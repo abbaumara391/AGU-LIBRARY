@@ -708,3 +708,213 @@ button {
   }
 
 }
+/* ==========================================
+   PHASE 2 — LOGIN & REGISTRATION
+========================================== */
+
+.auth-page {
+  min-height: 75vh;
+  padding: 45px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background:
+    radial-gradient(circle at top right, #dff8ed, transparent 40%),
+    #f4f8f6;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 480px;
+  background: white;
+  padding: 35px;
+  border-radius: 24px;
+  border: 1px solid #dcebe4;
+  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.09);
+}
+
+.auth-icon {
+  width: 70px;
+  height: 70px;
+  margin: 0 auto 18px;
+  border-radius: 20px;
+  background: #e2f7ed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 34px;
+}
+
+.auth-card h2 {
+  text-align: center;
+  color: #075e43;
+  font-size: 30px;
+  margin-bottom: 8px;
+}
+
+.auth-subtitle {
+  text-align: center;
+  color: #68756f;
+  margin-bottom: 28px;
+}
+
+.form-group {
+  margin-bottom: 18px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 7px;
+  color: #29463b;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 14px 15px;
+  border: 1px solid #cbdcd4;
+  border-radius: 11px;
+  background: #f9fcfa;
+  color: #263b33;
+  font-size: 15px;
+  outline: none;
+  transition: 0.2s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: #087f5b;
+  box-shadow: 0 0 0 3px rgba(8, 127, 91, 0.1);
+  background: white;
+}
+
+.auth-btn,
+.register-btn {
+  width: 100%;
+  border: none;
+  border-radius: 11px;
+  padding: 14px;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: 0.25s ease;
+}
+
+.auth-btn {
+  background: #087f5b;
+  color: white;
+}
+
+.auth-btn:hover {
+  background: #075e43;
+  transform: translateY(-2px);
+}
+
+.register-btn {
+  background: #e5f6ef;
+  color: #075e43;
+}
+
+.register-btn:hover {
+  background: #d4f0e4;
+}
+
+.auth-message {
+  min-height: 22px;
+  margin-top: 14px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.auth-message.success {
+  color: #087f5b;
+}
+
+.auth-message.error {
+  color: #c0392b;
+}
+
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 25px 0 18px;
+  color: #8a9992;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #dce7e2;
+}
+
+.auth-divider span {
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.register-text {
+  text-align: center;
+  color: #68756f;
+  margin-bottom: 12px;
+}
+
+#registerForm {
+  margin-top: 25px;
+  padding-top: 25px;
+  border-top: 1px solid #e3ece8;
+}
+
+#registerForm h3 {
+  color: #075e43;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.back-link {
+  display: block;
+  margin-top: 25px;
+  text-align: center;
+  color: #087f5b;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.back-link:hover {
+  text-decoration: underline;
+}
+
+
+/* ==========================================
+   MOBILE LOGIN
+========================================== */
+
+@media (max-width: 650px) {
+
+  .auth-page {
+    padding: 25px 15px;
+    align-items: flex-start;
+  }
+
+  .auth-card {
+    padding: 25px 20px;
+    border-radius: 20px;
+  }
+
+  .auth-card h2 {
+    font-size: 26px;
+  }
+
+  .auth-icon {
+    width: 60px;
+    height: 60px;
+    font-size: 29px;
+  }
+
+}

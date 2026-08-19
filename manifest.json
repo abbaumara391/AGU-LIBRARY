@@ -1,0 +1,16 @@
+{
+  "name": "AGU Educational Platform",
+  "short_name": "AGU Education",
+  "description": "AGU Educational Platform — Learn, Teach and Grow.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f4f8f6",
+  "theme_color": "#087f5b",
+  "orientation": "portrait-primary",
+  "lang": "en",
+  "categories": [
+    "education",
+    "learning"
+  ],
+  "icons": []
+}

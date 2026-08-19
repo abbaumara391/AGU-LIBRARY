@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>AGU Educational Platform</title>
+
+  <meta name="description"
+        content="AGU Educational Platform — learning resources, students, teachers and invitations.">
+
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+</head>
+
+<body>
+
+  <!-- =========================
+       HEADER
+  ========================== -->
+  <header class="site-header">
+
+    <div class="brand">
+      <div class="brand-logo">AGU</div>
+
+      <div>
+        <h1>AGU EDUCATIONAL PLATFORM</h1>
+        <p>Learn • Teach • Grow</p>
+      </div>
+    </div>
+
+    <button class="menu-btn" onclick="toggleMenu()" aria-label="Open menu">
+      ☰
+    </button>
+
+  </header>
+
+
+  <!-- =========================
+       NAVIGATION
+  ========================== -->
+  <nav id="mainNav" class="main-nav">
+
+    <button onclick="showSection('home')">
+      🏠 Home
+    </button>
+
+    <button onclick="showSection('library')">
+      📚 Library
+    </button>
+
+    <button onclick="showSection('students')">
+      👨‍🎓 Students
+    </button>
+
+    <button onclick="showSection('teachers')">
+      👨‍🏫 Teachers
+    </button>
+
+    <button onclick="showSection('invitations')">
+      📩 Invitations
+    </button>
+
+    <button onclick="showSection('dashboard')">
+      📊 Dashboard
+    </button>
+<button onclick="openLogin()">
+  🔐 Login
+</button>
+  </nav>
+
+
+  <!-- =========================
+       MAIN CONTENT
+  ========================== -->
+  <main>
+
+
+    <!-- =========================
+         HOME
+    ========================== -->
+    <section id="home" class="page-section active">
+
+      <div class="hero">
+
+        <div class="hero-content">
+
+          <span class="hero-badge">
+            🎓 EDUCATION FOR EVERYONE
+          </span>
+
+          <h2>
+            Welcome to
+            <span>AGU Educational Platform</span>
+          </h2>
+
+          <p>
+            A modern educational platform designed to connect
+            students, teachers and learning resources in one place.
+          </p>
+
+          <div class="hero-buttons">
+
+            <button class="primary-btn"
+                    onclick="showSection('library')">
+              📚 Explore Library
+            </button>
+
+            <button class="secondary-btn"
+                    onclick="showSection('invitations')">
+              📩 Invite Someone
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="section-heading">
+        <h2>What You Can Do</h2>
+        <p>Everything you need to begin your learning journey.</p>
+      </div>
+
+
+      <div class="feature-grid">
+
+        <div class="feature-card">
+          <div class="feature-icon">📚</div>
+          <h3>Learning Library</h3>
+          <p>
+            Access educational books, lessons and learning materials.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">👨‍🎓</div>
+          <h3>Students</h3>
+          <p>
+            Give students access to organized learning resources.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">👨‍🏫</div>
+          <h3>Teachers</h3>
+          <p>
+            Create a foundation for teachers and educational content.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">📩</div>
+          <h3>Invitations</h3>
+          <p>
+            Invite students and teachers using invitation links and codes.
+          </p>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================
+         LIBRARY
+    ========================== -->
+    <section id="library" class="page-section">
+
+      <div class="page-header">
+
+        <span class="page-icon">📚</span>
+
+        <div>
+          <h2>Learning Library</h2>
+          <p>
+            Your educational resources will appear here.
+          </p>
+        </div>
+
+      </div>
+
+      <div class="empty-state">
+
+        <div class="empty-icon">📖</div>
+
+        <h3>Library Ready</h3>
+
+        <p>
+          Educational books, videos, documents and other
+          learning materials can be added here.
+        </p>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================
+         STUDENTS
+    ========================== -->
+    <section id="students" class="page-section">
+
+      <div class="page-header">
+
+        <span class="page-icon">👨‍🎓</span>
+
+        <div>
+          <h2>Student Area</h2>
+          <p>
+            A dedicated space for students.
+          </p>
+        </div>
+
+      </div>
+
+      <div class="dashboard-grid">
+
+        <div class="dashboard-card">
+          <span>📚</span>
+          <h3>My Lessons</h3>
+          <p>Access your lessons and learning materials.</p>
+        </div>
+
+        <div class="dashboard-card">
+          <span>📝</span>
+          <h3>Assignments</h3>
+          <p>Assignments and educational activities.</p>
+        </div>
+
+        <div class="dashboard-card">
+          <span>🏆</span>
+          <h3>Progress</h3>
+          <p>Track your learning progress.</p>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================
+         TEACHERS
+    ========================== -->
+    <section id="teachers" class="page-section">
+
+      <div class="page-header">
+
+        <span class="page-icon">👨‍🏫</span>
+
+        <div>
+          <h2>Teacher Area</h2>
+          <p>
+            A dedicated space for teachers.
+          </p>
+        </div>
+
+      </div>
+
+      <div class="dashboard-grid">
+
+        <div class="dashboard-card">
+          <span>📚</span>
+          <h3>Teaching Materials</h3>
+          <p>Organize educational resources.</p>
+        </div>
+
+        <div class="dashboard-card">
+          <span>👨‍🎓</span>
+          <h3>Students</h3>
+          <p>Manage and support your students.</p>
+        </div>
+
+        <div class="dashboard-card">
+          <span>📊</span>
+          <h3>Class Progress</h3>
+          <p>Monitor learning progress.</p>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================
+         INVITATIONS
+    ========================== -->
+    <section id="invitations" class="page-section">
+
+      <div class="page-header">
+
+        <span class="page-icon">📩</span>
+
+        <div>
+          <h2>Invitation Center</h2>
+          <p>
+            Invite students and teachers to join AGU Educational Platform.
+          </p>
+        </div>
+
+      </div>
+
+
+      <div class="invitation-intro">
+
+        <h3>📩 Grow Your Learning Community</h3>
+
+        <p>
+          Generate an invitation and share it with the person
+          you want to invite.
+        </p>
+
+      </div>
+
+
+      <div class="invitation-grid">
+
+
+        <!-- STUDENT INVITATION -->
+        <div class="invitation-card">
+
+          <div class="invitation-icon">
+            👨‍🎓
+          </div>
+
+          <h3>Invite a Student</h3>
+
+          <p>
+            Create an invitation for a student to join
+            the educational platform.
+          </p>
+
+          <button class="primary-btn"
+                  onclick="generateInvitation('Student')">
+            Generate Student Invitation
+          </button>
+
+        </div>
+
+
+        <!-- TEACHER INVITATION -->
+        <div class="invitation-card">
+
+          <div class="invitation-icon">
+            👨‍🏫
+          </div>
+
+          <h3>Invite a Teacher</h3>
+
+          <p>
+            Create an invitation for a teacher to join
+            the educational platform.
+          </p>
+
+          <button class="primary-btn"
+                  onclick="generateInvitation('Teacher')">
+            Generate Teacher Invitation
+          </button>
+
+        </div>
+
+
+      </div>
+
+
+      <!-- GENERATED INVITATION -->
+      <div id="invitationResult"
+           class="invitation-result"
+           style="display:none;">
+
+        <h3>🎉 Invitation Generated</h3>
+
+        <p id="invitationMessage"></p>
+
+        <div class="invitation-code-box">
+
+          <span>Invitation Code</span>
+
+          <strong id="invitationCode">
+            ------
+          </strong>
+
+        </div>
+
+
+        <div class="invitation-link-box">
+
+          <label for="invitationLink">
+            Invitation Link
+          </label>
+
+          <input
+            id="invitationLink"
+            type="text"
+            readonly
+          >
+
+        </div>
+
+
+        <div class="invitation-actions">
+
+          <button onclick="copyInvitationLink()">
+            📋 Copy Link
+          </button>
+
+          <button onclick="shareWhatsApp()">
+            💬 WhatsApp
+          </button>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================
+         DASHBOARD
+    ========================== -->
+    <section id="dashboard" class="page-section">
+
+      <div class="page-header">
+
+        <span class="page-icon">📊</span>
+
+        <div>
+          <h2>Dashboard</h2>
+          <p>
+            Your AGU educational dashboard.
+          </p>
+        </div>
+
+      </div>
+
+
+      <div class="dashboard-grid">
+
+        <div class="dashboard-card">
+
+          <span>👨‍🎓</span>
+
+          <h3>Students</h3>
+
+          <strong id="studentCount">
+            0
+          </strong>
+
+        </div>
+
+
+        <div class="dashboard-card">
+
+          <span>👨‍🏫</span>
+
+          <h3>Teachers</h3>
+
+          <strong id="teacherCount">
+            0
+          </strong>
+
+        </div>
+
+
+        <div class="dashboard-card">
+
+          <span>📩</span>
+
+          <h3>Invitations</h3>
+
+          <strong id="invitationCount">
+            0
+          </strong>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- =========================
+       FOOTER
+  ========================== -->
+  <footer class="site-footer">
+
+    <div class="footer-logo">
+      AGU
+    </div>
+
+    <h3>AGU Educational Platform</h3>
+
+    <p>
+      Learn • Teach • Grow
+    </p>
+
+    <p class="copyright">
+      © 2026 AGU Educational Platform. All rights reserved.
+    </p>
+
+  </footer>
+
+
+  <!-- =========================
+       JAVASCRIPT
+  ========================== -->
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+
+</body>
+</html>

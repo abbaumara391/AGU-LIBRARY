@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#087a4b">
+<title>AGULIBRARY — Global Learning Library</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="nav">
+  <a class="logo" href="#home"><span>AG</span><b>AGULIBRARY</b><small>Learn • Read • Watch • Grow</small></a>
+  <nav id="navLinks"><a href="#home">Home</a><a href="#subjects">Subjects</a><a href="#resources">Resources</a><a href="#exams">Exams</a><a href="#support">Support</a></nav>
+  <div class="actions"><button class="ai-btn" onclick="openAI()">🤖 AI Agent</button><button class="menu" onclick="toggleMenu()">☰</button></div>
+</header>
+<main id="home">
+<section class="hero">
+  <div><span class="eyebrow">🌍 GLOBAL DIGITAL EDUCATION</span>
+  <h1>Your global <em>learning library.</em></h1>
+  <p>Discover books, PDFs, video lessons, courses, practice questions and educational resources in one comfortable learning space.</p>
+  <div class="buttons"><a class="btn primary" href="#resources">Explore Library</a><button class="btn light" onclick="openAI()">Ask AI Agent</button></div>
+  <div class="checks"><span>✓ Easy to use</span><span>✓ Mobile friendly</span><span>✓ Learn at your pace</span></div></div>
+  <div class="hero-art"><div class="glow"></div><div class="book">📖</div><div class="float one">📚 <b>Books</b><small>Tap to open</small></div><div class="float two">🎥 <b>Video Lessons</b><small>Learn visually</small></div><div class="float three">🤖 <b>AI Learning</b><small>Ask anything</small></div></div>
+</section>
+<section class="search-area"><div class="search"><span>⌕</span><input id="search" placeholder="Search subjects, books, PDFs, videos, lessons..." oninput="searchResources()"><button onclick="searchResources()">Search</button></div></section>
+<section id="resources" class="section">
+  <div class="heading"><div><span class="eyebrow">LEARN YOUR WAY</span><h2>Explore AGULIBRARY</h2><p>Everything is organized into simple, tappable learning spaces.</p></div></div>
+  <div class="resource-grid">
+    <article onclick="notice('Books & eBooks')"><i>📚</i><h3>Books & eBooks</h3><p>Textbooks, revision books and digital reading.</p><b>Tap to open →</b></article>
+    <article onclick="notice('PDF Library')"><i>📄</i><h3>PDF Library</h3><p>Notes, guides, handouts and documents.</p><b>Tap to open →</b></article>
+    <article onclick="notice('Video Lessons')"><i>🎥</i><h3>Video Lessons</h3><p>Watch clear lessons and tutorials.</p><b>Tap to open →</b></article>
+    <article onclick="notice('Educational Photos')"><i>🖼️</i><h3>Educational Photos</h3><p>Diagrams and visual learning.</p><b>Tap to open →</b></article>
+    <article onclick="location.hash='subjects'"><i>🌍</i><h3>Subjects</h3><p>Browse the global subject library.</p><b>Explore subjects →</b></article>
+    <article onclick="notice('Practice & Quizzes')"><i>📝</i><h3>Practice & Quizzes</h3><p>Test your knowledge and improve.</p><b>Practice now →</b></article>
+    <article onclick="notice('Courses')"><i>🎓</i><h3>Courses</h3><p>Follow structured learning programmes.</p><b>View courses →</b></article>
+    <article class="ai-card" onclick="openAI()"><i>🤖</i><h3>AI Learning Agent</h3><p>Ask questions and get learning guidance.</p><b>Ask AI →</b></article>
+  </div>
+</section>
+<section id="subjects" class="section white">
+  <div class="heading"><div><span class="eyebrow">GLOBAL SUBJECT LIBRARY</span><h2>Explore Subjects</h2><p>Choose a subject category to begin learning.</p></div></div>
+  <div class="subject-grid">
+    <article><span>🔬</span><b>Science</b><small>Physics • Chemistry • Biology • Earth Science • Astronomy</small></article>
+    <article><span>📐</span><b>Mathematics</b><small>Mathematics • Algebra • Geometry • Calculus • Statistics</small></article>
+    <article><span>💻</span><b>Technology</b><small>Computer Science • Programming • AI • Web Development • Data Science</small></article>
+    <article><span>📚</span><b>Languages & Literature</b><small>English • Literature • French • Spanish • German</small></article>
+    <article><span>🌎</span><b>Social Sciences & Humanities</b><small>Civic Education • History • Geography • Economics • Government • Psychology</small></article>
+    <article><span>💼</span><b>Business & Finance</b><small>Accounting • Business • Finance • Marketing • Entrepreneurship</small></article>
+    <article><span>🎨</span><b>Arts & Creative Studies</b><small>Art • Music • Photography • Film • Creative Writing</small></article>
+    <article><span>🧑‍⚕️</span><b>Professional & Career</b><small>Medicine • Engineering • Law • Education • Agriculture</small></article>
+  </div>
+</section>
+<section id="exams" class="exam"><div><span class="eyebrow">EXAM PREPARATION</span><h2>Prepare with confidence.</h2><p>Resources for school, university entrance, international and professional examinations.</p></div><div class="pills"><span>School Exams</span><span>University Entrance</span><span>International Exams</span><span>Professional Certifications</span></div></section>
+<section id="support" class="section split"><div class="panel"><span class="eyebrow">24/7 LEARNING SUPPORT</span><h2>We're here to help.</h2><p>Get assistance with learning, resources, accounts, payments or technical concerns.</p><div class="buttons"><a class="btn primary" href="mailto:support@agulibrary.com">Email Support</a><button class="btn light" onclick="openAI()">Chat with AI</button></div></div><div class="panel premium"><span class="eyebrow">PREMIUM LEARNING</span><h2>Unlock more.</h2><ul><li>Premium books and PDFs</li><li>Exclusive video lessons</li><li>Structured courses</li><li>AI learning assistance</li></ul><button class="btn primary wide" onclick="payment()">Continue to Payment</button><small>🔒 Secure payment integration will be connected later.</small></div></section>
+</main>
+<footer><div class="foot"><span>AG</span><div><b>AGULIBRARY</b><small>Owner: Umar Mohammed</small></div></div><div><a href="#subjects">Subjects</a><a href="#resources">Resources</a><a href="#support">Support</a></div><p>© <span id="year"></span> AGULIBRARY • Global Learning Library</p></footer>
+<div id="aiModal" class="modal" onclick="closeAI(event)"><div class="ai" onclick="event.stopPropagation()"><div class="aihead"><b>🤖 AGU AI Learning Agent</b><button onclick="closeAI()">×</button></div><div id="chat" class="chat"><div class="bubble">Hello! Ask me about a subject, lesson, study plan or how to use AGULIBRARY.</div></div><div class="chatbar"><input id="aiInput" placeholder="Ask your question..." onkeydown="if(event.key==='Enter')sendAI()"><button onclick="sendAI()">Send</button></div><small class="note">Demo interface — a secure live AI connection can be added later.</small></div></div>
+<script src="app.js"></script>
+</body></html>

@@ -69,90 +69,7 @@ function toggleMenu() {
 
 
 // ==========================================
-// CREATE INVITATION CODE
-// ==========================================
-
-function createInvitationCode() {
-
-  const letters =
-    "ABCDEFGHJKLMNPQRSTUVWXYZ";
-
-  const numbers =
-    "23456789";
-
-  let code = "";
-
-  for (let i = 0; i < 3; i++) {
-
-    code += letters.charAt(
-      Math.floor(
-        Math.random() * letters.length
-      )
-    );
-
-  }
-
-  code += "-";
-
-  for (let i = 0; i < 3; i++) {
-
-    code += numbers.charAt(
-      Math.floor(
-        Math.random() * numbers.length
-      )
-    );
-
-  }
-
-  return code;
-
-}
-
-
-// ==========================================
-// GET SAVED INVITATIONS
-// ==========================================
-
-function getSavedInvitations() {
-
-  try {
-
-    return JSON.parse(
-      localStorage.getItem(
-        "aguInvitations"
-      ) || "[]"
-    );
-
-  } catch (error) {
-
-    console.warn(
-      "Could not load invitations:",
-      error
-    );
-
-    return [];
-
-  }
-
-}
-
-
-// ==========================================
-// SAVE INVITATIONS
-// ==========================================
-
-function saveInvitations(invitations) {
-
-  localStorage.setItem(
-    "aguInvitations",
-    JSON.stringify(invitations)
-  );
-
-}
-
-
-// ==========================================
-// GENERATE INVITATION
+// INVITATION CODE GENERATOR
 // ==========================================
 
 function generateInvitation(type) {
@@ -164,15 +81,12 @@ function generateInvitation(type) {
     return;
   }
 
-
   const code =
     createInvitationCode();
-
 
   const baseURL =
     window.location.origin +
     window.location.pathname;
-
 
   const invitationLink =
     baseURL +
@@ -192,43 +106,25 @@ function generateInvitation(type) {
 
     link: invitationLink,
 
-    status: "pending",
-
     createdAt:
-      new Date().toISOString(),
-
-    acceptedAt: null,
-
-    acceptedBy: null
+      new Date().toISOString()
 
   };
-
-
-  // ========================================
-  // SAVE INVITATION
-  // ========================================
-
-  const invitations =
-    getSavedInvitations();
-
-
-  invitations.push(
-    currentInvitation
-  );
-
-
-  saveInvitations(
-    invitations
-  );
 
 
   // ========================================
   // UPDATE STATISTICS
   // ========================================
 
-  loadInvitationStats();
+  invitationStats.total++;
 
-  updateDashboard();
+  if (type === "Student") {
+    invitationStats.students++;
+  }
+
+  if (type === "Teacher") {
+    invitationStats.teachers++;
+  }
 
 
   // ========================================
@@ -260,7 +156,6 @@ function generateInvitation(type) {
     result.style.display = "block";
   }
 
-
   if (message) {
 
     message.textContent =
@@ -268,17 +163,21 @@ function generateInvitation(type) {
 
   }
 
-
   if (codeElement) {
-    codeElement.textContent =
-      code;
+    codeElement.textContent = code;
   }
-
 
   if (linkElement) {
     linkElement.value =
       invitationLink;
   }
+
+
+  updateDashboard();
+
+  saveInvitation(
+    currentInvitation
+  );
 
 
   setTimeout(() => {
@@ -298,149 +197,50 @@ function generateInvitation(type) {
 
 
 // ==========================================
-// VALIDATE INVITATION
+// CREATE RANDOM INVITATION CODE
 // ==========================================
 
-function validateInvitationCode(
-  code,
-  role
-) {
+function createInvitationCode() {
 
-  if (!code) {
+  const letters =
+    "ABCDEFGHJKLMNPQRSTUVWXYZ";
 
-    return {
-      valid: false,
-      message: "No invitation code entered."
-    };
+  const numbers =
+    "23456789";
 
-  }
+  let code = "";
 
 
-  const invitations =
-    getSavedInvitations();
+  for (let i = 0; i < 3; i++) {
 
-
-  const invitation =
-    invitations.find(
-      item =>
-        item.code.toUpperCase() ===
-        code.toUpperCase()
-    );
-
-
-  if (!invitation) {
-
-    return {
-      valid: false,
-      message:
-        "❌ Invitation code not found."
-    };
+    code +=
+      letters.charAt(
+        Math.floor(
+          Math.random() *
+          letters.length
+        )
+      );
 
   }
 
 
-  if (
-    invitation.status ===
-    "accepted"
-  ) {
-
-    return {
-      valid: false,
-      message:
-        "❌ This invitation has already been used."
-    };
-
-  }
+  code += "-";
 
 
-  const expectedType =
-    role === "student"
-      ? "Student"
-      : "Teacher";
+  for (let i = 0; i < 3; i++) {
 
-
-  if (
-    invitation.type !==
-    expectedType
-  ) {
-
-    return {
-      valid: false,
-      message:
-        `❌ This invitation is for ${invitation.type.toLowerCase()}s.`
-    };
+    code +=
+      numbers.charAt(
+        Math.floor(
+          Math.random() *
+          numbers.length
+        )
+      );
 
   }
 
 
-  return {
-    valid: true,
-    invitation: invitation,
-    message:
-      "✅ Invitation code is valid."
-  };
-
-}
-
-
-// ==========================================
-// ACCEPT INVITATION
-// ==========================================
-
-function acceptInvitation(
-  code,
-  user
-) {
-
-  const invitations =
-    getSavedInvitations();
-
-
-  const index =
-    invitations.findIndex(
-      item =>
-        item.code.toUpperCase() ===
-        code.toUpperCase()
-    );
-
-
-  if (index === -1) {
-    return false;
-  }
-
-
-  invitations[index].status =
-    "accepted";
-
-
-  invitations[index].acceptedAt =
-    new Date().toISOString();
-
-
-  invitations[index].acceptedBy = {
-
-    id: user.id,
-
-    name: user.name,
-
-    email: user.email,
-
-    role: user.role
-
-  };
-
-
-  saveInvitations(
-    invitations
-  );
-
-
-  loadInvitationStats();
-
-  updateDashboard();
-
-
-  return true;
+  return code;
 
 }
 
@@ -483,7 +283,6 @@ async function copyInvitationLink() {
         "invitationLink"
       );
 
-
     if (input) {
 
       input.select();
@@ -493,9 +292,7 @@ async function copyInvitationLink() {
         99999
       );
 
-      document.execCommand(
-        "copy"
-      );
+      document.execCommand("copy");
 
       alert(
         "✅ Invitation link copied!"
@@ -536,9 +333,7 @@ function shareWhatsApp() {
 
   const whatsappURL =
     "https://wa.me/?text=" +
-    encodeURIComponent(
-      message
-    );
+    encodeURIComponent(message);
 
 
   window.open(
@@ -551,33 +346,90 @@ function shareWhatsApp() {
 
 
 // ==========================================
+// SAVE INVITATION
+// ==========================================
+
+function saveInvitation(invitation) {
+
+  try {
+
+    const saved =
+      JSON.parse(
+        localStorage.getItem(
+          "aguInvitations"
+        ) || "[]"
+      );
+
+
+    saved.push(invitation);
+
+
+    localStorage.setItem(
+      "aguInvitations",
+      JSON.stringify(saved)
+    );
+
+  } catch (error) {
+
+    console.warn(
+      "Could not save invitation:",
+      error
+    );
+
+  }
+
+}
+
+
+// ==========================================
 // LOAD INVITATION STATISTICS
 // ==========================================
 
 function loadInvitationStats() {
 
-  const saved =
-    getSavedInvitations();
+  try {
+
+    const saved =
+      JSON.parse(
+        localStorage.getItem(
+          "aguInvitations"
+        ) || "[]"
+      );
 
 
-  invitationStats = {
+    invitationStats = {
 
-    total:
-      saved.length,
+      total:
+        saved.length,
 
-    students:
-      saved.filter(
-        item =>
-          item.type === "Student"
-      ).length,
+      students:
+        saved.filter(
+          item =>
+            item.type === "Student"
+        ).length,
 
-    teachers:
-      saved.filter(
-        item =>
-          item.type === "Teacher"
-      ).length
+      teachers:
+        saved.filter(
+          item =>
+            item.type === "Teacher"
+        ).length
 
-  };
+    };
+
+
+  } catch (error) {
+
+    invitationStats = {
+
+      total: 0,
+
+      students: 0,
+
+      teachers: 0
+
+    };
+
+  }
 
 }
 
@@ -633,6 +485,11 @@ function updateDashboard() {
 // ==========================================
 // CHECK INVITATION LINK
 // ==========================================
+// IMPORTANT:
+// When somebody opens an invitation link,
+// save the invitation and send them directly
+// to the registration page.
+// ==========================================
 
 function checkInvitationLink() {
 
@@ -649,79 +506,96 @@ function checkInvitationLink() {
     params.get("type");
 
 
+  // No invitation
   if (!invite) {
     return;
   }
 
 
-  showSection(
-    "invitations"
-  );
+  const invitationCode =
+    invite
+      .trim()
+      .toUpperCase();
 
 
-  const result =
-    document.getElementById(
-      "invitationResult"
+  const invitationType =
+    type
+      ? type
+          .trim()
+          .toLowerCase()
+      : "student";
+
+
+  // ========================================
+  // SAVE PENDING INVITATION
+  // ========================================
+
+  const pendingInvitation = {
+
+    code:
+      invitationCode,
+
+    type:
+      invitationType,
+
+    createdAt:
+      new Date().toISOString()
+
+  };
+
+
+  try {
+
+    sessionStorage.setItem(
+      "aguPendingInvitation",
+      JSON.stringify(
+        pendingInvitation
+      )
     );
 
-  const message =
-    document.getElementById(
-      "invitationMessage"
+  } catch (error) {
+
+    console.warn(
+      "Could not save pending invitation:",
+      error
     );
-
-  const codeElement =
-    document.getElementById(
-      "invitationCode"
-    );
-
-
-  if (result) {
-
-    result.style.display =
-      "block";
 
   }
 
 
-  if (message) {
+  // ========================================
+  // GO DIRECTLY TO REGISTRATION
+  // ========================================
 
-    const invitationType =
-      type
-        ? type.charAt(0).toUpperCase() +
-          type.slice(1)
-        : "User";
-
-
-    message.textContent =
-      `You have received a ${invitationType.toLowerCase()} invitation to join AGU Educational Platform.`;
-
-  }
-
-
-  if (codeElement) {
-
-    codeElement.textContent =
-      invite;
-
-  }
-
-
-  // Store the invitation code
-  // so registration can use it.
-
-  sessionStorage.setItem(
-    "aguPendingInvitation",
-    JSON.stringify({
-
-      code: invite,
-
-      type: type || null
-
-    })
-
-  );
+  window.location.href =
+    "login.html?register=true";
 
 }
+
+
+// ==========================================
+// INITIALIZE APPLICATION
+// ==========================================
+
+function initializeApp() {
+
+  loadInvitationStats();
+
+  updateDashboard();
+
+  checkInvitationLink();
+
+}
+
+
+// ==========================================
+// START APP
+// ==========================================
+
+document.addEventListener(
+  "DOMContentLoaded",
+  initializeApp
+);
 
 
 // ==========================================
@@ -839,37 +713,22 @@ function createLogoutButton() {
     };
 
 
-  nav.appendChild(
-    button
-  );
+  nav.appendChild(button);
 
 }
 
 
 // ==========================================
-// INITIALIZE APPLICATION
-// ==========================================
-
-function initializeApp() {
-
-  loadInvitationStats();
-
-  updateDashboard();
-
-  checkInvitationLink();
-
-  displayCurrentUser();
-
-  createLogoutButton();
-
-}
-
-
-// ==========================================
-// START APPLICATION
+// START AUTH DISPLAY
 // ==========================================
 
 document.addEventListener(
   "DOMContentLoaded",
-  initializeApp
+  () => {
+
+    displayCurrentUser();
+
+    createLogoutButton();
+
+  }
 );

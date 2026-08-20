@@ -3,11 +3,6 @@
 // PHASE 2 — AUTHENTICATION + INVITATIONS
 // ==========================================
 
-
-// ==========================================
-// STORAGE KEY
-// ==========================================
-
 const AGU_USERS_KEY = "aguUsers";
 
 
@@ -25,10 +20,7 @@ function getUsers() {
 
   } catch (error) {
 
-    console.error(
-      "Unable to load users:",
-      error
-    );
+    console.error("Unable to load users:", error);
 
     return [];
 
@@ -66,28 +58,16 @@ function showRegister() {
   const loginMessage =
     document.getElementById("loginMessage");
 
-
   if (loginForm) {
-
-    loginForm.style.display =
-      "none";
-
+    loginForm.style.display = "none";
   }
-
 
   if (registerForm) {
-
-    registerForm.style.display =
-      "block";
-
+    registerForm.style.display = "block";
   }
 
-
   if (loginMessage) {
-
-    loginMessage.textContent =
-      "";
-
+    loginMessage.textContent = "";
   }
 
 }
@@ -106,32 +86,18 @@ function showLogin() {
     document.getElementById("registerForm");
 
   const registerMessage =
-    document.getElementById(
-      "registerMessage"
-    );
-
+    document.getElementById("registerMessage");
 
   if (loginForm) {
-
-    loginForm.style.display =
-      "block";
-
+    loginForm.style.display = "block";
   }
-
 
   if (registerForm) {
-
-    registerForm.style.display =
-      "none";
-
+    registerForm.style.display = "none";
   }
 
-
   if (registerMessage) {
-
-    registerMessage.textContent =
-      "";
-
+    registerMessage.textContent = "";
   }
 
 }
@@ -148,30 +114,19 @@ function showMessage(
 ) {
 
   const element =
-    document.getElementById(
-      elementId
-    );
+    document.getElementById(elementId);
 
+  if (!element) return;
 
-  if (!element) {
-    return;
-  }
-
-
-  element.textContent =
-    message;
-
+  element.textContent = message;
 
   element.classList.remove(
     "success",
     "error"
   );
 
-
   element.classList.add(
-    success
-      ? "success"
-      : "error"
+    success ? "success" : "error"
   );
 
 }
@@ -206,17 +161,64 @@ function getPendingInvitation() {
 
   try {
 
-    return JSON.parse(
+    const data =
       sessionStorage.getItem(
         "aguPendingInvitation"
-      )
-    );
+      );
+
+    if (!data) {
+      return null;
+    }
+
+    return JSON.parse(data);
 
   } catch (error) {
 
     return null;
 
   }
+
+}
+
+
+// ==========================================
+// GET SAVED INVITATIONS
+// ==========================================
+
+function getInvitations() {
+
+  try {
+
+    return JSON.parse(
+      localStorage.getItem(
+        "aguInvitations"
+      ) || "[]"
+    );
+
+  } catch (error) {
+
+    console.warn(
+      "Unable to load invitations:",
+      error
+    );
+
+    return [];
+
+  }
+
+}
+
+
+// ==========================================
+// SAVE INVITATIONS
+// ==========================================
+
+function saveInvitations(invitations) {
+
+  localStorage.setItem(
+    "aguInvitations",
+    JSON.stringify(invitations)
+  );
 
 }
 
@@ -230,20 +232,20 @@ function registerUser(event) {
   event.preventDefault();
 
 
+  // ========================================
+  // GET FORM VALUES
+  // ========================================
+
   const name =
     document
-      .getElementById(
-        "registerName"
-      )
+      .getElementById("registerName")
       .value
       .trim();
 
 
   const email =
     document
-      .getElementById(
-        "registerEmail"
-      )
+      .getElementById("registerEmail")
       .value
       .trim()
       .toLowerCase();
@@ -251,17 +253,13 @@ function registerUser(event) {
 
   const password =
     document
-      .getElementById(
-        "registerPassword"
-      )
+      .getElementById("registerPassword")
       .value;
 
 
   const role =
     document
-      .getElementById(
-        "registerRole"
-      )
+      .getElementById("registerRole")
       .value;
 
 
@@ -300,9 +298,7 @@ function registerUser(event) {
   }
 
 
-  if (
-    password.length < 6
-  ) {
+  if (password.length < 6) {
 
     showMessage(
       "registerMessage",
@@ -320,35 +316,74 @@ function registerUser(event) {
 
   let invitation = null;
 
+  const invitations =
+    getInvitations();
+
+
+  // ----------------------------------------
+  // FIRST: CHECK LOCAL STORAGE
+  // ----------------------------------------
 
   if (invitationCode) {
-
-    let invitations = [];
-
-
-    try {
-
-      invitations =
-        JSON.parse(
-          localStorage.getItem(
-            "aguInvitations"
-          ) || "[]"
-        );
-
-    } catch (error) {
-
-      invitations = [];
-
-    }
-
 
     invitation =
       invitations.find(
         item =>
-          item.code.toUpperCase() ===
+          String(item.code)
+            .toUpperCase() ===
           invitationCode
       );
 
+  }
+
+
+  // ----------------------------------------
+  // SECOND: CHECK PENDING INVITATION
+  // ----------------------------------------
+
+  const pending =
+    getPendingInvitation();
+
+
+  if (
+    !invitation &&
+    pending &&
+    pending.code &&
+    pending.code.toUpperCase() ===
+      invitationCode
+  ) {
+
+    invitation = {
+
+      code:
+        invitationCode,
+
+      type:
+        pending.type
+          ? pending.type
+              .charAt(0)
+              .toUpperCase() +
+            pending.type
+              .slice(1)
+              .toLowerCase()
+          : null,
+
+      status:
+        "pending",
+
+      createdAt:
+        new Date().toISOString()
+
+    };
+
+  }
+
+
+  // ----------------------------------------
+  // INVITATION CODE WAS ENTERED
+  // ----------------------------------------
+
+  if (invitationCode) {
 
     if (!invitation) {
 
@@ -361,6 +396,10 @@ function registerUser(event) {
 
     }
 
+
+    // --------------------------------------
+    // CHECK IF ALREADY USED
+    // --------------------------------------
 
     if (
       invitation.status ===
@@ -377,15 +416,21 @@ function registerUser(event) {
     }
 
 
+    // --------------------------------------
+    // CHECK ROLE
+    // --------------------------------------
+
     const expectedType =
-      role === "student"
+      role.toLowerCase() ===
+      "student"
         ? "Student"
         : "Teacher";
 
 
     if (
+      invitation.type &&
       invitation.type !==
-      expectedType
+        expectedType
     ) {
 
       showMessage(
@@ -415,8 +460,7 @@ function registerUser(event) {
   const existingUser =
     users.find(
       user =>
-        user.email ===
-        email
+        user.email === email
     );
 
 
@@ -471,59 +515,100 @@ function registerUser(event) {
   // SAVE USER
   // ========================================
 
-  users.push(
-    newUser
-  );
+  users.push(newUser);
 
-  saveUsers(
-    users
-  );
+  saveUsers(users);
 
 
   // ========================================
   // MARK INVITATION ACCEPTED
   // ========================================
 
-  if (invitation) {
+  if (invitationCode) {
 
-    try {
-
-      const invitations =
-        JSON.parse(
-          localStorage.getItem(
-            "aguInvitations"
-          ) || "[]"
-        );
+    const updatedInvitations =
+      getInvitations();
 
 
-      const invitationIndex =
-        invitations.findIndex(
-          item =>
-            item.code.toUpperCase() ===
-            invitationCode
-        );
+    const invitationIndex =
+      updatedInvitations.findIndex(
+        item =>
+          String(item.code)
+            .toUpperCase() ===
+          invitationCode
+      );
 
 
-      if (
-        invitationIndex !==
-        -1
-      ) {
+    if (
+      invitationIndex !== -1
+    ) {
 
-        invitations[
-          invitationIndex
-        ].status =
-          "accepted";
-
-
-        invitations[
-          invitationIndex
-        ].acceptedAt =
-          new Date().toISOString();
+      updatedInvitations[
+        invitationIndex
+      ].status =
+        "accepted";
 
 
-        invitations[
-          invitationIndex
-        ].acceptedBy = {
+      updatedInvitations[
+        invitationIndex
+      ].acceptedAt =
+        new Date().toISOString();
+
+
+      updatedInvitations[
+        invitationIndex
+      ].acceptedBy = {
+
+        id:
+          newUser.id,
+
+        name:
+          newUser.name,
+
+        email:
+          newUser.email,
+
+        role:
+          newUser.role
+
+      };
+
+
+      saveInvitations(
+        updatedInvitations
+      );
+
+    } else {
+
+      // If this invitation came
+      // from the pending link,
+      // create its local record.
+
+      const newInvitation = {
+
+        code:
+          invitationCode,
+
+        type:
+          invitation.type ||
+          (
+            role.toLowerCase() ===
+            "student"
+              ? "Student"
+              : "Teacher"
+          ),
+
+        status:
+          "accepted",
+
+        createdAt:
+          invitation.createdAt ||
+          new Date().toISOString(),
+
+        acceptedAt:
+          new Date().toISOString(),
+
+        acceptedBy: {
 
           id:
             newUser.id,
@@ -537,26 +622,29 @@ function registerUser(event) {
           role:
             newUser.role
 
-        };
+        }
+
+      };
 
 
-        localStorage.setItem(
-          "aguInvitations",
-          JSON.stringify(
-            invitations
-          )
-        );
+      updatedInvitations.push(
+        newInvitation
+      );
 
-      }
 
-    } catch (error) {
-
-      console.warn(
-        "Could not update invitation:",
-        error
+      saveInvitations(
+        updatedInvitations
       );
 
     }
+
+
+    // Remove pending invitation
+    // after successful registration.
+
+    sessionStorage.removeItem(
+      "aguPendingInvitation"
+    );
 
   }
 
@@ -567,9 +655,11 @@ function registerUser(event) {
 
   showMessage(
     "registerMessage",
-    invitation
+
+    invitationCode
       ? "🎉 Account created and invitation accepted successfully!"
       : "✅ Account created successfully. You can now login.",
+
     true
   );
 
@@ -608,9 +698,7 @@ function loginUser(event) {
 
   const email =
     document
-      .getElementById(
-        "loginEmail"
-      )
+      .getElementById("loginEmail")
       .value
       .trim()
       .toLowerCase();
@@ -618,9 +706,7 @@ function loginUser(event) {
 
   const password =
     document
-      .getElementById(
-        "loginPassword"
-      )
+      .getElementById("loginPassword")
       .value;
 
 
@@ -695,9 +781,7 @@ function loginUser(event) {
 
   localStorage.setItem(
     "aguCurrentUser",
-    JSON.stringify(
-      session
-    )
+    JSON.stringify(session)
   );
 
 
@@ -758,7 +842,6 @@ function logoutUser() {
     "aguCurrentUser"
   );
 
-
   window.location.href =
     "login.html";
 
@@ -784,7 +867,6 @@ function getUserRole() {
 
   const user =
     getCurrentUser();
-
 
   return user
     ? user.role

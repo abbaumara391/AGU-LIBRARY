@@ -1,6 +1,6 @@
 // ==========================================
 // AGU EDUCATIONAL PLATFORM
-// PHASE 1 — DATA
+// PHASE 3 — EDUCATIONAL DATA
 // ==========================================
 
 
@@ -12,344 +12,360 @@ const AGU_PLATFORM = {
 
   name: "AGU Educational Platform",
 
-  shortName: "AGU",
-
   slogan: "Learn • Teach • Grow",
 
-  year: 2026,
-
-  version: "1.0.0"
+  year: 2026
 
 };
 
 
 // ==========================================
-// PLATFORM SECTIONS
+// STUDENT DASHBOARD DATA
 // ==========================================
 
-const AGU_SECTIONS = [
+const AGU_STUDENT_DATA = {
 
-  {
-    id: "home",
-    name: "Home",
-    icon: "🏠"
-  },
+  lessons: [
 
-  {
-    id: "library",
-    name: "Library",
-    icon: "📚"
-  },
+    {
+      id: 1,
+      title: "Introduction to Physics",
+      subject: "Physics",
+      status: "Available"
+    },
 
-  {
-    id: "students",
-    name: "Students",
-    icon: "👨‍🎓"
-  },
+    {
+      id: 2,
+      title: "Basic Chemistry",
+      subject: "Chemistry",
+      status: "Available"
+    },
 
-  {
-    id: "teachers",
-    name: "Teachers",
-    icon: "👨‍🏫"
-  },
+    {
+      id: 3,
+      title: "Mathematics Fundamentals",
+      subject: "Mathematics",
+      status: "Available"
+    }
 
-  {
-    id: "invitations",
-    name: "Invitations",
-    icon: "📩"
-  },
+  ],
 
-  {
-    id: "dashboard",
-    name: "Dashboard",
-    icon: "📊"
+
+  assignments: [
+
+    {
+      id: 1,
+      title: "Physics Assignment",
+      subject: "Physics",
+      status: "Pending"
+    },
+
+    {
+      id: 2,
+      title: "Chemistry Exercise",
+      subject: "Chemistry",
+      status: "Pending"
+    }
+
+  ],
+
+
+  progress: {
+
+    lessonsCompleted: 0,
+
+    totalLessons: 3,
+
+    assignmentsCompleted: 0,
+
+    totalAssignments: 2,
+
+    score: 0
+
   }
 
-];
+};
 
 
 // ==========================================
-// USER TYPES
+// TEACHER DASHBOARD DATA
 // ==========================================
 
-const AGU_USER_TYPES = [
+const AGU_TEACHER_DATA = {
 
-  {
-    id: "student",
-    name: "Student",
-    icon: "👨‍🎓"
-  },
+  materials: [
 
-  {
-    id: "teacher",
-    name: "Teacher",
-    icon: "👨‍🏫"
-  },
+    {
+      id: 1,
+      title: "Physics Teaching Materials",
+      subject: "Physics"
+    },
 
-  {
-    id: "admin",
-    name: "Administrator",
-    icon: "🛡️"
-  }
+    {
+      id: 2,
+      title: "Chemistry Teaching Materials",
+      subject: "Chemistry"
+    },
 
-];
+    {
+      id: 3,
+      title: "Mathematics Teaching Materials",
+      subject: "Mathematics"
+    }
 
-
-// ==========================================
-// INVITATION TYPES
-// ==========================================
-
-const AGU_INVITATION_TYPES = [
-
-  {
-    id: "student",
-    name: "Student Invitation",
-    description:
-      "Invitation for students to join AGU Educational Platform.",
-    icon: "👨‍🎓"
-  },
-
-  {
-    id: "teacher",
-    name: "Teacher Invitation",
-    description:
-      "Invitation for teachers to join AGU Educational Platform.",
-    icon: "👨‍🏫"
-  }
-
-];
+  ],
 
 
-// ==========================================
-// INVITATION STATUS
-// ==========================================
-
-const AGU_INVITATION_STATUS = [
-
-  {
-    id: "pending",
-    name: "Pending",
-    icon: "⏳"
-  },
-
-  {
-    id: "accepted",
-    name: "Accepted",
-    icon: "✅"
-  },
-
-  {
-    id: "expired",
-    name: "Expired",
-    icon: "⌛"
-  }
-
-];
+  students: [],
 
 
-// ==========================================
-// EDUCATIONAL SUBJECTS
-// ==========================================
+  classes: [
 
-const AGU_SUBJECTS = [
+    {
+      id: 1,
+      name: "SSS 1",
+      students: 0
+    },
 
-  {
-    id: "physics",
-    name: "Physics",
-    icon: "⚛️",
-    description:
-      "Physics lessons, textbooks and learning resources."
-  },
+    {
+      id: 2,
+      name: "SSS 2",
+      students: 0
+    },
 
-  {
-    id: "chemistry",
-    name: "Chemistry",
-    icon: "🧪",
-    description:
-      "Chemistry lessons, textbooks and learning resources."
-  },
+    {
+      id: 3,
+      name: "SSS 3",
+      students: 0
+    }
 
-  {
-    id: "biology",
-    name: "Biology",
-    icon: "🧬",
-    description:
-      "Biology lessons, textbooks and learning resources."
-  },
-
-  {
-    id: "mathematics",
-    name: "Mathematics",
-    icon: "📐",
-    description:
-      "Mathematics lessons, exercises and learning resources."
-  },
-
-  {
-    id: "civic-education",
-    name: "Civic Education",
-    icon: "🏛️",
-    description:
-      "Civic Education lessons and learning resources."
-  },
-
-  {
-    id: "english",
-    name: "English",
-    icon: "📖",
-    description:
-      "English language lessons and educational resources."
-  }
-
-];
+  ],
 
 
-// ==========================================
-// ACADEMIC LEVELS
-// ==========================================
+  lessons: []
 
-const AGU_LEVELS = [
-
-  {
-    id: "sss1",
-    name: "SSS 1"
-  },
-
-  {
-    id: "sss2",
-    name: "SSS 2"
-  },
-
-  {
-    id: "sss3",
-    name: "SSS 3"
-  }
-
-];
-
-
-// ==========================================
-// TERM DATA
-// ==========================================
-
-const AGU_TERMS = [
-
-  {
-    id: "first-term",
-    name: "First Term"
-  },
-
-  {
-    id: "second-term",
-    name: "Second Term"
-  },
-
-  {
-    id: "third-term",
-    name: "Third Term"
-  }
-
-];
-
-
-// ==========================================
-// INITIAL INVITATION DATA
-// ==========================================
-
-const AGU_INVITATIONS = [];
-
-
-// ==========================================
-// INITIAL STUDENT DATA
-// ==========================================
-
-const AGU_STUDENTS = [];
-
-
-// ==========================================
-// INITIAL TEACHER DATA
-// ==========================================
-
-const AGU_TEACHERS = [];
+};
 
 
 // ==========================================
 // LIBRARY DATA
 // ==========================================
 
-const AGU_LIBRARY = [
+const AGU_LIBRARY_DATA = {
 
-  {
-    id: "physics",
-    subject: "Physics",
-    icon: "⚛️",
-    resources: []
-  },
+  ebooks: [
 
-  {
-    id: "chemistry",
-    subject: "Chemistry",
-    icon: "🧪",
-    resources: []
-  },
+    {
+      id: 1,
+      title: "Physics",
+      category: "Science"
+    },
 
-  {
-    id: "biology",
-    subject: "Biology",
-    icon: "🧬",
-    resources: []
-  },
+    {
+      id: 2,
+      title: "Chemistry",
+      category: "Science"
+    },
 
-  {
-    id: "mathematics",
-    subject: "Mathematics",
-    icon: "📐",
-    resources: []
-  },
+    {
+      id: 3,
+      title: "Mathematics",
+      category: "Science"
+    }
 
-  {
-    id: "civic-education",
-    subject: "Civic Education",
-    icon: "🏛️",
-    resources: []
-  },
+  ],
 
-  {
-    id: "english",
-    subject: "English",
-    icon: "📖",
-    resources: []
+
+  videos: [],
+
+
+  documents: []
+
+};
+
+
+// ==========================================
+// DASHBOARD STATISTICS
+// ==========================================
+
+const AGU_DASHBOARD_DATA = {
+
+  students: 0,
+
+  teachers: 0,
+
+  invitations: 0,
+
+  lessons: 0,
+
+  assignments: 0
+
+};
+
+
+// ==========================================
+// SAVE DATA
+// ==========================================
+
+function saveAGUData() {
+
+  try {
+
+    localStorage.setItem(
+      "aguStudentData",
+      JSON.stringify(
+        AGU_STUDENT_DATA
+      )
+    );
+
+
+    localStorage.setItem(
+      "aguTeacherData",
+      JSON.stringify(
+        AGU_TEACHER_DATA
+      )
+    );
+
+
+    localStorage.setItem(
+      "aguLibraryData",
+      JSON.stringify(
+        AGU_LIBRARY_DATA
+      )
+    );
+
+
+  } catch (error) {
+
+    console.warn(
+      "AGU data could not be saved:",
+      error
+    );
+
   }
 
-];
+}
 
 
 // ==========================================
-// HELPER FUNCTIONS
+// LOAD DATA
 // ==========================================
 
-function getSubjectById(id) {
+function loadAGUData() {
 
-  return AGU_SUBJECTS.find(
-    subject => subject.id === id
-  );
+  try {
+
+    const studentData =
+      localStorage.getItem(
+        "aguStudentData"
+      );
+
+
+    const teacherData =
+      localStorage.getItem(
+        "aguTeacherData"
+      );
+
+
+    const libraryData =
+      localStorage.getItem(
+        "aguLibraryData"
+      );
+
+
+    if (studentData) {
+
+      Object.assign(
+        AGU_STUDENT_DATA,
+        JSON.parse(studentData)
+      );
+
+    }
+
+
+    if (teacherData) {
+
+      Object.assign(
+        AGU_TEACHER_DATA,
+        JSON.parse(teacherData)
+      );
+
+    }
+
+
+    if (libraryData) {
+
+      Object.assign(
+        AGU_LIBRARY_DATA,
+        JSON.parse(libraryData)
+      );
+
+    }
+
+
+  } catch (error) {
+
+    console.warn(
+      "AGU data could not be loaded:",
+      error
+    );
+
+  }
 
 }
 
 
-function getLevelById(id) {
+// ==========================================
+// ADD STUDENT
+// ==========================================
 
-  return AGU_LEVELS.find(
-    level => level.id === id
+function addAGUStudent(student) {
+
+  if (!student) {
+    return;
+  }
+
+
+  AGU_TEACHER_DATA.students.push(
+    student
   );
+
+
+  saveAGUData();
 
 }
 
 
-function getTermById(id) {
+// ==========================================
+// ADD TEACHER LESSON
+// ==========================================
 
-  return AGU_TERMS.find(
-    term => term.id === id
+function addAGULesson(lesson) {
+
+  if (!lesson) {
+    return;
+  }
+
+
+  AGU_TEACHER_DATA.lessons.push(
+    lesson
   );
 
+
+  saveAGUData();
+
 }
+
+
+// ==========================================
+// INITIALIZE DATA
+// ==========================================
+
+document.addEventListener(
+  "DOMContentLoaded",
+  () => {
+
+    loadAGUData();
+
+  }
+);

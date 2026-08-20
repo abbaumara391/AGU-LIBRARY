@@ -114,7 +114,7 @@
 
 
   <!-- =====================================
-       MAIN CONTENT
+       MAIN
   ====================================== -->
 
   <main>
@@ -137,7 +137,6 @@
             🎓 EDUCATION FOR EVERYONE
           </span>
 
-
           <h2>
 
             Welcome to
@@ -147,7 +146,6 @@
             </span>
 
           </h2>
-
 
           <p>
 
@@ -168,7 +166,6 @@
               📚 Explore Library
             </button>
 
-
             <button
               class="secondary-btn"
               onclick="showSection('invitations')"
@@ -183,7 +180,6 @@
       </div>
 
 
-
       <div class="section-heading">
 
         <h2>
@@ -196,7 +192,6 @@
         </p>
 
       </div>
-
 
 
       <div class="feature-grid">
@@ -220,7 +215,6 @@
         </div>
 
 
-
         <div class="feature-card">
 
           <div class="feature-icon">
@@ -239,7 +233,6 @@
         </div>
 
 
-
         <div class="feature-card">
 
           <div class="feature-icon">
@@ -256,7 +249,6 @@
           </p>
 
         </div>
-
 
 
         <div class="feature-card">
@@ -305,14 +297,12 @@
           </h2>
 
           <p>
-            Your educational resources
-            will appear here.
+            Your educational resources.
           </p>
 
         </div>
 
       </div>
-
 
 
       <div class="dashboard-grid">
@@ -335,13 +325,12 @@
 
           <button
             class="primary-btn"
-            onclick="showSection('library')"
+            onclick="showLibraryMessage('eBooks')"
           >
             Explore eBooks
           </button>
 
         </div>
-
 
 
         <div class="dashboard-card">
@@ -361,13 +350,12 @@
 
           <button
             class="primary-btn"
-            onclick="alert('🎥 Video Lessons will be added soon.')"
+            onclick="showLibraryMessage('Video Lessons')"
           >
             Watch Lessons
           </button>
 
         </div>
-
 
 
         <div class="dashboard-card">
@@ -387,7 +375,7 @@
 
           <button
             class="primary-btn"
-            onclick="alert('📝 Study Materials will be added soon.')"
+            onclick="showLibraryMessage('Study Materials')"
           >
             View Materials
           </button>
@@ -431,11 +419,29 @@
       </div>
 
 
+      <!-- STUDENT PROFILE -->
+
+      <div
+        id="studentWelcome"
+        class="invitation-intro"
+      >
+
+        <h3>
+          👋 Welcome, Student
+        </h3>
+
+        <p>
+          Your personal student dashboard
+          will appear here.
+        </p>
+
+      </div>
+
+
+      <!-- STUDENT STATISTICS -->
 
       <div class="dashboard-grid">
 
-
-        <!-- MY LESSONS -->
 
         <div class="dashboard-card">
 
@@ -447,9 +453,12 @@
             My Lessons
           </h3>
 
+          <strong>
+            3
+          </strong>
+
           <p>
-            Access your lessons and
-            learning materials.
+            Available lessons
           </p>
 
           <button
@@ -462,9 +471,6 @@
         </div>
 
 
-
-        <!-- ASSIGNMENTS -->
-
         <div class="dashboard-card">
 
           <span>
@@ -475,9 +481,12 @@
             Assignments
           </h3>
 
+          <strong>
+            2
+          </strong>
+
           <p>
-            Complete your assignments
-            and educational activities.
+            Available assignments
           </p>
 
           <button
@@ -490,9 +499,6 @@
         </div>
 
 
-
-        <!-- PROGRESS -->
-
         <div class="dashboard-card">
 
           <span>
@@ -503,9 +509,12 @@
             My Progress
           </h3>
 
+          <strong>
+            0%
+          </strong>
+
           <p>
-            Track your learning progress
-            and achievements.
+            Learning progress
           </p>
 
           <button
@@ -517,9 +526,6 @@
 
         </div>
 
-
-
-        <!-- STUDY LIBRARY -->
 
         <div class="dashboard-card">
 
@@ -549,19 +555,98 @@
       </div>
 
 
+      <!-- STUDENT SUBJECTS -->
 
-      <div class="invitation-intro">
+      <div class="section-heading">
 
-        <h3>
-          🎓 Keep Learning
-        </h3>
+        <h2>
+          📚 My Subjects
+        </h2>
 
         <p>
-          Your AGU student dashboard will
-          grow as new lessons, assignments,
-          results and learning resources
-          are added.
+          Select a subject to begin learning.
         </p>
+
+      </div>
+
+
+      <div class="dashboard-grid">
+
+
+        <div class="dashboard-card">
+
+          <span>
+            ⚛️
+          </span>
+
+          <h3>
+            Physics
+          </h3>
+
+          <p>
+            Lessons, examples and
+            educational resources.
+          </p>
+
+          <button
+            class="primary-btn"
+            onclick="openSubject('Physics')"
+          >
+            Open Physics
+          </button>
+
+        </div>
+
+
+        <div class="dashboard-card">
+
+          <span>
+            🧪
+          </span>
+
+          <h3>
+            Chemistry
+          </h3>
+
+          <p>
+            Chemistry lessons and
+            study materials.
+          </p>
+
+          <button
+            class="primary-btn"
+            onclick="openSubject('Chemistry')"
+          >
+            Open Chemistry
+          </button>
+
+        </div>
+
+
+        <div class="dashboard-card">
+
+          <span>
+            ➗
+          </span>
+
+          <h3>
+            Mathematics
+          </h3>
+
+          <p>
+            Mathematics lessons,
+            exercises and examples.
+          </p>
+
+          <button
+            class="primary-btn"
+            onclick="openSubject('Mathematics')"
+          >
+            Open Mathematics
+          </button>
+
+        </div>
+
 
       </div>
 
@@ -599,11 +684,24 @@
       </div>
 
 
+      <div
+        id="teacherWelcome"
+        class="invitation-intro"
+      >
+
+        <h3>
+          👨‍🏫 Welcome, Teacher
+        </h3>
+
+        <p>
+          Your teaching dashboard is ready.
+        </p>
+
+      </div>
+
 
       <div class="dashboard-grid">
 
-
-        <!-- TEACHING MATERIALS -->
 
         <div class="dashboard-card">
 
@@ -630,9 +728,6 @@
         </div>
 
 
-
-        <!-- STUDENTS -->
-
         <div class="dashboard-card">
 
           <span>
@@ -657,9 +752,6 @@
 
         </div>
 
-
-
-        <!-- CLASS PROGRESS -->
 
         <div class="dashboard-card">
 
@@ -686,9 +778,6 @@
         </div>
 
 
-
-        <!-- CREATE LESSON -->
-
         <div class="dashboard-card">
 
           <span>
@@ -713,24 +802,6 @@
 
         </div>
 
-
-      </div>
-
-
-
-      <div class="invitation-intro">
-
-        <h3>
-          👨‍🏫 Welcome Teacher
-        </h3>
-
-        <p>
-          Your teacher dashboard will
-          become the central place for
-          managing lessons, students,
-          assignments and educational
-          content.
-        </p>
 
       </div>
 
@@ -769,7 +840,6 @@
       </div>
 
 
-
       <div class="invitation-intro">
 
         <h3>
@@ -784,11 +854,8 @@
       </div>
 
 
-
       <div class="invitation-grid">
 
-
-        <!-- STUDENT INVITATION -->
 
         <div class="invitation-card">
 
@@ -814,9 +881,6 @@
 
         </div>
 
-
-
-        <!-- TEACHER INVITATION -->
 
         <div class="invitation-card">
 
@@ -846,9 +910,6 @@
       </div>
 
 
-
-      <!-- GENERATED INVITATION -->
-
       <div
         id="invitationResult"
         class="invitation-result"
@@ -862,7 +923,6 @@
         <p
           id="invitationMessage"
         ></p>
-
 
 
         <div
@@ -880,7 +940,6 @@
           </strong>
 
         </div>
-
 
 
         <div
@@ -902,7 +961,6 @@
         </div>
 
 
-
         <div
           class="invitation-actions"
         >
@@ -912,7 +970,6 @@
           >
             📋 Copy Link
           </button>
-
 
           <button
             onclick="shareWhatsApp()"
@@ -959,6 +1016,22 @@
       </div>
 
 
+      <div
+        id="aguUserWelcome"
+        class="invitation-intro"
+      >
+
+        <h3>
+          👋 Welcome to AGU
+        </h3>
+
+        <p>
+          Login to see your personalized
+          dashboard.
+        </p>
+
+      </div>
+
 
       <div class="dashboard-grid">
 
@@ -986,7 +1059,6 @@
         </div>
 
 
-
         <div class="dashboard-card">
 
           <span>
@@ -1008,7 +1080,6 @@
           </p>
 
         </div>
-
 
 
         <div class="dashboard-card">
@@ -1080,4 +1151,4 @@
 
 </body>
 
-            </html>
+</html>

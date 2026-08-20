@@ -10,18 +10,27 @@
     content="width=device-width, initial-scale=1.0"
   >
 
-  <title>AGU Education — Login</title>
+  <title>AGU — Login & Registration</title>
 
-  <link rel="stylesheet" href="style.css">
+  <meta
+    name="description"
+    content="Login or create an account on AGU Educational Platform."
+  >
+
+  <link
+    rel="stylesheet"
+    href="style.css"
+  >
 
 </head>
 
 
 <body>
 
-  <!-- =========================
-       LOGIN HEADER
-  ========================== -->
+
+  <!-- =====================================
+       HEADER
+  ====================================== -->
 
   <header class="site-header">
 
@@ -32,8 +41,15 @@
       </div>
 
       <div>
-        <h1>AGU EDUCATIONAL PLATFORM</h1>
-        <p>Learn • Teach • Grow</p>
+
+        <h1>
+          AGU EDUCATIONAL PLATFORM
+        </h1>
+
+        <p>
+          Learn • Teach • Grow
+        </p>
+
       </div>
 
     </div>
@@ -41,161 +57,204 @@
   </header>
 
 
-  <!-- =========================
-       LOGIN PAGE
-  ========================== -->
 
-  <main class="auth-page">
+  <!-- =====================================
+       AUTHENTICATION AREA
+  ====================================== -->
 
-    <div class="auth-card">
+  <main>
 
-      <div class="auth-icon">
-        🔐
+    <section class="page-section active">
+
+
+      <div class="page-header">
+
+        <span class="page-icon">
+          🔐
+        </span>
+
+        <div>
+
+          <h2>
+            AGU Account
+          </h2>
+
+          <p>
+            Login or create your educational
+            account.
+          </p>
+
+        </div>
+
       </div>
 
-      <h2>Welcome Back</h2>
-
-      <p class="auth-subtitle">
-        Login to your AGU Educational account.
-      </p>
 
 
-      <!-- =========================
-           LOGIN FORM
-      ========================== -->
+      <!-- =================================
+           LOGIN CARD
+      ================================== -->
 
-      <form id="loginForm">
+      <div
+        class="invitation-card"
+        id="loginForm"
+      >
 
-        <div class="form-group">
+        <div class="invitation-icon">
+          🔐
+        </div>
+
+
+        <h2>
+          Welcome Back
+        </h2>
+
+
+        <p>
+          Login to continue to your
+          AGU Educational Platform.
+        </p>
+
+
+
+        <form id="loginFormElement">
+
 
           <label for="loginEmail">
             Email Address
           </label>
 
           <input
-            type="email"
             id="loginEmail"
+            type="email"
             placeholder="Enter your email"
+            autocomplete="email"
             required
           >
 
-        </div>
-
-
-        <div class="form-group">
 
           <label for="loginPassword">
             Password
           </label>
 
           <input
-            type="password"
             id="loginPassword"
+            type="password"
             placeholder="Enter your password"
+            autocomplete="current-password"
             required
           >
 
-        </div>
+
+          <button
+            type="submit"
+            class="primary-btn"
+          >
+            🔐 Login
+          </button>
+
+
+        </form>
+
+
+        <p
+          id="loginMessage"
+          class="auth-message"
+        ></p>
 
 
         <button
-          type="submit"
-          class="auth-btn"
+          type="button"
+          class="secondary-btn"
+          onclick="showRegister()"
         >
-          🔐 Login
+          📝 Create New Account
         </button>
 
-      </form>
 
-
-      <div id="loginMessage" class="auth-message"></div>
-
-
-      <!-- =========================
-           REGISTER
-      ========================== -->
-
-      <div class="auth-divider">
-        <span>OR</span>
       </div>
 
 
-      <p class="register-text">
-        Don't have an account?
-      </p>
 
+      <!-- =================================
+           REGISTER CARD
+      ================================== -->
 
-      <button
-        type="button"
-        class="register-btn"
-        onclick="showRegister()"
-      >
-        ✨ Create Account
-      </button>
-
-
-      <!-- =========================
-           REGISTER FORM
-      ========================== -->
-
-      <form
+      <div
+        class="invitation-card"
         id="registerForm"
         style="display:none;"
       >
 
-        <h3>Create Your Account</h3>
+        <div class="invitation-icon">
+          📝
+        </div>
 
 
-        <div class="form-group">
+        <h2>
+          Create Your AGU Account
+        </h2>
+
+
+        <p>
+          Join the AGU Educational Platform
+          and start learning.
+        </p>
+
+
+
+        <form id="registerFormElement">
+
+
+          <!-- NAME -->
 
           <label for="registerName">
             Full Name
           </label>
 
           <input
-            type="text"
             id="registerName"
+            type="text"
             placeholder="Enter your full name"
+            autocomplete="name"
             required
           >
 
-        </div>
 
 
-        <div class="form-group">
+          <!-- EMAIL -->
 
           <label for="registerEmail">
             Email Address
           </label>
 
           <input
-            type="email"
             id="registerEmail"
+            type="email"
             placeholder="Enter your email"
+            autocomplete="email"
             required
           >
 
-        </div>
 
 
-        <div class="form-group">
+          <!-- PASSWORD -->
 
           <label for="registerPassword">
             Password
           </label>
 
           <input
-            type="password"
             id="registerPassword"
-            placeholder="Create a password"
+            type="password"
+            placeholder="Minimum 6 characters"
+            autocomplete="new-password"
             minlength="6"
             required
           >
 
-        </div>
 
 
-        <div class="form-group">
+          <!-- ROLE -->
 
           <label for="registerRole">
             Account Type
@@ -211,7 +270,7 @@
             </option>
 
             <option value="student">
-              👨‍🎓 Student
+              🎓 Student
             </option>
 
             <option value="teacher">
@@ -220,65 +279,161 @@
 
           </select>
 
-        </div>
 
 
-<div class="form-group">
+          <!-- INVITATION -->
 
-  <label for="invitationCode">
-    📩 Invitation Code
-  </label>
+          <label for="invitationCode">
+            📩 Invitation Code
+            <small>
+              Optional if you are registering directly.
+            </small>
+          </label>
 
-  <input
-    type="text"
-    id="invitationCode"
-    placeholder="Enter invitation code"
-    maxlength="7"
-    autocomplete="off"
-  >
+          <input
+            id="invitationCode"
+            type="text"
+            placeholder="Example: ABC-234"
+            autocomplete="off"
+          >
 
-  <small>
-    Enter the invitation code you received.
-  </small>
 
-</div>        <button
-          type="submit"
-          class="auth-btn"
+
+          <!-- REGISTER -->
+
+          <button
+            type="submit"
+            class="primary-btn"
+          >
+            ✨ Create Account
+          </button>
+
+
+        </form>
+
+
+        <p
+          id="registerMessage"
+          class="auth-message"
+        ></p>
+
+
+        <button
+          type="button"
+          class="secondary-btn"
+          onclick="showLogin()"
         >
-          ✨ Create Account
+          🔐 Already have an account? Login
         </button>
 
-      </form>
+
+      </div>
 
 
-      <div
-        id="registerMessage"
-        class="auth-message"
-      ></div>
-
-
-      <!-- =========================
-           BACK TO PLATFORM
-      ========================== -->
-
-      <a
-        href="index.html"
-        class="back-link"
-      >
-        ← Back to AGU Educational Platform
-      </a>
-
-    </div>
+    </section>
 
   </main>
 
 
-  <!-- =========================
-       JAVASCRIPT
-  ========================== -->
 
-  <script src="data.js"></script>
+  <!-- =====================================
+       FOOTER
+  ====================================== -->
+
+  <footer class="site-footer">
+
+    <div class="footer-logo">
+      AGU
+    </div>
+
+    <h3>
+      AGU Educational Platform
+    </h3>
+
+    <p>
+      Learn • Teach • Grow
+    </p>
+
+    <p class="copyright">
+      © 2026 AGU Educational Platform.
+      All rights reserved.
+    </p>
+
+  </footer>
+
+
+
+  <!-- =====================================
+       AUTH JAVASCRIPT
+  ====================================== -->
+
   <script src="auth.js"></script>
+
+
+  <!-- =====================================
+       OPEN REGISTER WHEN INVITATION EXISTS
+  ====================================== -->
+
+  <script>
+
+    document.addEventListener(
+      "DOMContentLoaded",
+      function () {
+
+        const params =
+          new URLSearchParams(
+            window.location.search
+          );
+
+
+        const register =
+          params.get("register");
+
+
+        const invite =
+          params.get("invite");
+
+
+        if (
+          register === "true" ||
+          invite
+        ) {
+
+          showRegister();
+
+        }
+
+
+        /*
+         * If an invitation code is present
+         * in the URL, also place it directly
+         * into the registration field.
+         */
+
+        if (invite) {
+
+          const input =
+            document.getElementById(
+              "invitationCode"
+            );
+
+
+          if (input) {
+
+            input.value =
+              invite
+                .trim()
+                .toUpperCase();
+
+          }
+
+        }
+
+      }
+    );
+
+  </script>
+
 
 </body>
 

@@ -1,6 +1,6 @@
 // ==========================================
 // AGU EDUCATIONAL PLATFORM
-// PHASE 3 — STUDENT & TEACHER DASHBOARD
+// PHASE 3 — WORKING DASHBOARD
 // ==========================================
 
 
@@ -77,7 +77,9 @@ function getAGUCurrentUser() {
   try {
 
     return JSON.parse(
-      localStorage.getItem("aguCurrentUser")
+      localStorage.getItem(
+        "aguCurrentUser"
+      )
     );
 
   } catch (error) {
@@ -90,7 +92,24 @@ function getAGUCurrentUser() {
 
 
 // ==========================================
-// INVITATION CODE GENERATOR
+// SAFE TEXT
+// ==========================================
+
+function escapeHTML(text) {
+
+  const div =
+    document.createElement("div");
+
+  div.textContent =
+    text || "";
+
+  return div.innerHTML;
+
+}
+
+
+// ==========================================
+// INVITATION CODE
 // ==========================================
 
 function generateInvitation(type) {
@@ -105,9 +124,11 @@ function generateInvitation(type) {
   const code =
     createInvitationCode();
 
+
   const baseURL =
     window.location.origin +
     window.location.pathname;
+
 
   const invitationLink =
     baseURL +
@@ -135,17 +156,14 @@ function generateInvitation(type) {
   };
 
 
-  invitationStats.total++;
+  saveInvitation(
+    currentInvitation
+  );
 
 
-  if (type === "Student") {
-    invitationStats.students++;
-  }
+  loadInvitationStats();
 
-
-  if (type === "Teacher") {
-    invitationStats.teachers++;
-  }
+  updateDashboard();
 
 
   const result =
@@ -170,7 +188,10 @@ function generateInvitation(type) {
 
 
   if (result) {
-    result.style.display = "block";
+
+    result.style.display =
+      "block";
+
   }
 
 
@@ -183,21 +204,19 @@ function generateInvitation(type) {
 
 
   if (codeElement) {
-    codeElement.textContent = code;
+
+    codeElement.textContent =
+      code;
+
   }
 
 
   if (linkElement) {
+
     linkElement.value =
       invitationLink;
+
   }
-
-
-  saveInvitation(
-    currentInvitation
-  );
-
-  updateDashboard();
 
 
   setTimeout(() => {
@@ -266,110 +285,6 @@ function createInvitationCode() {
 
 
 // ==========================================
-// COPY INVITATION LINK
-// ==========================================
-
-async function copyInvitationLink() {
-
-  if (!currentInvitation) {
-
-    alert(
-      "Please generate an invitation first."
-    );
-
-    return;
-
-  }
-
-
-  const link =
-    currentInvitation.link;
-
-
-  try {
-
-    await navigator.clipboard.writeText(
-      link
-    );
-
-    alert(
-      "✅ Invitation link copied successfully!"
-    );
-
-  } catch (error) {
-
-    const input =
-      document.getElementById(
-        "invitationLink"
-      );
-
-    if (input) {
-
-      input.select();
-
-      input.setSelectionRange(
-        0,
-        99999
-      );
-
-      document.execCommand("copy");
-
-      alert(
-        "✅ Invitation link copied!"
-      );
-
-    }
-
-  }
-
-}
-
-
-// ==========================================
-// WHATSAPP SHARING
-// ==========================================
-
-function shareWhatsApp() {
-
-  if (!currentInvitation) {
-
-    alert(
-      "Please generate an invitation first."
-    );
-
-    return;
-
-  }
-
-
-  const message =
-`🎓 AGU Educational Platform Invitation
-
-You have been invited to join AGU Educational Platform.
-
-Invitation type: ${currentInvitation.type}
-
-Invitation code: ${currentInvitation.code}
-
-Join using this link:
-${currentInvitation.link}`;
-
-
-  const whatsappURL =
-    "https://wa.me/?text=" +
-    encodeURIComponent(message);
-
-
-  window.open(
-    whatsappURL,
-    "_blank",
-    "noopener,noreferrer"
-  );
-
-}
-
-
-// ==========================================
 // SAVE INVITATION
 // ==========================================
 
@@ -407,7 +322,7 @@ function saveInvitation(invitation) {
 
 
 // ==========================================
-// LOAD INVITATION STATISTICS
+// LOAD INVITATION STATS
 // ==========================================
 
 function loadInvitationStats() {
@@ -460,7 +375,7 @@ function loadInvitationStats() {
 
 
 // ==========================================
-// UPDATE DASHBOARD COUNTS
+// UPDATE DASHBOARD
 // ==========================================
 
 function updateDashboard() {
@@ -508,6 +423,111 @@ function updateDashboard() {
 
 
 // ==========================================
+// COPY INVITATION
+// ==========================================
+
+async function copyInvitationLink() {
+
+  if (!currentInvitation) {
+
+    alert(
+      "Please generate an invitation first."
+    );
+
+    return;
+
+  }
+
+
+  try {
+
+    await navigator.clipboard.writeText(
+      currentInvitation.link
+    );
+
+
+    alert(
+      "✅ Invitation link copied successfully!"
+    );
+
+
+  } catch (error) {
+
+    const input =
+      document.getElementById(
+        "invitationLink"
+      );
+
+
+    if (input) {
+
+      input.select();
+
+      input.setSelectionRange(
+        0,
+        99999
+      );
+
+      document.execCommand("copy");
+
+
+      alert(
+        "✅ Invitation link copied!"
+      );
+
+    }
+
+  }
+
+}
+
+
+// ==========================================
+// WHATSAPP
+// ==========================================
+
+function shareWhatsApp() {
+
+  if (!currentInvitation) {
+
+    alert(
+      "Please generate an invitation first."
+    );
+
+    return;
+
+  }
+
+
+  const message =
+`🎓 AGU Educational Platform Invitation
+
+You have been invited to join AGU Educational Platform.
+
+Invitation type:
+${currentInvitation.type}
+
+Invitation code:
+${currentInvitation.code}
+
+Join using this link:
+${currentInvitation.link}`;
+
+
+  const whatsappURL =
+    "https://wa.me/?text=" +
+    encodeURIComponent(message);
+
+
+  window.open(
+    whatsappURL,
+    "_blank"
+  );
+
+}
+
+
+// ==========================================
 // CHECK INVITATION LINK
 // ==========================================
 
@@ -531,29 +551,18 @@ function checkInvitationLink() {
   }
 
 
-  /*
-   * IMPORTANT:
-   * Store invitation temporarily.
-   * The registration page can use this
-   * invitation code.
-   */
-
   sessionStorage.setItem(
     "aguPendingInvitation",
     JSON.stringify({
 
       code: invite,
 
-      type: type || "user"
+      type:
+        type || "user"
 
     })
   );
 
-
-  /*
-   * Send the user directly to
-   * registration.
-   */
 
   window.location.href =
     "login.html?register=true&invite=" +
@@ -563,272 +572,252 @@ function checkInvitationLink() {
 
 
 // ==========================================
-// PERSONALIZED STUDENT DASHBOARD
+// STUDENT LESSONS
 // ==========================================
 
-function buildStudentDashboard() {
+function openStudentLessons() {
 
-  const user =
-    getAGUCurrentUser();
+  showSection("library");
 
-  if (!user) {
-    return;
-  }
-
-
-  const studentsSection =
-    document.getElementById(
-      "students"
-    );
-
-  if (!studentsSection) {
-    return;
-  }
-
-
-  const name =
-    user.name || "Student";
-
-
-  const existing =
-    document.getElementById(
-      "aguStudentWelcome"
-    );
-
-
-  if (existing) {
-    return;
-  }
-
-
-  const welcome =
-    document.createElement("div");
-
-  welcome.id =
-    "aguStudentWelcome";
-
-  welcome.className =
-    "dashboard-card";
-
-
-  welcome.innerHTML = `
-
-    <span>🎓</span>
-
-    <h3>
-      Welcome, ${escapeHTML(name)}
-    </h3>
-
-    <p>
-      Your student dashboard is ready.
-    </p>
-
-    <p>
-      📚 Continue learning and explore
-      your educational resources.
-    </p>
-
-  `;
-
-
-  const grid =
-    studentsSection.querySelector(
-      ".dashboard-grid"
-    );
-
-
-  if (grid) {
-
-    grid.insertBefore(
-      welcome,
-      grid.firstChild
-    );
-
-  }
-
-}
-
-
-// ==========================================
-// PERSONALIZED TEACHER DASHBOARD
-// ==========================================
-
-function buildTeacherDashboard() {
-
-  const user =
-    getAGUCurrentUser();
-
-  if (!user) {
-    return;
-  }
-
-
-  const teachersSection =
-    document.getElementById(
-      "teachers"
-    );
-
-  if (!teachersSection) {
-    return;
-  }
-
-
-  const name =
-    user.name || "Teacher";
-
-
-  const existing =
-    document.getElementById(
-      "aguTeacherWelcome"
-    );
-
-
-  if (existing) {
-    return;
-  }
-
-
-  const welcome =
-    document.createElement("div");
-
-  welcome.id =
-    "aguTeacherWelcome";
-
-  welcome.className =
-    "dashboard-card";
-
-
-  welcome.innerHTML = `
-
-    <span>👨‍🏫</span>
-
-    <h3>
-      Welcome, ${escapeHTML(name)}
-    </h3>
-
-    <p>
-      Your teacher dashboard is ready.
-    </p>
-
-    <p>
-      📚 Organize lessons and support
-      your students.
-    </p>
-
-  `;
-
-
-  const grid =
-    teachersSection.querySelector(
-      ".dashboard-grid"
-    );
-
-
-  if (grid) {
-
-    grid.insertBefore(
-      welcome,
-      grid.firstChild
-    );
-
-  }
-
-}
-
-
-// ==========================================
-// DASHBOARD WELCOME
-// ==========================================
-
-function buildMainDashboard() {
-
-  const user =
-    getAGUCurrentUser();
-
-  if (!user) {
-    return;
-  }
-
-
-  const dashboard =
-    document.getElementById(
-      "dashboard"
-    );
-
-  if (!dashboard) {
-    return;
-  }
-
-
-  const existing =
-    document.getElementById(
-      "aguDashboardWelcome"
-    );
-
-
-  if (existing) {
-    return;
-  }
-
-
-  const welcome =
-    document.createElement("div");
-
-  welcome.id =
-    "aguDashboardWelcome";
-
-  welcome.className =
-    "invitation-intro";
-
-
-  const role =
-    user.role === "student"
-      ? "Student"
-      : "Teacher";
-
-
-  welcome.innerHTML = `
-
-    <h3>
-      👋 Welcome, ${escapeHTML(user.name)}
-    </h3>
-
-    <p>
-      You are logged in as a
-      <strong>${role}</strong>.
-    </p>
-
-    <p>
-      Your AGU Educational Platform
-      dashboard is ready.
-    </p>
-
-  `;
-
-
-  dashboard.insertBefore(
-    welcome,
-    dashboard.querySelector(
-      ".dashboard-grid"
-    )
+  alert(
+    "📚 Student Lessons\n\nYour available lessons are ready. The full lesson system will be connected in the next phase."
   );
 
 }
 
 
 // ==========================================
-// SAFE TEXT
+// STUDENT ASSIGNMENTS
 // ==========================================
 
-function escapeHTML(text) {
+function openAssignments() {
 
-  const div =
-    document.createElement("div");
+  alert(
+    "📝 Assignments\n\nYour assignment system is ready for the next development stage."
+  );
 
-  div.textContent =
-    text;
+}
 
-  return div.innerHTML;
+
+// ==========================================
+// STUDENT PROGRESS
+// ==========================================
+
+function openStudentProgress() {
+
+  const data =
+    typeof AGU_STUDENT_DATA !== "undefined"
+      ? AGU_STUDENT_DATA.progress
+      : null;
+
+
+  if (!data) {
+
+    alert(
+      "🏆 Progress data is not available yet."
+    );
+
+    return;
+
+  }
+
+
+  alert(
+`🏆 MY PROGRESS
+
+Lessons completed:
+${data.lessonsCompleted}/${data.totalLessons}
+
+Assignments completed:
+${data.assignmentsCompleted}/${data.totalAssignments}
+
+Score:
+${data.score}%`
+  );
+
+}
+
+
+// ==========================================
+// TEACHING MATERIALS
+// ==========================================
+
+function openTeachingMaterials() {
+
+  const data =
+    typeof AGU_TEACHER_DATA !== "undefined"
+      ? AGU_TEACHER_DATA.materials
+      : [];
+
+
+  let message =
+    "📚 TEACHING MATERIALS\n\n";
+
+
+  if (!data.length) {
+
+    message +=
+      "No teaching materials available yet.";
+
+  } else {
+
+    data.forEach(
+      material => {
+
+        message +=
+          "• " +
+          material.title +
+          "\n";
+
+      }
+    );
+
+  }
+
+
+  alert(message);
+
+}
+
+
+// ==========================================
+// TEACHER STUDENTS
+// ==========================================
+
+function openTeacherStudents() {
+
+  const data =
+    typeof AGU_TEACHER_DATA !== "undefined"
+      ? AGU_TEACHER_DATA.students
+      : [];
+
+
+  if (!data.length) {
+
+    alert(
+      "👨‍🎓 My Students\n\nNo students have been added yet."
+    );
+
+    return;
+
+  }
+
+
+  let message =
+    "👨‍🎓 MY STUDENTS\n\n";
+
+
+  data.forEach(
+    student => {
+
+      message +=
+        "• " +
+        student.name +
+        "\n";
+
+    }
+  );
+
+
+  alert(message);
+
+}
+
+
+// ==========================================
+// CLASS PROGRESS
+// ==========================================
+
+function openClassProgress() {
+
+  const data =
+    typeof AGU_TEACHER_DATA !== "undefined"
+      ? AGU_TEACHER_DATA.classes
+      : [];
+
+
+  let message =
+    "📊 CLASS PROGRESS\n\n";
+
+
+  data.forEach(
+    classroom => {
+
+      message +=
+        classroom.name +
+        ": " +
+        classroom.students +
+        " students\n";
+
+    }
+  );
+
+
+  alert(message);
+
+}
+
+
+// ==========================================
+// CREATE LESSON
+// ==========================================
+
+function createTeacherLesson() {
+
+  const title =
+    prompt(
+      "Enter the lesson title:"
+    );
+
+
+  if (!title) {
+    return;
+  }
+
+
+  const subject =
+    prompt(
+      "Enter the subject:"
+    );
+
+
+  if (!subject) {
+    return;
+  }
+
+
+  const lesson = {
+
+    id:
+      Date.now(),
+
+    title:
+      title,
+
+    subject:
+      subject,
+
+    createdAt:
+      new Date().toISOString()
+
+  };
+
+
+  if (
+    typeof addAGULesson ===
+    "function"
+  ) {
+
+    addAGULesson(
+      lesson
+    );
+
+  }
+
+
+  alert(
+    "✅ Lesson created successfully!"
+  );
 
 }
 
@@ -841,6 +830,7 @@ function displayCurrentUser() {
 
   const user =
     getAGUCurrentUser();
+
 
   if (!user) {
     return;
@@ -858,13 +848,14 @@ function displayCurrentUser() {
 
 
 // ==========================================
-// CREATE LOGOUT BUTTON
+// LOGOUT
 // ==========================================
 
 function createLogoutButton() {
 
   const user =
     getAGUCurrentUser();
+
 
   if (!user) {
     return;
@@ -875,6 +866,7 @@ function createLogoutButton() {
     document.getElementById(
       "mainNav"
     );
+
 
   if (!nav) {
     return;
@@ -924,56 +916,90 @@ function createLogoutButton() {
 
 
 // ==========================================
-// ROLE-BASED NAVIGATION
+// PERSONALIZED DASHBOARD
 // ==========================================
 
-function setupRoleAccess() {
+function personalizeDashboard() {
 
   const user =
     getAGUCurrentUser();
+
 
   if (!user) {
     return;
   }
 
 
-  const studentButton =
-    document.querySelector(
-      'button[onclick="showSection(\'students\')"]'
-    );
-
-  const teacherButton =
-    document.querySelector(
-      'button[onclick="showSection(\'teachers\')"]'
+  const dashboard =
+    document.getElementById(
+      "dashboard"
     );
 
 
-  /*
-   * Keep both areas visible for now.
-   * This makes Phase 3 easier to expand.
-   */
-
-
-  if (user.role === "student") {
-
-    if (studentButton) {
-
-      studentButton.innerHTML =
-        "🎓 My Student Area";
-
-    }
-
+  if (!dashboard) {
+    return;
   }
 
 
-  if (user.role === "teacher") {
+  const old =
+    document.getElementById(
+      "aguUserWelcome"
+    );
 
-    if (teacherButton) {
 
-      teacherButton.innerHTML =
-        "👨‍🏫 My Teacher Area";
+  if (old) {
+    old.remove();
+  }
 
-    }
+
+  const welcome =
+    document.createElement(
+      "div"
+    );
+
+
+  welcome.id =
+    "aguUserWelcome";
+
+
+  welcome.className =
+    "invitation-intro";
+
+
+  welcome.innerHTML = `
+
+    <h3>
+      👋 Welcome,
+      ${escapeHTML(user.name)}
+    </h3>
+
+    <p>
+      You are logged in as
+      <strong>
+        ${escapeHTML(user.role)}
+      </strong>.
+    </p>
+
+    <p>
+      Your AGU Educational Platform
+      dashboard is ready.
+    </p>
+
+  `;
+
+
+  const grid =
+    dashboard.querySelector(
+      ".dashboard-grid"
+    );
+
+
+  if (grid) {
+
+    dashboard.insertBefore(
+      welcome,
+      grid
+    );
 
   }
 
@@ -981,15 +1007,10 @@ function setupRoleAccess() {
 
 
 // ==========================================
-// INITIALIZE APPLICATION
+// INITIALIZE
 // ==========================================
 
 function initializeApp() {
-
-  /*
-   * Check invitation BEFORE normal
-   * application initialization.
-   */
 
   const params =
     new URLSearchParams(
@@ -1018,19 +1039,13 @@ function initializeApp() {
 
   createLogoutButton();
 
-  setupRoleAccess();
-
-  buildStudentDashboard();
-
-  buildTeacherDashboard();
-
-  buildMainDashboard();
+  personalizeDashboard();
 
 }
 
 
 // ==========================================
-// START APPLICATION
+// START
 // ==========================================
 
 document.addEventListener(
@@ -1040,7 +1055,7 @@ document.addEventListener(
 
 
 // ==========================================
-// LOGIN BUTTON
+// LOGIN
 // ==========================================
 
 function openLogin() {

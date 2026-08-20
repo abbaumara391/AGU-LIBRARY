@@ -1,11 +1,6 @@
 // ==========================================
 // AGU EDUCATIONAL PLATFORM
-// PHASE 3 — WORKING DASHBOARD
-// ==========================================
-
-
-// ==========================================
-// GLOBAL DATA
+// PHASE 3 — MAIN APPLICATION
 // ==========================================
 
 let currentInvitation = null;
@@ -48,7 +43,6 @@ function showSection(sectionId) {
     top: 0,
     behavior: "smooth"
   });
-
 }
 
 
@@ -64,52 +58,22 @@ function toggleMenu() {
   if (!nav) return;
 
   nav.classList.toggle("open");
-
 }
 
 
 // ==========================================
-// CURRENT USER
+// LOGIN
 // ==========================================
 
-function getAGUCurrentUser() {
+function openLogin() {
 
-  try {
-
-    return JSON.parse(
-      localStorage.getItem(
-        "aguCurrentUser"
-      )
-    );
-
-  } catch (error) {
-
-    return null;
-
-  }
-
+  window.location.href =
+    "login.html";
 }
 
 
 // ==========================================
-// SAFE TEXT
-// ==========================================
-
-function escapeHTML(text) {
-
-  const div =
-    document.createElement("div");
-
-  div.textContent =
-    text || "";
-
-  return div.innerHTML;
-
-}
-
-
-// ==========================================
-// INVITATION CODE
+// INVITATION CODE GENERATOR
 // ==========================================
 
 function generateInvitation(type) {
@@ -124,11 +88,9 @@ function generateInvitation(type) {
   const code =
     createInvitationCode();
 
-
   const baseURL =
     window.location.origin +
     window.location.pathname;
-
 
   const invitationLink =
     baseURL +
@@ -138,7 +100,6 @@ function generateInvitation(type) {
     encodeURIComponent(
       type.toLowerCase()
     );
-
 
   currentInvitation = {
 
@@ -155,16 +116,15 @@ function generateInvitation(type) {
 
   };
 
+  invitationStats.total++;
 
-  saveInvitation(
-    currentInvitation
-  );
+  if (type === "Student") {
+    invitationStats.students++;
+  }
 
-
-  loadInvitationStats();
-
-  updateDashboard();
-
+  if (type === "Teacher") {
+    invitationStats.teachers++;
+  }
 
   const result =
     document.getElementById(
@@ -186,14 +146,10 @@ function generateInvitation(type) {
       "invitationLink"
     );
 
-
   if (result) {
-
     result.style.display =
       "block";
-
   }
-
 
   if (message) {
 
@@ -202,22 +158,21 @@ function generateInvitation(type) {
 
   }
 
-
   if (codeElement) {
-
     codeElement.textContent =
       code;
-
   }
-
 
   if (linkElement) {
-
     linkElement.value =
       invitationLink;
-
   }
 
+  updateDashboard();
+
+  saveInvitation(
+    currentInvitation
+  );
 
   setTimeout(() => {
 
@@ -249,38 +204,124 @@ function createInvitationCode() {
 
   let code = "";
 
-
   for (let i = 0; i < 3; i++) {
 
-    code +=
-      letters.charAt(
-        Math.floor(
-          Math.random() *
-          letters.length
-        )
-      );
+    code += letters.charAt(
+      Math.floor(
+        Math.random() *
+        letters.length
+      )
+    );
 
   }
-
 
   code += "-";
 
-
   for (let i = 0; i < 3; i++) {
 
-    code +=
-      numbers.charAt(
-        Math.floor(
-          Math.random() *
-          numbers.length
-        )
-      );
+    code += numbers.charAt(
+      Math.floor(
+        Math.random() *
+        numbers.length
+      )
+    );
 
   }
 
-
   return code;
+}
 
+
+// ==========================================
+// COPY INVITATION LINK
+// ==========================================
+
+async function copyInvitationLink() {
+
+  if (!currentInvitation) {
+
+    alert(
+      "Please generate an invitation first."
+    );
+
+    return;
+  }
+
+  const link =
+    currentInvitation.link;
+
+  try {
+
+    await navigator.clipboard.writeText(
+      link
+    );
+
+    alert(
+      "✅ Invitation link copied successfully!"
+    );
+
+  } catch (error) {
+
+    const input =
+      document.getElementById(
+        "invitationLink"
+      );
+
+    if (input) {
+
+      input.select();
+
+      input.setSelectionRange(
+        0,
+        99999
+      );
+
+      document.execCommand(
+        "copy"
+      );
+
+      alert(
+        "✅ Invitation link copied!"
+      );
+
+    }
+
+  }
+}
+
+
+// ==========================================
+// WHATSAPP SHARING
+// ==========================================
+
+function shareWhatsApp() {
+
+  if (!currentInvitation) {
+
+    alert(
+      "Please generate an invitation first."
+    );
+
+    return;
+  }
+
+  const message =
+    `🎓 AGU Educational Platform Invitation\n\n` +
+    `You have been invited to join AGU Educational Platform.\n\n` +
+    `Invitation type: ${currentInvitation.type}\n` +
+    `Invitation code: ${currentInvitation.code}\n\n` +
+    `Join using this link:\n` +
+    `${currentInvitation.link}`;
+
+  const whatsappURL =
+    "https://wa.me/?text=" +
+    encodeURIComponent(message);
+
+  window.open(
+    whatsappURL,
+    "_blank",
+    "noopener,noreferrer"
+  );
 }
 
 
@@ -288,7 +329,9 @@ function createInvitationCode() {
 // SAVE INVITATION
 // ==========================================
 
-function saveInvitation(invitation) {
+function saveInvitation(
+  invitation
+) {
 
   try {
 
@@ -299,15 +342,14 @@ function saveInvitation(invitation) {
         ) || "[]"
       );
 
-
-    saved.push(invitation);
-
+    saved.push(
+      invitation
+    );
 
     localStorage.setItem(
       "aguInvitations",
       JSON.stringify(saved)
     );
-
 
   } catch (error) {
 
@@ -317,12 +359,11 @@ function saveInvitation(invitation) {
     );
 
   }
-
 }
 
 
 // ==========================================
-// LOAD INVITATION STATS
+// LOAD INVITATION STATISTICS
 // ==========================================
 
 function loadInvitationStats() {
@@ -335,7 +376,6 @@ function loadInvitationStats() {
           "aguInvitations"
         ) || "[]"
       );
-
 
     invitationStats = {
 
@@ -356,7 +396,6 @@ function loadInvitationStats() {
 
     };
 
-
   } catch (error) {
 
     invitationStats = {
@@ -370,7 +409,6 @@ function loadInvitationStats() {
     };
 
   }
-
 }
 
 
@@ -395,14 +433,12 @@ function updateDashboard() {
       "teacherCount"
     );
 
-
   if (invitationCount) {
 
     invitationCount.textContent =
       invitationStats.total;
 
   }
-
 
   if (studentCount) {
 
@@ -411,118 +447,12 @@ function updateDashboard() {
 
   }
 
-
   if (teacherCount) {
 
     teacherCount.textContent =
       invitationStats.teachers;
 
   }
-
-}
-
-
-// ==========================================
-// COPY INVITATION
-// ==========================================
-
-async function copyInvitationLink() {
-
-  if (!currentInvitation) {
-
-    alert(
-      "Please generate an invitation first."
-    );
-
-    return;
-
-  }
-
-
-  try {
-
-    await navigator.clipboard.writeText(
-      currentInvitation.link
-    );
-
-
-    alert(
-      "✅ Invitation link copied successfully!"
-    );
-
-
-  } catch (error) {
-
-    const input =
-      document.getElementById(
-        "invitationLink"
-      );
-
-
-    if (input) {
-
-      input.select();
-
-      input.setSelectionRange(
-        0,
-        99999
-      );
-
-      document.execCommand("copy");
-
-
-      alert(
-        "✅ Invitation link copied!"
-      );
-
-    }
-
-  }
-
-}
-
-
-// ==========================================
-// WHATSAPP
-// ==========================================
-
-function shareWhatsApp() {
-
-  if (!currentInvitation) {
-
-    alert(
-      "Please generate an invitation first."
-    );
-
-    return;
-
-  }
-
-
-  const message =
-`🎓 AGU Educational Platform Invitation
-
-You have been invited to join AGU Educational Platform.
-
-Invitation type:
-${currentInvitation.type}
-
-Invitation code:
-${currentInvitation.code}
-
-Join using this link:
-${currentInvitation.link}`;
-
-
-  const whatsappURL =
-    "https://wa.me/?text=" +
-    encodeURIComponent(message);
-
-
-  window.open(
-    whatsappURL,
-    "_blank"
-  );
 
 }
 
@@ -538,228 +468,209 @@ function checkInvitationLink() {
       window.location.search
     );
 
-
   const invite =
     params.get("invite");
 
   const type =
     params.get("type");
 
-
   if (!invite) {
     return;
   }
 
+  // Save invitation for registration page
 
   sessionStorage.setItem(
     "aguPendingInvitation",
     JSON.stringify({
-
       code: invite,
-
-      type:
-        type || "user"
-
+      type: type || "student"
     })
   );
 
+  // Send invited person to registration
 
   window.location.href =
     "login.html?register=true&invite=" +
-    encodeURIComponent(invite);
-
+    encodeURIComponent(invite) +
+    "&type=" +
+    encodeURIComponent(
+      type || "student"
+    );
 }
 
 
 // ==========================================
-// STUDENT LESSONS
+// STUDENT — MY LESSONS
 // ==========================================
 
 function openStudentLessons() {
 
-  showSection("library");
-
-  alert(
-    "📚 Student Lessons\n\nYour available lessons are ready. The full lesson system will be connected in the next phase."
+  showSection(
+    "library"
   );
 
+  setTimeout(() => {
+
+    alert(
+      "📚 Student Lessons\n\n" +
+      "Your lessons will appear in the AGU Library."
+    );
+
+  }, 300);
 }
 
 
 // ==========================================
-// STUDENT ASSIGNMENTS
+// STUDENT — ASSIGNMENTS
 // ==========================================
 
 function openAssignments() {
 
   alert(
-    "📝 Assignments\n\nYour assignment system is ready for the next development stage."
+    "📝 Assignments\n\n" +
+    "Your assignments area is ready for the next development phase."
   );
-
 }
 
 
 // ==========================================
-// STUDENT PROGRESS
+// STUDENT — PROGRESS
 // ==========================================
 
 function openStudentProgress() {
 
-  const data =
-    typeof AGU_STUDENT_DATA !== "undefined"
-      ? AGU_STUDENT_DATA.progress
-      : null;
+  const user =
+    getCurrentUser();
 
-
-  if (!data) {
-
-    alert(
-      "🏆 Progress data is not available yet."
-    );
-
-    return;
-
-  }
-
+  const name =
+    user
+      ? user.name
+      : "Student";
 
   alert(
-`🏆 MY PROGRESS
-
-Lessons completed:
-${data.lessonsCompleted}/${data.totalLessons}
-
-Assignments completed:
-${data.assignmentsCompleted}/${data.totalAssignments}
-
-Score:
-${data.score}%`
+    "🏆 Student Progress\n\n" +
+    `${name}, your progress dashboard will display your lessons, assignments and achievements here.`
   );
-
 }
 
 
 // ==========================================
-// TEACHING MATERIALS
+// TEACHER — MATERIALS
 // ==========================================
 
 function openTeachingMaterials() {
 
-  const data =
-    typeof AGU_TEACHER_DATA !== "undefined"
-      ? AGU_TEACHER_DATA.materials
-      : [];
+  showSection(
+    "library"
+  );
 
+  setTimeout(() => {
 
-  let message =
-    "📚 TEACHING MATERIALS\n\n";
-
-
-  if (!data.length) {
-
-    message +=
-      "No teaching materials available yet.";
-
-  } else {
-
-    data.forEach(
-      material => {
-
-        message +=
-          "• " +
-          material.title +
-          "\n";
-
-      }
+    alert(
+      "📚 Teaching Materials\n\n" +
+      "Teachers will be able to manage educational materials here."
     );
 
-  }
-
-
-  alert(message);
-
+  }, 300);
 }
 
 
 // ==========================================
-// TEACHER STUDENTS
+// TEACHER — STUDENTS
 // ==========================================
 
 function openTeacherStudents() {
 
-  const data =
-    typeof AGU_TEACHER_DATA !== "undefined"
-      ? AGU_TEACHER_DATA.students
-      : [];
+  let users = [];
 
+  try {
 
-  if (!data.length) {
+    users =
+      JSON.parse(
+        localStorage.getItem(
+          "aguUsers"
+        ) || "[]"
+      );
 
-    alert(
-      "👨‍🎓 My Students\n\nNo students have been added yet."
-    );
+  } catch (error) {
 
-    return;
+    users = [];
 
   }
 
+  const students =
+    users.filter(
+      user =>
+        user.role === "student"
+    );
+
+  if (students.length === 0) {
+
+    alert(
+      "👨‍🎓 My Students\n\n" +
+      "No registered students found yet."
+    );
+
+    return;
+  }
 
   let message =
     "👨‍🎓 MY STUDENTS\n\n";
 
-
-  data.forEach(
-    student => {
+  students.forEach(
+    (student, index) => {
 
       message +=
-        "• " +
-        student.name +
-        "\n";
+        `${index + 1}. ${student.name}\n` +
+        `   ${student.email}\n\n`;
 
     }
   );
 
-
   alert(message);
-
 }
 
 
 // ==========================================
-// CLASS PROGRESS
+// TEACHER — CLASS PROGRESS
 // ==========================================
 
 function openClassProgress() {
 
-  const data =
-    typeof AGU_TEACHER_DATA !== "undefined"
-      ? AGU_TEACHER_DATA.classes
-      : [];
+  let users = [];
 
+  try {
 
-  let message =
-    "📊 CLASS PROGRESS\n\n";
+    users =
+      JSON.parse(
+        localStorage.getItem(
+          "aguUsers"
+        ) || "[]"
+      );
 
+  } catch (error) {
 
-  data.forEach(
-    classroom => {
+    users = [];
 
-      message +=
-        classroom.name +
-        ": " +
-        classroom.students +
-        " students\n";
+  }
 
-    }
+  const students =
+    users.filter(
+      user =>
+        user.role === "student"
+    );
+
+  alert(
+    "📊 CLASS PROGRESS\n\n" +
+    `Registered students: ${students.length}\n\n` +
+    "Detailed academic progress will be added in the next phase."
   );
-
-
-  alert(message);
-
 }
 
 
 // ==========================================
-// CREATE LESSON
+// TEACHER — CREATE LESSON
 // ==========================================
 
 function createTeacherLesson() {
@@ -769,56 +680,91 @@ function createTeacherLesson() {
       "Enter the lesson title:"
     );
 
-
   if (!title) {
     return;
   }
-
 
   const subject =
     prompt(
       "Enter the subject:"
     );
 
-
   if (!subject) {
     return;
   }
 
-
   const lesson = {
 
     id:
+      "LESSON-" +
       Date.now(),
 
     title:
-      title,
+      title.trim(),
 
     subject:
-      subject,
+      subject.trim(),
 
     createdAt:
       new Date().toISOString()
 
   };
 
+  try {
 
-  if (
-    typeof addAGULesson ===
-    "function"
-  ) {
+    const lessons =
+      JSON.parse(
+        localStorage.getItem(
+          "aguLessons"
+        ) || "[]"
+      );
 
-    addAGULesson(
+    lessons.push(
       lesson
     );
 
+    localStorage.setItem(
+      "aguLessons",
+      JSON.stringify(
+        lessons
+      )
+    );
+
+    alert(
+      "✅ Lesson created successfully!\n\n" +
+      `Title: ${lesson.title}\n` +
+      `Subject: ${lesson.subject}`
+    );
+
+  } catch (error) {
+
+    alert(
+      "❌ Unable to save the lesson."
+    );
+
   }
+}
 
 
-  alert(
-    "✅ Lesson created successfully!"
-  );
+// ==========================================
+// CURRENT USER
+// ==========================================
 
+function getCurrentUser() {
+
+  try {
+
+    return JSON.parse(
+      localStorage.getItem(
+        "aguCurrentUser"
+      )
+    );
+
+  } catch (error) {
+
+    return null;
+
+  }
 }
 
 
@@ -829,13 +775,11 @@ function createTeacherLesson() {
 function displayCurrentUser() {
 
   const user =
-    getAGUCurrentUser();
-
+    getCurrentUser();
 
   if (!user) {
     return;
   }
-
 
   console.log(
     "AGU User:",
@@ -843,35 +787,32 @@ function displayCurrentUser() {
     "| Role:",
     user.role
   );
-
 }
 
 
 // ==========================================
-// LOGOUT
+// LOGOUT BUTTON
 // ==========================================
 
 function createLogoutButton() {
 
   const user =
-    getAGUCurrentUser();
-
+    localStorage.getItem(
+      "aguCurrentUser"
+    );
 
   if (!user) {
     return;
   }
-
 
   const nav =
     document.getElementById(
       "mainNav"
     );
 
-
   if (!nav) {
     return;
   }
-
 
   if (
     document.getElementById(
@@ -881,20 +822,16 @@ function createLogoutButton() {
     return;
   }
 
-
   const button =
     document.createElement(
       "button"
     );
 
-
   button.id =
     "aguLogoutButton";
 
-
   button.textContent =
     "🚪 Logout";
-
 
   button.onclick =
     function () {
@@ -907,129 +844,17 @@ function createLogoutButton() {
 
     };
 
-
   nav.appendChild(
     button
   );
-
 }
 
 
 // ==========================================
-// PERSONALIZED DASHBOARD
-// ==========================================
-
-function personalizeDashboard() {
-
-  const user =
-    getAGUCurrentUser();
-
-
-  if (!user) {
-    return;
-  }
-
-
-  const dashboard =
-    document.getElementById(
-      "dashboard"
-    );
-
-
-  if (!dashboard) {
-    return;
-  }
-
-
-  const old =
-    document.getElementById(
-      "aguUserWelcome"
-    );
-
-
-  if (old) {
-    old.remove();
-  }
-
-
-  const welcome =
-    document.createElement(
-      "div"
-    );
-
-
-  welcome.id =
-    "aguUserWelcome";
-
-
-  welcome.className =
-    "invitation-intro";
-
-
-  welcome.innerHTML = `
-
-    <h3>
-      👋 Welcome,
-      ${escapeHTML(user.name)}
-    </h3>
-
-    <p>
-      You are logged in as
-      <strong>
-        ${escapeHTML(user.role)}
-      </strong>.
-    </p>
-
-    <p>
-      Your AGU Educational Platform
-      dashboard is ready.
-    </p>
-
-  `;
-
-
-  const grid =
-    dashboard.querySelector(
-      ".dashboard-grid"
-    );
-
-
-  if (grid) {
-
-    dashboard.insertBefore(
-      welcome,
-      grid
-    );
-
-  }
-
-}
-
-
-// ==========================================
-// INITIALIZE
+// INITIALIZE APPLICATION
 // ==========================================
 
 function initializeApp() {
-
-  const params =
-    new URLSearchParams(
-      window.location.search
-    );
-
-
-  const invite =
-    params.get("invite");
-
-
-  if (invite) {
-
-    checkInvitationLink();
-
-    return;
-
-  }
-
 
   loadInvitationStats();
 
@@ -1039,28 +864,16 @@ function initializeApp() {
 
   createLogoutButton();
 
-  personalizeDashboard();
+  checkInvitationLink();
 
 }
 
 
 // ==========================================
-// START
+// START APP
 // ==========================================
 
 document.addEventListener(
   "DOMContentLoaded",
   initializeApp
 );
-
-
-// ==========================================
-// LOGIN
-// ==========================================
-
-function openLogin() {
-
-  window.location.href =
-    "login.html";
-
-}

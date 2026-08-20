@@ -1,6 +1,6 @@
 // ==========================================
 // AGU EDUCATIONAL PLATFORM
-// PHASE 2 — AUTHENTICATION FOUNDATION
+// PHASE 2 — AUTHENTICATION + INVITATIONS
 // ==========================================
 
 
@@ -25,7 +25,10 @@ function getUsers() {
 
   } catch (error) {
 
-    console.error("Unable to load users:", error);
+    console.error(
+      "Unable to load users:",
+      error
+    );
 
     return [];
 
@@ -63,16 +66,28 @@ function showRegister() {
   const loginMessage =
     document.getElementById("loginMessage");
 
+
   if (loginForm) {
-    loginForm.style.display = "none";
+
+    loginForm.style.display =
+      "none";
+
   }
+
 
   if (registerForm) {
-    registerForm.style.display = "block";
+
+    registerForm.style.display =
+      "block";
+
   }
 
+
   if (loginMessage) {
-    loginMessage.textContent = "";
+
+    loginMessage.textContent =
+      "";
+
   }
 
 }
@@ -91,18 +106,32 @@ function showLogin() {
     document.getElementById("registerForm");
 
   const registerMessage =
-    document.getElementById("registerMessage");
+    document.getElementById(
+      "registerMessage"
+    );
+
 
   if (loginForm) {
-    loginForm.style.display = "block";
+
+    loginForm.style.display =
+      "block";
+
   }
+
 
   if (registerForm) {
-    registerForm.style.display = "none";
+
+    registerForm.style.display =
+      "none";
+
   }
 
+
   if (registerMessage) {
-    registerMessage.textContent = "";
+
+    registerMessage.textContent =
+      "";
+
   }
 
 }
@@ -119,19 +148,30 @@ function showMessage(
 ) {
 
   const element =
-    document.getElementById(elementId);
+    document.getElementById(
+      elementId
+    );
 
-  if (!element) return;
 
-  element.textContent = message;
+  if (!element) {
+    return;
+  }
+
+
+  element.textContent =
+    message;
+
 
   element.classList.remove(
     "success",
     "error"
   );
 
+
   element.classList.add(
-    success ? "success" : "error"
+    success
+      ? "success"
+      : "error"
   );
 
 }
@@ -145,13 +185,38 @@ function createUserId() {
 
   return (
     "AGU-" +
-    Date.now().toString(36).toUpperCase() +
+    Date.now()
+      .toString(36)
+      .toUpperCase() +
     "-" +
     Math.random()
       .toString(36)
       .substring(2, 7)
       .toUpperCase()
   );
+
+}
+
+
+// ==========================================
+// GET PENDING INVITATION
+// ==========================================
+
+function getPendingInvitation() {
+
+  try {
+
+    return JSON.parse(
+      sessionStorage.getItem(
+        "aguPendingInvitation"
+      )
+    );
+
+  } catch (error) {
+
+    return null;
+
+  }
 
 }
 
@@ -167,14 +232,18 @@ function registerUser(event) {
 
   const name =
     document
-      .getElementById("registerName")
+      .getElementById(
+        "registerName"
+      )
       .value
       .trim();
 
 
   const email =
     document
-      .getElementById("registerEmail")
+      .getElementById(
+        "registerEmail"
+      )
       .value
       .trim()
       .toLowerCase();
@@ -182,31 +251,44 @@ function registerUser(event) {
 
   const password =
     document
-      .getElementById("registerPassword")
+      .getElementById(
+        "registerPassword"
+      )
       .value;
 
 
   const role =
     document
-      .getElementById("registerRole")
+      .getElementById(
+        "registerRole"
+      )
       .value;
 
 
   const invitationElement =
-    document.getElementById("invitationCode");
+    document.getElementById(
+      "invitationCode"
+    );
 
 
   const invitationCode =
     invitationElement
-      ? invitationElement.value.trim().toUpperCase()
+      ? invitationElement.value
+          .trim()
+          .toUpperCase()
       : "";
 
 
   // ========================================
-  // VALIDATION
+  // BASIC VALIDATION
   // ========================================
 
-  if (!name || !email || !password || !role) {
+  if (
+    !name ||
+    !email ||
+    !password ||
+    !role
+  ) {
 
     showMessage(
       "registerMessage",
@@ -218,7 +300,9 @@ function registerUser(event) {
   }
 
 
-  if (password.length < 6) {
+  if (
+    password.length < 6
+  ) {
 
     showMessage(
       "registerMessage",
@@ -231,10 +315,97 @@ function registerUser(event) {
 
 
   // ========================================
-  // GET EXISTING USERS
+  // INVITATION VALIDATION
   // ========================================
 
-  const users = getUsers();
+  let invitation = null;
+
+
+  if (invitationCode) {
+
+    let invitations = [];
+
+
+    try {
+
+      invitations =
+        JSON.parse(
+          localStorage.getItem(
+            "aguInvitations"
+          ) || "[]"
+        );
+
+    } catch (error) {
+
+      invitations = [];
+
+    }
+
+
+    invitation =
+      invitations.find(
+        item =>
+          item.code.toUpperCase() ===
+          invitationCode
+      );
+
+
+    if (!invitation) {
+
+      showMessage(
+        "registerMessage",
+        "❌ Invalid invitation code."
+      );
+
+      return;
+
+    }
+
+
+    if (
+      invitation.status ===
+      "accepted"
+    ) {
+
+      showMessage(
+        "registerMessage",
+        "❌ This invitation has already been used."
+      );
+
+      return;
+
+    }
+
+
+    const expectedType =
+      role === "student"
+        ? "Student"
+        : "Teacher";
+
+
+    if (
+      invitation.type !==
+      expectedType
+    ) {
+
+      showMessage(
+        "registerMessage",
+        `❌ This invitation is for ${invitation.type.toLowerCase()}s.`
+      );
+
+      return;
+
+    }
+
+  }
+
+
+  // ========================================
+  // GET USERS
+  // ========================================
+
+  const users =
+    getUsers();
 
 
   // ========================================
@@ -243,7 +414,9 @@ function registerUser(event) {
 
   const existingUser =
     users.find(
-      user => user.email === email
+      user =>
+        user.email ===
+        email
     );
 
 
@@ -265,18 +438,28 @@ function registerUser(event) {
 
   const newUser = {
 
-    id: createUserId(),
+    id:
+      createUserId(),
 
-    name: name,
+    name:
+      name,
 
-    email: email,
+    email:
+      email,
 
-    password: password,
+    password:
+      password,
 
-    role: role,
+    role:
+      role,
 
     invitationCode:
       invitationCode || null,
+
+    invitationId:
+      invitation
+        ? invitation.code
+        : null,
 
     createdAt:
       new Date().toISOString()
@@ -288,9 +471,94 @@ function registerUser(event) {
   // SAVE USER
   // ========================================
 
-  users.push(newUser);
+  users.push(
+    newUser
+  );
 
-  saveUsers(users);
+  saveUsers(
+    users
+  );
+
+
+  // ========================================
+  // MARK INVITATION ACCEPTED
+  // ========================================
+
+  if (invitation) {
+
+    try {
+
+      const invitations =
+        JSON.parse(
+          localStorage.getItem(
+            "aguInvitations"
+          ) || "[]"
+        );
+
+
+      const invitationIndex =
+        invitations.findIndex(
+          item =>
+            item.code.toUpperCase() ===
+            invitationCode
+        );
+
+
+      if (
+        invitationIndex !==
+        -1
+      ) {
+
+        invitations[
+          invitationIndex
+        ].status =
+          "accepted";
+
+
+        invitations[
+          invitationIndex
+        ].acceptedAt =
+          new Date().toISOString();
+
+
+        invitations[
+          invitationIndex
+        ].acceptedBy = {
+
+          id:
+            newUser.id,
+
+          name:
+            newUser.name,
+
+          email:
+            newUser.email,
+
+          role:
+            newUser.role
+
+        };
+
+
+        localStorage.setItem(
+          "aguInvitations",
+          JSON.stringify(
+            invitations
+          )
+        );
+
+      }
+
+    } catch (error) {
+
+      console.warn(
+        "Could not update invitation:",
+        error
+      );
+
+    }
+
+  }
 
 
   // ========================================
@@ -299,13 +567,17 @@ function registerUser(event) {
 
   showMessage(
     "registerMessage",
-    "✅ Account created successfully. You can now login.",
+    invitation
+      ? "🎉 Account created and invitation accepted successfully!"
+      : "✅ Account created successfully. You can now login.",
     true
   );
 
 
   document
-    .getElementById("registerForm")
+    .getElementById(
+      "registerForm"
+    )
     .reset();
 
 
@@ -313,11 +585,14 @@ function registerUser(event) {
   // RETURN TO LOGIN
   // ========================================
 
-  setTimeout(() => {
+  setTimeout(
+    () => {
 
-    showLogin();
+      showLogin();
 
-  }, 1200);
+    },
+    1500
+  );
 
 }
 
@@ -333,7 +608,9 @@ function loginUser(event) {
 
   const email =
     document
-      .getElementById("loginEmail")
+      .getElementById(
+        "loginEmail"
+      )
       .value
       .trim()
       .toLowerCase();
@@ -341,11 +618,16 @@ function loginUser(event) {
 
   const password =
     document
-      .getElementById("loginPassword")
+      .getElementById(
+        "loginPassword"
+      )
       .value;
 
 
-  if (!email || !password) {
+  if (
+    !email ||
+    !password
+  ) {
 
     showMessage(
       "loginMessage",
@@ -357,14 +639,17 @@ function loginUser(event) {
   }
 
 
-  const users = getUsers();
+  const users =
+    getUsers();
 
 
   const user =
     users.find(
       account =>
-        account.email === email &&
-        account.password === password
+        account.email ===
+          email &&
+        account.password ===
+          password
     );
 
 
@@ -386,16 +671,21 @@ function loginUser(event) {
 
   const session = {
 
-    id: user.id,
+    id:
+      user.id,
 
-    name: user.name,
+    name:
+      user.name,
 
-    email: user.email,
+    email:
+      user.email,
 
-    role: user.role,
+    role:
+      user.role,
 
     invitationCode:
-      user.invitationCode || null,
+      user.invitationCode ||
+      null,
 
     loginTime:
       new Date().toISOString()
@@ -405,12 +695,14 @@ function loginUser(event) {
 
   localStorage.setItem(
     "aguCurrentUser",
-    JSON.stringify(session)
+    JSON.stringify(
+      session
+    )
   );
 
 
   // ========================================
-  // SUCCESS MESSAGE
+  // SUCCESS
   // ========================================
 
   showMessage(
@@ -420,16 +712,15 @@ function loginUser(event) {
   );
 
 
-  // ========================================
-  // OPEN MAIN PLATFORM
-  // ========================================
+  setTimeout(
+    () => {
 
-  setTimeout(() => {
+      window.location.href =
+        "index.html";
 
-    window.location.href =
-      "index.html";
-
-  }, 800);
+    },
+    800
+  );
 
 }
 
@@ -443,7 +734,9 @@ function getCurrentUser() {
   try {
 
     return JSON.parse(
-      localStorage.getItem("aguCurrentUser")
+      localStorage.getItem(
+        "aguCurrentUser"
+      )
     );
 
   } catch (error) {
@@ -464,6 +757,7 @@ function logoutUser() {
   localStorage.removeItem(
     "aguCurrentUser"
   );
+
 
   window.location.href =
     "login.html";
@@ -491,6 +785,7 @@ function getUserRole() {
   const user =
     getCurrentUser();
 
+
   return user
     ? user.role
     : null;
@@ -499,7 +794,41 @@ function getUserRole() {
 
 
 // ==========================================
-// CONNECT LOGIN & REGISTER FORMS
+// AUTO-FILL INVITATION CODE
+// ==========================================
+
+function loadPendingInvitation() {
+
+  const input =
+    document.getElementById(
+      "invitationCode"
+    );
+
+
+  if (!input) {
+    return;
+  }
+
+
+  const pending =
+    getPendingInvitation();
+
+
+  if (
+    pending &&
+    pending.code
+  ) {
+
+    input.value =
+      pending.code;
+
+  }
+
+}
+
+
+// ==========================================
+// CONNECT FORMS
 // ==========================================
 
 document.addEventListener(
@@ -507,10 +836,15 @@ document.addEventListener(
   () => {
 
     const loginForm =
-      document.getElementById("loginForm");
+      document.getElementById(
+        "loginForm"
+      );
+
 
     const registerForm =
-      document.getElementById("registerForm");
+      document.getElementById(
+        "registerForm"
+      );
 
 
     if (loginForm) {
@@ -531,6 +865,9 @@ document.addEventListener(
       );
 
     }
+
+
+    loadPendingInvitation();
 
   }
 );

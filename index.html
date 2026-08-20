@@ -81,51 +81,31 @@
     class="main-nav"
   >
 
-    <button
-      onclick="showSection('home')"
-    >
+    <button onclick="showSection('home')">
       🏠 Home
     </button>
 
-
-    <button
-      onclick="showSection('library')"
-    >
+    <button onclick="showSection('library')">
       📚 Library
     </button>
 
-
-    <button
-      onclick="showSection('students')"
-    >
+    <button onclick="showSection('students')">
       🎓 Students
     </button>
 
-
-    <button
-      onclick="showSection('teachers')"
-    >
+    <button onclick="showSection('teachers')">
       👨‍🏫 Teachers
     </button>
 
-
-    <button
-      onclick="showSection('invitations')"
-    >
+    <button onclick="showSection('invitations')">
       📩 Invitations
     </button>
 
-
-    <button
-      onclick="showSection('dashboard')"
-    >
+    <button onclick="showSection('dashboard')">
       📊 Dashboard
     </button>
 
-
-    <button
-      onclick="openLogin()"
-    >
+    <button onclick="openLogin()">
       🔐 Login
     </button>
 
@@ -134,7 +114,7 @@
 
 
   <!-- =====================================
-       MAIN
+       MAIN CONTENT
   ====================================== -->
 
   <main>
@@ -203,8 +183,6 @@
       </div>
 
 
-
-      <!-- FEATURES -->
 
       <div class="section-heading">
 
@@ -357,6 +335,7 @@
 
           <button
             class="primary-btn"
+            onclick="showSection('library')"
           >
             Explore eBooks
           </button>
@@ -382,6 +361,7 @@
 
           <button
             class="primary-btn"
+            onclick="alert('🎥 Video Lessons will be added soon.')"
           >
             Watch Lessons
           </button>
@@ -407,6 +387,7 @@
 
           <button
             class="primary-btn"
+            onclick="alert('📝 Study Materials will be added soon.')"
           >
             View Materials
           </button>
@@ -451,10 +432,10 @@
 
 
 
-      <!-- STUDENT CARDS -->
-
       <div class="dashboard-grid">
 
+
+        <!-- MY LESSONS -->
 
         <div class="dashboard-card">
 
@@ -473,7 +454,7 @@
 
           <button
             class="primary-btn"
-            onclick="showSection('library')"
+            onclick="openStudentLessons()"
           >
             Open Lessons
           </button>
@@ -481,6 +462,8 @@
         </div>
 
 
+
+        <!-- ASSIGNMENTS -->
 
         <div class="dashboard-card">
 
@@ -499,6 +482,7 @@
 
           <button
             class="primary-btn"
+            onclick="openAssignments()"
           >
             View Assignments
           </button>
@@ -506,6 +490,8 @@
         </div>
 
 
+
+        <!-- PROGRESS -->
 
         <div class="dashboard-card">
 
@@ -524,6 +510,7 @@
 
           <button
             class="primary-btn"
+            onclick="openStudentProgress()"
           >
             View Progress
           </button>
@@ -531,6 +518,8 @@
         </div>
 
 
+
+        <!-- STUDY LIBRARY -->
 
         <div class="dashboard-card">
 
@@ -560,7 +549,6 @@
       </div>
 
 
-      <!-- STUDENT NOTICE -->
 
       <div class="invitation-intro">
 
@@ -612,10 +600,10 @@
 
 
 
-      <!-- TEACHER CARDS -->
-
       <div class="dashboard-grid">
 
+
+        <!-- TEACHING MATERIALS -->
 
         <div class="dashboard-card">
 
@@ -634,6 +622,7 @@
 
           <button
             class="primary-btn"
+            onclick="openTeachingMaterials()"
           >
             Manage Materials
           </button>
@@ -641,6 +630,8 @@
         </div>
 
 
+
+        <!-- STUDENTS -->
 
         <div class="dashboard-card">
 
@@ -659,6 +650,7 @@
 
           <button
             class="primary-btn"
+            onclick="openTeacherStudents()"
           >
             View Students
           </button>
@@ -666,6 +658,8 @@
         </div>
 
 
+
+        <!-- CLASS PROGRESS -->
 
         <div class="dashboard-card">
 
@@ -684,6 +678,7 @@
 
           <button
             class="primary-btn"
+            onclick="openClassProgress()"
           >
             View Progress
           </button>
@@ -691,6 +686,8 @@
         </div>
 
 
+
+        <!-- CREATE LESSON -->
 
         <div class="dashboard-card">
 
@@ -709,6 +706,7 @@
 
           <button
             class="primary-btn"
+            onclick="createTeacherLesson()"
           >
             Create Lesson
           </button>
@@ -719,7 +717,6 @@
       </div>
 
 
-      <!-- TEACHER NOTICE -->
 
       <div class="invitation-intro">
 
@@ -1083,4 +1080,4 @@
 
 </body>
 
-</html>
+            </html>

@@ -1,6 +1,6 @@
 // ==========================================
 // AGU EDUCATIONAL PLATFORM
-// PHASE 2 — MAIN APPLICATION
+// PHASE 3 — STUDENT & TEACHER DASHBOARD
 // ==========================================
 
 
@@ -69,6 +69,27 @@ function toggleMenu() {
 
 
 // ==========================================
+// CURRENT USER
+// ==========================================
+
+function getAGUCurrentUser() {
+
+  try {
+
+    return JSON.parse(
+      localStorage.getItem("aguCurrentUser")
+    );
+
+  } catch (error) {
+
+    return null;
+
+  }
+
+}
+
+
+// ==========================================
 // INVITATION CODE GENERATOR
 // ==========================================
 
@@ -107,29 +128,25 @@ function generateInvitation(type) {
     link: invitationLink,
 
     createdAt:
-      new Date().toISOString()
+      new Date().toISOString(),
+
+    status: "pending"
 
   };
 
 
-  // ========================================
-  // UPDATE STATISTICS
-  // ========================================
-
   invitationStats.total++;
+
 
   if (type === "Student") {
     invitationStats.students++;
   }
 
+
   if (type === "Teacher") {
     invitationStats.teachers++;
   }
 
-
-  // ========================================
-  // DISPLAY INVITATION
-  // ========================================
 
   const result =
     document.getElementById(
@@ -156,6 +173,7 @@ function generateInvitation(type) {
     result.style.display = "block";
   }
 
+
   if (message) {
 
     message.textContent =
@@ -163,9 +181,11 @@ function generateInvitation(type) {
 
   }
 
+
   if (codeElement) {
     codeElement.textContent = code;
   }
+
 
   if (linkElement) {
     linkElement.value =
@@ -173,11 +193,11 @@ function generateInvitation(type) {
   }
 
 
-  updateDashboard();
-
   saveInvitation(
     currentInvitation
   );
+
+  updateDashboard();
 
 
   setTimeout(() => {
@@ -197,7 +217,7 @@ function generateInvitation(type) {
 
 
 // ==========================================
-// CREATE RANDOM INVITATION CODE
+// CREATE INVITATION CODE
 // ==========================================
 
 function createInvitationCode() {
@@ -323,12 +343,16 @@ function shareWhatsApp() {
 
 
   const message =
-    `🎓 AGU Educational Platform Invitation\n\n` +
-    `You have been invited to join AGU Educational Platform.\n\n` +
-    `Invitation type: ${currentInvitation.type}\n` +
-    `Invitation code: ${currentInvitation.code}\n\n` +
-    `Join using this link:\n` +
-    `${currentInvitation.link}`;
+`🎓 AGU Educational Platform Invitation
+
+You have been invited to join AGU Educational Platform.
+
+Invitation type: ${currentInvitation.type}
+
+Invitation code: ${currentInvitation.code}
+
+Join using this link:
+${currentInvitation.link}`;
 
 
   const whatsappURL =
@@ -368,6 +392,7 @@ function saveInvitation(invitation) {
       "aguInvitations",
       JSON.stringify(saved)
     );
+
 
   } catch (error) {
 
@@ -435,7 +460,7 @@ function loadInvitationStats() {
 
 
 // ==========================================
-// UPDATE DASHBOARD
+// UPDATE DASHBOARD COUNTS
 // ==========================================
 
 function updateDashboard() {
@@ -485,11 +510,6 @@ function updateDashboard() {
 // ==========================================
 // CHECK INVITATION LINK
 // ==========================================
-// IMPORTANT:
-// When somebody opens an invitation link,
-// save the invitation and send them directly
-// to the registration page.
-// ==========================================
 
 function checkInvitationLink() {
 
@@ -506,161 +526,345 @@ function checkInvitationLink() {
     params.get("type");
 
 
-  // No invitation
   if (!invite) {
     return;
   }
 
 
-  const invitationCode =
-    invite
-      .trim()
-      .toUpperCase();
+  /*
+   * IMPORTANT:
+   * Store invitation temporarily.
+   * The registration page can use this
+   * invitation code.
+   */
+
+  sessionStorage.setItem(
+    "aguPendingInvitation",
+    JSON.stringify({
+
+      code: invite,
+
+      type: type || "user"
+
+    })
+  );
 
 
-  const invitationType =
-    type
-      ? type
-          .trim()
-          .toLowerCase()
-      : "student";
+  /*
+   * Send the user directly to
+   * registration.
+   */
+
+  window.location.href =
+    "login.html?register=true&invite=" +
+    encodeURIComponent(invite);
+
+}
 
 
-  // ========================================
-  // SAVE PENDING INVITATION
-  // ========================================
+// ==========================================
+// PERSONALIZED STUDENT DASHBOARD
+// ==========================================
 
-  const pendingInvitation = {
+function buildStudentDashboard() {
 
-    code:
-      invitationCode,
+  const user =
+    getAGUCurrentUser();
 
-    type:
-      invitationType,
-
-    createdAt:
-      new Date().toISOString()
-
-  };
+  if (!user) {
+    return;
+  }
 
 
-  try {
-
-    sessionStorage.setItem(
-      "aguPendingInvitation",
-      JSON.stringify(
-        pendingInvitation
-      )
+  const studentsSection =
+    document.getElementById(
+      "students"
     );
 
-  } catch (error) {
+  if (!studentsSection) {
+    return;
+  }
 
-    console.warn(
-      "Could not save pending invitation:",
-      error
+
+  const name =
+    user.name || "Student";
+
+
+  const existing =
+    document.getElementById(
+      "aguStudentWelcome"
+    );
+
+
+  if (existing) {
+    return;
+  }
+
+
+  const welcome =
+    document.createElement("div");
+
+  welcome.id =
+    "aguStudentWelcome";
+
+  welcome.className =
+    "dashboard-card";
+
+
+  welcome.innerHTML = `
+
+    <span>🎓</span>
+
+    <h3>
+      Welcome, ${escapeHTML(name)}
+    </h3>
+
+    <p>
+      Your student dashboard is ready.
+    </p>
+
+    <p>
+      📚 Continue learning and explore
+      your educational resources.
+    </p>
+
+  `;
+
+
+  const grid =
+    studentsSection.querySelector(
+      ".dashboard-grid"
+    );
+
+
+  if (grid) {
+
+    grid.insertBefore(
+      welcome,
+      grid.firstChild
     );
 
   }
 
+}
 
-  // ========================================
-  // GO DIRECTLY TO REGISTRATION
-  // ========================================
 
-  window.location.href =
-    "login.html?register=true";
+// ==========================================
+// PERSONALIZED TEACHER DASHBOARD
+// ==========================================
+
+function buildTeacherDashboard() {
+
+  const user =
+    getAGUCurrentUser();
+
+  if (!user) {
+    return;
+  }
+
+
+  const teachersSection =
+    document.getElementById(
+      "teachers"
+    );
+
+  if (!teachersSection) {
+    return;
+  }
+
+
+  const name =
+    user.name || "Teacher";
+
+
+  const existing =
+    document.getElementById(
+      "aguTeacherWelcome"
+    );
+
+
+  if (existing) {
+    return;
+  }
+
+
+  const welcome =
+    document.createElement("div");
+
+  welcome.id =
+    "aguTeacherWelcome";
+
+  welcome.className =
+    "dashboard-card";
+
+
+  welcome.innerHTML = `
+
+    <span>👨‍🏫</span>
+
+    <h3>
+      Welcome, ${escapeHTML(name)}
+    </h3>
+
+    <p>
+      Your teacher dashboard is ready.
+    </p>
+
+    <p>
+      📚 Organize lessons and support
+      your students.
+    </p>
+
+  `;
+
+
+  const grid =
+    teachersSection.querySelector(
+      ".dashboard-grid"
+    );
+
+
+  if (grid) {
+
+    grid.insertBefore(
+      welcome,
+      grid.firstChild
+    );
+
+  }
 
 }
 
 
 // ==========================================
-// INITIALIZE APPLICATION
+// DASHBOARD WELCOME
 // ==========================================
 
-function initializeApp() {
+function buildMainDashboard() {
 
-  loadInvitationStats();
+  const user =
+    getAGUCurrentUser();
 
-  updateDashboard();
+  if (!user) {
+    return;
+  }
 
-  checkInvitationLink();
+
+  const dashboard =
+    document.getElementById(
+      "dashboard"
+    );
+
+  if (!dashboard) {
+    return;
+  }
+
+
+  const existing =
+    document.getElementById(
+      "aguDashboardWelcome"
+    );
+
+
+  if (existing) {
+    return;
+  }
+
+
+  const welcome =
+    document.createElement("div");
+
+  welcome.id =
+    "aguDashboardWelcome";
+
+  welcome.className =
+    "invitation-intro";
+
+
+  const role =
+    user.role === "student"
+      ? "Student"
+      : "Teacher";
+
+
+  welcome.innerHTML = `
+
+    <h3>
+      👋 Welcome, ${escapeHTML(user.name)}
+    </h3>
+
+    <p>
+      You are logged in as a
+      <strong>${role}</strong>.
+    </p>
+
+    <p>
+      Your AGU Educational Platform
+      dashboard is ready.
+    </p>
+
+  `;
+
+
+  dashboard.insertBefore(
+    welcome,
+    dashboard.querySelector(
+      ".dashboard-grid"
+    )
+  );
 
 }
 
 
 // ==========================================
-// START APP
+// SAFE TEXT
 // ==========================================
 
-document.addEventListener(
-  "DOMContentLoaded",
-  initializeApp
-);
+function escapeHTML(text) {
 
+  const div =
+    document.createElement("div");
 
-// ==========================================
-// LOGIN
-// ==========================================
+  div.textContent =
+    text;
 
-function openLogin() {
-
-  window.location.href =
-    "login.html";
+  return div.innerHTML;
 
 }
 
 
 // ==========================================
-// CURRENT USER
+// DISPLAY CURRENT USER
 // ==========================================
 
 function displayCurrentUser() {
 
-  try {
+  const user =
+    getAGUCurrentUser();
 
-    const user =
-      JSON.parse(
-        localStorage.getItem(
-          "aguCurrentUser"
-        )
-      );
-
-
-    if (!user) {
-      return;
-    }
-
-
-    console.log(
-      "AGU User:",
-      user.name,
-      "| Role:",
-      user.role
-    );
-
-
-  } catch (error) {
-
-    console.warn(
-      "No active AGU user."
-    );
-
+  if (!user) {
+    return;
   }
+
+
+  console.log(
+    "AGU User:",
+    user.name,
+    "| Role:",
+    user.role
+  );
 
 }
 
 
 // ==========================================
-// LOGOUT BUTTON
+// CREATE LOGOUT BUTTON
 // ==========================================
 
 function createLogoutButton() {
 
   const user =
-    localStorage.getItem(
-      "aguCurrentUser"
-    );
-
+    getAGUCurrentUser();
 
   if (!user) {
     return;
@@ -671,7 +875,6 @@ function createLogoutButton() {
     document.getElementById(
       "mainNav"
     );
-
 
   if (!nav) {
     return;
@@ -713,22 +916,136 @@ function createLogoutButton() {
     };
 
 
-  nav.appendChild(button);
+  nav.appendChild(
+    button
+  );
 
 }
 
 
 // ==========================================
-// START AUTH DISPLAY
+// ROLE-BASED NAVIGATION
+// ==========================================
+
+function setupRoleAccess() {
+
+  const user =
+    getAGUCurrentUser();
+
+  if (!user) {
+    return;
+  }
+
+
+  const studentButton =
+    document.querySelector(
+      'button[onclick="showSection(\'students\')"]'
+    );
+
+  const teacherButton =
+    document.querySelector(
+      'button[onclick="showSection(\'teachers\')"]'
+    );
+
+
+  /*
+   * Keep both areas visible for now.
+   * This makes Phase 3 easier to expand.
+   */
+
+
+  if (user.role === "student") {
+
+    if (studentButton) {
+
+      studentButton.innerHTML =
+        "🎓 My Student Area";
+
+    }
+
+  }
+
+
+  if (user.role === "teacher") {
+
+    if (teacherButton) {
+
+      teacherButton.innerHTML =
+        "👨‍🏫 My Teacher Area";
+
+    }
+
+  }
+
+}
+
+
+// ==========================================
+// INITIALIZE APPLICATION
+// ==========================================
+
+function initializeApp() {
+
+  /*
+   * Check invitation BEFORE normal
+   * application initialization.
+   */
+
+  const params =
+    new URLSearchParams(
+      window.location.search
+    );
+
+
+  const invite =
+    params.get("invite");
+
+
+  if (invite) {
+
+    checkInvitationLink();
+
+    return;
+
+  }
+
+
+  loadInvitationStats();
+
+  updateDashboard();
+
+  displayCurrentUser();
+
+  createLogoutButton();
+
+  setupRoleAccess();
+
+  buildStudentDashboard();
+
+  buildTeacherDashboard();
+
+  buildMainDashboard();
+
+}
+
+
+// ==========================================
+// START APPLICATION
 // ==========================================
 
 document.addEventListener(
   "DOMContentLoaded",
-  () => {
-
-    displayCurrentUser();
-
-    createLogoutButton();
-
-  }
+  initializeApp
 );
+
+
+// ==========================================
+// LOGIN BUTTON
+// ==========================================
+
+function openLogin() {
+
+  window.location.href =
+    "login.html";
+
+}

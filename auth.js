@@ -1,0 +1,536 @@
+// ==========================================
+// AGU EDUCATIONAL PLATFORM
+// PHASE 2 — AUTHENTICATION FOUNDATION
+// ==========================================
+
+
+// ==========================================
+// STORAGE KEY
+// ==========================================
+
+const AGU_USERS_KEY = "aguUsers";
+
+
+// ==========================================
+// GET USERS
+// ==========================================
+
+function getUsers() {
+
+  try {
+
+    return JSON.parse(
+      localStorage.getItem(AGU_USERS_KEY) || "[]"
+    );
+
+  } catch (error) {
+
+    console.error("Unable to load users:", error);
+
+    return [];
+
+  }
+
+}
+
+
+// ==========================================
+// SAVE USERS
+// ==========================================
+
+function saveUsers(users) {
+
+  localStorage.setItem(
+    AGU_USERS_KEY,
+    JSON.stringify(users)
+  );
+
+}
+
+
+// ==========================================
+// SHOW REGISTER FORM
+// ==========================================
+
+function showRegister() {
+
+  const loginForm =
+    document.getElementById("loginForm");
+
+  const registerForm =
+    document.getElementById("registerForm");
+
+  const loginMessage =
+    document.getElementById("loginMessage");
+
+  if (loginForm) {
+    loginForm.style.display = "none";
+  }
+
+  if (registerForm) {
+    registerForm.style.display = "block";
+  }
+
+  if (loginMessage) {
+    loginMessage.textContent = "";
+  }
+
+}
+
+
+// ==========================================
+// SHOW LOGIN FORM
+// ==========================================
+
+function showLogin() {
+
+  const loginForm =
+    document.getElementById("loginForm");
+
+  const registerForm =
+    document.getElementById("registerForm");
+
+  const registerMessage =
+    document.getElementById("registerMessage");
+
+  if (loginForm) {
+    loginForm.style.display = "block";
+  }
+
+  if (registerForm) {
+    registerForm.style.display = "none";
+  }
+
+  if (registerMessage) {
+    registerMessage.textContent = "";
+  }
+
+}
+
+
+// ==========================================
+// DISPLAY MESSAGE
+// ==========================================
+
+function showMessage(
+  elementId,
+  message,
+  success = false
+) {
+
+  const element =
+    document.getElementById(elementId);
+
+  if (!element) return;
+
+  element.textContent = message;
+
+  element.classList.remove(
+    "success",
+    "error"
+  );
+
+  element.classList.add(
+    success ? "success" : "error"
+  );
+
+}
+
+
+// ==========================================
+// CREATE USER ID
+// ==========================================
+
+function createUserId() {
+
+  return (
+    "AGU-" +
+    Date.now().toString(36).toUpperCase() +
+    "-" +
+    Math.random()
+      .toString(36)
+      .substring(2, 7)
+      .toUpperCase()
+  );
+
+}
+
+
+// ==========================================
+// REGISTER USER
+// ==========================================
+
+function registerUser(event) {
+
+  event.preventDefault();
+
+
+  const name =
+    document
+      .getElementById("registerName")
+      .value
+      .trim();
+
+
+  const email =
+    document
+      .getElementById("registerEmail")
+      .value
+      .trim()
+      .toLowerCase();
+
+
+  const password =
+    document
+      .getElementById("registerPassword")
+      .value;
+
+
+  const role =
+    document
+      .getElementById("registerRole")
+      .value;
+
+
+  const invitationElement =
+    document.getElementById("invitationCode");
+
+
+  const invitationCode =
+    invitationElement
+      ? invitationElement.value.trim().toUpperCase()
+      : "";
+
+
+  // ========================================
+  // VALIDATION
+  // ========================================
+
+  if (!name || !email || !password || !role) {
+
+    showMessage(
+      "registerMessage",
+      "Please complete all required fields."
+    );
+
+    return;
+
+  }
+
+
+  if (password.length < 6) {
+
+    showMessage(
+      "registerMessage",
+      "Password must contain at least 6 characters."
+    );
+
+    return;
+
+  }
+
+
+  // ========================================
+  // GET EXISTING USERS
+  // ========================================
+
+  const users = getUsers();
+
+
+  // ========================================
+  // CHECK DUPLICATE EMAIL
+  // ========================================
+
+  const existingUser =
+    users.find(
+      user => user.email === email
+    );
+
+
+  if (existingUser) {
+
+    showMessage(
+      "registerMessage",
+      "An account with this email already exists."
+    );
+
+    return;
+
+  }
+
+
+  // ========================================
+  // CREATE USER
+  // ========================================
+
+  const newUser = {
+
+    id: createUserId(),
+
+    name: name,
+
+    email: email,
+
+    password: password,
+
+    role: role,
+
+    invitationCode:
+      invitationCode || null,
+
+    createdAt:
+      new Date().toISOString()
+
+  };
+
+
+  // ========================================
+  // SAVE USER
+  // ========================================
+
+  users.push(newUser);
+
+  saveUsers(users);
+
+
+  // ========================================
+  // SUCCESS
+  // ========================================
+
+  showMessage(
+    "registerMessage",
+    "✅ Account created successfully. You can now login.",
+    true
+  );
+
+
+  document
+    .getElementById("registerForm")
+    .reset();
+
+
+  // ========================================
+  // RETURN TO LOGIN
+  // ========================================
+
+  setTimeout(() => {
+
+    showLogin();
+
+  }, 1200);
+
+}
+
+
+// ==========================================
+// LOGIN USER
+// ==========================================
+
+function loginUser(event) {
+
+  event.preventDefault();
+
+
+  const email =
+    document
+      .getElementById("loginEmail")
+      .value
+      .trim()
+      .toLowerCase();
+
+
+  const password =
+    document
+      .getElementById("loginPassword")
+      .value;
+
+
+  if (!email || !password) {
+
+    showMessage(
+      "loginMessage",
+      "Please enter your email and password."
+    );
+
+    return;
+
+  }
+
+
+  const users = getUsers();
+
+
+  const user =
+    users.find(
+      account =>
+        account.email === email &&
+        account.password === password
+    );
+
+
+  if (!user) {
+
+    showMessage(
+      "loginMessage",
+      "❌ Incorrect email or password."
+    );
+
+    return;
+
+  }
+
+
+  // ========================================
+  // SAVE CURRENT SESSION
+  // ========================================
+
+  const session = {
+
+    id: user.id,
+
+    name: user.name,
+
+    email: user.email,
+
+    role: user.role,
+
+    invitationCode:
+      user.invitationCode || null,
+
+    loginTime:
+      new Date().toISOString()
+
+  };
+
+
+  localStorage.setItem(
+    "aguCurrentUser",
+    JSON.stringify(session)
+  );
+
+
+  // ========================================
+  // SUCCESS MESSAGE
+  // ========================================
+
+  showMessage(
+    "loginMessage",
+    "✅ Login successful. Opening your dashboard...",
+    true
+  );
+
+
+  // ========================================
+  // OPEN MAIN PLATFORM
+  // ========================================
+
+  setTimeout(() => {
+
+    window.location.href =
+      "index.html";
+
+  }, 800);
+
+}
+
+
+// ==========================================
+// GET CURRENT USER
+// ==========================================
+
+function getCurrentUser() {
+
+  try {
+
+    return JSON.parse(
+      localStorage.getItem("aguCurrentUser")
+    );
+
+  } catch (error) {
+
+    return null;
+
+  }
+
+}
+
+
+// ==========================================
+// LOGOUT
+// ==========================================
+
+function logoutUser() {
+
+  localStorage.removeItem(
+    "aguCurrentUser"
+  );
+
+  window.location.href =
+    "login.html";
+
+}
+
+
+// ==========================================
+// CHECK LOGIN
+// ==========================================
+
+function isLoggedIn() {
+
+  return !!getCurrentUser();
+
+}
+
+
+// ==========================================
+// GET USER ROLE
+// ==========================================
+
+function getUserRole() {
+
+  const user =
+    getCurrentUser();
+
+  return user
+    ? user.role
+    : null;
+
+}
+
+
+// ==========================================
+// CONNECT LOGIN & REGISTER FORMS
+// ==========================================
+
+document.addEventListener(
+  "DOMContentLoaded",
+  () => {
+
+    const loginForm =
+      document.getElementById("loginForm");
+
+    const registerForm =
+      document.getElementById("registerForm");
+
+
+    if (loginForm) {
+
+      loginForm.addEventListener(
+        "submit",
+        loginUser
+      );
+
+    }
+
+
+    if (registerForm) {
+
+      registerForm.addEventListener(
+        "submit",
+        registerUser
+      );
+
+    }
+
+  }
+);

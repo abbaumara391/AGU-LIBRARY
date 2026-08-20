@@ -1,6 +1,6 @@
 // ==========================================
 // AGU EDUCATIONAL PLATFORM
-// PHASE 1 — MAIN APPLICATION
+// PHASE 2 — MAIN APPLICATION
 // ==========================================
 
 
@@ -23,30 +23,32 @@ let invitationStats = {
 
 function showSection(sectionId) {
 
-  const sections = document.querySelectorAll(".page-section");
+  const sections =
+    document.querySelectorAll(".page-section");
 
   sections.forEach(section => {
     section.classList.remove("active");
   });
 
-  const selectedSection = document.getElementById(sectionId);
+  const selectedSection =
+    document.getElementById(sectionId);
 
   if (selectedSection) {
     selectedSection.classList.add("active");
   }
 
-  // Close mobile menu
-  const nav = document.getElementById("mainNav");
+  const nav =
+    document.getElementById("mainNav");
 
   if (nav) {
     nav.classList.remove("open");
   }
 
-  // Scroll to top
   window.scrollTo({
     top: 0,
     behavior: "smooth"
   });
+
 }
 
 
@@ -56,110 +58,18 @@ function showSection(sectionId) {
 
 function toggleMenu() {
 
-  const nav = document.getElementById("mainNav");
+  const nav =
+    document.getElementById("mainNav");
 
   if (!nav) return;
 
   nav.classList.toggle("open");
-}
-
-
-// ==========================================
-// INVITATION CODE GENERATOR
-// ==========================================
-
-function generateInvitation(type) {
-
-  if (type !== "Student" && type !== "Teacher") {
-    return;
-  }
-
-  const code = createInvitationCode();
-
-  const baseURL = window.location.origin + window.location.pathname;
-
-  const invitationLink =
-    baseURL +
-    "?invite=" +
-    encodeURIComponent(code) +
-    "&type=" +
-    encodeURIComponent(type.toLowerCase());
-
-
-  currentInvitation = {
-    type: type,
-    code: code,
-    link: invitationLink,
-    createdAt: new Date().toISOString()
-  };
-
-
-  // Update statistics
-  invitationStats.total++;
-
-  if (type === "Student") {
-    invitationStats.students++;
-  }
-
-  if (type === "Teacher") {
-    invitationStats.teachers++;
-  }
-
-
-  // Display invitation
-  const result =
-    document.getElementById("invitationResult");
-
-  const message =
-    document.getElementById("invitationMessage");
-
-  const codeElement =
-    document.getElementById("invitationCode");
-
-  const linkElement =
-    document.getElementById("invitationLink");
-
-
-  if (result) {
-    result.style.display = "block";
-  }
-
-  if (message) {
-    message.textContent =
-      `Your ${type.toLowerCase()} invitation is ready to share.`;
-  }
-
-  if (codeElement) {
-    codeElement.textContent = code;
-  }
-
-  if (linkElement) {
-    linkElement.value = invitationLink;
-  }
-
-
-  updateDashboard();
-
-  saveInvitation(currentInvitation);
-
-
-  // Move the user to the generated invitation
-  setTimeout(() => {
-
-    if (result) {
-      result.scrollIntoView({
-        behavior: "smooth",
-        block: "center"
-      });
-    }
-
-  }, 100);
 
 }
 
 
 // ==========================================
-// CREATE RANDOM INVITATION CODE
+// CREATE INVITATION CODE
 // ==========================================
 
 function createInvitationCode() {
@@ -173,20 +83,365 @@ function createInvitationCode() {
   let code = "";
 
   for (let i = 0; i < 3; i++) {
+
     code += letters.charAt(
-      Math.floor(Math.random() * letters.length)
+      Math.floor(
+        Math.random() * letters.length
+      )
     );
+
   }
 
   code += "-";
 
   for (let i = 0; i < 3; i++) {
+
     code += numbers.charAt(
-      Math.floor(Math.random() * numbers.length)
+      Math.floor(
+        Math.random() * numbers.length
+      )
     );
+
   }
 
   return code;
+
+}
+
+
+// ==========================================
+// GET SAVED INVITATIONS
+// ==========================================
+
+function getSavedInvitations() {
+
+  try {
+
+    return JSON.parse(
+      localStorage.getItem(
+        "aguInvitations"
+      ) || "[]"
+    );
+
+  } catch (error) {
+
+    console.warn(
+      "Could not load invitations:",
+      error
+    );
+
+    return [];
+
+  }
+
+}
+
+
+// ==========================================
+// SAVE INVITATIONS
+// ==========================================
+
+function saveInvitations(invitations) {
+
+  localStorage.setItem(
+    "aguInvitations",
+    JSON.stringify(invitations)
+  );
+
+}
+
+
+// ==========================================
+// GENERATE INVITATION
+// ==========================================
+
+function generateInvitation(type) {
+
+  if (
+    type !== "Student" &&
+    type !== "Teacher"
+  ) {
+    return;
+  }
+
+
+  const code =
+    createInvitationCode();
+
+
+  const baseURL =
+    window.location.origin +
+    window.location.pathname;
+
+
+  const invitationLink =
+    baseURL +
+    "?invite=" +
+    encodeURIComponent(code) +
+    "&type=" +
+    encodeURIComponent(
+      type.toLowerCase()
+    );
+
+
+  currentInvitation = {
+
+    type: type,
+
+    code: code,
+
+    link: invitationLink,
+
+    status: "pending",
+
+    createdAt:
+      new Date().toISOString(),
+
+    acceptedAt: null,
+
+    acceptedBy: null
+
+  };
+
+
+  // ========================================
+  // SAVE INVITATION
+  // ========================================
+
+  const invitations =
+    getSavedInvitations();
+
+
+  invitations.push(
+    currentInvitation
+  );
+
+
+  saveInvitations(
+    invitations
+  );
+
+
+  // ========================================
+  // UPDATE STATISTICS
+  // ========================================
+
+  loadInvitationStats();
+
+  updateDashboard();
+
+
+  // ========================================
+  // DISPLAY INVITATION
+  // ========================================
+
+  const result =
+    document.getElementById(
+      "invitationResult"
+    );
+
+  const message =
+    document.getElementById(
+      "invitationMessage"
+    );
+
+  const codeElement =
+    document.getElementById(
+      "invitationCode"
+    );
+
+  const linkElement =
+    document.getElementById(
+      "invitationLink"
+    );
+
+
+  if (result) {
+    result.style.display = "block";
+  }
+
+
+  if (message) {
+
+    message.textContent =
+      `Your ${type.toLowerCase()} invitation is ready to share.`;
+
+  }
+
+
+  if (codeElement) {
+    codeElement.textContent =
+      code;
+  }
+
+
+  if (linkElement) {
+    linkElement.value =
+      invitationLink;
+  }
+
+
+  setTimeout(() => {
+
+    if (result) {
+
+      result.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+      });
+
+    }
+
+  }, 100);
+
+}
+
+
+// ==========================================
+// VALIDATE INVITATION
+// ==========================================
+
+function validateInvitationCode(
+  code,
+  role
+) {
+
+  if (!code) {
+
+    return {
+      valid: false,
+      message: "No invitation code entered."
+    };
+
+  }
+
+
+  const invitations =
+    getSavedInvitations();
+
+
+  const invitation =
+    invitations.find(
+      item =>
+        item.code.toUpperCase() ===
+        code.toUpperCase()
+    );
+
+
+  if (!invitation) {
+
+    return {
+      valid: false,
+      message:
+        "❌ Invitation code not found."
+    };
+
+  }
+
+
+  if (
+    invitation.status ===
+    "accepted"
+  ) {
+
+    return {
+      valid: false,
+      message:
+        "❌ This invitation has already been used."
+    };
+
+  }
+
+
+  const expectedType =
+    role === "student"
+      ? "Student"
+      : "Teacher";
+
+
+  if (
+    invitation.type !==
+    expectedType
+  ) {
+
+    return {
+      valid: false,
+      message:
+        `❌ This invitation is for ${invitation.type.toLowerCase()}s.`
+    };
+
+  }
+
+
+  return {
+    valid: true,
+    invitation: invitation,
+    message:
+      "✅ Invitation code is valid."
+  };
+
+}
+
+
+// ==========================================
+// ACCEPT INVITATION
+// ==========================================
+
+function acceptInvitation(
+  code,
+  user
+) {
+
+  const invitations =
+    getSavedInvitations();
+
+
+  const index =
+    invitations.findIndex(
+      item =>
+        item.code.toUpperCase() ===
+        code.toUpperCase()
+    );
+
+
+  if (index === -1) {
+    return false;
+  }
+
+
+  invitations[index].status =
+    "accepted";
+
+
+  invitations[index].acceptedAt =
+    new Date().toISOString();
+
+
+  invitations[index].acceptedBy = {
+
+    id: user.id,
+
+    name: user.name,
+
+    email: user.email,
+
+    role: user.role
+
+  };
+
+
+  saveInvitations(
+    invitations
+  );
+
+
+  loadInvitationStats();
+
+  updateDashboard();
+
+
+  return true;
+
 }
 
 
@@ -197,37 +452,59 @@ function createInvitationCode() {
 async function copyInvitationLink() {
 
   if (!currentInvitation) {
-    alert("Please generate an invitation first.");
+
+    alert(
+      "Please generate an invitation first."
+    );
+
     return;
+
   }
 
-  const link = currentInvitation.link;
+
+  const link =
+    currentInvitation.link;
+
 
   try {
 
-    await navigator.clipboard.writeText(link);
+    await navigator.clipboard.writeText(
+      link
+    );
 
-    alert("✅ Invitation link copied successfully!");
+    alert(
+      "✅ Invitation link copied successfully!"
+    );
 
   } catch (error) {
 
-    // Fallback for browsers that block clipboard access
-
     const input =
-      document.getElementById("invitationLink");
+      document.getElementById(
+        "invitationLink"
+      );
+
 
     if (input) {
 
       input.select();
-      input.setSelectionRange(0, 99999);
 
-      document.execCommand("copy");
+      input.setSelectionRange(
+        0,
+        99999
+      );
 
-      alert("✅ Invitation link copied!");
+      document.execCommand(
+        "copy"
+      );
+
+      alert(
+        "✅ Invitation link copied!"
+      );
 
     }
 
   }
+
 }
 
 
@@ -238,9 +515,15 @@ async function copyInvitationLink() {
 function shareWhatsApp() {
 
   if (!currentInvitation) {
-    alert("Please generate an invitation first.");
+
+    alert(
+      "Please generate an invitation first."
+    );
+
     return;
+
   }
+
 
   const message =
     `🎓 AGU Educational Platform Invitation\n\n` +
@@ -253,7 +536,9 @@ function shareWhatsApp() {
 
   const whatsappURL =
     "https://wa.me/?text=" +
-    encodeURIComponent(message);
+    encodeURIComponent(
+      message
+    );
 
 
   window.open(
@@ -261,37 +546,7 @@ function shareWhatsApp() {
     "_blank",
     "noopener,noreferrer"
   );
-}
 
-
-// ==========================================
-// SAVE INVITATION
-// ==========================================
-
-function saveInvitation(invitation) {
-
-  try {
-
-    const saved =
-      JSON.parse(
-        localStorage.getItem("aguInvitations") || "[]"
-      );
-
-    saved.push(invitation);
-
-    localStorage.setItem(
-      "aguInvitations",
-      JSON.stringify(saved)
-    );
-
-  } catch (error) {
-
-    console.warn(
-      "Could not save invitation:",
-      error
-    );
-
-  }
 }
 
 
@@ -301,33 +556,28 @@ function saveInvitation(invitation) {
 
 function loadInvitationStats() {
 
-  try {
-
-    const saved =
-      JSON.parse(
-        localStorage.getItem("aguInvitations") || "[]"
-      );
+  const saved =
+    getSavedInvitations();
 
 
-    invitationStats = {
-      total: saved.length,
-      students: saved.filter(
-        item => item.type === "Student"
+  invitationStats = {
+
+    total:
+      saved.length,
+
+    students:
+      saved.filter(
+        item =>
+          item.type === "Student"
       ).length,
-      teachers: saved.filter(
-        item => item.type === "Teacher"
+
+    teachers:
+      saved.filter(
+        item =>
+          item.type === "Teacher"
       ).length
-    };
 
-  } catch (error) {
-
-    invitationStats = {
-      total: 0,
-      students: 0,
-      teachers: 0
-    };
-
-  }
+  };
 
 }
 
@@ -339,28 +589,42 @@ function loadInvitationStats() {
 function updateDashboard() {
 
   const invitationCount =
-    document.getElementById("invitationCount");
+    document.getElementById(
+      "invitationCount"
+    );
 
   const studentCount =
-    document.getElementById("studentCount");
+    document.getElementById(
+      "studentCount"
+    );
 
   const teacherCount =
-    document.getElementById("teacherCount");
+    document.getElementById(
+      "teacherCount"
+    );
 
 
   if (invitationCount) {
+
     invitationCount.textContent =
       invitationStats.total;
+
   }
+
 
   if (studentCount) {
+
     studentCount.textContent =
       invitationStats.students;
+
   }
 
+
   if (teacherCount) {
+
     teacherCount.textContent =
       invitationStats.teachers;
+
   }
 
 }
@@ -390,39 +654,194 @@ function checkInvitationLink() {
   }
 
 
-  // Show invitation section
-  showSection("invitations");
+  showSection(
+    "invitations"
+  );
 
 
   const result =
-    document.getElementById("invitationResult");
+    document.getElementById(
+      "invitationResult"
+    );
 
   const message =
-    document.getElementById("invitationMessage");
+    document.getElementById(
+      "invitationMessage"
+    );
 
   const codeElement =
-    document.getElementById("invitationCode");
+    document.getElementById(
+      "invitationCode"
+    );
 
 
   if (result) {
-    result.style.display = "block";
+
+    result.style.display =
+      "block";
+
   }
+
 
   if (message) {
 
     const invitationType =
       type
-        ? type.charAt(0).toUpperCase() + type.slice(1)
+        ? type.charAt(0).toUpperCase() +
+          type.slice(1)
         : "User";
+
 
     message.textContent =
       `You have received a ${invitationType.toLowerCase()} invitation to join AGU Educational Platform.`;
 
   }
 
+
   if (codeElement) {
-    codeElement.textContent = invite;
+
+    codeElement.textContent =
+      invite;
+
   }
+
+
+  // Store the invitation code
+  // so registration can use it.
+
+  sessionStorage.setItem(
+    "aguPendingInvitation",
+    JSON.stringify({
+
+      code: invite,
+
+      type: type || null
+
+    })
+
+  );
+
+}
+
+
+// ==========================================
+// LOGIN
+// ==========================================
+
+function openLogin() {
+
+  window.location.href =
+    "login.html";
+
+}
+
+
+// ==========================================
+// CURRENT USER
+// ==========================================
+
+function displayCurrentUser() {
+
+  try {
+
+    const user =
+      JSON.parse(
+        localStorage.getItem(
+          "aguCurrentUser"
+        )
+      );
+
+
+    if (!user) {
+      return;
+    }
+
+
+    console.log(
+      "AGU User:",
+      user.name,
+      "| Role:",
+      user.role
+    );
+
+
+  } catch (error) {
+
+    console.warn(
+      "No active AGU user."
+    );
+
+  }
+
+}
+
+
+// ==========================================
+// LOGOUT BUTTON
+// ==========================================
+
+function createLogoutButton() {
+
+  const user =
+    localStorage.getItem(
+      "aguCurrentUser"
+    );
+
+
+  if (!user) {
+    return;
+  }
+
+
+  const nav =
+    document.getElementById(
+      "mainNav"
+    );
+
+
+  if (!nav) {
+    return;
+  }
+
+
+  if (
+    document.getElementById(
+      "aguLogoutButton"
+    )
+  ) {
+    return;
+  }
+
+
+  const button =
+    document.createElement(
+      "button"
+    );
+
+
+  button.id =
+    "aguLogoutButton";
+
+
+  button.textContent =
+    "🚪 Logout";
+
+
+  button.onclick =
+    function () {
+
+      localStorage.removeItem(
+        "aguCurrentUser"
+      );
+
+      window.location.reload();
+
+    };
+
+
+  nav.appendChild(
+    button
+  );
 
 }
 
@@ -439,109 +858,18 @@ function initializeApp() {
 
   checkInvitationLink();
 
+  displayCurrentUser();
+
+  createLogoutButton();
+
 }
 
 
 // ==========================================
-// START APP
+// START APPLICATION
 // ==========================================
 
 document.addEventListener(
   "DOMContentLoaded",
   initializeApp
-);
-// ==========================================
-// LOGIN
-// ==========================================
-
-function openLogin() {
-  window.location.href = "login.html";
-}
-
-
-// ==========================================
-// CURRENT USER
-// ==========================================
-
-function displayCurrentUser() {
-
-  try {
-
-    const user = JSON.parse(
-      localStorage.getItem("aguCurrentUser")
-    );
-
-    if (!user) return;
-
-    console.log(
-      "AGU User:",
-      user.name,
-      "| Role:",
-      user.role
-    );
-
-  } catch (error) {
-
-    console.warn("No active AGU user.");
-
-  }
-
-}
-
-
-// ==========================================
-// LOGOUT BUTTON
-// ==========================================
-
-function createLogoutButton() {
-
-  const user =
-    localStorage.getItem("aguCurrentUser");
-
-  if (!user) return;
-
-  const nav =
-    document.getElementById("mainNav");
-
-  if (!nav) return;
-
-  if (document.getElementById("aguLogoutButton")) {
-    return;
-  }
-
-  const button =
-    document.createElement("button");
-
-  button.id = "aguLogoutButton";
-
-  button.textContent = "🚪 Logout";
-
-  button.onclick = function () {
-
-    localStorage.removeItem(
-      "aguCurrentUser"
-    );
-
-    window.location.reload();
-
-  };
-
-  nav.appendChild(button);
-
-}
-
-
-// ==========================================
-// START AUTH DISPLAY
-// ==========================================
-
-document.addEventListener(
-  "DOMContentLoaded",
-  () => {
-
-    displayCurrentUser();
-
-    createLogoutButton();
-
-  }
 );

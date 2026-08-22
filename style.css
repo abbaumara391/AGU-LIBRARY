@@ -452,9 +452,634 @@ footer {
   color: #687a72;
 }
 
+
+/* =========================================================
+   STUDENT PROFILE SECTION
+========================================================= */
+
+.student-profile-section {
+  display: grid;
+  gap: 18px;
+  margin-bottom: 25px;
+}
+
+.profile-card,
+.progress-card,
+.subjects-card,
+.achievement-card {
+  background: #ffffff;
+  border: 1px solid #dce9e2;
+  border-radius: 26px;
+  padding: 25px;
+}
+
+
 /* =========================
-   MOBILE
+   PROFILE CARD
 ========================= */
+
+.profile-card {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.profile-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 22px;
+  background: linear-gradient(
+    135deg,
+    #087a4b,
+    #0c9b61
+  );
+  color: #ffffff;
+  display: grid;
+  place-items: center;
+  font-size: 24px;
+  font-weight: 900;
+  flex-shrink: 0;
+}
+
+.profile-info {
+  min-width: 0;
+}
+
+.profile-info small,
+.progress-card small,
+.subjects-card small,
+.achievement-card small {
+  color: #087a4b;
+  font-weight: 900;
+  letter-spacing: 1.5px;
+  font-size: 11px;
+}
+
+.profile-info h2 {
+  margin: 6px 0;
+}
+
+.profile-info p {
+  margin: 0;
+  color: #718078;
+}
+
+
+/* =========================================================
+   LEARNING PROGRESS
+========================================================= */
+
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+}
+
+.progress-header h2,
+.subjects-card h2,
+.achievement-card h2 {
+  margin: 7px 0 15px;
+}
+
+.progress-header strong {
+  font-size: 30px;
+  color: #087a4b;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 13px;
+  background: #e8f1ec;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(
+    90deg,
+    #087a4b,
+    #0c9b61
+  );
+  border-radius: 20px;
+  transition: width 0.5s ease;
+}
+
+.progress-card p {
+  color: #718078;
+  margin-bottom: 0;
+}
+
+
+/* =========================================================
+   STUDENT SUBJECTS
+========================================================= */
+
+.student-subjects-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.student-subject-item {
+  border: 1px solid #dce9e2;
+  background: #f8fcfa;
+  border-radius: 18px;
+  padding: 18px 10px;
+  cursor: pointer;
+  text-align: center;
+  font-size: 28px;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.student-subject-item:hover {
+  transform: translateY(-3px);
+  border-color: #087a4b;
+  box-shadow: 0 10px 25px #123b2810;
+}
+
+.student-subject-item span {
+  display: block;
+  margin-top: 8px;
+  font-size: 13px;
+  font-weight: 800;
+  color: #14251e;
+}
+
+
+/* =========================================================
+   ACHIEVEMENTS
+========================================================= */
+
+.badges {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.badge {
+  text-align: center;
+  padding: 18px 10px;
+  background: #f8fcfa;
+  border: 1px solid #dce9e2;
+  border-radius: 18px;
+  font-size: 28px;
+  transition: transform 0.2s ease;
+}
+
+.badge:hover {
+  transform: translateY(-3px);
+}
+
+.badge span {
+  display: block;
+  margin-top: 8px;
+  font-size: 12px;
+  font-weight: 800;
+  color: #718078;
+}
+
+
+/* =========================================================
+   STUDENT DASHBOARD
+========================================================= */
+
+.student-header {
+  background: #ffffff;
+  border-bottom: 1px solid #dce9e2;
+  padding: 15px 5%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.student-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.student-brand .mark {
+  width: 54px;
+  height: 54px;
+  border-radius: 16px;
+  background: #087a4b;
+  color: #ffffff;
+  display: grid;
+  place-items: center;
+  font-weight: 900;
+  font-size: 20px;
+}
+
+.student-brand b {
+  display: block;
+  font-size: 20px;
+}
+
+.student-brand small {
+  color: #718078;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+}
+
+.header-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.back {
+  text-decoration: none;
+  color: #087a4b;
+  font-weight: 800;
+}
+
+.logout {
+  border: 1px solid #dce9e2;
+  background: #ffffff;
+  color: #087a4b;
+  padding: 12px 16px;
+  border-radius: 14px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.dashboard {
+  max-width: 1200px;
+  margin: auto;
+  padding: 35px 5%;
+}
+
+.student-message {
+  display: none;
+  padding: 14px 18px;
+  margin-bottom: 20px;
+  border-radius: 14px;
+  font-weight: 700;
+}
+
+.student-message.show {
+  display: block;
+}
+
+.student-message.success {
+  background: #e8f8ef;
+  color: #087a4b;
+}
+
+.student-message.error {
+  background: #fff0f0;
+  color: #b42318;
+}
+
+
+/* =========================
+   STUDENT WELCOME
+========================= */
+
+.welcome {
+  background: linear-gradient(
+    135deg,
+    #087a4b,
+    #0c9b61
+  );
+  color: #ffffff;
+  border-radius: 30px;
+  padding: 38px;
+  margin-bottom: 25px;
+  box-shadow: 0 20px 50px rgba(8,122,75,.18);
+}
+
+.welcome small {
+  opacity: .85;
+  letter-spacing: 2px;
+  font-weight: 800;
+}
+
+.welcome h1 {
+  font-size: clamp(30px,5vw,50px);
+  margin: 12px 0;
+  word-break: break-word;
+}
+
+.welcome p {
+  max-width: 700px;
+  line-height: 1.7;
+  opacity: .95;
+  font-size: 17px;
+}
+
+
+/* =========================
+   STUDENT STATISTICS
+========================= */
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.stat {
+  background: #ffffff;
+  border: 1px solid #dce9e2;
+  border-radius: 22px;
+  padding: 25px;
+}
+
+.stat strong {
+  display: block;
+  font-size: 34px;
+  color: #087a4b;
+  margin-bottom: 8px;
+}
+
+.stat span {
+  color: #718078;
+  font-size: 14px;
+}
+
+
+/* =========================
+   STUDENT DASHBOARD CARDS
+========================= */
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.dashboard-card {
+  background: #ffffff;
+  border: 1px solid #dce9e2;
+  border-radius: 22px;
+  padding: 22px;
+  text-decoration: none;
+  color: #14251e;
+  transition: .2s;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(0,0,0,.06);
+}
+
+.dashboard-card .icon {
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+
+.dashboard-card b {
+  display: block;
+  font-size: 17px;
+}
+
+.dashboard-card span {
+  display: block;
+  color: #718078;
+  font-size: 13px;
+  margin-top: 7px;
+  line-height: 1.5;
+}
+
+
+/* =========================================================
+   STUDENT LIBRARY
+========================================================= */
+
+.library-section {
+  background: #ffffff;
+  border: 1px solid #dce9e2;
+  border-radius: 26px;
+  padding: 25px;
+  margin-bottom: 25px;
+}
+
+.library-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.library-head h2,
+.library-section h2 {
+  margin: 6px 0 15px;
+}
+
+.search-box {
+  display: flex;
+  gap: 8px;
+  margin: 15px 0 20px;
+}
+
+.search-box input {
+  flex: 1;
+  min-width: 0;
+  padding: 14px;
+  border: 1px solid #dce9e2;
+  border-radius: 12px;
+  outline: none;
+  font-size: 15px;
+}
+
+.search-box input:focus {
+  border-color: #087a4b;
+}
+
+.search-box button {
+  border: 0;
+  background: #087a4b;
+  color: #ffffff;
+  border-radius: 12px;
+  padding: 0 18px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+
+/* =========================
+   FILTERS
+========================= */
+
+.filter-row {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 12px;
+  margin-bottom: 10px;
+}
+
+.filter {
+  border: 1px solid #cfe1d8;
+  background: #ffffff;
+  color: #087a4b;
+  border-radius: 20px;
+  padding: 9px 14px;
+  white-space: nowrap;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.filter.active {
+  background: #087a4b;
+  color: #ffffff;
+}
+
+
+/* =========================
+   RESOURCE CARDS
+========================= */
+
+.resource-grid {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 15px;
+}
+
+.resource-card {
+  border: 1px solid #dce9e2;
+  border-radius: 18px;
+  padding: 15px;
+  background: #fbfefc;
+  transition: .2s;
+}
+
+.resource-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(0,0,0,.06);
+}
+
+.resource-icon {
+  height: 110px;
+  border-radius: 14px;
+  background: #edf8f2;
+  display: grid;
+  place-items: center;
+  font-size: 42px;
+  margin-bottom: 12px;
+}
+
+.resource-card small {
+  color: #087a4b;
+  font-weight: 800;
+}
+
+.resource-card h3 {
+  margin: 7px 0;
+  font-size: 17px;
+}
+
+.resource-card p {
+  color: #718078;
+  font-size: 12px;
+  line-height: 1.5;
+  min-height: 38px;
+}
+
+.resource-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.open-resource {
+  flex: 1;
+  border: 0;
+  background: #087a4b;
+  color: #ffffff;
+  padding: 11px;
+  border-radius: 11px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.save-resource {
+  width: 48px;
+  border: 1px solid #dce9e2;
+  background: #ffffff;
+  border-radius: 11px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.save-resource.saved {
+  background: #fff0f3;
+}
+
+.empty-message {
+  padding: 35px;
+  text-align: center;
+  color: #718078;
+  background: #f6faf8;
+  border-radius: 15px;
+  grid-column: 1/-1;
+}
+
+
+/* =========================
+   RECENT LEARNING
+========================= */
+
+.recent-list {
+  display: grid;
+  gap: 10px;
+}
+
+.recent-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid #e0ebe5;
+  border-radius: 14px;
+  background: #fbfefc;
+}
+
+.recent-icon {
+  font-size: 28px;
+}
+
+.recent-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.recent-info strong {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.recent-info small {
+  color: #718078;
+}
+
+.recent-open {
+  border: 0;
+  background: #087a4b;
+  color: #ffffff;
+  border-radius: 10px;
+  padding: 9px 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
 
 @media (max-width: 900px) {
 
@@ -470,7 +1095,29 @@ footer {
     grid-template-columns: repeat(2, 1fr);
   }
 
+  .stats,
+  .dashboard-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .resource-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .student-subjects-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .badges {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
 }
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
 
 @media (max-width: 600px) {
 
@@ -509,4 +1156,87 @@ footer {
     height: 320px;
   }
 
-}
+
+  /* =========================
+     STUDENT DASHBOARD MOBILE
+  ========================= */
+
+  .student-header {
+    padding: 13px 5%;
+  }
+
+  .student-brand .mark {
+    width: 50px;
+    height: 50px;
+  }
+
+  .student-brand b {
+    font-size: 18px;
+  }
+
+  .student-brand small {
+    font-size: 8px;
+  }
+
+  .dashboard {
+    padding: 25px 5%;
+  }
+
+  .welcome {
+    padding: 28px;
+  }
+
+  .stats,
+  .dashboard-grid,
+  .resource-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .library-head {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .back {
+    display: none;
+  }
+
+  .recent-item {
+    align-items: flex-start;
+  }
+
+
+  /* =========================
+     PROFILE MOBILE
+  ========================= */
+
+  .profile-card {
+    padding: 20px;
+  }
+
+  .profile-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 18px;
+    font-size: 21px;
+  }
+
+
+  /* =========================
+     SUBJECTS MOBILE
+  ========================= */
+
+  .student-subjects-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+
+  /* =========================
+     ACHIEVEMENTS MOBILE
+  ========================= */
+
+  .badges {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+    }

@@ -1,26 +1,50 @@
 <!doctype html>
 <html lang="en">
+
 <head>
+
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <meta
+    name="viewport"
+    content="width=device-width,initial-scale=1">
 
   <title>AGULIBRARY — Global Learning Library</title>
 
   <link rel="stylesheet" href="style.css">
 
   <style>
+
+    /* ==========================================
+       STUDENT ACCOUNT BAR
+    ========================================== */
+
     .student-bar {
       display: none;
+
       align-items: center;
       gap: 10px;
+
       padding: 10px 16px;
+
       margin: 12px auto;
+
+      width: calc(100% - 10%);
+
       max-width: 1200px;
+
       background: #e8f7f0;
+
       border: 1px solid #c8eadb;
+
       border-radius: 14px;
+
       color: #087f55;
+
       font-weight: 600;
+
+      box-shadow:
+        0 8px 25px rgba(8,122,75,.06);
     }
 
     .student-bar.show {
@@ -33,49 +57,140 @@
 
     .student-dashboard-btn {
       background: #078653;
-      color: white;
+
+      color: #ffffff;
+
       border: none;
+
       border-radius: 10px;
+
       padding: 9px 14px;
+
       font-weight: 700;
+
       cursor: pointer;
     }
 
+    .student-dashboard-btn:hover {
+      background: #066d44;
+    }
+
     .signout-btn {
-      background: white;
+      background: #ffffff;
+
       color: #087f55;
+
       border: 1px solid #b9dccd;
+
       border-radius: 10px;
+
       padding: 9px 14px;
+
       font-weight: 700;
+
       cursor: pointer;
+    }
+
+    .signout-btn:hover {
+      background: #f4fbf7;
     }
 
     .auth-btn {
       text-decoration: none;
+
       display: inline-flex;
+
       align-items: center;
+
       justify-content: center;
     }
+
+
+    /* ==========================================
+       SUBJECT CARDS
+    ========================================== */
+
+    .subjects > div {
+      cursor: pointer;
+
+      transition:
+        transform .2s ease,
+        box-shadow .2s ease,
+        border-color .2s ease;
+    }
+
+    .subjects > div:hover {
+      transform: translateY(-5px);
+
+      border-color: #9ad9bb;
+
+      box-shadow:
+        0 15px 35px rgba(8,122,75,.10);
+    }
+
+
+    /* ==========================================
+       MOBILE STUDENT BAR
+    ========================================== */
+
+    @media (max-width: 600px) {
+
+      .student-bar {
+        width: 90%;
+
+        flex-wrap: wrap;
+
+        padding: 12px;
+      }
+
+      .student-bar .student-name {
+        min-width: 100%;
+        margin-bottom: 3px;
+      }
+
+      .student-dashboard-btn,
+      .signout-btn {
+        flex: 1;
+      }
+
+    }
+
   </style>
+
 </head>
+
 
 <body>
 
+
+<!-- ==================================================
+     NAVIGATION
+================================================== -->
+
 <header class="nav">
 
-  <a class="brand" href="index.html">
+  <a
+    class="brand"
+    href="index.html">
 
     <span class="mark">
       AG
     </span>
 
     <span>
-      <b>AGULIBRARY</b>
-      <small>Learn • Read • Watch • Grow</small>
+
+      <b>
+        AGULIBRARY
+      </b>
+
+      <small>
+        Learn • Read • Watch • Grow
+      </small>
+
     </span>
 
   </a>
+
 
   <nav>
 
@@ -97,19 +212,30 @@
 
   </nav>
 
-  <div style="display:flex;gap:10px;align-items:center;">
+
+  <div
+    style="
+      display:flex;
+      gap:10px;
+      align-items:center;
+    ">
 
     <a
       id="accountButton"
       class="btn outline auth-btn"
       href="auth.html">
+
       👤 Student Account
+
     </a>
+
 
     <button
       class="btn outline"
-      onclick="alert('AI Learning Agent will be connected in a later phase.')">
+      id="aiAgentButton">
+
       🤖 AI Agent
+
     </button>
 
   </div>
@@ -117,7 +243,10 @@
 </header>
 
 
-<!-- STUDENT SIGNED-IN BAR -->
+
+<!-- ==================================================
+     SIGNED-IN STUDENT BAR
+================================================== -->
 
 <div
   id="studentBar"
@@ -127,64 +256,95 @@
     🎓
   </span>
 
+
   <span
     id="studentWelcome"
     class="student-name">
+
     Welcome, Student
+
   </span>
 
-  <button
-    class="student-dashboard-btn"
-    onclick="openStudentDashboard()">
-    📚 Student Dashboard
-  </button>
 
   <button
-    class="signout-btn"
-    onclick="studentSignOut()">
+    id="studentDashboardButton"
+    class="student-dashboard-btn">
+
+    📚 Student Dashboard
+
+  </button>
+
+
+  <button
+    id="studentSignoutButton"
+    class="signout-btn">
+
     Sign out
+
   </button>
 
 </div>
 
 
-<!-- HERO -->
+
+<!-- ==================================================
+     HERO
+================================================== -->
 
 <section class="hero">
 
   <div>
 
     <span class="eyebrow">
+
       🌍 GLOBAL DIGITAL EDUCATION
+
     </span>
 
+
     <h1>
+
       Your global
-      <em>learning library.</em>
+
+      <em>
+        learning library.
+      </em>
+
     </h1>
 
+
     <p>
-      Books, PDFs, videos, photos, lessons and courses
-      in one comfortable learning space.
+
+      Books, PDFs, videos, photos, lessons
+      and courses in one comfortable
+      learning space.
+
     </p>
+
 
     <div class="actions">
 
       <a
         class="btn primary"
         href="#resources">
+
         Explore Library
+
       </a>
+
 
       <a
         class="btn outline"
         href="#subjects">
+
         Explore Subjects
+
       </a>
 
     </div>
 
   </div>
+
 
 
   <div class="hero-art">
@@ -195,20 +355,37 @@
       📖
     </div>
 
+
     <span class="float a">
+
       📚 Books
+
       <br>
-      <small>Tap to open</small>
+
+      <small>
+        Tap to open
+      </small>
+
     </span>
+
 
     <span class="float b">
+
       🎥 Videos
+
       <br>
-      <small>Learn visually</small>
+
+      <small>
+        Learn visually
+      </small>
+
     </span>
 
+
     <span class="float c">
+
       ☁️ Cloud Library
+
     </span>
 
   </div>
@@ -216,47 +393,68 @@
 </section>
 
 
-<!-- SEARCH -->
+
+<!-- ==================================================
+     SEARCH
+================================================== -->
 
 <div class="search">
 
   <input
     id="search"
+    type="search"
     placeholder="Search resources..."
-    oninput="filterResources()">
+    autocomplete="off">
+
 
   <button
-    onclick="filterResources()">
+    id="searchButton">
+
     Search
+
   </button>
 
 </div>
 
 
-<!-- RESOURCES -->
+
+<!-- ==================================================
+     RESOURCES
+================================================== -->
 
 <section
   id="resources"
   class="section">
 
   <span class="eyebrow">
+
     DIGITAL RESOURCES
+
   </span>
 
+
   <h2>
+
     Latest learning resources
+
   </h2>
 
+
   <p class="muted">
+
     Published resources appear here.
+
   </p>
+
 
   <div
     id="resourceGrid"
     class="grid">
 
     <div class="empty">
+
       Loading resources...
+
     </div>
 
   </div>
@@ -264,101 +462,164 @@
 </section>
 
 
-<!-- SUBJECTS -->
+
+<!-- ==================================================
+     SUBJECTS
+================================================== -->
 
 <section
   id="subjects"
   class="section white">
 
   <span class="eyebrow">
+
     GLOBAL SUBJECTS
+
   </span>
 
+
   <h2>
+
     Explore Subjects
+
   </h2>
 
 
   <div class="grid subjects">
 
 
-    <div>
+    <div
+      data-subject="Science">
+
       🔬
-      <b>Science</b>
+
+      <b>
+        Science
+      </b>
 
       <small>
         Physics • Chemistry • Biology
       </small>
+
     </div>
 
 
-    <div>
+
+    <div
+      data-subject="Mathematics">
+
       📐
-      <b>Mathematics</b>
+
+      <b>
+        Mathematics
+      </b>
 
       <small>
         Mathematics • Algebra • Statistics
       </small>
+
     </div>
 
 
-    <div>
+
+    <div
+      data-subject="Technology">
+
       💻
-      <b>Technology</b>
+
+      <b>
+        Technology
+      </b>
 
       <small>
         Computer Science • Programming • AI
       </small>
+
     </div>
 
 
-    <div>
+
+    <div
+      data-subject="Languages & Literature">
+
       📚
-      <b>Languages & Literature</b>
+
+      <b>
+        Languages & Literature
+      </b>
 
       <small>
         English • Literature • French • Spanish
       </small>
+
     </div>
 
 
-    <div>
+
+    <div
+      data-subject="Social Sciences & Humanities">
+
       🌎
-      <b>Social Sciences & Humanities</b>
+
+      <b>
+        Social Sciences & Humanities
+      </b>
 
       <small>
         Civic Education • History • Geography • Economics
       </small>
+
     </div>
 
 
-    <div>
+
+    <div
+      data-subject="Business & Finance">
+
       💼
-      <b>Business & Finance</b>
+
+      <b>
+        Business & Finance
+      </b>
 
       <small>
         Accounting • Finance • Marketing
       </small>
+
     </div>
 
 
-    <div>
+
+    <div
+      data-subject="Arts & Creative Studies">
+
       🎨
-      <b>Arts & Creative Studies</b>
+
+      <b>
+        Arts & Creative Studies
+      </b>
 
       <small>
         Art • Music • Photography • Film
       </small>
+
     </div>
 
 
-    <div>
+
+    <div
+      data-subject="Professional & Career">
+
       🧑‍⚕️
-      <b>Professional & Career</b>
+
+      <b>
+        Professional & Career
+      </b>
 
       <small>
         Medicine • Engineering • Law • Education
       </small>
+
     </div>
 
 
@@ -367,24 +628,36 @@
 </section>
 
 
-<!-- SUPPORT -->
+
+<!-- ==================================================
+     SUPPORT
+================================================== -->
 
 <section
   id="support"
   class="support">
 
   <span class="eyebrow">
+
     SUPPORT
+
   </span>
 
+
   <h2>
+
     We're here to help.
+
   </h2>
 
+
   <p>
-    Account, library, technical and payment support
-    will be available here.
+
+    Account, library, technical and payment
+    support will be available here.
+
   </p>
+
 
   <a
     class="btn primary"
@@ -397,7 +670,10 @@
 </section>
 
 
-<!-- FOOTER -->
+
+<!-- ==================================================
+     FOOTER
+================================================== -->
 
 <footer>
 
@@ -405,148 +681,349 @@
     AGULIBRARY
   </b>
 
+
   <span>
     Owner: Umar Mohammed
   </span>
 
+
   <span>
-    © <span id="year"></span>
+
+    ©
+
+    <span id="year"></span>
+
   </span>
 
 </footer>
 
 
-<!-- SUPABASE -->
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!-- ==================================================
+     SUPABASE
+================================================== -->
 
-<script src="config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+</script>
 
-<script src="supabase.js"></script>
+<script src="config.js">
+</script>
 
-<script src="app.js"></script>
+<script src="supabase.js">
+</script>
+
+<script src="app.js">
+</script>
 
 
-<!-- STUDENT SESSION CHECK -->
+
+<!-- ==================================================
+     STUDENT SESSION
+================================================== -->
 
 <script>
 
-  document.getElementById("year").textContent =
-    new Date().getFullYear();
+document.addEventListener(
+  "DOMContentLoaded",
+  () => {
+
+    /* YEAR */
+
+    const year =
+      document.getElementById("year");
+
+    if (year) {
+
+      year.textContent =
+        new Date().getFullYear();
+
+    }
 
 
-  async function checkStudentSession() {
+    /* AI BUTTON */
 
-    try {
+    const aiButton =
+      document.getElementById(
+        "aiAgentButton"
+      );
 
-      if (
-        typeof supabase === "undefined" ||
-        !supabase ||
-        !supabase.auth
-      ) {
-        return;
-      }
+    if (aiButton) {
 
-      const result =
-        await supabase.auth.getSession();
+      aiButton.addEventListener(
+        "click",
+        () => {
 
-      const session =
-        result.data?.session;
+          alert(
+            "🤖 AGULIBRARY AI Learning Agent will be connected in a later phase."
+          );
 
-      if (!session) {
-
-        return;
-
-      }
-
-
-      const user =
-        session.user;
-
-      const email =
-        user.email || "Student";
-
-
-      let name =
-        user.user_metadata?.full_name ||
-        user.user_metadata?.name ||
-        email.split("@")[0];
-
-
-      const studentBar =
-        document.getElementById("studentBar");
-
-      const studentWelcome =
-        document.getElementById("studentWelcome");
-
-      const accountButton =
-        document.getElementById("accountButton");
-
-
-      studentWelcome.textContent =
-        "Welcome, " + name;
-
-
-      studentBar.classList.add("show");
-
-
-      accountButton.textContent =
-        "🎓 My Account";
-
-
-      accountButton.href =
-        "student.html";
-
-
-    } catch (error) {
-
-      console.log(
-        "Student session check:",
-        error
+        }
       );
 
     }
 
-  }
 
+    /* STUDENT DASHBOARD */
 
-  function openStudentDashboard() {
+    const dashboardButton =
+      document.getElementById(
+        "studentDashboardButton"
+      );
 
-    window.location.href =
-      "student.html";
+    if (dashboardButton) {
 
-  }
+      dashboardButton.addEventListener(
+        "click",
+        () => {
 
+          window.location.href =
+            "student.html";
 
-  async function studentSignOut() {
-
-    try {
-
-      if (
-        typeof supabase !== "undefined" &&
-        supabase &&
-        supabase.auth
-      ) {
-
-        await supabase.auth.signOut();
-
-      }
-
-    } catch (error) {
-
-      console.error(error);
+        }
+      );
 
     }
 
-    window.location.href =
-      "index.html";
+
+    /* STUDENT SIGN OUT */
+
+    const signoutButton =
+      document.getElementById(
+        "studentSignoutButton"
+      );
+
+    if (signoutButton) {
+
+      signoutButton.addEventListener(
+        "click",
+        studentSignOut
+      );
+
+    }
+
+
+    /* SUBJECT BUTTONS */
+
+    document
+      .querySelectorAll(
+        ".subjects > div"
+      )
+      .forEach(card => {
+
+        card.addEventListener(
+          "click",
+          () => {
+
+            const subject =
+              card.dataset.subject;
+
+            const search =
+              document.getElementById(
+                "search"
+              );
+
+            if (search) {
+
+              search.value =
+                subject;
+
+            }
+
+            const resources =
+              document.getElementById(
+                "resources"
+              );
+
+            if (resources) {
+
+              resources.scrollIntoView({
+                behavior:"smooth"
+              });
+
+            }
+
+            if (
+              typeof filterResources ===
+              "function"
+            ) {
+
+              filterResources();
+
+            }
+
+          }
+        );
+
+      });
+
+
+    /* CHECK STUDENT */
+
+    checkStudentSession();
+
+  }
+);
+
+
+
+/* ==================================================
+   CHECK SUPABASE STUDENT SESSION
+================================================== */
+
+async function checkStudentSession() {
+
+  try {
+
+    if (
+      typeof supabase === "undefined" ||
+      !supabase ||
+      !supabase.auth
+    ) {
+
+      console.warn(
+        "Supabase authentication is not available."
+      );
+
+      return;
+
+    }
+
+
+    const result =
+      await supabase.auth.getSession();
+
+
+    if (result.error) {
+
+      console.error(
+        "Session error:",
+        result.error
+      );
+
+      return;
+
+    }
+
+
+    const session =
+      result.data?.session;
+
+
+    if (!session) {
+
+      return;
+
+    }
+
+
+    const user =
+      session.user;
+
+
+    const email =
+      user.email || "Student";
+
+
+    const name =
+      user.user_metadata?.full_name ||
+      user.user_metadata?.name ||
+      email.split("@")[0] ||
+      "Student";
+
+
+    const studentBar =
+      document.getElementById(
+        "studentBar"
+      );
+
+
+    const studentWelcome =
+      document.getElementById(
+        "studentWelcome"
+      );
+
+
+    const accountButton =
+      document.getElementById(
+        "accountButton"
+      );
+
+
+    if (studentWelcome) {
+
+      studentWelcome.textContent =
+        "Welcome, " + name;
+
+    }
+
+
+    if (studentBar) {
+
+      studentBar.classList.add(
+        "show"
+      );
+
+    }
+
+
+    if (accountButton) {
+
+      accountButton.textContent =
+        "🎓 My Account";
+
+      accountButton.href =
+        "student.html";
+
+    }
+
+  } catch (error) {
+
+    console.error(
+      "Student session check:",
+      error
+    );
+
+  }
+
+}
+
+
+
+/* ==================================================
+   STUDENT SIGN OUT
+================================================== */
+
+async function studentSignOut() {
+
+  try {
+
+    if (
+      typeof supabase !== "undefined" &&
+      supabase &&
+      supabase.auth
+    ) {
+
+      await supabase.auth.signOut();
+
+    }
+
+  } catch (error) {
+
+    console.error(
+      "Sign out error:",
+      error
+    );
 
   }
 
 
-  checkStudentSession();
+  window.location.href =
+    "index.html";
+
+}
 
 </script>
+
 
 </body>
 </html>

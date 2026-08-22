@@ -9,296 +9,373 @@
     name="viewport"
     content="width=device-width,initial-scale=1">
 
-  <title>
-    AGULIBRARY — Student Dashboard
-  </title>
+  <title>AGULIBRARY — Student Dashboard</title>
 
-  <link
-    rel="stylesheet"
-    href="style.css"
-  >
+  <link rel="stylesheet" href="style.css">
 
   <style>
 
     body {
       background:
-        linear-gradient(
-          135deg,
-          #f4faf7,
-          #ffffff
-        );
+        linear-gradient(135deg,#f4faf7,#ffffff);
     }
 
     .student-header {
-      background: white;
-      border-bottom: 1px solid #dce9e2;
-      padding: 16px 6%;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 15px;
+      background:#fff;
+      border-bottom:1px solid #dce9e2;
+      padding:15px 6%;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:15px;
     }
 
     .student-brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
+      display:flex;
+      align-items:center;
+      gap:12px;
     }
 
     .student-brand .mark {
-      width: 46px;
-      height: 46px;
-      border-radius: 14px;
-      background: #087a4b;
-      color: white;
-      display: grid;
-      place-items: center;
-      font-weight: 900;
+      width:46px;
+      height:46px;
+      border-radius:14px;
+      background:#087a4b;
+      color:#fff;
+      display:grid;
+      place-items:center;
+      font-weight:900;
     }
 
     .student-brand b {
-      display: block;
+      display:block;
     }
 
     .student-brand small {
-      color: #718078;
-      font-size: 9px;
-      letter-spacing: 1px;
+      color:#718078;
+      font-size:9px;
+      letter-spacing:1px;
     }
 
     .dashboard {
-      max-width: 1200px;
-      margin: auto;
-      padding: 45px 6%;
+      max-width:1200px;
+      margin:auto;
+      padding:35px 6%;
     }
 
     .welcome {
       background:
-        linear-gradient(
-          135deg,
-          #087a4b,
-          #0c9b61
-        );
-      color: white;
-      border-radius: 28px;
-      padding: 35px;
-      margin-bottom: 25px;
-      box-shadow:
-        0 20px 50px rgba(8,122,75,.18);
+        linear-gradient(135deg,#087a4b,#0c9b61);
+      color:#fff;
+      border-radius:28px;
+      padding:35px;
+      margin-bottom:25px;
+      box-shadow:0 20px 50px rgba(8,122,75,.18);
     }
 
     .welcome small {
-      opacity: .8;
-      letter-spacing: 2px;
-      font-weight: 800;
+      opacity:.8;
+      letter-spacing:2px;
+      font-weight:800;
     }
 
     .welcome h1 {
-      font-size: clamp(30px, 5vw, 50px);
-      margin: 10px 0;
+      font-size:clamp(30px,5vw,50px);
+      margin:10px 0;
     }
 
     .welcome p {
-      max-width: 650px;
-      opacity: .9;
-      line-height: 1.6;
+      max-width:700px;
+      line-height:1.6;
+      opacity:.92;
+    }
+
+    .stats {
+      display:grid;
+      grid-template-columns:
+        repeat(4,1fr);
+      gap:15px;
+      margin-bottom:25px;
+    }
+
+    .stat {
+      background:#fff;
+      border:1px solid #dce9e2;
+      border-radius:20px;
+      padding:20px;
+    }
+
+    .stat strong {
+      display:block;
+      font-size:30px;
+      color:#087a4b;
+    }
+
+    .stat span {
+      color:#718078;
+      font-size:13px;
     }
 
     .dashboard-grid {
-      display: grid;
+      display:grid;
       grid-template-columns:
-        repeat(4, 1fr);
-      gap: 16px;
-      margin-bottom: 30px;
+        repeat(4,1fr);
+      gap:15px;
+      margin-bottom:25px;
     }
 
     .dashboard-card {
-      background: white;
-      border: 1px solid #dce9e2;
-      border-radius: 20px;
-      padding: 22px;
-      text-decoration: none;
-      color: #14251e;
-      transition: .2s;
-    }
-
-    .dashboard-card:hover {
-      transform: translateY(-4px);
-      box-shadow:
-        0 18px 45px rgba(18,59,40,.09);
+      background:#fff;
+      border:1px solid #dce9e2;
+      border-radius:20px;
+      padding:20px;
+      text-decoration:none;
+      color:#14251e;
     }
 
     .dashboard-card .icon {
-      font-size: 30px;
-      margin-bottom: 12px;
+      font-size:30px;
+      margin-bottom:10px;
     }
 
     .dashboard-card b {
-      display: block;
-      font-size: 16px;
+      display:block;
     }
 
     .dashboard-card span {
-      display: block;
-      color: #718078;
-      font-size: 12px;
-      margin-top: 5px;
-      line-height: 1.5;
+      display:block;
+      color:#718078;
+      font-size:12px;
+      margin-top:5px;
+      line-height:1.5;
     }
 
     .library-section {
-      background: white;
-      border: 1px solid #dce9e2;
-      border-radius: 25px;
-      padding: 25px;
+      background:#fff;
+      border:1px solid #dce9e2;
+      border-radius:25px;
+      padding:25px;
+      margin-bottom:25px;
     }
 
     .library-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 15px;
-      margin-bottom: 15px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:15px;
+      margin-bottom:15px;
     }
 
     .library-head h2 {
-      margin: 0;
+      margin:5px 0 0;
     }
 
     .search-box {
-      display: flex;
-      gap: 8px;
-      margin: 15px 0 20px;
+      display:flex;
+      gap:8px;
+      margin:15px 0 20px;
     }
 
     .search-box input {
-      flex: 1;
-      padding: 13px;
-      border: 1px solid #dce9e2;
-      border-radius: 12px;
-      outline: none;
+      flex:1;
+      padding:14px;
+      border:1px solid #dce9e2;
+      border-radius:12px;
+      outline:none;
+      font-size:15px;
     }
 
     .search-box button {
-      border: 0;
-      background: #087a4b;
-      color: white;
-      border-radius: 12px;
-      padding: 0 18px;
-      font-weight: 700;
+      border:0;
+      background:#087a4b;
+      color:#fff;
+      border-radius:12px;
+      padding:0 18px;
+      font-weight:700;
+    }
+
+    .filter-row {
+      display:flex;
+      gap:8px;
+      overflow-x:auto;
+      padding-bottom:10px;
+    }
+
+    .filter {
+      border:1px solid #cfe1d8;
+      background:#fff;
+      color:#087a4b;
+      border-radius:20px;
+      padding:9px 14px;
+      white-space:nowrap;
+      font-weight:700;
+      cursor:pointer;
+    }
+
+    .filter.active {
+      background:#087a4b;
+      color:#fff;
     }
 
     .resource-grid {
-      display: grid;
+      display:grid;
       grid-template-columns:
-        repeat(3, 1fr);
-      gap: 15px;
+        repeat(3,1fr);
+      gap:15px;
     }
 
     .resource-card {
-      border: 1px solid #dce9e2;
-      border-radius: 18px;
-      padding: 18px;
-      background: #fbfefc;
+      border:1px solid #dce9e2;
+      border-radius:18px;
+      padding:15px;
+      background:#fbfefc;
     }
 
     .resource-icon {
-      height: 100px;
-      border-radius: 14px;
-      background: #edf8f2;
-      display: grid;
-      place-items: center;
-      font-size: 42px;
-      margin-bottom: 12px;
+      height:110px;
+      border-radius:14px;
+      background:#edf8f2;
+      display:grid;
+      place-items:center;
+      font-size:42px;
+      margin-bottom:12px;
     }
 
     .resource-card small {
-      color: #087a4b;
-      font-weight: 800;
+      color:#087a4b;
+      font-weight:800;
     }
 
     .resource-card h3 {
-      margin: 7px 0;
-      font-size: 17px;
+      margin:7px 0;
+      font-size:17px;
     }
 
     .resource-card p {
-      color: #718078;
-      font-size: 12px;
-      line-height: 1.5;
+      color:#718078;
+      font-size:12px;
+      line-height:1.5;
+      min-height:38px;
+    }
+
+    .resource-actions {
+      display:flex;
+      gap:8px;
     }
 
     .open-resource {
-      width: 100%;
-      border: 0;
-      background: #087a4b;
-      color: white;
-      padding: 11px;
-      border-radius: 11px;
-      font-weight: 700;
-      cursor: pointer;
+      flex:1;
+      border:0;
+      background:#087a4b;
+      color:#fff;
+      padding:11px;
+      border-radius:11px;
+      font-weight:700;
+      cursor:pointer;
+    }
+
+    .save-resource {
+      width:45px;
+      border:1px solid #dce9e2;
+      background:#fff;
+      border-radius:11px;
+      font-size:20px;
+      cursor:pointer;
+    }
+
+    .save-resource.saved {
+      background:#fff0f3;
     }
 
     .empty-message {
-      padding: 35px;
-      text-align: center;
-      color: #718078;
-      background: #f6faf8;
-      border-radius: 15px;
+      padding:35px;
+      text-align:center;
+      color:#718078;
+      background:#f6faf8;
+      border-radius:15px;
+      grid-column:1/-1;
+    }
+
+    .recent-list {
+      display:grid;
+      gap:10px;
+    }
+
+    .recent-item {
+      display:flex;
+      align-items:center;
+      gap:12px;
+      padding:13px;
+      border:1px solid #e0ebe5;
+      border-radius:14px;
+    }
+
+    .recent-item .recent-icon {
+      font-size:25px;
+    }
+
+    .recent-item strong {
+      display:block;
+    }
+
+    .recent-item small {
+      color:#718078;
     }
 
     .logout {
-      border: 1px solid #dce9e2;
-      background: white;
-      color: #087a4b;
-      padding: 11px 16px;
-      border-radius: 11px;
-      font-weight: 700;
-      cursor: pointer;
+      border:1px solid #dce9e2;
+      background:#fff;
+      color:#087a4b;
+      padding:11px 16px;
+      border-radius:11px;
+      font-weight:700;
+      cursor:pointer;
     }
 
     .back {
-      text-decoration: none;
-      color: #087a4b;
-      font-weight: 700;
+      text-decoration:none;
+      color:#087a4b;
+      font-weight:700;
     }
 
-    @media (max-width: 900px) {
+    @media(max-width:900px) {
 
+      .stats,
       .dashboard-grid {
         grid-template-columns:
-          repeat(2, 1fr);
+          repeat(2,1fr);
       }
 
       .resource-grid {
         grid-template-columns:
-          repeat(2, 1fr);
+          repeat(2,1fr);
       }
 
     }
 
-    @media (max-width: 600px) {
+    @media(max-width:600px) {
 
       .student-header {
-        padding: 13px 5%;
+        padding:13px 5%;
       }
 
       .dashboard {
-        padding: 25px 5%;
+        padding:25px 5%;
       }
 
       .welcome {
-        padding: 25px;
+        padding:25px;
       }
 
+      .stats,
       .dashboard-grid,
       .resource-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns:1fr;
       }
 
       .library-head {
-        align-items: flex-start;
-        flex-direction: column;
+        align-items:flex-start;
+        flex-direction:column;
       }
 
     }
@@ -334,7 +411,8 @@
   </div>
 
 
-  <div style="display:flex;gap:10px;align-items:center;">
+  <div
+    style="display:flex;gap:10px;align-items:center;">
 
     <a
       class="back"
@@ -356,189 +434,318 @@
 <main class="dashboard">
 
 
-  <section class="welcome">
+<section class="welcome">
 
-    <small>
-      STUDENT LEARNING SPACE
-    </small>
+  <small>
+    STUDENT LEARNING SPACE
+  </small>
 
-    <h1 id="welcomeName">
-      Welcome!
-    </h1>
+  <h1 id="welcomeName">
+    Welcome!
+  </h1>
 
-    <p>
-      Your personal AGULIBRARY learning space.
-      Explore books, videos, PDFs and educational
-      resources from around the world.
-    </p>
+  <p>
+    Your personal AGULIBRARY learning space.
+    Explore books, videos, PDFs and educational
+    resources from around the world.
+  </p>
 
-  </section>
-
-
-  <section class="dashboard-grid">
+</section>
 
 
-    <a
-      class="dashboard-card"
-      href="index.html#resources">
+<!-- STATISTICS -->
 
-      <div class="icon">
-        📚
-      </div>
+<section class="stats">
 
-      <b>
-        Browse Library
-      </b>
+  <div class="stat">
 
-      <span>
-        Explore books, PDFs, videos and photos.
-      </span>
+    <strong id="totalResources">
+      0
+    </strong>
 
-    </a>
+    <span>
+      Available Resources
+    </span>
+
+  </div>
 
 
-    <a
-      class="dashboard-card"
-      href="index.html#subjects">
+  <div class="stat">
 
-      <div class="icon">
-        🎓
-      </div>
+    <strong id="savedCount">
+      0
+    </strong>
 
-      <b>
-        Subjects
-      </b>
-
-      <span>
-        Explore subjects and learning areas.
-      </span>
-
-    </a>
-
-
-    <a
-      class="dashboard-card"
-      href="#myLearning">
-
-      <div class="icon">
-        📊
-      </div>
-
-      <b>
-        My Learning
-      </b>
-
-      <span>
-        Your learning area will appear here.
-      </span>
-
-    </a>
-
-
-    <a
-      class="dashboard-card"
-      href="#saved">
-
-      <div class="icon">
-        ❤️
-      </div>
-
-      <b>
-        Saved Resources
-      </b>
-
-      <span>
-        Your saved resources will appear here.
-      </span>
-
-    </a>
-
-
-  </section>
-
-
-  <section
-    id="myLearning"
-    class="library-section">
-
-    <div class="library-head">
-
-      <div>
-
-        <small
-          class="eyebrow">
-          LEARNING LIBRARY
-        </small>
-
-        <h2>
-          Available Resources
-        </h2>
-
-      </div>
-
-    </div>
-
-
-    <div class="search-box">
-
-      <input
-        id="studentSearch"
-        type="search"
-        placeholder="Search books, videos, Physics, Chemistry..."
-      >
-
-      <button
-        id="searchButton">
-        Search
-      </button>
-
-    </div>
-
-
-    <div
-      id="studentResourceGrid"
-      class="resource-grid">
-
-      <div class="empty-message">
-        Loading your learning resources...
-      </div>
-
-    </div>
-
-  </section>
-
-
-  <section
-    id="saved"
-    class="library-section"
-    style="margin-top:25px;">
-
-    <small class="eyebrow">
-      MY LEARNING
-    </small>
-
-    <h2>
+    <span>
       Saved Resources
-    </h2>
+    </span>
 
-    <div
-      class="empty-message"
-      style="margin-top:15px;">
+  </div>
 
-      ❤️ Your saved resources feature
-      will be connected in the next Phase 3 step.
+
+  <div class="stat">
+
+    <strong id="recentCount">
+      0
+    </strong>
+
+    <span>
+      Recently Opened
+    </span>
+
+  </div>
+
+
+  <div class="stat">
+
+    <strong>
+      🌍
+    </strong>
+
+    <span>
+      Global Learning
+    </span>
+
+  </div>
+
+</section>
+
+
+<!-- QUICK ACCESS -->
+
+<section class="dashboard-grid">
+
+
+  <a
+    class="dashboard-card"
+    href="#library">
+
+    <div class="icon">
+      📚
+    </div>
+
+    <b>
+      Browse Library
+    </b>
+
+    <span>
+      Explore books, PDFs, videos and photos.
+    </span>
+
+  </a>
+
+
+  <a
+    class="dashboard-card"
+    href="#library">
+
+    <div class="icon">
+      🎓
+    </div>
+
+    <b>
+      Subjects
+    </b>
+
+    <span>
+      Search Physics, Chemistry, Mathematics and more.
+    </span>
+
+  </a>
+
+
+  <a
+    class="dashboard-card"
+    href="#saved">
+
+    <div class="icon">
+      ❤️
+    </div>
+
+    <b>
+      Saved Resources
+    </b>
+
+    <span>
+      Quickly access resources you saved.
+    </span>
+
+  </a>
+
+
+  <a
+    class="dashboard-card"
+    href="#recent">
+
+    <div class="icon">
+      🕘
+    </div>
+
+    <b>
+      Recent Learning
+    </b>
+
+    <span>
+      Continue from resources you opened recently.
+    </span>
+
+  </a>
+
+
+</section>
+
+
+<!-- MAIN LIBRARY -->
+
+<section
+  id="library"
+  class="library-section">
+
+  <div class="library-head">
+
+    <div>
+
+      <small class="eyebrow">
+        DIGITAL LIBRARY
+      </small>
+
+      <h2>
+        Explore Learning Resources
+      </h2>
 
     </div>
 
-  </section>
+  </div>
+
+
+  <div class="search-box">
+
+    <input
+      id="studentSearch"
+      type="search"
+      placeholder="Search books, Physics, Chemistry..."
+    >
+
+    <button
+      id="searchButton">
+      Search
+    </button>
+
+  </div>
+
+
+  <div class="filter-row">
+
+    <button
+      class="filter active"
+      data-filter="all">
+      All
+    </button>
+
+    <button
+      class="filter"
+      data-filter="book">
+      📚 Books
+    </button>
+
+    <button
+      class="filter"
+      data-filter="pdf">
+      📄 PDFs
+    </button>
+
+    <button
+      class="filter"
+      data-filter="video">
+      🎥 Videos
+    </button>
+
+    <button
+      class="filter"
+      data-filter="photo">
+      🖼️ Photos
+    </button>
+
+    <button
+      class="filter"
+      data-filter="lesson">
+      📖 Lessons
+    </button>
+
+  </div>
+
+
+  <div
+    id="studentResourceGrid"
+    class="resource-grid">
+
+    <div class="empty-message">
+      Loading learning resources...
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- SAVED -->
+
+<section
+  id="saved"
+  class="library-section">
+
+  <small class="eyebrow">
+    MY COLLECTION
+  </small>
+
+  <h2>
+    ❤️ Saved Resources
+  </h2>
+
+  <div
+    id="savedGrid"
+    class="resource-grid">
+
+    <div class="empty-message">
+      You have not saved any resources yet.
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- RECENT -->
+
+<section
+  id="recent"
+  class="library-section">
+
+  <small class="eyebrow">
+    LEARNING HISTORY
+  </small>
+
+  <h2>
+    🕘 Recently Opened
+  </h2>
+
+  <div
+    id="recentList"
+    class="recent-list">
+
+    <div class="empty-message">
+      No resources opened yet.
+    </div>
+
+  </div>
+
+</section>
 
 
 </main>
 
 
-<script
-  src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
-</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script src="config.js"></script>
 
@@ -548,203 +755,601 @@
 <script>
 
 
-  // ==========================================
-  // AGULIBRARY PHASE 3.2
-  // STUDENT DASHBOARD
-  // ==========================================
+// ==========================================
+// AGULIBRARY
+// PHASE 3.3
+// STUDENT LIBRARY
+// ==========================================
 
 
-  const client =
-    getSupabase();
+const client = getSupabase();
 
+let resources = [];
+
+let currentFilter = "all";
+
+
+// ==========================================
+// LOCAL STUDENT DATA
+// ==========================================
+
+function savedKey() {
+
+  return "AGU_SAVED_RESOURCES";
+
+}
+
+
+function recentKey() {
+
+  return "AGU_RECENT_RESOURCES";
+
+}
+
+
+function getSaved() {
+
+  try {
+
+    return JSON.parse(
+      localStorage.getItem(
+        savedKey()
+      ) || "[]"
+    );
+
+  } catch {
+
+    return [];
+
+  }
+
+}
+
+
+function setSaved(list) {
+
+  localStorage.setItem(
+    savedKey(),
+    JSON.stringify(list)
+  );
+
+}
+
+
+function getRecent() {
+
+  try {
+
+    return JSON.parse(
+      localStorage.getItem(
+        recentKey()
+      ) || "[]"
+    );
+
+  } catch {
+
+    return [];
+
+  }
+
+}
+
+
+function setRecent(list) {
+
+  localStorage.setItem(
+    recentKey(),
+    JSON.stringify(list)
+  );
+
+}
+
+
+// ==========================================
+// CHECK LOGIN
+// ==========================================
+
+async function checkStudent() {
 
   if (!client) {
 
     alert(
-      "AGULIBRARY could not connect to Supabase. Please check config.js."
+      "Supabase connection is not available."
     );
 
-  }
-
-
-  let resources = [];
-
-
-  // ==========================================
-  // CHECK STUDENT SESSION
-  // ==========================================
-
-  async function checkStudent() {
-
-    const {
-      data,
-      error
-    } = await client.auth.getSession();
-
-
-    if (error || !data.session) {
-
-      window.location.href =
-        "auth.html";
-
-      return null;
-
-    }
-
-
-    return data.session.user;
+    return null;
 
   }
 
 
-  // ==========================================
-  // LOAD STUDENT
-  // ==========================================
-
-  async function loadStudent() {
-
-    const user =
-      await checkStudent();
+  const {
+    data,
+    error
+  } = await client.auth.getSession();
 
 
-    if (!user) return;
+  if (
+    error ||
+    !data ||
+    !data.session
+  ) {
+
+    window.location.href =
+      "auth.html";
+
+    return null;
+
+  }
 
 
-    const name =
-      user.user_metadata?.full_name ||
-      user.user_metadata?.name ||
-      user.email?.split("@")[0] ||
-      "Student";
+  return data.session.user;
 
+}
+
+
+// ==========================================
+// LOAD STUDENT
+// ==========================================
+
+async function loadStudent() {
+
+  const user =
+    await checkStudent();
+
+
+  if (!user) return;
+
+
+  const name =
+    user.user_metadata?.full_name ||
+    user.user_metadata?.name ||
+    user.email?.split("@")[0] ||
+    "Student";
+
+
+  document.getElementById(
+    "welcomeName"
+  ).textContent =
+    "Welcome, " + name + "!";
+
+
+  await loadResources();
+
+  renderSaved();
+
+  renderRecent();
+
+  updateStats();
+
+}
+
+
+// ==========================================
+// LOAD RESOURCES
+// ==========================================
+
+async function loadResources() {
+
+  const {
+    data,
+    error
+  } = await client
+    .from("resources")
+    .select("*")
+    .order(
+      "created_at",
+      {
+        ascending:false
+      }
+    );
+
+
+  if (error) {
+
+    console.error(error);
 
     document.getElementById(
-      "welcomeName"
-    ).textContent =
-      "Welcome, " + name + "!";
+      "studentResourceGrid"
+    ).innerHTML = `
 
+      <div class="empty-message">
 
-    await loadResources();
+        Unable to load learning resources.
 
-  }
+      </div>
 
+    `;
 
-  // ==========================================
-  // LOAD RESOURCES
-  // ==========================================
-
-  async function loadResources() {
-
-    const {
-      data,
-      error
-    } = await client
-      .from("resources")
-      .select("*")
-      .order(
-        "created_at",
-        {
-          ascending: false
-        }
-      );
-
-
-    if (error) {
-
-      console.error(error);
-
-      document.getElementById(
-        "studentResourceGrid"
-      ).innerHTML = `
-
-        <div class="empty-message">
-
-          Unable to load learning resources.
-
-        </div>
-
-      `;
-
-      return;
-
-    }
-
-
-    resources =
-      data || [];
-
-
-    renderResources(
-      resources
-    );
+    return;
 
   }
 
 
-  // ==========================================
-  // RENDER
-  // ==========================================
-
-  function renderResources(list) {
-
-    const grid =
-      document.getElementById(
-        "studentResourceGrid"
-      );
+  resources =
+    data || [];
 
 
-    if (!list.length) {
+  renderResources(
+    resources
+  );
 
-      grid.innerHTML = `
-
-        <div class="empty-message">
-
-          No learning resources found.
-
-        </div>
-
-      `;
-
-      return;
-
-    }
+}
 
 
-    grid.innerHTML =
-      list.map(resource => {
+// ==========================================
+// FILTER
+// ==========================================
 
-        const icon =
-          getIcon(
-            resource.type
-          );
+function applyFilters() {
 
-
-        const title =
-          escapeHTML(
-            resource.title ||
-            "Untitled Resource"
-          );
+  const query =
+    document.getElementById(
+      "studentSearch"
+    ).value
+      .toLowerCase()
+      .trim();
 
 
-        const description =
-          escapeHTML(
-            resource.description ||
-            "Educational resource"
-          );
-
+  let filtered =
+    resources.filter(
+      resource => {
 
         const type =
-          escapeHTML(
-            String(
-              resource.type ||
-              "resource"
-            ).toUpperCase()
+          String(
+            resource.type || ""
+          ).toLowerCase();
+
+
+        const matchesType =
+          currentFilter === "all" ||
+          type === currentFilter;
+
+
+        const searchable = `
+
+          ${resource.title || ""}
+
+          ${resource.description || ""}
+
+          ${resource.subject || ""}
+
+          ${resource.type || ""}
+
+          ${resource.level || ""}
+
+          ${resource.class_level || ""}
+
+          ${resource.term || ""}
+
+        `.toLowerCase();
+
+
+        const matchesSearch =
+          !query ||
+          searchable.includes(
+            query
           );
 
 
-        const url =
-          escapeAttr(
+        return (
+          matchesType &&
+          matchesSearch
+        );
+
+      }
+    );
+
+
+  renderResources(
+    filtered
+  );
+
+}
+
+
+// ==========================================
+// RENDER RESOURCES
+// ==========================================
+
+function renderResources(list) {
+
+  const grid =
+    document.getElementById(
+      "studentResourceGrid"
+    );
+
+
+  if (!list.length) {
+
+    grid.innerHTML = `
+
+      <div class="empty-message">
+
+        No resources found.
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  const saved =
+    getSaved();
+
+
+  grid.innerHTML =
+    list.map(resource => {
+
+      const id =
+        resource.id ||
+        resource.file_url ||
+        resource.title;
+
+
+      const isSaved =
+        saved.includes(
+          String(id)
+        );
+
+
+      const title =
+        escapeHTML(
+          resource.title ||
+          "Untitled Resource"
+        );
+
+
+      const description =
+        escapeHTML(
+          resource.description ||
+          "Educational resource"
+        );
+
+
+      const type =
+        escapeHTML(
+          String(
+            resource.type ||
+            "resource"
+          ).toUpperCase()
+        );
+
+
+      const url =
+        escapeAttr(
+          resource.file_url ||
+          ""
+        );
+
+
+      return `
+
+        <article
+          class="resource-card">
+
+          <div class="resource-icon">
+
+            ${getIcon(resource.type)}
+
+          </div>
+
+          <small>
+            ${type}
+          </small>
+
+          <h3>
+            ${title}
+          </h3>
+
+          <p>
+            ${description}
+          </p>
+
+          <div
+            class="resource-actions">
+
+            <button
+              class="open-resource"
+              onclick="openResource(
+                '${url}',
+                '${escapeAttr(String(id))}',
+                '${escapeAttr(title)}',
+                '${escapeAttr(String(resource.type || ""))}'
+              )">
+
+              Tap to Open →
+
+            </button>
+
+            <button
+              class="save-resource ${isSaved ? "saved" : ""}"
+              onclick="toggleSaved(
+                '${escapeAttr(String(id))}'
+              )">
+
+              ${isSaved ? "❤️" : "♡"}
+
+            </button>
+
+          </div>
+
+        </article>
+
+      `;
+
+    }).join("");
+
+}
+
+
+// ==========================================
+// SAVE / UNSAVE
+// ==========================================
+
+function toggleSaved(id) {
+
+  let saved =
+    getSaved();
+
+
+  id = String(id);
+
+
+  if (
+    saved.includes(id)
+  ) {
+
+    saved =
+      saved.filter(
+        item => item !== id
+      );
+
+  } else {
+
+    saved.push(id);
+
+  }
+
+
+  setSaved(saved);
+
+
+  renderResources(
+    getFilteredResources()
+  );
+
+  renderSaved();
+
+  updateStats();
+
+}
+
+
+// ==========================================
+// GET FILTERED
+// ==========================================
+
+function getFilteredResources() {
+
+  const query =
+    document.getElementById(
+      "studentSearch"
+    ).value
+      .toLowerCase()
+      .trim();
+
+
+  return resources.filter(
+    resource => {
+
+      const type =
+        String(
+          resource.type || ""
+        ).toLowerCase();
+
+
+      const matchesType =
+        currentFilter === "all" ||
+        type === currentFilter;
+
+
+      const text = `
+
+        ${resource.title || ""}
+
+        ${resource.description || ""}
+
+        ${resource.subject || ""}
+
+        ${resource.type || ""}
+
+        ${resource.level || ""}
+
+        ${resource.class_level || ""}
+
+        ${resource.term || ""}
+
+      `.toLowerCase();
+
+
+      return (
+        matchesType &&
+        (
+          !query ||
+          text.includes(query)
+        )
+      );
+
+    }
+  );
+
+}
+
+
+// ==========================================
+// SAVED RESOURCES
+// ==========================================
+
+function renderSaved() {
+
+  const grid =
+    document.getElementById(
+      "savedGrid"
+    );
+
+
+  const saved =
+    getSaved();
+
+
+  const list =
+    resources.filter(
+      resource => {
+
+        const id =
+          String(
+            resource.id ||
             resource.file_url ||
-            ""
+            resource.title
+          );
+
+        return saved.includes(id);
+
+      }
+    );
+
+
+  if (!list.length) {
+
+    grid.innerHTML = `
+
+      <div class="empty-message">
+
+        You have not saved any resources yet.
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  grid.innerHTML =
+    list.map(
+      resource => {
+
+        const id =
+          escapeAttr(
+            String(
+              resource.id ||
+              resource.file_url ||
+              resource.title
+            )
           );
 
 
@@ -753,266 +1358,438 @@
           <article
             class="resource-card">
 
-            <div
-              class="resource-icon">
+            <div class="resource-icon">
 
-              ${icon}
+              ${getIcon(resource.type)}
 
             </div>
 
             <small>
-              ${type}
+              ${escapeHTML(
+                String(
+                  resource.type ||
+                  "RESOURCE"
+                ).toUpperCase()
+              )}
             </small>
 
             <h3>
-              ${title}
+              ${escapeHTML(
+                resource.title ||
+                "Untitled Resource"
+              )}
             </h3>
 
             <p>
-              ${description}
+              ${escapeHTML(
+                resource.description ||
+                "Educational resource"
+              )}
             </p>
 
-            <button
-              class="open-resource"
-              onclick="openResource('${url}')">
+            <div class="resource-actions">
 
-              Tap to Open →
+              <button
+                class="open-resource"
+                onclick="openResource(
+                  '${escapeAttr(resource.file_url || "")}',
+                  '${id}',
+                  '${escapeAttr(resource.title || "")}',
+                  '${escapeAttr(resource.type || "")}'
+                )">
 
-            </button>
+                Open
+
+              </button>
+
+              <button
+                class="save-resource saved"
+                onclick="toggleSaved('${id}')">
+
+                ❤️
+
+              </button>
+
+            </div>
 
           </article>
 
         `;
 
-      }).join("");
+      }
+    ).join("");
+
+}
+
+
+// ==========================================
+// RECENTLY OPENED
+// ==========================================
+
+function addRecent(
+  id,
+  title,
+  type
+) {
+
+  let recent =
+    getRecent();
+
+
+  id = String(id);
+
+
+  recent =
+    recent.filter(
+      item => item.id !== id
+    );
+
+
+  recent.unshift({
+
+    id:id,
+
+    title:title,
+
+    type:type,
+
+    time:
+      new Date().toISOString()
+
+  });
+
+
+  recent =
+    recent.slice(
+      0,
+      10
+    );
+
+
+  setRecent(
+    recent
+  );
+
+
+  renderRecent();
+
+  updateStats();
+
+}
+
+
+// ==========================================
+// RENDER RECENT
+// ==========================================
+
+function renderRecent() {
+
+  const box =
+    document.getElementById(
+      "recentList"
+    );
+
+
+  const recent =
+    getRecent();
+
+
+  if (!recent.length) {
+
+    box.innerHTML = `
+
+      <div class="empty-message">
+
+        No resources opened yet.
+
+      </div>
+
+    `;
+
+    return;
 
   }
 
 
-  // ==========================================
-  // SEARCH
-  // ==========================================
+  box.innerHTML =
+    recent.map(
+      item => {
 
-  function searchResources() {
+        return `
 
-    const input =
-      document.getElementById(
-        "studentSearch"
-      );
+          <div
+            class="recent-item">
+
+            <div
+              class="recent-icon">
+
+              ${getIcon(item.type)}
+
+            </div>
+
+            <div>
+
+              <strong>
+                ${escapeHTML(item.title)}
+              </strong>
+
+              <small>
+                Recently opened
+              </small>
+
+            </div>
+
+          </div>
+
+        `;
+
+      }
+    ).join("");
+
+}
 
 
-    const query =
-      input.value
-        .toLowerCase()
-        .trim();
+// ==========================================
+// OPEN RESOURCE
+// ==========================================
+
+function openResource(
+  url,
+  id,
+  title,
+  type
+) {
+
+  if (!url) {
+
+    alert(
+      "This resource does not have a file attached."
+    );
+
+    return;
+
+  }
 
 
-    if (!query) {
+  addRecent(
+    id,
+    title,
+    type
+  );
 
-      renderResources(
-        resources
-      );
 
-      return;
+  window.open(
+    url,
+    "_blank",
+    "noopener,noreferrer"
+  );
+
+}
+
+
+// ==========================================
+// STATISTICS
+// ==========================================
+
+function updateStats() {
+
+  document.getElementById(
+    "totalResources"
+  ).textContent =
+    resources.length;
+
+
+  document.getElementById(
+    "savedCount"
+  ).textContent =
+    getSaved().length;
+
+
+  document.getElementById(
+    "recentCount"
+  ).textContent =
+    getRecent().length;
+
+}
+
+
+// ==========================================
+// ICONS
+// ==========================================
+
+function getIcon(type) {
+
+  const icons = {
+
+    book:"📚",
+
+    pdf:"📄",
+
+    video:"🎥",
+
+    photo:"🖼️",
+
+    course:"🎓",
+
+    lesson:"📖"
+
+  };
+
+
+  return (
+    icons[
+      String(
+        type || ""
+      ).toLowerCase()
+    ] || "📘"
+  );
+
+}
+
+
+// ==========================================
+// SECURITY
+// ==========================================
+
+function escapeHTML(value) {
+
+  return String(
+    value
+  ).replace(
+    /[&<>"']/g,
+    character => {
+
+      const entities = {
+
+        "&":"&amp;",
+
+        "<":"&lt;",
+
+        ">":"&gt;",
+
+        '"':"&quot;",
+
+        "'":"&#039;"
+
+      };
+
+      return entities[
+        character
+      ];
 
     }
+  );
+
+}
 
 
-    const filtered =
-      resources.filter(
-        resource => {
+function escapeAttr(value) {
 
-          const text = `
+  return escapeHTML(
+    value
+  ).replace(
+    /`/g,
+    "&#096;"
+  );
 
-            ${resource.title || ""}
-
-            ${resource.description || ""}
-
-            ${resource.subject || ""}
-
-            ${resource.type || ""}
-
-            ${resource.level || ""}
-
-            ${resource.class_level || ""}
-
-            ${resource.term || ""}
-
-          `.toLowerCase();
+}
 
 
-          return text.includes(
-            query
+// ==========================================
+// SEARCH
+// ==========================================
+
+document
+  .getElementById(
+    "studentSearch"
+  )
+  .addEventListener(
+    "input",
+    applyFilters
+  );
+
+
+document
+  .getElementById(
+    "searchButton"
+  )
+  .addEventListener(
+    "click",
+    applyFilters
+  );
+
+
+// ==========================================
+// TYPE FILTERS
+// ==========================================
+
+document
+  .querySelectorAll(
+    ".filter"
+  )
+  .forEach(button => {
+
+    button.addEventListener(
+      "click",
+      () => {
+
+        document
+          .querySelectorAll(
+            ".filter"
+          )
+          .forEach(
+            item =>
+              item.classList.remove(
+                "active"
+              )
           );
 
-        }
-      );
+
+        button.classList.add(
+          "active"
+        );
 
 
-    renderResources(
-      filtered
+        currentFilter =
+          button.dataset.filter;
+
+
+        applyFilters();
+
+      }
     );
 
-  }
+  });
 
 
-  document
-    .getElementById(
-      "searchButton"
-    )
-    .addEventListener(
-      "click",
-      searchResources
-    );
+// ==========================================
+// SIGN OUT
+// ==========================================
 
+document
+  .getElementById(
+    "logoutButton"
+  )
+  .addEventListener(
+    "click",
+    async () => {
 
-  document
-    .getElementById(
-      "studentSearch"
-    )
-    .addEventListener(
-      "input",
-      searchResources
-    );
+      await client.auth.signOut();
 
-
-  // ==========================================
-  // OPEN RESOURCE
-  // ==========================================
-
-  function openResource(url) {
-
-    if (!url) {
-
-      alert(
-        "This resource does not have a file attached."
-      );
-
-      return;
+      window.location.href =
+        "index.html";
 
     }
+  );
 
 
-    window.open(
-      url,
-      "_blank",
-      "noopener,noreferrer"
-    );
+// ==========================================
+// START
+// ==========================================
 
-  }
-
-
-  // ==========================================
-  // ICONS
-  // ==========================================
-
-  function getIcon(type) {
-
-    const icons = {
-
-      book: "📚",
-
-      pdf: "📄",
-
-      video: "🎥",
-
-      photo: "🖼️",
-
-      course: "🎓",
-
-      lesson: "📖"
-
-    };
-
-
-    return (
-      icons[
-        String(
-          type || ""
-        ).toLowerCase()
-      ] || "📘"
-    );
-
-  }
-
-
-  // ==========================================
-  // SECURITY ESCAPING
-  // ==========================================
-
-  function escapeHTML(value) {
-
-    return String(
-      value
-    ).replace(
-      /[&<>"']/g,
-      character => {
-
-        const entities = {
-
-          "&": "&amp;",
-
-          "<": "&lt;",
-
-          ">": "&gt;",
-
-          '"': "&quot;",
-
-          "'": "&#039;"
-
-        };
-
-        return entities[
-          character
-        ];
-
-      }
-    );
-
-  }
-
-
-  function escapeAttr(value) {
-
-    return escapeHTML(
-      value
-    ).replace(
-      /`/g,
-      "&#096;"
-    );
-
-  }
-
-
-  // ==========================================
-  // SIGN OUT
-  // ==========================================
-
-  document
-    .getElementById(
-      "logoutButton"
-    )
-    .addEventListener(
-      "click",
-      async () => {
-
-        await client.auth.signOut();
-
-        window.location.href =
-          "index.html";
-
-      }
-    );
-
-
-  // ==========================================
-  // START
-  // ==========================================
-
-  loadStudent();
+loadStudent();
 
 </script>
-
 
 </body>
   </html>

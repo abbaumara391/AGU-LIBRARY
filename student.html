@@ -1,23 +1,29 @@
 <!doctype html>
 <html lang="en">
+
 <head>
+
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <meta
+    name="viewport"
+    content="width=device-width,initial-scale=1">
 
   <title>AGULIBRARY — Student Dashboard</title>
 
   <link rel="stylesheet" href="style.css">
 
   <style>
+
     * {
-      box-sizing: border-box;
+      box-sizing:border-box;
     }
 
     body {
-      margin: 0;
-      background: linear-gradient(135deg,#f4faf7,#ffffff);
+      margin:0;
+      background:linear-gradient(135deg,#f4faf7,#ffffff);
       color:#14251e;
-      font-family: Arial, Helvetica, sans-serif;
+      font-family:Arial,Helvetica,sans-serif;
     }
 
     .student-header {
@@ -416,6 +422,7 @@
     }
 
     @media(max-width:900px) {
+
       .stats,
       .dashboard-grid {
         grid-template-columns:repeat(2,1fr);
@@ -424,9 +431,11 @@
       .resource-grid {
         grid-template-columns:repeat(2,1fr);
       }
+
     }
 
     @media(max-width:600px) {
+
       .student-header {
         padding:13px 5%;
       }
@@ -470,31 +479,57 @@
       .recent-item {
         align-items:flex-start;
       }
+
     }
+
   </style>
+
 </head>
 
+
 <body>
+
 
 <header class="student-header">
 
   <div class="student-brand">
-    <div class="mark">AG</div>
+
+    <div class="mark">
+      AG
+    </div>
 
     <div>
-      <b>AGULIBRARY</b>
-      <small>STUDENT DASHBOARD</small>
+
+      <b>
+        AGULIBRARY
+      </b>
+
+      <small>
+        STUDENT DASHBOARD
+      </small>
+
     </div>
+
   </div>
+
 
   <div class="header-actions">
 
-    <a class="back" href="index.html">
+    <a
+      class="back"
+      href="index.html">
+
       ← Library
+
     </a>
 
-    <button class="logout" id="logoutButton">
+
+    <button
+      class="logout"
+      id="logoutButton">
+
       Sign out
+
     </button>
 
   </div>
@@ -504,12 +539,20 @@
 
 <main class="dashboard">
 
-  <div id="studentMessage" class="student-message"></div>
 
+  <div
+    id="studentMessage"
+    class="student-message">
+  </div>
+
+
+  <!-- WELCOME -->
 
   <section class="welcome">
 
-    <small>STUDENT LEARNING SPACE</small>
+    <small>
+      STUDENT LEARNING SPACE
+    </small>
 
     <h1 id="welcomeName">
       Welcome!
@@ -524,68 +567,173 @@
   </section>
 
 
+  <!-- STATISTICS -->
+
   <section class="stats">
 
-    <div class="stat">
-      <strong id="totalResources">0</strong>
-      <span>Available Resources</span>
-    </div>
 
     <div class="stat">
-      <strong id="savedCount">0</strong>
-      <span>Saved Resources</span>
+
+      <strong id="totalResources">
+        0
+      </strong>
+
+      <span>
+        Available Resources
+      </span>
+
     </div>
 
-    <div class="stat">
-      <strong id="recentCount">0</strong>
-      <span>Recently Opened</span>
-    </div>
 
     <div class="stat">
-      <strong>🌍</strong>
-      <span>Global Learning</span>
+
+      <strong id="savedCount">
+        0
+      </strong>
+
+      <span>
+        Saved Resources
+      </span>
+
     </div>
+
+
+    <div class="stat">
+
+      <strong id="recentCount">
+        0
+      </strong>
+
+      <span>
+        Recently Opened
+      </span>
+
+    </div>
+
+
+    <div class="stat">
+
+      <strong>
+        🌍
+      </strong>
+
+      <span>
+        Global Learning
+      </span>
+
+    </div>
+
 
   </section>
 
+
+  <!-- QUICK ACCESS -->
 
   <section class="dashboard-grid">
 
-    <a class="dashboard-card" href="#library">
-      <div class="icon">📚</div>
-      <b>Browse Library</b>
-      <span>Explore books, PDFs, videos and photos.</span>
+
+    <a
+      class="dashboard-card"
+      href="#library">
+
+      <div class="icon">
+        📚
+      </div>
+
+      <b>
+        Browse Library
+      </b>
+
+      <span>
+        Explore books, PDFs, videos and photos.
+      </span>
+
     </a>
 
-    <a class="dashboard-card" href="#library">
-      <div class="icon">🎓</div>
-      <b>Subjects</b>
-      <span>Search Physics, Chemistry, Mathematics and more.</span>
+
+    <a
+      class="dashboard-card"
+      href="#library">
+
+      <div class="icon">
+        🎓
+      </div>
+
+      <b>
+        Subjects
+      </b>
+
+      <span>
+        Search Physics, Chemistry, Mathematics and more.
+      </span>
+
     </a>
 
-    <a class="dashboard-card" href="#saved">
-      <div class="icon">❤️</div>
-      <b>Saved Resources</b>
-      <span>Access resources saved to your account.</span>
+
+    <a
+      class="dashboard-card"
+      href="#saved">
+
+      <div class="icon">
+        ❤️
+      </div>
+
+      <b>
+        Saved Resources
+      </b>
+
+      <span>
+        Access resources saved to your account.
+      </span>
+
     </a>
 
-    <a class="dashboard-card" href="#recent">
-      <div class="icon">🕘</div>
-      <b>Recent Learning</b>
-      <span>Continue resources you recently opened.</span>
+
+    <a
+      class="dashboard-card"
+      href="#recent">
+
+      <div class="icon">
+        🕘
+      </div>
+
+      <b>
+        Recent Learning
+      </b>
+
+      <span>
+        Continue resources you recently opened.
+      </span>
+
     </a>
+
 
   </section>
 
 
-  <section id="library" class="library-section">
+  <!-- LIBRARY -->
+
+  <section
+    id="library"
+    class="library-section">
+
 
     <div class="library-head">
+
       <div>
-        <small class="eyebrow">DIGITAL LIBRARY</small>
-        <h2>Explore Learning Resources</h2>
+
+        <small class="eyebrow">
+          DIGITAL LIBRARY
+        </small>
+
+        <h2>
+          Explore Learning Resources
+        </h2>
+
       </div>
+
     </div>
+
 
     <div class="search-box">
 
@@ -594,8 +742,11 @@
         type="search"
         placeholder="Search books, Physics, Chemistry...">
 
-      <button id="searchButton">
+      <button
+        id="searchButton">
+
         Search
+
       </button>
 
     </div>
@@ -603,34 +754,67 @@
 
     <div class="filter-row">
 
-      <button class="filter active" data-filter="all">
+
+      <button
+        class="filter active"
+        data-filter="all">
+
         All
+
       </button>
 
-      <button class="filter" data-filter="book">
+
+      <button
+        class="filter"
+        data-filter="book">
+
         📚 Books
+
       </button>
 
-      <button class="filter" data-filter="pdf">
+
+      <button
+        class="filter"
+        data-filter="pdf">
+
         📄 PDFs
+
       </button>
 
-      <button class="filter" data-filter="video">
+
+      <button
+        class="filter"
+        data-filter="video">
+
         🎥 Videos
+
       </button>
 
-      <button class="filter" data-filter="photo">
+
+      <button
+        class="filter"
+        data-filter="photo">
+
         🖼️ Photos
+
       </button>
 
-      <button class="filter" data-filter="lesson">
+
+      <button
+        class="filter"
+        data-filter="lesson">
+
         📖 Lessons
+
       </button>
+
 
     </div>
 
 
-    <div id="studentResourceGrid" class="resource-grid">
+    <div
+      id="studentResourceGrid"
+      class="resource-grid">
 
       <div class="empty-message">
         Loading learning resources...
@@ -638,16 +822,29 @@
 
     </div>
 
+
   </section>
 
 
-  <section id="saved" class="library-section">
+  <!-- SAVED -->
 
-    <small class="eyebrow">MY COLLECTION</small>
+  <section
+    id="saved"
+    class="library-section">
 
-    <h2>❤️ Saved Resources</h2>
 
-    <div id="savedGrid" class="resource-grid">
+    <small class="eyebrow">
+      MY COLLECTION
+    </small>
+
+    <h2>
+      ❤️ Saved Resources
+    </h2>
+
+
+    <div
+      id="savedGrid"
+      class="resource-grid">
 
       <div class="empty-message">
         Loading saved resources...
@@ -655,16 +852,29 @@
 
     </div>
 
+
   </section>
 
 
-  <section id="recent" class="library-section">
+  <!-- RECENT -->
 
-    <small class="eyebrow">LEARNING HISTORY</small>
+  <section
+    id="recent"
+    class="library-section">
 
-    <h2>🕘 Recently Opened</h2>
 
-    <div id="recentList" class="recent-list">
+    <small class="eyebrow">
+      LEARNING HISTORY
+    </small>
+
+    <h2>
+      🕘 Recently Opened
+    </h2>
+
+
+    <div
+      id="recentList"
+      class="recent-list">
 
       <div class="empty-message">
         Loading recent resources...
@@ -672,40 +882,128 @@
 
     </div>
 
+
   </section>
+
 
 </main>
 
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script src="config.js"></script>
+
 <script src="supabase.js"></script>
+
 
 <script>
 
+
+/* =========================================
+   SUPABASE
+========================================= */
+
 const client = getSupabase();
 
+
 let currentUser = null;
+
 let resources = [];
+
 let savedResourceIds = [];
+
 let recentRows = [];
+
 let currentFilter = "all";
+
+
+/* =========================================
+   LOCAL RECENT STORAGE
+   BACKUP FOR RECENTLY OPENED
+========================================= */
+
+function recentStorageKey() {
+
+  if (!currentUser) {
+
+    return "AGU_RECENT_GUEST";
+
+  }
+
+  return "AGU_RECENT_" + currentUser.id;
+
+}
+
+
+function getLocalRecent() {
+
+  try {
+
+    return JSON.parse(
+      localStorage.getItem(
+        recentStorageKey()
+      ) || "[]"
+    );
+
+  } catch {
+
+    return [];
+
+  }
+
+}
+
+
+function setLocalRecent(list) {
+
+  try {
+
+    localStorage.setItem(
+      recentStorageKey(),
+      JSON.stringify(list)
+    );
+
+  } catch(error) {
+
+    console.error(
+      "Local recent storage error:",
+      error
+    );
+
+  }
+
+}
 
 
 /* =========================================
    MESSAGE
 ========================================= */
 
-function showMessage(message, type = "success") {
+function showMessage(
+  message,
+  type = "success"
+) {
 
-  const box = document.getElementById("studentMessage");
+  const box =
+    document.getElementById(
+      "studentMessage"
+    );
+
 
   box.textContent = message;
-  box.className = "student-message show " + type;
+
+
+  box.className =
+    "student-message show " + type;
+
 
   setTimeout(() => {
-    box.classList.remove("show");
-  }, 3500);
+
+    box.classList.remove(
+      "show"
+    );
+
+  },3500);
 
 }
 
@@ -716,19 +1014,25 @@ function showMessage(message, type = "success") {
 
 function escapeHTML(value) {
 
-  return String(value ?? "").replace(
+  return String(
+    value ?? ""
+  ).replace(
     /[&<>"']/g,
     character => {
 
       const entities = {
+
         "&":"&amp;",
         "<":"&lt;",
         ">":"&gt;",
         '"':"&quot;",
         "'":"&#039;"
+
       };
 
-      return entities[character];
+      return entities[
+        character
+      ];
 
     }
   );
@@ -739,7 +1043,10 @@ function escapeHTML(value) {
 function escapeAttr(value) {
 
   return escapeHTML(value)
-    .replace(/`/g, "&#096;");
+    .replace(
+      /`/g,
+      "&#096;"
+    );
 
 }
 
@@ -751,17 +1058,28 @@ function escapeAttr(value) {
 function getIcon(type) {
 
   const icons = {
+
     book:"📚",
+
     pdf:"📄",
+
     video:"🎥",
+
     photo:"🖼️",
+
     image:"🖼️",
+
     course:"🎓",
+
     lesson:"📖"
+
   };
 
+
   return icons[
-    String(type || "").toLowerCase()
+    String(
+      type || ""
+    ).toLowerCase()
   ] || "📘";
 
 }
@@ -773,7 +1091,9 @@ function getIcon(type) {
 
 function resourceId(resource) {
 
-  return String(resource.id);
+  return String(
+    resource.id
+  );
 
 }
 
@@ -795,8 +1115,13 @@ async function checkStudent() {
 
   }
 
-  const { data, error } =
+
+  const {
+    data,
+    error
+  } =
     await client.auth.getSession();
+
 
   if (
     error ||
@@ -804,10 +1129,13 @@ async function checkStudent() {
     !data.session
   ) {
 
-    window.location.href = "auth.html";
+    window.location.href =
+      "auth.html";
+
     return null;
 
   }
+
 
   return data.session.user;
 
@@ -820,11 +1148,20 @@ async function checkStudent() {
 
 async function loadStudent() {
 
-  const user = await checkStudent();
+  const user =
+    await checkStudent();
 
-  if (!user) return;
 
-  currentUser = user;
+  if (!user) {
+
+    return;
+
+  }
+
+
+  currentUser =
+    user;
+
 
   const name =
     user.user_metadata?.full_name ||
@@ -832,17 +1169,23 @@ async function loadStudent() {
     user.email?.split("@")[0] ||
     "Student";
 
+
   document.getElementById(
     "welcomeName"
   ).textContent =
-    "Welcome, " + name + "!";
+    "Welcome, " +
+    name +
+    "!";
 
 
   await loadResources();
 
+
   await loadSavedResources();
 
+
   await loadRecentResources();
+
 
   updateStats();
 
@@ -850,18 +1193,25 @@ async function loadStudent() {
 
 
 /* =========================================
-   LOAD LIBRARY RESOURCES
+   LOAD RESOURCES
 ========================================= */
 
 async function loadResources() {
 
-  const { data, error } =
+  const {
+    data,
+    error
+  } =
     await client
       .from("resources")
       .select("*")
-      .order("created_at", {
-        ascending:false
-      });
+      .order(
+        "created_at",
+        {
+          ascending:false
+        }
+      );
+
 
   if (error) {
 
@@ -870,12 +1220,15 @@ async function loadResources() {
       error
     );
 
+
     document.getElementById(
       "studentResourceGrid"
     ).innerHTML = `
 
       <div class="empty-message">
+
         Unable to load learning resources.
+
       </div>
 
     `;
@@ -884,7 +1237,10 @@ async function loadResources() {
 
   }
 
-  resources = data || [];
+
+  resources =
+    data || [];
+
 
   renderResources(
     getFilteredResources()
@@ -894,21 +1250,38 @@ async function loadResources() {
 
 
 /* =========================================
-   LOAD SAVED FROM SUPABASE
+   LOAD SAVED RESOURCES
 ========================================= */
 
 async function loadSavedResources() {
 
-  if (!currentUser) return;
+  if (!currentUser) {
 
-  const { data, error } =
+    return;
+
+  }
+
+
+  const {
+    data,
+    error
+  } =
     await client
-      .from("student_saved_resources")
+      .from(
+        "student_saved_resources"
+      )
       .select("*")
-      .eq("user_id", currentUser.id)
-      .order("created_at", {
-        ascending:false
-      });
+      .eq(
+        "user_id",
+        currentUser.id
+      )
+      .order(
+        "created_at",
+        {
+          ascending:false
+        }
+      );
+
 
   if (error) {
 
@@ -917,33 +1290,46 @@ async function loadSavedResources() {
       error
     );
 
+
     savedResourceIds = [];
+
 
     document.getElementById(
       "savedGrid"
     ).innerHTML = `
 
       <div class="empty-message">
+
         Unable to load saved resources.
+
       </div>
 
     `;
 
+
     updateStats();
+
     return;
 
   }
 
+
   savedResourceIds =
     (data || []).map(
-      row => String(row.resource_id)
+      row =>
+        String(
+          row.resource_id
+        )
     );
 
+
   renderSaved();
+
 
   renderResources(
     getFilteredResources()
   );
+
 
   updateStats();
 
@@ -956,17 +1342,45 @@ async function loadSavedResources() {
 
 async function saveResource(id) {
 
-  if (!currentUser) return;
+  if (!currentUser) {
 
-  const numericId = Number(id);
+    return;
 
-  const { error } =
+  }
+
+
+  const numericId =
+    Number(id);
+
+
+  if (
+    savedResourceIds.includes(
+      String(id)
+    )
+  ) {
+
+    return;
+
+  }
+
+
+  const {
+    error
+  } =
     await client
-      .from("student_saved_resources")
+      .from(
+        "student_saved_resources"
+      )
       .insert({
-        user_id: currentUser.id,
-        resource_id: numericId
+
+        user_id:
+          currentUser.id,
+
+        resource_id:
+          numericId
+
       });
+
 
   if (error) {
 
@@ -975,18 +1389,22 @@ async function saveResource(id) {
       error
     );
 
+
     showMessage(
       "Unable to save this resource.",
       "error"
     );
 
+
     return;
 
   }
 
+
   showMessage(
     "Resource saved successfully."
   );
+
 
   await loadSavedResources();
 
@@ -999,16 +1417,34 @@ async function saveResource(id) {
 
 async function removeSavedResource(id) {
 
-  if (!currentUser) return;
+  if (!currentUser) {
 
-  const numericId = Number(id);
+    return;
 
-  const { error } =
+  }
+
+
+  const numericId =
+    Number(id);
+
+
+  const {
+    error
+  } =
     await client
-      .from("student_saved_resources")
+      .from(
+        "student_saved_resources"
+      )
       .delete()
-      .eq("user_id", currentUser.id)
-      .eq("resource_id", numericId);
+      .eq(
+        "user_id",
+        currentUser.id
+      )
+      .eq(
+        "resource_id",
+        numericId
+      );
+
 
   if (error) {
 
@@ -1017,18 +1453,22 @@ async function removeSavedResource(id) {
       error
     );
 
+
     showMessage(
       "Unable to remove this resource.",
       "error"
     );
 
+
     return;
 
   }
 
+
   showMessage(
     "Removed from Saved Resources."
   );
+
 
   await loadSavedResources();
 
@@ -1041,7 +1481,9 @@ async function removeSavedResource(id) {
 
 async function toggleSaved(id) {
 
-  id = String(id);
+  id =
+    String(id);
+
 
   if (
     savedResourceIds.includes(id)
@@ -1065,14 +1507,19 @@ async function toggleSaved(id) {
 function renderSaved() {
 
   const grid =
-    document.getElementById("savedGrid");
+    document.getElementById(
+      "savedGrid"
+    );
+
 
   const list =
-    resources.filter(resource =>
-      savedResourceIds.includes(
-        resourceId(resource)
-      )
+    resources.filter(
+      resource =>
+        savedResourceIds.includes(
+          resourceId(resource)
+        )
     );
+
 
   if (!list.length) {
 
@@ -1094,115 +1541,232 @@ function renderSaved() {
 
   }
 
+
   grid.innerHTML =
-    list.map(resource => {
+    list.map(
+      resource => {
 
-      const id = resourceId(resource);
+        const id =
+          resourceId(
+            resource
+          );
 
-      return `
 
-        <article class="resource-card">
+        return `
 
-          <div class="resource-icon">
-            ${getIcon(resource.type)}
-          </div>
+          <article
+            class="resource-card">
 
-          <small>
-            ${escapeHTML(
-              String(
-                resource.type || "RESOURCE"
-              ).toUpperCase()
-            )}
-          </small>
 
-          <h3>
-            ${escapeHTML(
-              resource.title ||
-              "Untitled Resource"
-            )}
-          </h3>
+            <div
+              class="resource-icon">
 
-          <p>
-            ${escapeHTML(
-              resource.description ||
-              "Educational resource"
-            )}
-          </p>
+              ${getIcon(
+                resource.type
+              )}
 
-          <div class="resource-actions">
+            </div>
 
-            <button
-              class="open-resource"
-              data-action="open"
-              data-id="${escapeAttr(id)}">
 
-              Open →
+            <small>
 
-            </button>
+              ${escapeHTML(
+                String(
+                  resource.type ||
+                  "RESOURCE"
+                ).toUpperCase()
+              )}
 
-            <button
-              class="save-resource saved"
-              data-action="save"
-              data-id="${escapeAttr(id)}">
+            </small>
 
-              ❤️
 
-            </button>
+            <h3>
 
-          </div>
+              ${escapeHTML(
+                resource.title ||
+                "Untitled Resource"
+              )}
 
-        </article>
+            </h3>
 
-      `;
 
-    }).join("");
+            <p>
+
+              ${escapeHTML(
+                resource.description ||
+                "Educational resource"
+              )}
+
+            </p>
+
+
+            <div
+              class="resource-actions">
+
+
+              <button
+                class="open-resource"
+                data-action="open"
+                data-id="${escapeAttr(id)}">
+
+                Open →
+
+              </button>
+
+
+              <button
+                class="save-resource saved"
+                data-action="save"
+                data-id="${escapeAttr(id)}">
+
+                ❤️
+
+              </button>
+
+
+            </div>
+
+
+          </article>
+
+        `;
+
+      }
+    ).join("");
 
 }
 
 
 /* =========================================
-   LOAD RECENT FROM SUPABASE
+   LOAD RECENT
 ========================================= */
 
 async function loadRecentResources() {
 
-  if (!currentUser) return;
+  if (!currentUser) {
 
-  const { data, error } =
-    await client
-      .from("student_recent_resources")
-      .select("*")
-      .eq("user_id", currentUser.id)
-      .order("created_at", {
-        ascending:false
-      })
-      .limit(10);
-
-  if (error) {
-
-    console.error(
-      "Recent resources error:",
-      error
-    );
-
-    recentRows = [];
-
-    document.getElementById(
-      "recentList"
-    ).innerHTML = `
-
-      <div class="empty-message">
-        Unable to load recent resources.
-      </div>
-
-    `;
-
-    updateStats();
     return;
 
   }
 
-  recentRows = data || [];
+
+  /*
+    FIRST load local backup.
+  */
+
+  const localRecent =
+    getLocalRecent();
+
+
+  /*
+    Convert local records into
+    the format used by renderRecent().
+  */
+
+  if (
+    localRecent.length
+  ) {
+
+    recentRows =
+      localRecent;
+
+    renderRecent();
+
+    updateStats();
+
+  }
+
+
+  /*
+    THEN try Supabase.
+  */
+
+  const {
+    data,
+    error
+  } =
+    await client
+      .from(
+        "student_recent_resources"
+      )
+      .select("*")
+      .eq(
+        "user_id",
+        currentUser.id
+      )
+      .order(
+        "created_at",
+        {
+          ascending:false
+        }
+      )
+      .limit(10);
+
+
+  if (error) {
+
+    console.error(
+      "Recent resources Supabase error:",
+      error
+    );
+
+    /*
+      IMPORTANT:
+      Do NOT erase the local recent
+      resources when Supabase fails.
+    */
+
+    if (
+      !recentRows.length
+    ) {
+
+      renderRecent();
+
+    }
+
+    updateStats();
+
+    return;
+
+  }
+
+
+  /*
+    Supabase worked.
+  */
+
+  if (data && data.length) {
+
+    recentRows =
+      data;
+
+    /*
+      Also update local backup.
+    */
+
+    const backup =
+      data.map(
+        row => ({
+
+          id:
+            row.id,
+
+          resource_id:
+            row.resource_id,
+
+          created_at:
+            row.created_at
+
+        })
+      );
+
+
+    setLocalRecent(
+      backup
+    );
+
+  }
+
 
   renderRecent();
 
@@ -1215,43 +1779,169 @@ async function loadRecentResources() {
    ADD RECENT RESOURCE
 ========================================= */
 
-async function addRecentResource(resource) {
+async function addRecentResource(
+  resource
+) {
 
-  if (!currentUser) return;
+  if (!currentUser) {
 
-  const id = Number(resource.id);
+    return;
+
+  }
+
+
+  const resourceIdValue =
+    String(
+      resource.id
+    );
+
 
   /*
-    First remove the old occurrence of this
-    resource so the newest one appears first.
+    =====================================
+    1. UPDATE LOCAL STORAGE IMMEDIATELY
+    =====================================
   */
 
-  const { error: deleteError } =
+  let localRecent =
+    getLocalRecent();
+
+
+  /*
+    Remove previous copy.
+  */
+
+  localRecent =
+    localRecent.filter(
+      item =>
+        String(
+          item.resource_id
+        ) !==
+        resourceIdValue
+    );
+
+
+  /*
+    Put newest resource first.
+  */
+
+  localRecent.unshift({
+
+    resource_id:
+      resource.id,
+
+    created_at:
+      new Date().toISOString()
+
+  });
+
+
+  /*
+    Keep only 10.
+  */
+
+  localRecent =
+    localRecent.slice(
+      0,
+      10
+    );
+
+
+  /*
+    Save locally.
+  */
+
+  setLocalRecent(
+    localRecent
+  );
+
+
+  /*
+    Immediately update screen.
+  */
+
+  recentRows =
+    localRecent;
+
+
+  renderRecent();
+
+  updateStats();
+
+
+  /*
+    =====================================
+    2. TRY SUPABASE
+    =====================================
+  */
+
+  const numericId =
+    Number(
+      resource.id
+    );
+
+
+  /*
+    Remove old Supabase record.
+  */
+
+  const {
+    error:deleteError
+  } =
     await client
-      .from("student_recent_resources")
+      .from(
+        "student_recent_resources"
+      )
       .delete()
-      .eq("user_id", currentUser.id)
-      .eq("resource_id", id);
+      .eq(
+        "user_id",
+        currentUser.id
+      )
+      .eq(
+        "resource_id",
+        numericId
+      );
+
 
   if (deleteError) {
 
-    console.error(
-      "Recent cleanup error:",
+    console.warn(
+      "Recent delete warning:",
       deleteError
     );
 
   }
 
 
-  const { error: insertError } =
+  /*
+    Insert newest record.
+  */
+
+  const {
+    error:insertError
+  } =
     await client
-      .from("student_recent_resources")
+      .from(
+        "student_recent_resources"
+      )
       .insert({
-        user_id: currentUser.id,
-        resource_id: id
+
+        user_id:
+          currentUser.id,
+
+        resource_id:
+          numericId
+
       });
 
+
   if (insertError) {
+
+    /*
+      Do not break the dashboard.
+
+      Local Recent Learning continues
+      working even if RLS blocks Supabase.
+    */
 
     console.error(
       "Recent insert error:",
@@ -1261,6 +1951,12 @@ async function addRecentResource(resource) {
     return;
 
   }
+
+
+  /*
+    Supabase worked.
+    Refresh from database.
+  */
 
   await loadRecentResources();
 
@@ -1274,14 +1970,19 @@ async function addRecentResource(resource) {
 function renderRecent() {
 
   const box =
-    document.getElementById("recentList");
+    document.getElementById(
+      "recentList"
+    );
+
 
   if (!recentRows.length) {
 
     box.innerHTML = `
 
       <div class="empty-message">
+
         No resources opened yet.
+
       </div>
 
     `;
@@ -1293,53 +1994,85 @@ function renderRecent() {
 
   const html = [];
 
-  recentRows.forEach(row => {
 
-    const resource =
-      resources.find(item =>
-        String(item.id) ===
-        String(row.resource_id)
-      );
+  recentRows.forEach(
+    row => {
 
-    if (!resource) return;
+      const resource =
+        resources.find(
+          item =>
+            String(
+              item.id
+            ) ===
+            String(
+              row.resource_id
+            )
+        );
 
-    html.push(`
 
-      <div class="recent-item">
+      if (!resource) {
 
-        <div class="recent-icon">
-          ${getIcon(resource.type)}
-        </div>
+        return;
 
-        <div class="recent-info">
+      }
 
-          <strong>
-            ${escapeHTML(
-              resource.title ||
-              "Resource"
+
+      html.push(`
+
+        <div
+          class="recent-item">
+
+
+          <div
+            class="recent-icon">
+
+            ${getIcon(
+              resource.type
             )}
-          </strong>
 
-          <small>
-            Recently opened
-          </small>
+          </div>
+
+
+          <div
+            class="recent-info">
+
+
+            <strong>
+
+              ${escapeHTML(
+                resource.title ||
+                "Resource"
+              )}
+
+            </strong>
+
+
+            <small>
+
+              Recently opened
+
+            </small>
+
+
+          </div>
+
+
+          <button
+            class="recent-open"
+            data-action="open"
+            data-id="${escapeAttr(resource.id)}">
+
+            Open
+
+          </button>
+
 
         </div>
 
-        <button
-          class="recent-open"
-          data-action="open"
-          data-id="${escapeAttr(resource.id)}">
+      `);
 
-          Open
-
-        </button>
-
-      </div>
-
-    `);
-
-  });
+    }
+  );
 
 
   if (!html.length) {
@@ -1347,7 +2080,9 @@ function renderRecent() {
     box.innerHTML = `
 
       <div class="empty-message">
+
         No resources opened yet.
+
       </div>
 
     `;
@@ -1357,7 +2092,8 @@ function renderRecent() {
   }
 
 
-  box.innerHTML = html.join("");
+  box.innerHTML =
+    html.join("");
 
 }
 
@@ -1370,7 +2106,10 @@ function findResource(id) {
 
   return resources.find(
     resource =>
-      String(resource.id) === String(id)
+      String(
+        resource.id
+      ) ===
+      String(id)
   );
 
 }
@@ -1385,6 +2124,7 @@ async function openResourceById(id) {
   const resource =
     findResource(id);
 
+
   if (!resource) {
 
     showMessage(
@@ -1396,8 +2136,11 @@ async function openResourceById(id) {
 
   }
 
+
   const url =
-    resource.file_url || "";
+    resource.file_url ||
+    "";
+
 
   if (!url) {
 
@@ -1410,29 +2153,50 @@ async function openResourceById(id) {
 
   }
 
+
   /*
-    Open first so mobile browsers don't block
-    the new tab while Supabase is being updated.
+    =====================================
+    RECORD RECENT IMMEDIATELY
+    =====================================
+  */
+
+  await addRecentResource(
+    resource
+  );
+
+
+  /*
+    =====================================
+    OPEN FILE
+    =====================================
   */
 
   const newWindow =
     window.open(
       url,
-      "_blank",
-      "noopener,noreferrer"
+      "_blank"
     );
 
-  await addRecentResource(resource);
+
+  /*
+    Some mobile browsers block
+    window.open.
+
+    If blocked, navigate directly.
+  */
 
   if (!newWindow) {
-    window.location.href = url;
+
+    window.location.href =
+      url;
+
   }
 
 }
 
 
 /* =========================================
-   SEARCH AND FILTER
+   SEARCH
 ========================================= */
 
 function getFilteredResources() {
@@ -1442,44 +2206,63 @@ function getFilteredResources() {
       "studentSearch"
     );
 
+
   const query =
     input
-      ? input.value.toLowerCase().trim()
+      ? input.value
+          .toLowerCase()
+          .trim()
       : "";
 
-  return resources.filter(resource => {
 
-    const type =
-      String(
-        resource.type || ""
-      ).toLowerCase();
+  return resources.filter(
+    resource => {
 
-    const matchesType =
-      currentFilter === "all" ||
-      type === currentFilter;
+      const type =
+        String(
+          resource.type ||
+          ""
+        ).toLowerCase();
 
-    const searchable = `
 
-      ${resource.title || ""}
-      ${resource.description || ""}
-      ${resource.subject || ""}
-      ${resource.type || ""}
-      ${resource.level || ""}
-      ${resource.class_level || ""}
-      ${resource.term || ""}
+      const matchesType =
+        currentFilter === "all" ||
+        type === currentFilter;
 
-    `.toLowerCase();
 
-    const matchesSearch =
-      !query ||
-      searchable.includes(query);
+      const searchable = `
 
-    return (
-      matchesType &&
-      matchesSearch
-    );
+        ${resource.title || ""}
 
-  });
+        ${resource.description || ""}
+
+        ${resource.subject || ""}
+
+        ${resource.type || ""}
+
+        ${resource.level || ""}
+
+        ${resource.class_level || ""}
+
+        ${resource.term || ""}
+
+      `.toLowerCase();
+
+
+      const matchesSearch =
+        !query ||
+        searchable.includes(
+          query
+        );
+
+
+      return (
+        matchesType &&
+        matchesSearch
+      );
+
+    }
+  );
 
 }
 
@@ -1504,12 +2287,15 @@ function renderResources(list) {
       "studentResourceGrid"
     );
 
+
   if (!list.length) {
 
     grid.innerHTML = `
 
       <div class="empty-message">
+
         No resources found.
+
       </div>
 
     `;
@@ -1518,82 +2304,124 @@ function renderResources(list) {
 
   }
 
+
   grid.innerHTML =
-    list.map(resource => {
+    list.map(
+      resource => {
 
-      const id =
-        resourceId(resource);
+        const id =
+          resourceId(
+            resource
+          );
 
-      const isSaved =
-        savedResourceIds.includes(id);
 
-      const title =
-        escapeHTML(
-          resource.title ||
-          "Untitled Resource"
-        );
+        const isSaved =
+          savedResourceIds.includes(
+            id
+          );
 
-      const description =
-        escapeHTML(
-          resource.description ||
-          "Educational resource"
-        );
 
-      const type =
-        escapeHTML(
-          String(
-            resource.type ||
-            "resource"
-          ).toUpperCase()
-        );
+        const title =
+          escapeHTML(
+            resource.title ||
+            "Untitled Resource"
+          );
 
-      return `
 
-        <article class="resource-card">
+        const description =
+          escapeHTML(
+            resource.description ||
+            "Educational resource"
+          );
 
-          <div class="resource-icon">
-            ${getIcon(resource.type)}
-          </div>
 
-          <small>
-            ${type}
-          </small>
+        const type =
+          escapeHTML(
+            String(
+              resource.type ||
+              "resource"
+            ).toUpperCase()
+          );
 
-          <h3>
-            ${title}
-          </h3>
 
-          <p>
-            ${description}
-          </p>
+        return `
 
-          <div class="resource-actions">
+          <article
+            class="resource-card">
 
-            <button
-              class="open-resource"
-              data-action="open"
-              data-id="${escapeAttr(id)}">
 
-              Tap to Open →
+            <div
+              class="resource-icon">
 
-            </button>
+              ${getIcon(
+                resource.type
+              )}
 
-            <button
-              class="save-resource ${isSaved ? "saved" : ""}"
-              data-action="save"
-              data-id="${escapeAttr(id)}">
+            </div>
 
-              ${isSaved ? "❤️" : "♡"}
 
-            </button>
+            <small>
 
-          </div>
+              ${type}
 
-        </article>
+            </small>
 
-      `;
 
-    }).join("");
+            <h3>
+
+              ${title}
+
+            </h3>
+
+
+            <p>
+
+              ${description}
+
+            </p>
+
+
+            <div
+              class="resource-actions">
+
+
+              <button
+                class="open-resource"
+                data-action="open"
+                data-id="${escapeAttr(id)}">
+
+                Tap to Open →
+
+              </button>
+
+
+              <button
+                class="save-resource ${
+                  isSaved
+                    ? "saved"
+                    : ""
+                }"
+                data-action="save"
+                data-id="${escapeAttr(id)}">
+
+                ${
+                  isSaved
+                    ? "❤️"
+                    : "♡"
+                }
+
+              </button>
+
+
+            </div>
+
+
+          </article>
+
+        `;
+
+      }
+    ).join("");
 
 }
 
@@ -1609,10 +2437,12 @@ function updateStats() {
   ).textContent =
     resources.length;
 
+
   document.getElementById(
     "savedCount"
   ).textContent =
     savedResourceIds.length;
+
 
   document.getElementById(
     "recentCount"
@@ -1623,7 +2453,7 @@ function updateStats() {
 
 
 /* =========================================
-   RESOURCE BUTTON EVENTS
+   BUTTON EVENTS
 ========================================= */
 
 document.addEventListener(
@@ -1635,27 +2465,48 @@ document.addEventListener(
         "[data-action]"
       );
 
-    if (!button) return;
+
+    if (!button) {
+
+      return;
+
+    }
+
 
     const action =
       button.dataset.action;
 
+
     const id =
       button.dataset.id;
 
-    if (action === "open") {
 
-      await openResourceById(id);
+    if (
+      action === "open"
+    ) {
+
+      await openResourceById(
+        id
+      );
 
     }
 
-    if (action === "save") {
 
-      button.disabled = true;
+    if (
+      action === "save"
+    ) {
 
-      await toggleSaved(id);
+      button.disabled =
+        true;
 
-      button.disabled = false;
+
+      await toggleSaved(
+        id
+      );
+
+
+      button.disabled =
+        false;
 
     }
 
@@ -1668,14 +2519,19 @@ document.addEventListener(
 ========================================= */
 
 document
-  .getElementById("studentSearch")
+  .getElementById(
+    "studentSearch"
+  )
   .addEventListener(
     "input",
     applyFilters
   );
 
+
 document
-  .getElementById("searchButton")
+  .getElementById(
+    "searchButton"
+  )
   .addEventListener(
     "click",
     applyFilters
@@ -1687,30 +2543,47 @@ document
 ========================================= */
 
 document
-  .querySelectorAll(".filter")
-  .forEach(button => {
+  .querySelectorAll(
+    ".filter"
+  )
+  .forEach(
+    button => {
 
-    button.addEventListener(
-      "click",
-      () => {
+      button.addEventListener(
+        "click",
+        () => {
 
-        document
-          .querySelectorAll(".filter")
-          .forEach(item => {
-            item.classList.remove("active");
-          });
+          document
+            .querySelectorAll(
+              ".filter"
+            )
+            .forEach(
+              item => {
 
-        button.classList.add("active");
+                item.classList.remove(
+                  "active"
+                );
 
-        currentFilter =
-          button.dataset.filter;
+              }
+            );
 
-        applyFilters();
 
-      }
-    );
+          button.classList.add(
+            "active"
+          );
 
-  });
+
+          currentFilter =
+            button.dataset.filter;
+
+
+          applyFilters();
+
+        }
+      );
+
+    }
+  );
 
 
 /* =========================================
@@ -1718,14 +2591,19 @@ document
 ========================================= */
 
 document
-  .getElementById("logoutButton")
+  .getElementById(
+    "logoutButton"
+  )
   .addEventListener(
     "click",
     async () => {
 
       if (client) {
+
         await client.auth.signOut();
+
       }
+
 
       window.location.href =
         "index.html";
@@ -1740,7 +2618,10 @@ document
 
 loadStudent();
 
+
 </script>
 
+
 </body>
+
 </html>

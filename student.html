@@ -1,23 +1,16 @@
 <!doctype html>
 <html lang="en">
-
 <head>
-
   <meta charset="utf-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width,initial-scale=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
 
   <title>AGULIBRARY — Student Dashboard</title>
 
   <link rel="stylesheet" href="style.css">
 
   <style>
-
     body {
-      background:
-        linear-gradient(135deg,#f4faf7,#ffffff);
+      background: linear-gradient(135deg,#f4faf7,#ffffff);
     }
 
     .student-header {
@@ -28,6 +21,9 @@
       align-items:center;
       justify-content:space-between;
       gap:15px;
+      position:sticky;
+      top:0;
+      z-index:100;
     }
 
     .student-brand {
@@ -64,8 +60,7 @@
     }
 
     .welcome {
-      background:
-        linear-gradient(135deg,#087a4b,#0c9b61);
+      background:linear-gradient(135deg,#087a4b,#0c9b61);
       color:#fff;
       border-radius:28px;
       padding:35px;
@@ -92,8 +87,7 @@
 
     .stats {
       display:grid;
-      grid-template-columns:
-        repeat(4,1fr);
+      grid-template-columns:repeat(4,1fr);
       gap:15px;
       margin-bottom:25px;
     }
@@ -118,8 +112,7 @@
 
     .dashboard-grid {
       display:grid;
-      grid-template-columns:
-        repeat(4,1fr);
+      grid-template-columns:repeat(4,1fr);
       gap:15px;
       margin-bottom:25px;
     }
@@ -131,6 +124,12 @@
       padding:20px;
       text-decoration:none;
       color:#14251e;
+      transition:.2s;
+    }
+
+    .dashboard-card:hover {
+      transform:translateY(-3px);
+      box-shadow:0 10px 25px rgba(0,0,0,.06);
     }
 
     .dashboard-card .icon {
@@ -185,6 +184,10 @@
       font-size:15px;
     }
 
+    .search-box input:focus {
+      border-color:#087a4b;
+    }
+
     .search-box button {
       border:0;
       background:#087a4b;
@@ -192,6 +195,7 @@
       border-radius:12px;
       padding:0 18px;
       font-weight:700;
+      cursor:pointer;
     }
 
     .filter-row {
@@ -219,8 +223,7 @@
 
     .resource-grid {
       display:grid;
-      grid-template-columns:
-        repeat(3,1fr);
+      grid-template-columns:repeat(3,1fr);
       gap:15px;
     }
 
@@ -229,6 +232,12 @@
       border-radius:18px;
       padding:15px;
       background:#fbfefc;
+      transition:.2s;
+    }
+
+    .resource-card:hover {
+      transform:translateY(-3px);
+      box-shadow:0 10px 25px rgba(0,0,0,.06);
     }
 
     .resource-icon {
@@ -310,7 +319,7 @@
       border-radius:14px;
     }
 
-    .recent-item .recent-icon {
+    .recent-icon {
       font-size:25px;
     }
 
@@ -338,23 +347,40 @@
       font-weight:700;
     }
 
-    @media(max-width:900px) {
+    .student-message {
+      display:none;
+      padding:14px 18px;
+      margin-bottom:20px;
+      border-radius:14px;
+      font-weight:700;
+    }
 
+    .student-message.show {
+      display:block;
+    }
+
+    .student-message.success {
+      background:#e8f8ef;
+      color:#087a4b;
+    }
+
+    .student-message.error {
+      background:#fff0f0;
+      color:#b42318;
+    }
+
+    @media(max-width:900px) {
       .stats,
       .dashboard-grid {
-        grid-template-columns:
-          repeat(2,1fr);
+        grid-template-columns:repeat(2,1fr);
       }
 
       .resource-grid {
-        grid-template-columns:
-          repeat(2,1fr);
+        grid-template-columns:repeat(2,1fr);
       }
-
     }
 
     @media(max-width:600px) {
-
       .student-header {
         padding:13px 5%;
       }
@@ -378,15 +404,14 @@
         flex-direction:column;
       }
 
+      .student-brand small {
+        font-size:8px;
+      }
     }
-
   </style>
-
 </head>
 
-
 <body>
-
 
 <header class="student-header">
 
@@ -397,22 +422,16 @@
     </div>
 
     <div>
-
-      <b>
-        AGULIBRARY
-      </b>
+      <b>AGULIBRARY</b>
 
       <small>
         STUDENT DASHBOARD
       </small>
-
     </div>
 
   </div>
 
-
-  <div
-    style="display:flex;gap:10px;align-items:center;">
+  <div style="display:flex;gap:10px;align-items:center;">
 
     <a
       class="back"
@@ -433,314 +452,317 @@
 
 <main class="dashboard">
 
-
-<section class="welcome">
-
-  <small>
-    STUDENT LEARNING SPACE
-  </small>
-
-  <h1 id="welcomeName">
-    Welcome!
-  </h1>
-
-  <p>
-    Your personal AGULIBRARY learning space.
-    Explore books, videos, PDFs and educational
-    resources from around the world.
-  </p>
-
-</section>
-
-
-<!-- STATISTICS -->
-
-<section class="stats">
-
-  <div class="stat">
-
-    <strong id="totalResources">
-      0
-    </strong>
-
-    <span>
-      Available Resources
-    </span>
-
-  </div>
-
-
-  <div class="stat">
-
-    <strong id="savedCount">
-      0
-    </strong>
-
-    <span>
-      Saved Resources
-    </span>
-
-  </div>
-
-
-  <div class="stat">
-
-    <strong id="recentCount">
-      0
-    </strong>
-
-    <span>
-      Recently Opened
-    </span>
-
-  </div>
-
-
-  <div class="stat">
-
-    <strong>
-      🌍
-    </strong>
-
-    <span>
-      Global Learning
-    </span>
-
-  </div>
-
-</section>
-
-
-<!-- QUICK ACCESS -->
-
-<section class="dashboard-grid">
-
-
-  <a
-    class="dashboard-card"
-    href="#library">
-
-    <div class="icon">
-      📚
-    </div>
-
-    <b>
-      Browse Library
-    </b>
-
-    <span>
-      Explore books, PDFs, videos and photos.
-    </span>
-
-  </a>
-
-
-  <a
-    class="dashboard-card"
-    href="#library">
-
-    <div class="icon">
-      🎓
-    </div>
-
-    <b>
-      Subjects
-    </b>
-
-    <span>
-      Search Physics, Chemistry, Mathematics and more.
-    </span>
-
-  </a>
-
-
-  <a
-    class="dashboard-card"
-    href="#saved">
-
-    <div class="icon">
-      ❤️
-    </div>
-
-    <b>
-      Saved Resources
-    </b>
-
-    <span>
-      Quickly access resources you saved.
-    </span>
-
-  </a>
-
-
-  <a
-    class="dashboard-card"
-    href="#recent">
-
-    <div class="icon">
-      🕘
-    </div>
-
-    <b>
-      Recent Learning
-    </b>
-
-    <span>
-      Continue from resources you opened recently.
-    </span>
-
-  </a>
-
-
-</section>
-
-
-<!-- MAIN LIBRARY -->
-
-<section
-  id="library"
-  class="library-section">
-
-  <div class="library-head">
-
-    <div>
-
-      <small class="eyebrow">
-        DIGITAL LIBRARY
-      </small>
-
-      <h2>
-        Explore Learning Resources
-      </h2>
-
-    </div>
-
-  </div>
-
-
-  <div class="search-box">
-
-    <input
-      id="studentSearch"
-      type="search"
-      placeholder="Search books, Physics, Chemistry..."
-    >
-
-    <button
-      id="searchButton">
-      Search
-    </button>
-
-  </div>
-
-
-  <div class="filter-row">
-
-    <button
-      class="filter active"
-      data-filter="all">
-      All
-    </button>
-
-    <button
-      class="filter"
-      data-filter="book">
-      📚 Books
-    </button>
-
-    <button
-      class="filter"
-      data-filter="pdf">
-      📄 PDFs
-    </button>
-
-    <button
-      class="filter"
-      data-filter="video">
-      🎥 Videos
-    </button>
-
-    <button
-      class="filter"
-      data-filter="photo">
-      🖼️ Photos
-    </button>
-
-    <button
-      class="filter"
-      data-filter="lesson">
-      📖 Lessons
-    </button>
-
-  </div>
-
-
   <div
-    id="studentResourceGrid"
-    class="resource-grid">
-
-    <div class="empty-message">
-      Loading learning resources...
-    </div>
-
+    id="studentMessage"
+    class="student-message">
   </div>
 
-</section>
+
+  <!-- WELCOME -->
+
+  <section class="welcome">
+
+    <small>
+      STUDENT LEARNING SPACE
+    </small>
+
+    <h1 id="welcomeName">
+      Welcome!
+    </h1>
+
+    <p>
+      Your personal AGULIBRARY learning space.
+      Explore books, videos, PDFs and educational
+      resources from around the world.
+    </p>
+
+  </section>
 
 
-<!-- SAVED -->
+  <!-- STATISTICS -->
 
-<section
-  id="saved"
-  class="library-section">
+  <section class="stats">
 
-  <small class="eyebrow">
-    MY COLLECTION
-  </small>
+    <div class="stat">
 
-  <h2>
-    ❤️ Saved Resources
-  </h2>
+      <strong id="totalResources">
+        0
+      </strong>
 
-  <div
-    id="savedGrid"
-    class="resource-grid">
+      <span>
+        Available Resources
+      </span>
 
-    <div class="empty-message">
-      You have not saved any resources yet.
     </div>
 
-  </div>
 
-</section>
+    <div class="stat">
 
+      <strong id="savedCount">
+        0
+      </strong>
 
-<!-- RECENT -->
+      <span>
+        Saved Resources
+      </span>
 
-<section
-  id="recent"
-  class="library-section">
-
-  <small class="eyebrow">
-    LEARNING HISTORY
-  </small>
-
-  <h2>
-    🕘 Recently Opened
-  </h2>
-
-  <div
-    id="recentList"
-    class="recent-list">
-
-    <div class="empty-message">
-      No resources opened yet.
     </div>
 
-  </div>
 
-</section>
+    <div class="stat">
 
+      <strong id="recentCount">
+        0
+      </strong>
+
+      <span>
+        Recently Opened
+      </span>
+
+    </div>
+
+
+    <div class="stat">
+
+      <strong>
+        🌍
+      </strong>
+
+      <span>
+        Global Learning
+      </span>
+
+    </div>
+
+  </section>
+
+
+  <!-- QUICK ACCESS -->
+
+  <section class="dashboard-grid">
+
+    <a
+      class="dashboard-card"
+      href="#library">
+
+      <div class="icon">
+        📚
+      </div>
+
+      <b>
+        Browse Library
+      </b>
+
+      <span>
+        Explore books, PDFs, videos and photos.
+      </span>
+
+    </a>
+
+
+    <a
+      class="dashboard-card"
+      href="#library">
+
+      <div class="icon">
+        🎓
+      </div>
+
+      <b>
+        Subjects
+      </b>
+
+      <span>
+        Search Physics, Chemistry, Mathematics and more.
+      </span>
+
+    </a>
+
+
+    <a
+      class="dashboard-card"
+      href="#saved">
+
+      <div class="icon">
+        ❤️
+      </div>
+
+      <b>
+        Saved Resources
+      </b>
+
+      <span>
+        Quickly access resources you saved.
+      </span>
+
+    </a>
+
+
+    <a
+      class="dashboard-card"
+      href="#recent">
+
+      <div class="icon">
+        🕘
+      </div>
+
+      <b>
+        Recent Learning
+      </b>
+
+      <span>
+        Continue from resources you opened recently.
+      </span>
+
+    </a>
+
+  </section>
+
+
+  <!-- LIBRARY -->
+
+  <section
+    id="library"
+    class="library-section">
+
+    <div class="library-head">
+
+      <div>
+
+        <small class="eyebrow">
+          DIGITAL LIBRARY
+        </small>
+
+        <h2>
+          Explore Learning Resources
+        </h2>
+
+      </div>
+
+    </div>
+
+
+    <div class="search-box">
+
+      <input
+        id="studentSearch"
+        type="search"
+        placeholder="Search books, Physics, Chemistry...">
+
+      <button
+        id="searchButton">
+        Search
+      </button>
+
+    </div>
+
+
+    <div class="filter-row">
+
+      <button
+        class="filter active"
+        data-filter="all">
+        All
+      </button>
+
+      <button
+        class="filter"
+        data-filter="book">
+        📚 Books
+      </button>
+
+      <button
+        class="filter"
+        data-filter="pdf">
+        📄 PDFs
+      </button>
+
+      <button
+        class="filter"
+        data-filter="video">
+        🎥 Videos
+      </button>
+
+      <button
+        class="filter"
+        data-filter="photo">
+        🖼️ Photos
+      </button>
+
+      <button
+        class="filter"
+        data-filter="lesson">
+        📖 Lessons
+      </button>
+
+    </div>
+
+
+    <div
+      id="studentResourceGrid"
+      class="resource-grid">
+
+      <div class="empty-message">
+        Loading learning resources...
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- SAVED -->
+
+  <section
+    id="saved"
+    class="library-section">
+
+    <small class="eyebrow">
+      MY COLLECTION
+    </small>
+
+    <h2>
+      ❤️ Saved Resources
+    </h2>
+
+    <div
+      id="savedGrid"
+      class="resource-grid">
+
+      <div class="empty-message">
+        You have not saved any resources yet.
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- RECENT -->
+
+  <section
+    id="recent"
+    class="library-section">
+
+    <small class="eyebrow">
+      LEARNING HISTORY
+    </small>
+
+    <h2>
+      🕘 Recently Opened
+    </h2>
+
+    <div
+      id="recentList"
+      class="recent-list">
+
+      <div class="empty-message">
+        No resources opened yet.
+      </div>
+
+    </div>
+
+  </section>
 
 </main>
 
@@ -754,35 +776,38 @@
 
 <script>
 
-
-// ==========================================
-// AGULIBRARY
-// PHASE 3.3
-// STUDENT LIBRARY
-// ==========================================
-
-
 const client = getSupabase();
 
+let currentUser = null;
 let resources = [];
-
 let currentFilter = "all";
 
 
-// ==========================================
-// LOCAL STUDENT DATA
-// ==========================================
+/* =========================================
+   STUDENT-SPECIFIC STORAGE
+========================================= */
+
+function storagePrefix() {
+
+  if (!currentUser) {
+    return "AGU_GUEST";
+  }
+
+  return "AGU_STUDENT_" + currentUser.id;
+
+}
+
 
 function savedKey() {
 
-  return "AGU_SAVED_RESOURCES";
+  return storagePrefix() + "_SAVED";
 
 }
 
 
 function recentKey() {
 
-  return "AGU_RECENT_RESOURCES";
+  return storagePrefix() + "_RECENT";
 
 }
 
@@ -792,9 +817,7 @@ function getSaved() {
   try {
 
     return JSON.parse(
-      localStorage.getItem(
-        savedKey()
-      ) || "[]"
+      localStorage.getItem(savedKey()) || "[]"
     );
 
   } catch {
@@ -821,9 +844,7 @@ function getRecent() {
   try {
 
     return JSON.parse(
-      localStorage.getItem(
-        recentKey()
-      ) || "[]"
+      localStorage.getItem(recentKey()) || "[]"
     );
 
   } catch {
@@ -845,16 +866,40 @@ function setRecent(list) {
 }
 
 
-// ==========================================
-// CHECK LOGIN
-// ==========================================
+/* =========================================
+   MESSAGE
+========================================= */
+
+function showMessage(message, type="success") {
+
+  const box =
+    document.getElementById("studentMessage");
+
+  box.textContent = message;
+
+  box.className =
+    "student-message show " + type;
+
+  setTimeout(() => {
+
+    box.classList.remove("show");
+
+  }, 3000);
+
+}
+
+
+/* =========================================
+   CHECK LOGIN
+========================================= */
 
 async function checkStudent() {
 
   if (!client) {
 
-    alert(
-      "Supabase connection is not available."
+    showMessage(
+      "Supabase connection is not available.",
+      "error"
     );
 
     return null;
@@ -874,8 +919,7 @@ async function checkStudent() {
     !data.session
   ) {
 
-    window.location.href =
-      "auth.html";
+    window.location.href = "auth.html";
 
     return null;
 
@@ -887,9 +931,9 @@ async function checkStudent() {
 }
 
 
-// ==========================================
-// LOAD STUDENT
-// ==========================================
+/* =========================================
+   LOAD STUDENT
+========================================= */
 
 async function loadStudent() {
 
@@ -897,7 +941,12 @@ async function loadStudent() {
     await checkStudent();
 
 
-  if (!user) return;
+  if (!user) {
+    return;
+  }
+
+
+  currentUser = user;
 
 
   const name =
@@ -924,11 +973,14 @@ async function loadStudent() {
 }
 
 
-// ==========================================
-// LOAD RESOURCES
-// ==========================================
+/* =========================================
+   LOAD RESOURCES
+========================================= */
 
 async function loadResources() {
+
+  if (!client) return;
+
 
   const {
     data,
@@ -946,7 +998,11 @@ async function loadResources() {
 
   if (error) {
 
-    console.error(error);
+    console.error(
+      "Resource loading error:",
+      error
+    );
+
 
     document.getElementById(
       "studentResourceGrid"
@@ -955,6 +1011,10 @@ async function loadResources() {
       <div class="empty-message">
 
         Unable to load learning resources.
+
+        <br><br>
+
+        Please try again later.
 
       </div>
 
@@ -976,80 +1036,98 @@ async function loadResources() {
 }
 
 
-// ==========================================
-// FILTER
-// ==========================================
+/* =========================================
+   RESOURCE ID
+========================================= */
 
-function applyFilters() {
+function resourceId(resource) {
 
-  const query =
-    document.getElementById(
-      "studentSearch"
-    ).value
-      .toLowerCase()
-      .trim();
-
-
-  let filtered =
-    resources.filter(
-      resource => {
-
-        const type =
-          String(
-            resource.type || ""
-          ).toLowerCase();
-
-
-        const matchesType =
-          currentFilter === "all" ||
-          type === currentFilter;
-
-
-        const searchable = `
-
-          ${resource.title || ""}
-
-          ${resource.description || ""}
-
-          ${resource.subject || ""}
-
-          ${resource.type || ""}
-
-          ${resource.level || ""}
-
-          ${resource.class_level || ""}
-
-          ${resource.term || ""}
-
-        `.toLowerCase();
-
-
-        const matchesSearch =
-          !query ||
-          searchable.includes(
-            query
-          );
-
-
-        return (
-          matchesType &&
-          matchesSearch
-        );
-
-      }
-    );
-
-
-  renderResources(
-    filtered
+  return String(
+    resource.id ||
+    resource.file_url ||
+    resource.title
   );
 
 }
 
 
-// ==========================================
-// RENDER RESOURCES
-// ==========================================
+/* =========================================
+   SEARCH + FILTER
+========================================= */
+
+function getFilteredResources() {
+
+  const input =
+    document.getElementById(
+      "studentSearch"
+    );
+
+
+  const query =
+    input
+      ? input.value.toLowerCase().trim()
+      : "";
+
+
+  return resources.filter(resource => {
+
+    const type =
+      String(
+        resource.type || ""
+      ).toLowerCase();
+
+
+    const matchesType =
+      currentFilter === "all" ||
+      type === currentFilter;
+
+
+    const searchable = `
+
+      ${resource.title || ""}
+
+      ${resource.description || ""}
+
+      ${resource.subject || ""}
+
+      ${resource.type || ""}
+
+      ${resource.level || ""}
+
+      ${resource.class_level || ""}
+
+      ${resource.term || ""}
+
+    `.toLowerCase();
+
+
+    const matchesSearch =
+      !query ||
+      searchable.includes(query);
+
+
+    return (
+      matchesType &&
+      matchesSearch
+    );
+
+  });
+
+}
+
+
+function applyFilters() {
+
+  renderResources(
+    getFilteredResources()
+  );
+
+}
+
+
+/* =========================================
+   RENDER RESOURCE CARDS
+========================================= */
 
 function renderResources(list) {
 
@@ -1084,15 +1162,11 @@ function renderResources(list) {
     list.map(resource => {
 
       const id =
-        resource.id ||
-        resource.file_url ||
-        resource.title;
+        resourceId(resource);
 
 
       const isSaved =
-        saved.includes(
-          String(id)
-        );
+        saved.includes(id);
 
 
       const title =
@@ -1119,10 +1193,7 @@ function renderResources(list) {
 
 
       const url =
-        escapeAttr(
-          resource.file_url ||
-          ""
-        );
+        resource.file_url || "";
 
 
       return `
@@ -1130,7 +1201,8 @@ function renderResources(list) {
         <article
           class="resource-card">
 
-          <div class="resource-icon">
+          <div
+            class="resource-icon">
 
             ${getIcon(resource.type)}
 
@@ -1153,12 +1225,8 @@ function renderResources(list) {
 
             <button
               class="open-resource"
-              onclick="openResource(
-                '${url}',
-                '${escapeAttr(String(id))}',
-                '${escapeAttr(title)}',
-                '${escapeAttr(String(resource.type || ""))}'
-              )">
+              data-action="open"
+              data-id="${escapeAttr(id)}">
 
               Tap to Open →
 
@@ -1166,9 +1234,8 @@ function renderResources(list) {
 
             <button
               class="save-resource ${isSaved ? "saved" : ""}"
-              onclick="toggleSaved(
-                '${escapeAttr(String(id))}'
-              )">
+              data-action="save"
+              data-id="${escapeAttr(id)}">
 
               ${isSaved ? "❤️" : "♡"}
 
@@ -1185,31 +1252,103 @@ function renderResources(list) {
 }
 
 
-// ==========================================
-// SAVE / UNSAVE
-// ==========================================
+/* =========================================
+   OPEN RESOURCE FROM CARD
+========================================= */
+
+function findResource(id) {
+
+  return resources.find(
+    resource =>
+      resourceId(resource) === String(id)
+  );
+
+}
+
+
+function openResourceById(id) {
+
+  const resource =
+    findResource(id);
+
+
+  if (!resource) {
+
+    showMessage(
+      "Resource could not be found.",
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  const url =
+    resource.file_url || "";
+
+
+  if (!url) {
+
+    showMessage(
+      "This resource does not have a file attached.",
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  addRecent(
+    resourceId(resource),
+    resource.title || "Untitled Resource",
+    resource.type || "resource"
+  );
+
+
+  window.open(
+    url,
+    "_blank",
+    "noopener,noreferrer"
+  );
+
+}
+
+
+/* =========================================
+   SAVE / UNSAVE
+========================================= */
 
 function toggleSaved(id) {
+
+  id = String(id);
+
 
   let saved =
     getSaved();
 
 
-  id = String(id);
-
-
-  if (
-    saved.includes(id)
-  ) {
+  if (saved.includes(id)) {
 
     saved =
       saved.filter(
         item => item !== id
       );
 
+
+    showMessage(
+      "Removed from Saved Resources."
+    );
+
   } else {
 
     saved.push(id);
+
+
+    showMessage(
+      "Resource saved successfully."
+    );
 
   }
 
@@ -1221,6 +1360,7 @@ function toggleSaved(id) {
     getFilteredResources()
   );
 
+
   renderSaved();
 
   updateStats();
@@ -1228,70 +1368,9 @@ function toggleSaved(id) {
 }
 
 
-// ==========================================
-// GET FILTERED
-// ==========================================
-
-function getFilteredResources() {
-
-  const query =
-    document.getElementById(
-      "studentSearch"
-    ).value
-      .toLowerCase()
-      .trim();
-
-
-  return resources.filter(
-    resource => {
-
-      const type =
-        String(
-          resource.type || ""
-        ).toLowerCase();
-
-
-      const matchesType =
-        currentFilter === "all" ||
-        type === currentFilter;
-
-
-      const text = `
-
-        ${resource.title || ""}
-
-        ${resource.description || ""}
-
-        ${resource.subject || ""}
-
-        ${resource.type || ""}
-
-        ${resource.level || ""}
-
-        ${resource.class_level || ""}
-
-        ${resource.term || ""}
-
-      `.toLowerCase();
-
-
-      return (
-        matchesType &&
-        (
-          !query ||
-          text.includes(query)
-        )
-      );
-
-    }
-  );
-
-}
-
-
-// ==========================================
-// SAVED RESOURCES
-// ==========================================
+/* =========================================
+   SAVED RESOURCES
+========================================= */
 
 function renderSaved() {
 
@@ -1307,18 +1386,10 @@ function renderSaved() {
 
   const list =
     resources.filter(
-      resource => {
-
-        const id =
-          String(
-            resource.id ||
-            resource.file_url ||
-            resource.title
-          );
-
-        return saved.includes(id);
-
-      }
+      resource =>
+        saved.includes(
+          resourceId(resource)
+        )
     );
 
 
@@ -1330,6 +1401,10 @@ function renderSaved() {
 
         You have not saved any resources yet.
 
+        <br><br>
+
+        Tap ♡ on a resource to save it here.
+
       </div>
 
     `;
@@ -1340,91 +1415,82 @@ function renderSaved() {
 
 
   grid.innerHTML =
-    list.map(
-      resource => {
+    list.map(resource => {
 
-        const id =
-          escapeAttr(
-            String(
-              resource.id ||
-              resource.file_url ||
-              resource.title
-            )
-          );
+      const id =
+        resourceId(resource);
 
 
-        return `
+      return `
 
-          <article
-            class="resource-card">
+        <article
+          class="resource-card">
 
-            <div class="resource-icon">
+          <div
+            class="resource-icon">
 
-              ${getIcon(resource.type)}
+            ${getIcon(resource.type)}
 
-            </div>
+          </div>
 
-            <small>
-              ${escapeHTML(
-                String(
-                  resource.type ||
-                  "RESOURCE"
-                ).toUpperCase()
-              )}
-            </small>
+          <small>
+            ${escapeHTML(
+              String(
+                resource.type ||
+                "RESOURCE"
+              ).toUpperCase()
+            )}
+          </small>
 
-            <h3>
-              ${escapeHTML(
-                resource.title ||
-                "Untitled Resource"
-              )}
-            </h3>
+          <h3>
+            ${escapeHTML(
+              resource.title ||
+              "Untitled Resource"
+            )}
+          </h3>
 
-            <p>
-              ${escapeHTML(
-                resource.description ||
-                "Educational resource"
-              )}
-            </p>
+          <p>
+            ${escapeHTML(
+              resource.description ||
+              "Educational resource"
+            )}
+          </p>
 
-            <div class="resource-actions">
+          <div
+            class="resource-actions">
 
-              <button
-                class="open-resource"
-                onclick="openResource(
-                  '${escapeAttr(resource.file_url || "")}',
-                  '${id}',
-                  '${escapeAttr(resource.title || "")}',
-                  '${escapeAttr(resource.type || "")}'
-                )">
+            <button
+              class="open-resource"
+              data-action="open"
+              data-id="${escapeAttr(id)}">
 
-                Open
+              Open →
 
-              </button>
+            </button>
 
-              <button
-                class="save-resource saved"
-                onclick="toggleSaved('${id}')">
+            <button
+              class="save-resource saved"
+              data-action="save"
+              data-id="${escapeAttr(id)}">
 
-                ❤️
+              ❤️
 
-              </button>
+            </button>
 
-            </div>
+          </div>
 
-          </article>
+        </article>
 
-        `;
+      `;
 
-      }
-    ).join("");
+    }).join("");
 
 }
 
 
-// ==========================================
-// RECENTLY OPENED
-// ==========================================
+/* =========================================
+   RECENTLY OPENED
+========================================= */
 
 function addRecent(
   id,
@@ -1432,16 +1498,17 @@ function addRecent(
   type
 ) {
 
+  id = String(id);
+
+
   let recent =
     getRecent();
 
 
-  id = String(id);
-
-
   recent =
     recent.filter(
-      item => item.id !== id
+      item =>
+        String(item.id) !== id
     );
 
 
@@ -1460,15 +1527,10 @@ function addRecent(
 
 
   recent =
-    recent.slice(
-      0,
-      10
-    );
+    recent.slice(0,10);
 
 
-  setRecent(
-    recent
-  );
+  setRecent(recent);
 
 
   renderRecent();
@@ -1477,10 +1539,6 @@ function addRecent(
 
 }
 
-
-// ==========================================
-// RENDER RECENT
-// ==========================================
 
 function renderRecent() {
 
@@ -1512,84 +1570,47 @@ function renderRecent() {
 
 
   box.innerHTML =
-    recent.map(
-      item => {
+    recent.map(item => {
 
-        return `
+      return `
+
+        <div
+          class="recent-item">
 
           <div
-            class="recent-item">
+            class="recent-icon">
 
-            <div
-              class="recent-icon">
-
-              ${getIcon(item.type)}
-
-            </div>
-
-            <div>
-
-              <strong>
-                ${escapeHTML(item.title)}
-              </strong>
-
-              <small>
-                Recently opened
-              </small>
-
-            </div>
+            ${getIcon(item.type)}
 
           </div>
 
-        `;
+          <div>
 
-      }
-    ).join("");
+            <strong>
+              ${escapeHTML(
+                item.title ||
+                "Resource"
+              )}
+            </strong>
 
-}
+            <small>
+              Recently opened
+            </small>
 
+          </div>
 
-// ==========================================
-// OPEN RESOURCE
-// ==========================================
+        </div>
 
-function openResource(
-  url,
-  id,
-  title,
-  type
-) {
+      `;
 
-  if (!url) {
-
-    alert(
-      "This resource does not have a file attached."
-    );
-
-    return;
-
-  }
-
-
-  addRecent(
-    id,
-    title,
-    type
-  );
-
-
-  window.open(
-    url,
-    "_blank",
-    "noopener,noreferrer"
-  );
+    }).join("");
 
 }
 
 
-// ==========================================
-// STATISTICS
-// ==========================================
+/* =========================================
+   STATISTICS
+========================================= */
 
 function updateStats() {
 
@@ -1613,9 +1634,9 @@ function updateStats() {
 }
 
 
-// ==========================================
-// ICONS
-// ==========================================
+/* =========================================
+   ICONS
+========================================= */
 
 function getIcon(type) {
 
@@ -1647,35 +1668,28 @@ function getIcon(type) {
 }
 
 
-// ==========================================
-// SECURITY
-// ==========================================
+/* =========================================
+   SECURITY HELPERS
+========================================= */
 
 function escapeHTML(value) {
 
-  return String(
-    value
-  ).replace(
+  return String(value).replace(
     /[&<>"']/g,
     character => {
 
       const entities = {
 
         "&":"&amp;",
-
         "<":"&lt;",
-
         ">":"&gt;",
-
         '"':"&quot;",
-
         "'":"&#039;"
 
       };
 
-      return entities[
-        character
-      ];
+
+      return entities[character];
 
     }
   );
@@ -1685,24 +1699,63 @@ function escapeHTML(value) {
 
 function escapeAttr(value) {
 
-  return escapeHTML(
-    value
-  ).replace(
-    /`/g,
-    "&#096;"
-  );
+  return escapeHTML(value)
+    .replace(
+      /`/g,
+      "&#096;"
+    );
 
 }
 
 
-// ==========================================
-// SEARCH
-// ==========================================
+/* =========================================
+   RESOURCE BUTTON EVENTS
+========================================= */
+
+document.addEventListener(
+  "click",
+  event => {
+
+    const button =
+      event.target.closest(
+        "[data-action]"
+      );
+
+
+    if (!button) return;
+
+
+    const action =
+      button.dataset.action;
+
+
+    const id =
+      button.dataset.id;
+
+
+    if (action === "open") {
+
+      openResourceById(id);
+
+    }
+
+
+    if (action === "save") {
+
+      toggleSaved(id);
+
+    }
+
+  }
+);
+
+
+/* =========================================
+   SEARCH
+========================================= */
 
 document
-  .getElementById(
-    "studentSearch"
-  )
+  .getElementById("studentSearch")
   .addEventListener(
     "input",
     applyFilters
@@ -1710,23 +1763,19 @@ document
 
 
 document
-  .getElementById(
-    "searchButton"
-  )
+  .getElementById("searchButton")
   .addEventListener(
     "click",
     applyFilters
   );
 
 
-// ==========================================
-// TYPE FILTERS
-// ==========================================
+/* =========================================
+   TYPE FILTERS
+========================================= */
 
 document
-  .querySelectorAll(
-    ".filter"
-  )
+  .querySelectorAll(".filter")
   .forEach(button => {
 
     button.addEventListener(
@@ -1734,15 +1783,14 @@ document
       () => {
 
         document
-          .querySelectorAll(
-            ".filter"
-          )
-          .forEach(
-            item =>
-              item.classList.remove(
-                "active"
-              )
-          );
+          .querySelectorAll(".filter")
+          .forEach(item => {
+
+            item.classList.remove(
+              "active"
+            );
+
+          });
 
 
         button.classList.add(
@@ -1762,19 +1810,22 @@ document
   });
 
 
-// ==========================================
-// SIGN OUT
-// ==========================================
+/* =========================================
+   SIGN OUT
+========================================= */
 
 document
-  .getElementById(
-    "logoutButton"
-  )
+  .getElementById("logoutButton")
   .addEventListener(
     "click",
     async () => {
 
-      await client.auth.signOut();
+      if (client) {
+
+        await client.auth.signOut();
+
+      }
+
 
       window.location.href =
         "index.html";
@@ -1783,9 +1834,9 @@ document
   );
 
 
-// ==========================================
-// START
-// ==========================================
+/* =========================================
+   START
+========================================= */
 
 loadStudent();
 

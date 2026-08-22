@@ -454,7 +454,7 @@ footer {
 
 
 /* =========================================================
-   STUDENT PROFILE SECTION
+   STUDENT PROFILE
 ========================================================= */
 
 .student-profile-section {
@@ -475,7 +475,7 @@ footer {
 
 
 /* =========================
-   PROFILE CARD
+   PROFILE
 ========================= */
 
 .profile-card {
@@ -574,41 +574,89 @@ footer {
 
 
 /* =========================================================
-   STUDENT SUBJECTS
+   PREMIUM STUDENT SUBJECT CARDS
 ========================================================= */
 
 .student-subjects-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
+  gap: 14px;
+  margin-top: 18px;
 }
 
 .student-subject-item {
-  border: 1px solid #dce9e2;
-  background: #f8fcfa;
-  border-radius: 18px;
-  padding: 18px 10px;
+  appearance: none;
+  -webkit-appearance: none;
+
+  width: 100%;
+  min-height: 105px;
+
+  border: 1px solid #315246;
+
+  background: linear-gradient(
+    145deg,
+    #102c21,
+    #0b2119
+  );
+
+  color: #ffffff;
+
+  border-radius: 20px;
+
+  padding: 18px 12px;
+
   cursor: pointer;
+
   text-align: center;
-  font-size: 28px;
+
+  font-family: inherit;
+
+  font-size: 32px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  box-shadow:
+    0 10px 25px rgba(0, 0, 0, 0.18);
+
   transition:
     transform 0.2s ease,
     border-color 0.2s ease,
+    background 0.2s ease,
     box-shadow 0.2s ease;
 }
 
 .student-subject-item:hover {
-  transform: translateY(-3px);
-  border-color: #087a4b;
-  box-shadow: 0 10px 25px #123b2810;
+  transform: translateY(-4px);
+
+  border-color: #69e6b1;
+
+  background: linear-gradient(
+    145deg,
+    #123d2d,
+    #0b2c20
+  );
+
+  box-shadow:
+    0 15px 30px rgba(0, 0, 0, 0.25);
+}
+
+.student-subject-item:active {
+  transform: scale(0.97);
 }
 
 .student-subject-item span {
   display: block;
-  margin-top: 8px;
-  font-size: 13px;
+
+  margin-top: 10px;
+
+  color: #e8fff5;
+
+  font-size: 14px;
+
   font-weight: 800;
-  color: #14251e;
 }
 
 
@@ -625,10 +673,15 @@ footer {
 .badge {
   text-align: center;
   padding: 18px 10px;
+
   background: #f8fcfa;
+
   border: 1px solid #dce9e2;
+
   border-radius: 18px;
+
   font-size: 28px;
+
   transition: transform 0.2s ease;
 }
 
@@ -638,9 +691,13 @@ footer {
 
 .badge span {
   display: block;
+
   margin-top: 8px;
+
   font-size: 12px;
+
   font-weight: 800;
+
   color: #718078;
 }
 
@@ -652,13 +709,18 @@ footer {
 .student-header {
   background: #ffffff;
   border-bottom: 1px solid #dce9e2;
+
   padding: 15px 5%;
+
   display: flex;
   align-items: center;
   justify-content: space-between;
+
   gap: 15px;
+
   position: sticky;
   top: 0;
+
   z-index: 100;
 }
 
@@ -671,11 +733,16 @@ footer {
 .student-brand .mark {
   width: 54px;
   height: 54px;
+
   border-radius: 16px;
+
   background: #087a4b;
+
   color: #ffffff;
+
   display: grid;
   place-items: center;
+
   font-weight: 900;
   font-size: 20px;
 }
@@ -687,7 +754,9 @@ footer {
 
 .student-brand small {
   color: #718078;
+
   font-size: 9px;
+
   letter-spacing: 1.5px;
 }
 
@@ -699,31 +768,45 @@ footer {
 
 .back {
   text-decoration: none;
+
   color: #087a4b;
+
   font-weight: 800;
 }
 
 .logout {
   border: 1px solid #dce9e2;
+
   background: #ffffff;
+
   color: #087a4b;
+
   padding: 12px 16px;
+
   border-radius: 14px;
+
   font-weight: 800;
+
   cursor: pointer;
 }
 
 .dashboard {
   max-width: 1200px;
+
   margin: auto;
+
   padding: 35px 5%;
 }
 
 .student-message {
   display: none;
+
   padding: 14px 18px;
+
   margin-bottom: 20px;
+
   border-radius: 14px;
+
   font-weight: 700;
 }
 
@@ -742,9 +825,9 @@ footer {
 }
 
 
-/* =========================
+/* =========================================================
    STUDENT WELCOME
-========================= */
+========================================================= */
 
 .welcome {
   background: linear-gradient(
@@ -752,126 +835,174 @@ footer {
     #087a4b,
     #0c9b61
   );
+
   color: #ffffff;
+
   border-radius: 30px;
+
   padding: 38px;
+
   margin-bottom: 25px;
-  box-shadow: 0 20px 50px rgba(8,122,75,.18);
+
+  box-shadow:
+    0 20px 50px rgba(8,122,75,.18);
 }
 
 .welcome small {
   opacity: .85;
+
   letter-spacing: 2px;
+
   font-weight: 800;
 }
 
 .welcome h1 {
   font-size: clamp(30px,5vw,50px);
+
   margin: 12px 0;
+
   word-break: break-word;
 }
 
 .welcome p {
   max-width: 700px;
+
   line-height: 1.7;
+
   opacity: .95;
+
   font-size: 17px;
 }
 
 
-/* =========================
+/* =========================================================
    STUDENT STATISTICS
-========================= */
+========================================================= */
 
 .stats {
   display: grid;
+
   grid-template-columns: repeat(4,1fr);
+
   gap: 15px;
+
   margin-bottom: 25px;
 }
 
 .stat {
   background: #ffffff;
+
   border: 1px solid #dce9e2;
+
   border-radius: 22px;
+
   padding: 25px;
 }
 
 .stat strong {
   display: block;
+
   font-size: 34px;
+
   color: #087a4b;
+
   margin-bottom: 8px;
 }
 
 .stat span {
   color: #718078;
+
   font-size: 14px;
 }
 
 
-/* =========================
-   STUDENT DASHBOARD CARDS
-========================= */
+/* =========================================================
+   DASHBOARD CARDS
+========================================================= */
 
 .dashboard-grid {
   display: grid;
+
   grid-template-columns: repeat(4,1fr);
+
   gap: 15px;
+
   margin-bottom: 25px;
 }
 
 .dashboard-card {
   background: #ffffff;
+
   border: 1px solid #dce9e2;
+
   border-radius: 22px;
+
   padding: 22px;
+
   text-decoration: none;
+
   color: #14251e;
+
   transition: .2s;
 }
 
 .dashboard-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 10px 25px rgba(0,0,0,.06);
+
+  box-shadow:
+    0 10px 25px rgba(0,0,0,.06);
 }
 
 .dashboard-card .icon {
   font-size: 32px;
+
   margin-bottom: 10px;
 }
 
 .dashboard-card b {
   display: block;
+
   font-size: 17px;
 }
 
 .dashboard-card span {
   display: block;
+
   color: #718078;
+
   font-size: 13px;
+
   margin-top: 7px;
+
   line-height: 1.5;
 }
 
 
 /* =========================================================
-   STUDENT LIBRARY
+   LIBRARY
 ========================================================= */
 
 .library-section {
   background: #ffffff;
+
   border: 1px solid #dce9e2;
+
   border-radius: 26px;
+
   padding: 25px;
+
   margin-bottom: 25px;
 }
 
 .library-head {
   display: flex;
+
   justify-content: space-between;
+
   align-items: center;
+
   gap: 15px;
+
   margin-bottom: 15px;
 }
 
@@ -880,19 +1011,32 @@ footer {
   margin: 6px 0 15px;
 }
 
+
+/* =========================
+   SEARCH BOX
+========================= */
+
 .search-box {
   display: flex;
+
   gap: 8px;
+
   margin: 15px 0 20px;
 }
 
 .search-box input {
   flex: 1;
+
   min-width: 0;
+
   padding: 14px;
+
   border: 1px solid #dce9e2;
+
   border-radius: 12px;
+
   outline: none;
+
   font-size: 15px;
 }
 
@@ -902,11 +1046,17 @@ footer {
 
 .search-box button {
   border: 0;
+
   background: #087a4b;
+
   color: #ffffff;
+
   border-radius: 12px;
+
   padding: 0 18px;
+
   font-weight: 700;
+
   cursor: pointer;
 }
 
@@ -917,101 +1067,145 @@ footer {
 
 .filter-row {
   display: flex;
+
   gap: 8px;
+
   overflow-x: auto;
+
   padding-bottom: 12px;
+
   margin-bottom: 10px;
 }
 
 .filter {
   border: 1px solid #cfe1d8;
+
   background: #ffffff;
+
   color: #087a4b;
+
   border-radius: 20px;
+
   padding: 9px 14px;
+
   white-space: nowrap;
+
   font-weight: 700;
+
   cursor: pointer;
 }
 
 .filter.active {
   background: #087a4b;
+
   color: #ffffff;
 }
 
 
-/* =========================
+/* =========================================================
    RESOURCE CARDS
-========================= */
+========================================================= */
 
 .resource-grid {
   display: grid;
+
   grid-template-columns: repeat(3,1fr);
+
   gap: 15px;
 }
 
 .resource-card {
   border: 1px solid #dce9e2;
+
   border-radius: 18px;
+
   padding: 15px;
+
   background: #fbfefc;
+
   transition: .2s;
 }
 
 .resource-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 10px 25px rgba(0,0,0,.06);
+
+  box-shadow:
+    0 10px 25px rgba(0,0,0,.06);
 }
 
 .resource-icon {
   height: 110px;
+
   border-radius: 14px;
+
   background: #edf8f2;
+
   display: grid;
+
   place-items: center;
+
   font-size: 42px;
+
   margin-bottom: 12px;
 }
 
 .resource-card small {
   color: #087a4b;
+
   font-weight: 800;
 }
 
 .resource-card h3 {
   margin: 7px 0;
+
   font-size: 17px;
 }
 
 .resource-card p {
   color: #718078;
+
   font-size: 12px;
+
   line-height: 1.5;
+
   min-height: 38px;
 }
 
 .resource-actions {
   display: flex;
+
   gap: 8px;
 }
 
 .open-resource {
   flex: 1;
+
   border: 0;
+
   background: #087a4b;
+
   color: #ffffff;
+
   padding: 11px;
+
   border-radius: 11px;
+
   font-weight: 700;
+
   cursor: pointer;
 }
 
 .save-resource {
   width: 48px;
+
   border: 1px solid #dce9e2;
+
   background: #ffffff;
+
   border-radius: 11px;
+
   font-size: 20px;
+
   cursor: pointer;
 }
 
@@ -1021,30 +1215,42 @@ footer {
 
 .empty-message {
   padding: 35px;
+
   text-align: center;
+
   color: #718078;
+
   background: #f6faf8;
+
   border-radius: 15px;
+
   grid-column: 1/-1;
 }
 
 
-/* =========================
-   RECENT LEARNING
-========================= */
+/* =========================================================
+   RECENTLY OPENED
+========================================================= */
 
 .recent-list {
   display: grid;
+
   gap: 10px;
 }
 
 .recent-item {
   display: flex;
+
   align-items: center;
+
   gap: 12px;
+
   padding: 14px;
+
   border: 1px solid #e0ebe5;
+
   border-radius: 14px;
+
   background: #fbfefc;
 }
 
@@ -1054,11 +1260,13 @@ footer {
 
 .recent-info {
   flex: 1;
+
   min-width: 0;
 }
 
 .recent-info strong {
   display: block;
+
   margin-bottom: 4px;
 }
 
@@ -1068,17 +1276,23 @@ footer {
 
 .recent-open {
   border: 0;
+
   background: #087a4b;
+
   color: #ffffff;
+
   border-radius: 10px;
+
   padding: 9px 12px;
+
   font-weight: 700;
+
   cursor: pointer;
 }
 
 
 /* =========================================================
-   MOBILE
+   TABLET
 ========================================================= */
 
 @media (max-width: 900px) {
@@ -1116,7 +1330,7 @@ footer {
 
 
 /* =========================================================
-   SMALL MOBILE
+   MOBILE
 ========================================================= */
 
 @media (max-width: 600px) {
@@ -1158,7 +1372,7 @@ footer {
 
 
   /* =========================
-     STUDENT DASHBOARD MOBILE
+     STUDENT HEADER
   ========================= */
 
   .student-header {
@@ -1178,6 +1392,11 @@ footer {
     font-size: 8px;
   }
 
+
+  /* =========================
+     STUDENT DASHBOARD
+  ========================= */
+
   .dashboard {
     padding: 25px 5%;
   }
@@ -1194,6 +1413,7 @@ footer {
 
   .library-head {
     align-items: flex-start;
+
     flex-direction: column;
   }
 
@@ -1207,7 +1427,7 @@ footer {
 
 
   /* =========================
-     PROFILE MOBILE
+     PROFILE
   ========================= */
 
   .profile-card {
@@ -1216,27 +1436,67 @@ footer {
 
   .profile-avatar {
     width: 60px;
+
     height: 60px;
+
     border-radius: 18px;
+
     font-size: 21px;
   }
 
 
   /* =========================
-     SUBJECTS MOBILE
+     SUBJECTS
   ========================= */
 
   .student-subjects-grid {
     grid-template-columns: repeat(2, 1fr);
+
+    gap: 12px;
+  }
+
+  .student-subject-item {
+    min-height: 100px;
+
+    border-radius: 18px;
+
+    font-size: 28px;
+
+    padding: 15px 8px;
+  }
+
+  .student-subject-item span {
+    font-size: 13px;
   }
 
 
   /* =========================
-     ACHIEVEMENTS MOBILE
+     ACHIEVEMENTS
   ========================= */
 
   .badges {
     grid-template-columns: repeat(2, 1fr);
   }
 
-    }
+}
+
+
+/* =========================================================
+   VERY SMALL PHONES
+========================================================= */
+
+@media (max-width: 380px) {
+
+  .student-subjects-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .student-subject-item {
+    min-height: 90px;
+  }
+
+  .profile-card {
+    align-items: flex-start;
+  }
+
+  }

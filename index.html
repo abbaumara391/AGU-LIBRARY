@@ -3,8 +3,61 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
+
   <title>AGULIBRARY — Global Learning Library</title>
+
   <link rel="stylesheet" href="style.css">
+
+  <style>
+    .student-bar {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 16px;
+      margin: 12px auto;
+      max-width: 1200px;
+      background: #e8f7f0;
+      border: 1px solid #c8eadb;
+      border-radius: 14px;
+      color: #087f55;
+      font-weight: 600;
+    }
+
+    .student-bar.show {
+      display: flex;
+    }
+
+    .student-bar .student-name {
+      flex: 1;
+    }
+
+    .student-dashboard-btn {
+      background: #078653;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 9px 14px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .signout-btn {
+      background: white;
+      color: #087f55;
+      border: 1px solid #b9dccd;
+      border-radius: 10px;
+      padding: 9px 14px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .auth-btn {
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+  </style>
 </head>
 
 <body>
@@ -12,29 +65,90 @@
 <header class="nav">
 
   <a class="brand" href="index.html">
-    <span class="mark">AG</span>
+
+    <span class="mark">
+      AG
+    </span>
 
     <span>
       <b>AGULIBRARY</b>
       <small>Learn • Read • Watch • Grow</small>
     </span>
+
   </a>
 
   <nav>
-    <a href="#resources">Resources</a>
-    <a href="#subjects">Subjects</a>
-    <a href="#support">Support</a>
-    <a href="admin.html">Admin</a>
+
+    <a href="#resources">
+      Resources
+    </a>
+
+    <a href="#subjects">
+      Subjects
+    </a>
+
+    <a href="#support">
+      Support
+    </a>
+
+    <a href="admin.html">
+      Admin
+    </a>
+
   </nav>
 
-  <button
-    class="btn outline"
-    onclick="alert('AI Learning Agent will be connected in a later phase.')">
-    🤖 AI Agent
-  </button>
+  <div style="display:flex;gap:10px;align-items:center;">
+
+    <a
+      id="accountButton"
+      class="btn outline auth-btn"
+      href="auth.html">
+      👤 Student Account
+    </a>
+
+    <button
+      class="btn outline"
+      onclick="alert('AI Learning Agent will be connected in a later phase.')">
+      🤖 AI Agent
+    </button>
+
+  </div>
 
 </header>
 
+
+<!-- STUDENT SIGNED-IN BAR -->
+
+<div
+  id="studentBar"
+  class="student-bar">
+
+  <span>
+    🎓
+  </span>
+
+  <span
+    id="studentWelcome"
+    class="student-name">
+    Welcome, Student
+  </span>
+
+  <button
+    class="student-dashboard-btn"
+    onclick="openStudentDashboard()">
+    📚 Student Dashboard
+  </button>
+
+  <button
+    class="signout-btn"
+    onclick="studentSignOut()">
+    Sign out
+  </button>
+
+</div>
+
+
+<!-- HERO -->
 
 <section class="hero">
 
@@ -56,11 +170,15 @@
 
     <div class="actions">
 
-      <a class="btn primary" href="#resources">
+      <a
+        class="btn primary"
+        href="#resources">
         Explore Library
       </a>
 
-      <a class="btn outline" href="#subjects">
+      <a
+        class="btn outline"
+        href="#subjects">
         Explore Subjects
       </a>
 
@@ -98,22 +216,28 @@
 </section>
 
 
+<!-- SEARCH -->
+
 <div class="search">
 
   <input
     id="search"
     placeholder="Search resources..."
-    oninput="filterResources()"
-  >
+    oninput="filterResources()">
 
-  <button onclick="filterResources()">
+  <button
+    onclick="filterResources()">
     Search
   </button>
 
 </div>
 
 
-<section id="resources" class="section">
+<!-- RESOURCES -->
+
+<section
+  id="resources"
+  class="section">
 
   <span class="eyebrow">
     DIGITAL RESOURCES
@@ -127,7 +251,9 @@
     Published resources appear here.
   </p>
 
-  <div id="resourceGrid" class="grid">
+  <div
+    id="resourceGrid"
+    class="grid">
 
     <div class="empty">
       Loading resources...
@@ -138,7 +264,11 @@
 </section>
 
 
-<section id="subjects" class="section white">
+<!-- SUBJECTS -->
+
+<section
+  id="subjects"
+  class="section white">
 
   <span class="eyebrow">
     GLOBAL SUBJECTS
@@ -155,6 +285,7 @@
     <div>
       🔬
       <b>Science</b>
+
       <small>
         Physics • Chemistry • Biology
       </small>
@@ -164,6 +295,7 @@
     <div>
       📐
       <b>Mathematics</b>
+
       <small>
         Mathematics • Algebra • Statistics
       </small>
@@ -173,6 +305,7 @@
     <div>
       💻
       <b>Technology</b>
+
       <small>
         Computer Science • Programming • AI
       </small>
@@ -182,6 +315,7 @@
     <div>
       📚
       <b>Languages & Literature</b>
+
       <small>
         English • Literature • French • Spanish
       </small>
@@ -191,6 +325,7 @@
     <div>
       🌎
       <b>Social Sciences & Humanities</b>
+
       <small>
         Civic Education • History • Geography • Economics
       </small>
@@ -200,6 +335,7 @@
     <div>
       💼
       <b>Business & Finance</b>
+
       <small>
         Accounting • Finance • Marketing
       </small>
@@ -209,6 +345,7 @@
     <div>
       🎨
       <b>Arts & Creative Studies</b>
+
       <small>
         Art • Music • Photography • Film
       </small>
@@ -218,6 +355,7 @@
     <div>
       🧑‍⚕️
       <b>Professional & Career</b>
+
       <small>
         Medicine • Engineering • Law • Education
       </small>
@@ -229,7 +367,11 @@
 </section>
 
 
-<section id="support" class="support">
+<!-- SUPPORT -->
+
+<section
+  id="support"
+  class="support">
 
   <span class="eyebrow">
     SUPPORT
@@ -254,6 +396,8 @@
 
 </section>
 
+
+<!-- FOOTER -->
 
 <footer>
 
@@ -282,6 +426,127 @@
 
 <script src="app.js"></script>
 
+
+<!-- STUDENT SESSION CHECK -->
+
+<script>
+
+  document.getElementById("year").textContent =
+    new Date().getFullYear();
+
+
+  async function checkStudentSession() {
+
+    try {
+
+      if (
+        typeof supabase === "undefined" ||
+        !supabase ||
+        !supabase.auth
+      ) {
+        return;
+      }
+
+      const result =
+        await supabase.auth.getSession();
+
+      const session =
+        result.data?.session;
+
+      if (!session) {
+
+        return;
+
+      }
+
+
+      const user =
+        session.user;
+
+      const email =
+        user.email || "Student";
+
+
+      let name =
+        user.user_metadata?.full_name ||
+        user.user_metadata?.name ||
+        email.split("@")[0];
+
+
+      const studentBar =
+        document.getElementById("studentBar");
+
+      const studentWelcome =
+        document.getElementById("studentWelcome");
+
+      const accountButton =
+        document.getElementById("accountButton");
+
+
+      studentWelcome.textContent =
+        "Welcome, " + name;
+
+
+      studentBar.classList.add("show");
+
+
+      accountButton.textContent =
+        "🎓 My Account";
+
+
+      accountButton.href =
+        "student.html";
+
+
+    } catch (error) {
+
+      console.log(
+        "Student session check:",
+        error
+      );
+
+    }
+
+  }
+
+
+  function openStudentDashboard() {
+
+    window.location.href =
+      "student.html";
+
+  }
+
+
+  async function studentSignOut() {
+
+    try {
+
+      if (
+        typeof supabase !== "undefined" &&
+        supabase &&
+        supabase.auth
+      ) {
+
+        await supabase.auth.signOut();
+
+      }
+
+    } catch (error) {
+
+      console.error(error);
+
+    }
+
+    window.location.href =
+      "index.html";
+
+  }
+
+
+  checkStudentSession();
+
+</script>
 
 </body>
 </html>

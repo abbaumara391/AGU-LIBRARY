@@ -1,0 +1,1018 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width,initial-scale=1">
+
+  <title>
+    AGULIBRARY — Student Dashboard
+  </title>
+
+  <link
+    rel="stylesheet"
+    href="style.css"
+  >
+
+  <style>
+
+    body {
+      background:
+        linear-gradient(
+          135deg,
+          #f4faf7,
+          #ffffff
+        );
+    }
+
+    .student-header {
+      background: white;
+      border-bottom: 1px solid #dce9e2;
+      padding: 16px 6%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+    }
+
+    .student-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .student-brand .mark {
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      background: #087a4b;
+      color: white;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+    }
+
+    .student-brand b {
+      display: block;
+    }
+
+    .student-brand small {
+      color: #718078;
+      font-size: 9px;
+      letter-spacing: 1px;
+    }
+
+    .dashboard {
+      max-width: 1200px;
+      margin: auto;
+      padding: 45px 6%;
+    }
+
+    .welcome {
+      background:
+        linear-gradient(
+          135deg,
+          #087a4b,
+          #0c9b61
+        );
+      color: white;
+      border-radius: 28px;
+      padding: 35px;
+      margin-bottom: 25px;
+      box-shadow:
+        0 20px 50px rgba(8,122,75,.18);
+    }
+
+    .welcome small {
+      opacity: .8;
+      letter-spacing: 2px;
+      font-weight: 800;
+    }
+
+    .welcome h1 {
+      font-size: clamp(30px, 5vw, 50px);
+      margin: 10px 0;
+    }
+
+    .welcome p {
+      max-width: 650px;
+      opacity: .9;
+      line-height: 1.6;
+    }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns:
+        repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 30px;
+    }
+
+    .dashboard-card {
+      background: white;
+      border: 1px solid #dce9e2;
+      border-radius: 20px;
+      padding: 22px;
+      text-decoration: none;
+      color: #14251e;
+      transition: .2s;
+    }
+
+    .dashboard-card:hover {
+      transform: translateY(-4px);
+      box-shadow:
+        0 18px 45px rgba(18,59,40,.09);
+    }
+
+    .dashboard-card .icon {
+      font-size: 30px;
+      margin-bottom: 12px;
+    }
+
+    .dashboard-card b {
+      display: block;
+      font-size: 16px;
+    }
+
+    .dashboard-card span {
+      display: block;
+      color: #718078;
+      font-size: 12px;
+      margin-top: 5px;
+      line-height: 1.5;
+    }
+
+    .library-section {
+      background: white;
+      border: 1px solid #dce9e2;
+      border-radius: 25px;
+      padding: 25px;
+    }
+
+    .library-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+
+    .library-head h2 {
+      margin: 0;
+    }
+
+    .search-box {
+      display: flex;
+      gap: 8px;
+      margin: 15px 0 20px;
+    }
+
+    .search-box input {
+      flex: 1;
+      padding: 13px;
+      border: 1px solid #dce9e2;
+      border-radius: 12px;
+      outline: none;
+    }
+
+    .search-box button {
+      border: 0;
+      background: #087a4b;
+      color: white;
+      border-radius: 12px;
+      padding: 0 18px;
+      font-weight: 700;
+    }
+
+    .resource-grid {
+      display: grid;
+      grid-template-columns:
+        repeat(3, 1fr);
+      gap: 15px;
+    }
+
+    .resource-card {
+      border: 1px solid #dce9e2;
+      border-radius: 18px;
+      padding: 18px;
+      background: #fbfefc;
+    }
+
+    .resource-icon {
+      height: 100px;
+      border-radius: 14px;
+      background: #edf8f2;
+      display: grid;
+      place-items: center;
+      font-size: 42px;
+      margin-bottom: 12px;
+    }
+
+    .resource-card small {
+      color: #087a4b;
+      font-weight: 800;
+    }
+
+    .resource-card h3 {
+      margin: 7px 0;
+      font-size: 17px;
+    }
+
+    .resource-card p {
+      color: #718078;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .open-resource {
+      width: 100%;
+      border: 0;
+      background: #087a4b;
+      color: white;
+      padding: 11px;
+      border-radius: 11px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .empty-message {
+      padding: 35px;
+      text-align: center;
+      color: #718078;
+      background: #f6faf8;
+      border-radius: 15px;
+    }
+
+    .logout {
+      border: 1px solid #dce9e2;
+      background: white;
+      color: #087a4b;
+      padding: 11px 16px;
+      border-radius: 11px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .back {
+      text-decoration: none;
+      color: #087a4b;
+      font-weight: 700;
+    }
+
+    @media (max-width: 900px) {
+
+      .dashboard-grid {
+        grid-template-columns:
+          repeat(2, 1fr);
+      }
+
+      .resource-grid {
+        grid-template-columns:
+          repeat(2, 1fr);
+      }
+
+    }
+
+    @media (max-width: 600px) {
+
+      .student-header {
+        padding: 13px 5%;
+      }
+
+      .dashboard {
+        padding: 25px 5%;
+      }
+
+      .welcome {
+        padding: 25px;
+      }
+
+      .dashboard-grid,
+      .resource-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .library-head {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+
+<header class="student-header">
+
+  <div class="student-brand">
+
+    <div class="mark">
+      AG
+    </div>
+
+    <div>
+
+      <b>
+        AGULIBRARY
+      </b>
+
+      <small>
+        STUDENT DASHBOARD
+      </small>
+
+    </div>
+
+  </div>
+
+
+  <div style="display:flex;gap:10px;align-items:center;">
+
+    <a
+      class="back"
+      href="index.html">
+      ← Library
+    </a>
+
+    <button
+      class="logout"
+      id="logoutButton">
+      Sign out
+    </button>
+
+  </div>
+
+</header>
+
+
+<main class="dashboard">
+
+
+  <section class="welcome">
+
+    <small>
+      STUDENT LEARNING SPACE
+    </small>
+
+    <h1 id="welcomeName">
+      Welcome!
+    </h1>
+
+    <p>
+      Your personal AGULIBRARY learning space.
+      Explore books, videos, PDFs and educational
+      resources from around the world.
+    </p>
+
+  </section>
+
+
+  <section class="dashboard-grid">
+
+
+    <a
+      class="dashboard-card"
+      href="index.html#resources">
+
+      <div class="icon">
+        📚
+      </div>
+
+      <b>
+        Browse Library
+      </b>
+
+      <span>
+        Explore books, PDFs, videos and photos.
+      </span>
+
+    </a>
+
+
+    <a
+      class="dashboard-card"
+      href="index.html#subjects">
+
+      <div class="icon">
+        🎓
+      </div>
+
+      <b>
+        Subjects
+      </b>
+
+      <span>
+        Explore subjects and learning areas.
+      </span>
+
+    </a>
+
+
+    <a
+      class="dashboard-card"
+      href="#myLearning">
+
+      <div class="icon">
+        📊
+      </div>
+
+      <b>
+        My Learning
+      </b>
+
+      <span>
+        Your learning area will appear here.
+      </span>
+
+    </a>
+
+
+    <a
+      class="dashboard-card"
+      href="#saved">
+
+      <div class="icon">
+        ❤️
+      </div>
+
+      <b>
+        Saved Resources
+      </b>
+
+      <span>
+        Your saved resources will appear here.
+      </span>
+
+    </a>
+
+
+  </section>
+
+
+  <section
+    id="myLearning"
+    class="library-section">
+
+    <div class="library-head">
+
+      <div>
+
+        <small
+          class="eyebrow">
+          LEARNING LIBRARY
+        </small>
+
+        <h2>
+          Available Resources
+        </h2>
+
+      </div>
+
+    </div>
+
+
+    <div class="search-box">
+
+      <input
+        id="studentSearch"
+        type="search"
+        placeholder="Search books, videos, Physics, Chemistry..."
+      >
+
+      <button
+        id="searchButton">
+        Search
+      </button>
+
+    </div>
+
+
+    <div
+      id="studentResourceGrid"
+      class="resource-grid">
+
+      <div class="empty-message">
+        Loading your learning resources...
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <section
+    id="saved"
+    class="library-section"
+    style="margin-top:25px;">
+
+    <small class="eyebrow">
+      MY LEARNING
+    </small>
+
+    <h2>
+      Saved Resources
+    </h2>
+
+    <div
+      class="empty-message"
+      style="margin-top:15px;">
+
+      ❤️ Your saved resources feature
+      will be connected in the next Phase 3 step.
+
+    </div>
+
+  </section>
+
+
+</main>
+
+
+<script
+  src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+</script>
+
+<script src="config.js"></script>
+
+<script src="supabase.js"></script>
+
+
+<script>
+
+
+  // ==========================================
+  // AGULIBRARY PHASE 3.2
+  // STUDENT DASHBOARD
+  // ==========================================
+
+
+  const client =
+    getSupabase();
+
+
+  if (!client) {
+
+    alert(
+      "AGULIBRARY could not connect to Supabase. Please check config.js."
+    );
+
+  }
+
+
+  let resources = [];
+
+
+  // ==========================================
+  // CHECK STUDENT SESSION
+  // ==========================================
+
+  async function checkStudent() {
+
+    const {
+      data,
+      error
+    } = await client.auth.getSession();
+
+
+    if (error || !data.session) {
+
+      window.location.href =
+        "auth.html";
+
+      return null;
+
+    }
+
+
+    return data.session.user;
+
+  }
+
+
+  // ==========================================
+  // LOAD STUDENT
+  // ==========================================
+
+  async function loadStudent() {
+
+    const user =
+      await checkStudent();
+
+
+    if (!user) return;
+
+
+    const name =
+      user.user_metadata?.full_name ||
+      user.user_metadata?.name ||
+      user.email?.split("@")[0] ||
+      "Student";
+
+
+    document.getElementById(
+      "welcomeName"
+    ).textContent =
+      "Welcome, " + name + "!";
+
+
+    await loadResources();
+
+  }
+
+
+  // ==========================================
+  // LOAD RESOURCES
+  // ==========================================
+
+  async function loadResources() {
+
+    const {
+      data,
+      error
+    } = await client
+      .from("resources")
+      .select("*")
+      .order(
+        "created_at",
+        {
+          ascending: false
+        }
+      );
+
+
+    if (error) {
+
+      console.error(error);
+
+      document.getElementById(
+        "studentResourceGrid"
+      ).innerHTML = `
+
+        <div class="empty-message">
+
+          Unable to load learning resources.
+
+        </div>
+
+      `;
+
+      return;
+
+    }
+
+
+    resources =
+      data || [];
+
+
+    renderResources(
+      resources
+    );
+
+  }
+
+
+  // ==========================================
+  // RENDER
+  // ==========================================
+
+  function renderResources(list) {
+
+    const grid =
+      document.getElementById(
+        "studentResourceGrid"
+      );
+
+
+    if (!list.length) {
+
+      grid.innerHTML = `
+
+        <div class="empty-message">
+
+          No learning resources found.
+
+        </div>
+
+      `;
+
+      return;
+
+    }
+
+
+    grid.innerHTML =
+      list.map(resource => {
+
+        const icon =
+          getIcon(
+            resource.type
+          );
+
+
+        const title =
+          escapeHTML(
+            resource.title ||
+            "Untitled Resource"
+          );
+
+
+        const description =
+          escapeHTML(
+            resource.description ||
+            "Educational resource"
+          );
+
+
+        const type =
+          escapeHTML(
+            String(
+              resource.type ||
+              "resource"
+            ).toUpperCase()
+          );
+
+
+        const url =
+          escapeAttr(
+            resource.file_url ||
+            ""
+          );
+
+
+        return `
+
+          <article
+            class="resource-card">
+
+            <div
+              class="resource-icon">
+
+              ${icon}
+
+            </div>
+
+            <small>
+              ${type}
+            </small>
+
+            <h3>
+              ${title}
+            </h3>
+
+            <p>
+              ${description}
+            </p>
+
+            <button
+              class="open-resource"
+              onclick="openResource('${url}')">
+
+              Tap to Open →
+
+            </button>
+
+          </article>
+
+        `;
+
+      }).join("");
+
+  }
+
+
+  // ==========================================
+  // SEARCH
+  // ==========================================
+
+  function searchResources() {
+
+    const input =
+      document.getElementById(
+        "studentSearch"
+      );
+
+
+    const query =
+      input.value
+        .toLowerCase()
+        .trim();
+
+
+    if (!query) {
+
+      renderResources(
+        resources
+      );
+
+      return;
+
+    }
+
+
+    const filtered =
+      resources.filter(
+        resource => {
+
+          const text = `
+
+            ${resource.title || ""}
+
+            ${resource.description || ""}
+
+            ${resource.subject || ""}
+
+            ${resource.type || ""}
+
+            ${resource.level || ""}
+
+            ${resource.class_level || ""}
+
+            ${resource.term || ""}
+
+          `.toLowerCase();
+
+
+          return text.includes(
+            query
+          );
+
+        }
+      );
+
+
+    renderResources(
+      filtered
+    );
+
+  }
+
+
+  document
+    .getElementById(
+      "searchButton"
+    )
+    .addEventListener(
+      "click",
+      searchResources
+    );
+
+
+  document
+    .getElementById(
+      "studentSearch"
+    )
+    .addEventListener(
+      "input",
+      searchResources
+    );
+
+
+  // ==========================================
+  // OPEN RESOURCE
+  // ==========================================
+
+  function openResource(url) {
+
+    if (!url) {
+
+      alert(
+        "This resource does not have a file attached."
+      );
+
+      return;
+
+    }
+
+
+    window.open(
+      url,
+      "_blank",
+      "noopener,noreferrer"
+    );
+
+  }
+
+
+  // ==========================================
+  // ICONS
+  // ==========================================
+
+  function getIcon(type) {
+
+    const icons = {
+
+      book: "📚",
+
+      pdf: "📄",
+
+      video: "🎥",
+
+      photo: "🖼️",
+
+      course: "🎓",
+
+      lesson: "📖"
+
+    };
+
+
+    return (
+      icons[
+        String(
+          type || ""
+        ).toLowerCase()
+      ] || "📘"
+    );
+
+  }
+
+
+  // ==========================================
+  // SECURITY ESCAPING
+  // ==========================================
+
+  function escapeHTML(value) {
+
+    return String(
+      value
+    ).replace(
+      /[&<>"']/g,
+      character => {
+
+        const entities = {
+
+          "&": "&amp;",
+
+          "<": "&lt;",
+
+          ">": "&gt;",
+
+          '"': "&quot;",
+
+          "'": "&#039;"
+
+        };
+
+        return entities[
+          character
+        ];
+
+      }
+    );
+
+  }
+
+
+  function escapeAttr(value) {
+
+    return escapeHTML(
+      value
+    ).replace(
+      /`/g,
+      "&#096;"
+    );
+
+  }
+
+
+  // ==========================================
+  // SIGN OUT
+  // ==========================================
+
+  document
+    .getElementById(
+      "logoutButton"
+    )
+    .addEventListener(
+      "click",
+      async () => {
+
+        await client.auth.signOut();
+
+        window.location.href =
+          "index.html";
+
+      }
+    );
+
+
+  // ==========================================
+  // START
+  // ==========================================
+
+  loadStudent();
+
+</script>
+
+
+</body>
+  </html>

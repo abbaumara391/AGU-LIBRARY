@@ -1,6 +1,6 @@
 /* =========================================================
    AGULIBRARY — APP.JS
-   PHASE 2 — SUBJECT + RESOURCE CONNECTION
+   PHASE 2 — SUBJECT + RESOURCE + LESSON CONNECTION
 ========================================================= */
 
 let allResources = [];
@@ -34,13 +34,13 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   setupSubjectCards();
 
+  updateStudentAccountButton();
+
 });
 
 
 /* =========================================================
    READ SUBJECT FROM URL
-   Example:
-   index.html?subject=Physics&subject_id=1
 ========================================================= */
 
 function readSubjectFromURL() {
@@ -207,8 +207,6 @@ function applyResourceFilters() {
           );
 
 
-        /* SUBJECT FILTER */
-
         let matchesSubject = true;
 
 
@@ -238,8 +236,6 @@ function applyResourceFilters() {
         }
 
 
-        /* SEARCH FILTER */
-
         const searchableText = `
 
           ${resource.title || ""}
@@ -263,6 +259,8 @@ function applyResourceFilters() {
           ${resource.chapter || ""}
 
           ${resource.lesson || ""}
+
+          ${resource.lesson_title || ""}
 
         `.toLowerCase();
 
@@ -343,6 +341,12 @@ function renderResources(list) {
     list.map(
       resource => {
 
+        const id =
+          escapeAttr(
+            resource.id
+          );
+
+
         const title =
           escapeHTML(
             resource.title ||
@@ -357,12 +361,16 @@ function renderResources(list) {
           );
 
 
+        const typeValue =
+          String(
+            resource.type ||
+            "resource"
+          ).toLowerCase();
+
+
         const type =
           escapeHTML(
-            String(
-              resource.type ||
-              "resource"
-            ).toUpperCase()
+            typeValue.toUpperCase()
           );
 
 
@@ -374,24 +382,31 @@ function renderResources(list) {
           );
 
 
-        const url =
-          escapeAttr(
-            resource.file_url ||
-            resource.url ||
-            ""
-          );
+        /*
+          LESSONS AND COURSES ARE SENT
+          TO lesson.html.
+
+          Other resources continue
+          opening their normal files.
+        */
+
+        const isLesson =
+          typeValue === "lesson" ||
+          typeValue === "course";
+
+
+        const buttonText =
+          isLesson
+            ? "📖 Open Lesson →"
+            : "Tap to open →";
 
 
         return `
 
           <article
             class="card"
-            data-resource-id="${
-              escapeAttr(
-                resource.id
-              )
-            }"
-            onclick="openResource('${url}')">
+            data-resource-id="${id}"
+            onclick="openResourceById('${id}')">
 
 
             <div class="thumb">
@@ -445,7 +460,7 @@ function renderResources(list) {
 
             <b>
 
-              Tap to open →
+              ${buttonText}
 
             </b>
 
@@ -608,10 +623,119 @@ function setupSubjectCards() {
 
 
 /* =========================================================
+   OPEN RESOURCE BY DATABASE ID
+========================================================= */
+
+function openResourceById(id) {
+
+  const resource =
+    allResources.find(
+      item =>
+        String(item.id) ===
+        String(id)
+    );
+
+
+  if (!resource) {
+
+    alert(
+      "This AGULIBRARY resource could not be found."
+    );
+
+    return;
+
+  }
+
+
+  openResource(
+    resource
+  );
+
+}
+
+
+/* =========================================================
    OPEN RESOURCE
 ========================================================= */
 
-function openResource(url) {
+function openResource(resource) {
+
+  /*
+    IMPORTANT:
+
+    LESSON
+    COURSE
+
+    resources do NOT open their
+    file directly.
+
+    They open lesson.html with
+    the resource ID.
+  */
+
+  const type =
+    String(
+      resource.type ||
+      ""
+    )
+    .toLowerCase()
+    .trim();
+
+
+  if (
+    type === "lesson" ||
+    type === "course"
+  ) {
+
+    window.location.href =
+      "lesson.html?id=" +
+      encodeURIComponent(
+        resource.id
+      );
+
+    return;
+
+  }
+
+
+  /*
+    NORMAL RESOURCE
+  */
+
+  const url =
+    resource.file_url ||
+    resource.url ||
+    "";
+
+
+  if (!url) {
+
+    alert(
+      "This resource does not have a file attached yet."
+    );
+
+    return;
+
+  }
+
+
+  window.open(
+    url,
+    "_blank",
+    "noopener,noreferrer"
+  );
+
+}
+
+
+/* =========================================================
+   BACKWARD COMPATIBILITY
+   Allows old calls such as:
+
+   openResource("https://...")
+========================================================= */
+
+function openResourceURL(url) {
 
   if (!url) {
 
@@ -735,8 +859,18 @@ function escapeAttr(value) {
 window.filterResources =
   filterResources;
 
+
 window.openResource =
   openResource;
+
+
+window.openResourceById =
+  openResourceById;
+
+
+window.openResourceURL =
+  openResourceURL;
+
 
 window.loadResources =
   loadResources;
@@ -867,18 +1001,4 @@ async function updateStudentAccountButton() {
 
   }
 
-}
-
-
-/* =========================================================
-   RUN STUDENT SESSION CHECK
-========================================================= */
-
-document.addEventListener(
-  "DOMContentLoaded",
-  () => {
-
-    updateStudentAccountButton();
-
-  }
-);
+       }

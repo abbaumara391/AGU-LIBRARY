@@ -3,19 +3,188 @@
 
 <head>
 
-  <meta charset="utf-8">
+<meta charset="utf-8">
 
-  <meta
-    name="viewport"
-    content="width=device-width,initial-scale=1"
-  >
+<meta
+  name="viewport"
+  content="width=device-width,initial-scale=1">
 
-  <title>AGULIBRARY Admin</title>
+<title>AGULIBRARY Admin</title>
 
-  <link
-    rel="stylesheet"
-    href="style.css"
-  >
+<link
+  rel="stylesheet"
+  href="style.css">
+
+<style>
+
+.hidden{
+  display:none !important;
+}
+
+.invitation-panel{
+  margin-top:30px;
+  padding-top:30px;
+  border-top:1px solid #dce8e2;
+}
+
+.invitation-create{
+  padding:22px;
+  margin-top:18px;
+  background:#f4faf7;
+  border:1px solid #d8ebe1;
+  border-radius:18px;
+}
+
+.invitation-create h2{
+  margin-top:0;
+}
+
+.invitation-form{
+  display:grid;
+  gap:15px;
+}
+
+.invitation-form .two{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:15px;
+}
+
+.invitation-result{
+  display:none;
+  margin-top:18px;
+  padding:18px;
+  background:#e8f7f0;
+  border:1px solid #bfe5d2;
+  border-radius:15px;
+}
+
+.invitation-result.show{
+  display:block;
+}
+
+.invitation-code{
+  margin:10px 0;
+  padding:15px;
+  background:#fff;
+  border:1px dashed #078653;
+  border-radius:12px;
+  color:#087f55;
+  font-size:22px;
+  font-weight:900;
+  text-align:center;
+  letter-spacing:2px;
+}
+
+.invitation-link{
+  width:100%;
+  padding:12px;
+  background:#fff;
+  border:1px solid #cbded5;
+  border-radius:10px;
+  color:#333;
+}
+
+.invitation-actions{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:12px;
+}
+
+.invitation-actions button{
+  border:0;
+  border-radius:10px;
+  padding:10px 15px;
+  font-weight:800;
+  cursor:pointer;
+}
+
+.copy-btn{
+  background:#087f55;
+  color:#fff;
+}
+
+.share-btn{
+  background:#1d70d6;
+  color:#fff;
+}
+
+.invitation-list{
+  margin-top:25px;
+}
+
+.invitation-item{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  padding:17px;
+  margin-top:10px;
+  background:#fff;
+  border:1px solid #dce8e2;
+  border-radius:15px;
+}
+
+.invitation-item-info{
+  flex:1;
+}
+
+.invitation-item-code{
+  color:#087f55;
+  font-size:17px;
+  font-weight:900;
+  letter-spacing:1px;
+}
+
+.invitation-status{
+  display:inline-block;
+  margin-top:6px;
+  padding:5px 9px;
+  border-radius:15px;
+  font-size:11px;
+  font-weight:900;
+}
+
+.invitation-status.available{
+  background:#e2f7ec;
+  color:#087f55;
+}
+
+.invitation-status.used{
+  background:#eee;
+  color:#666;
+}
+
+.cancel-invitation{
+  border:1px solid #e2bebe;
+  background:#fff5f5;
+  color:#b42323;
+  padding:9px 12px;
+  border-radius:9px;
+  font-weight:800;
+  cursor:pointer;
+}
+
+.invitation-message{
+  margin-top:15px;
+  font-weight:700;
+}
+
+@media(max-width:600px){
+
+  .invitation-form .two{
+    grid-template-columns:1fr;
+  }
+
+  .invitation-item{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+
+}
+
+</style>
 
 </head>
 
@@ -25,36 +194,36 @@
 
 <header class="nav">
 
-  <a
-    class="brand"
-    href="index.html"
-  >
+<a
+  class="brand"
+  href="index.html">
 
-    <span class="mark">
-      AG
-    </span>
+<span class="mark">
+AG
+</span>
 
-    <span>
+<span>
 
-      <b>
-        AGULIBRARY
-      </b>
+<b>
+AGULIBRARY
+</b>
 
-      <small>
-        SECURE ADMIN
-      </small>
+<small>
+SECURE ADMIN
+</small>
 
-    </span>
+</span>
 
-  </a>
+</a>
 
 
-  <a
-    class="btn outline"
-    href="index.html"
-  >
-    ← Website
-  </a>
+<a
+  class="btn outline"
+  href="index.html">
+
+← Website
+
+</a>
 
 </header>
 
@@ -63,359 +232,543 @@
 <main class="admin">
 
 
-  <!-- =========================
-       ADMIN LOGIN
-  ========================== -->
+<!-- =========================================
+     ADMIN LOGIN
+========================================= -->
 
-  <section
-    id="loginPanel"
-    class="panel"
-  >
+<section
+  id="loginPanel"
+  class="panel">
 
-    <span class="eyebrow">
-      SECURE ADMINISTRATION
-    </span>
+<span class="eyebrow">
+SECURE ADMINISTRATION
+</span>
 
+<h1>
+AGULIBRARY Admin
+</h1>
 
-    <h1>
-      AGULIBRARY Admin
-    </h1>
+<p class="muted">
+Sign in with the administrator
+account you created in Supabase.
+</p>
 
 
-    <p class="muted">
-      Sign in with the administrator
-      account you created in Supabase.
-    </p>
+<form id="loginForm">
 
+<label>
 
-    <form id="loginForm">
+Email
 
+<input
+  id="email"
+  type="email"
+  required
+  autocomplete="email"
+  placeholder="Admin email">
 
-      <label>
+</label>
 
-        Email
 
-        <input
-          id="email"
-          type="email"
-          required
-          autocomplete="email"
-          placeholder="Admin email"
-        >
+<label>
 
-      </label>
+Password
 
+<input
+  id="password"
+  type="password"
+  required
+  autocomplete="current-password"
+  placeholder="Admin password">
 
+</label>
 
-      <label>
 
-        Password
+<button
+  class="btn primary wide"
+  type="submit">
 
-        <input
-          id="password"
-          type="password"
-          required
-          autocomplete="current-password"
-          placeholder="Admin password"
-        >
+🔐 Sign in to Admin
 
-      </label>
+</button>
 
+</form>
 
 
-      <button
-        class="btn primary wide"
-        type="submit"
-      >
+<p id="loginMessage"></p>
 
-        🔐 Sign in to Admin
+</section>
 
-      </button>
 
 
-    </form>
+<!-- =========================================
+     ADMIN DASHBOARD
+========================================= -->
 
+<section
+  id="dashboardPanel"
+  class="panel hidden">
 
-    <p id="loginMessage"></p>
 
+<div class="dash">
 
-  </section>
+<div>
 
+<span class="eyebrow">
+ADMIN DASHBOARD
+</span>
 
+<h1>
+Content Manager
+</h1>
 
-  <!-- =========================
-       ADMIN DASHBOARD
-  ========================== -->
+</div>
 
-  <section
-    id="dashboardPanel"
-    class="panel hidden"
-  >
 
+<button
+  id="logoutBtn"
+  class="btn outline"
+  type="button">
 
-    <div class="dash">
+Sign out
 
+</button>
 
-      <div>
+</div>
 
-        <span class="eyebrow">
-          ADMIN DASHBOARD
-        </span>
 
+<p id="adminMessage"></p>
 
-        <h1>
-          Content Manager
-        </h1>
 
-      </div>
 
+<!-- =========================================
+     RESOURCE UPLOAD
+========================================= -->
 
-      <button
-        id="logoutBtn"
-        class="btn outline"
-        type="button"
-      >
+<section>
 
-        Sign out
+<span class="eyebrow">
+CONTENT MANAGEMENT
+</span>
 
-      </button>
+<h2>
+Upload Learning Resource
+</h2>
 
 
-    </div>
+<form id="uploadForm">
 
 
+<label>
 
-    <p id="adminMessage"></p>
+Resource title
 
+<input
+  id="title"
+  type="text"
+  required
+  placeholder="Example: Mastery Physics SSS1">
 
+</label>
 
-    <!-- =========================
-         UPLOAD FORM
-    ========================== -->
 
-    <form id="uploadForm">
+<label>
 
+Description
 
-      <label>
+<textarea
+  id="description"
+  placeholder="Write a short description of the resource">
+</textarea>
 
-        Resource title
+</label>
 
-        <input
-          id="title"
-          type="text"
-          required
-          placeholder="Example: Mastery Physics SSS1"
-        >
 
-      </label>
+<div class="two">
 
 
+<label>
 
-      <label>
+Type
 
-        Description
+<select id="type">
 
-        <textarea
-          id="description"
-          placeholder="Write a short description of the resource"
-        ></textarea>
+<option value="book">
+Book
+</option>
 
-      </label>
+<option value="pdf">
+PDF
+</option>
 
+<option value="video">
+Video
+</option>
 
+<option value="photo">
+Photo
+</option>
 
-      <div class="two">
+<option value="course">
+Course
+</option>
 
+<option value="lesson">
+Lesson
+</option>
 
-        <label>
+</select>
 
-          Type
+</label>
 
-          <select id="type">
 
-            <option value="book">
-              Book
-            </option>
+<label>
 
-            <option value="pdf">
-              PDF
-            </option>
+Subject
 
-            <option value="video">
-              Video
-            </option>
+<input
+  id="subject"
+  type="text"
+  placeholder="Example: Physics">
 
-            <option value="photo">
-              Photo
-            </option>
+</label>
 
-            <option value="course">
-              Course
-            </option>
+</div>
 
-            <option value="lesson">
-              Lesson
-            </option>
 
-          </select>
+<div class="two">
 
-        </label>
 
+<label>
 
+Level
 
-        <label>
+<input
+  id="level"
+  type="text"
+  placeholder="Primary / Secondary / University">
 
-          Subject
+</label>
 
-          <input
-            id="subject"
-            type="text"
-            placeholder="Example: Physics"
-          >
 
-        </label>
+<label>
 
+Class / Course
 
-      </div>
+<input
+  id="classLevel"
+  type="text"
+  placeholder="SSS 1 / Grade 8 / Year 1">
 
+</label>
 
+</div>
 
-      <div class="two">
 
+<label>
 
-        <label>
+Term / Semester
 
-          Level
+<input
+  id="term"
+  type="text"
+  placeholder="First Term / Semester 1">
 
-          <input
-            id="level"
-            type="text"
-            placeholder="Primary / Secondary / University"
-          >
+</label>
 
-        </label>
 
+<label>
 
+Educational file
 
-        <label>
+<input
+  id="file"
+  type="file"
+  required>
 
-          Class / Course
+</label>
 
-          <input
-            id="classLevel"
-            type="text"
-            placeholder="SSS 1 / Grade 8 / Year 1"
-          >
 
-        </label>
+<label>
 
+<input
+  id="premium"
+  type="checkbox">
 
-      </div>
+Premium resource
 
+</label>
 
 
-      <label>
+<button
+  class="btn primary wide"
+  type="submit">
 
-        Term / Semester
+☁️ Upload & Publish
 
-        <input
-          id="term"
-          type="text"
-          placeholder="First Term / Semester 1"
-        >
+</button>
 
-      </label>
+</form>
 
+</section>
 
 
-      <label>
 
-        Educational file
+<!-- =========================================
+     STUDENT INVITATIONS
+========================================= -->
 
-        <input
-          id="file"
-          type="file"
-          required
-        >
+<section
+  id="invitations"
+  class="invitation-panel">
 
-      </label>
 
+<span class="eyebrow">
+STUDENT ACCESS
+</span>
 
 
-      <label>
+<h2>
+🎟️ Student Invitations
+</h2>
 
-        <input
-          id="premium"
-          type="checkbox"
-        >
 
-        Premium resource
+<p class="muted">
 
-      </label>
+Create a secure invitation for a student
+to join AGULIBRARY.
 
+</p>
 
 
-      <button
-        class="btn primary wide"
-        type="submit"
-      >
 
-        ☁️ Upload & Publish
+<!-- CREATE INVITATION -->
 
-      </button>
+<div class="invitation-create">
 
+<h2>
+Create New Invitation
+</h2>
 
-    </form>
 
+<form
+  id="invitationForm"
+  class="invitation-form">
 
 
-    <div class="admin-info">
+<div class="two">
 
 
-      <b>
-        AGULIBRARY Storage
-      </b>
+<label>
 
-      <br>
+Student name
 
-      Bucket:
-      <strong>
-        agu-library
-      </strong>
+<input
+  id="invitationStudentName"
+  type="text"
+  placeholder="Optional">
 
+</label>
 
-      <br><br>
 
+<label>
 
-      <b>
-        Database
-      </b>
+Student email
 
-      <br>
+<input
+  id="invitationStudentEmail"
+  type="email"
+  placeholder="Optional">
 
-      Table:
-      <strong>
-        resources
-      </strong>
+</label>
 
+</div>
 
-      <br><br>
 
+<label>
 
-      <b>
-        Access
-      </b>
+Invitation note
 
-      <br>
+<textarea
+  id="invitationNote"
+  placeholder="Optional message for the student">
+</textarea>
 
-      Administrator only 🔐
+</label>
 
 
-    </div>
+<button
+  type="submit"
+  class="btn primary wide">
 
+🎟️ Generate Invitation
 
-  </section>
+</button>
 
+
+</form>
+
+
+<div
+  id="invitationResult"
+  class="invitation-result">
+
+
+<strong>
+✅ Invitation Created
+</strong>
+
+
+<p>
+Invitation code:
+</p>
+
+
+<div
+  id="generatedCode"
+  class="invitation-code">
+
+</div>
+
+
+<p>
+Invitation link:
+</p>
+
+
+<input
+  id="generatedLink"
+  class="invitation-link"
+  readonly>
+
+
+<div class="invitation-actions">
+
+
+<button
+  id="copyInvitationButton"
+  class="copy-btn"
+  type="button">
+
+📋 Copy Link
+
+</button>
+
+
+<button
+  id="shareInvitationButton"
+  class="share-btn"
+  type="button">
+
+📤 Share
+
+</button>
+
+
+</div>
+
+</div>
+
+
+<div
+  id="invitationMessage"
+  class="invitation-message">
+</div>
+
+</div>
+
+
+
+<!-- INVITATION LIST -->
+
+<div class="invitation-list">
+
+<h3>
+Existing Invitations
+</h3>
+
+
+<div id="invitationList">
+
+<div class="empty">
+
+Loading invitations...
+
+</div>
+
+</div>
+
+</div>
+
+
+</section>
+
+
+
+<!-- =========================================
+     ADMIN INFORMATION
+========================================= -->
+
+<div class="admin-info">
+
+
+<b>
+AGULIBRARY Storage
+</b>
+
+<br>
+
+Bucket:
+<strong>
+agu-library
+</strong>
+
+
+<br><br>
+
+
+<b>
+Database
+</b>
+
+<br>
+
+Table:
+<strong>
+resources
+</strong>
+
+
+<br><br>
+
+
+<b>
+Invitations
+</b>
+
+<br>
+
+Table:
+<strong>
+student_invitations
+</strong>
+
+
+<br><br>
+
+
+<b>
+Access
+</b>
+
+<br>
+
+Administrator only 🔐
+
+</div>
+
+
+</section>
 
 </main>
 
@@ -423,13 +776,17 @@
 
 <!-- SUPABASE -->
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+</script>
 
-<script src="config.js"></script>
+<script src="config.js">
+</script>
 
-<script src="supabase.js"></script>
+<script src="supabase.js">
+</script>
 
-<script src="admin.js"></script>
+<script src="admin.js">
+</script>
 
 
 </body>

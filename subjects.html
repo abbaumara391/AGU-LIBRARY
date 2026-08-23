@@ -1,812 +1,354 @@
 <!doctype html>
 <html lang="en">
-
 <head>
-
 <meta charset="utf-8">
-
-<meta
-  name="viewport"
-  content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 
 <title>AGULIBRARY — Subjects</title>
 
 <link rel="stylesheet" href="style.css">
 
 <style>
+*{box-sizing:border-box}
 
-/* =========================================================
-   AGULIBRARY — SUBJECTS PAGE
-========================================================= */
-
-* {
-  box-sizing: border-box;
+body{
+  margin:0;
+  background:#f4faf7;
+  color:#10251d;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
 }
 
-html {
-  scroll-behavior: smooth;
+.subject-nav{
+  position:sticky;
+  top:0;
+  z-index:1000;
+  background:#fff;
+  border-bottom:1px solid #dce9e2;
+  padding:14px 5%;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
 }
 
-body {
-  margin: 0;
-  background: #f4faf7;
-  color: #10251d;
-  font-family:
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    sans-serif;
+.brand{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  text-decoration:none;
+  color:#10251d;
 }
 
-
-/* =========================================================
-   HEADER
-========================================================= */
-
-.subject-header {
-
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  gap: 15px;
-
-  padding: 18px 5%;
-
-  background: #ffffff;
-
-  border-bottom: 1px solid #dce9e2;
-
+.brand-mark{
+  width:68px;
+  height:68px;
+  border-radius:22px;
+  display:grid;
+  place-items:center;
+  background:#087f55;
+  color:#fff;
+  font-size:27px;
+  font-weight:900;
 }
 
-.subject-brand {
-
-  display: flex;
-  align-items: center;
-
-  gap: 14px;
-
-  text-decoration: none;
-
-  color: #10251d;
-
+.brand-name b{
+  display:block;
+  font-size:25px;
 }
 
-.brand-mark {
-
-  width: 70px;
-  height: 70px;
-
-  display: grid;
-  place-items: center;
-
-  border-radius: 22px;
-
-  background: #087f55;
-
-  color: #ffffff;
-
-  font-size: 28px;
-
-  font-weight: 900;
-
+.brand-name small{
+  display:block;
+  margin-top:5px;
+  color:#7a8983;
+  font-size:10px;
+  letter-spacing:3px;
 }
 
-.brand-name {
-
-  display: block;
-
-  font-size: 27px;
-
-  font-weight: 900;
-
+.dashboard-btn{
+  text-decoration:none;
+  background:#087f55;
+  color:#fff;
+  padding:14px 22px;
+  border-radius:16px;
+  font-weight:800;
 }
 
-.brand-tagline {
-
-  display: block;
-
-  margin-top: 5px;
-
-  color: #78857f;
-
-  font-size: 11px;
-
-  letter-spacing: 3px;
-
+.page{
+  max-width:1200px;
+  margin:auto;
+  padding:30px 5% 80px;
 }
 
-.dashboard-button {
-
-  border: 0;
-
-  padding: 15px 22px;
-
-  border-radius: 16px;
-
-  background: #087f55;
-
-  color: #ffffff;
-
-  text-decoration: none;
-
-  font-size: 16px;
-
-  font-weight: 800;
-
+.hero{
+  background:linear-gradient(135deg,#004d25,#078653);
+  color:#fff;
+  border-radius:34px;
+  padding:55px;
+  margin-bottom:28px;
+  border:1px solid #087f55;
 }
 
-
-/* =========================================================
-   MAIN
-========================================================= */
-
-.container {
-
-  width: min(1200px, 90%);
-
-  margin: auto;
-
+.hero small{
+  color:#80efc5;
+  font-weight:900;
+  letter-spacing:4px;
 }
 
-
-/* =========================================================
-   HERO
-========================================================= */
-
-.hero {
-
-  margin-top: 0;
-
-  padding: 70px 7%;
-
-  border-radius: 0 0 45px 45px;
-
-  background:
-    linear-gradient(
-      135deg,
-      #004d25,
-      #078653
-    );
-
-  color: #ffffff;
-
+.hero h1{
+  margin:15px 0;
+  font-size:clamp(42px,7vw,72px);
+  line-height:.95;
 }
 
-.hero-eyebrow {
-
-  display: block;
-
-  color: #8df0c7;
-
-  font-size: 14px;
-
-  font-weight: 900;
-
-  letter-spacing: 4px;
-
-  margin-bottom: 20px;
-
+.hero p{
+  max-width:760px;
+  font-size:19px;
+  line-height:1.7;
+  color:#d5eee4;
 }
 
-.hero h1 {
-
-  max-width: 700px;
-
-  margin: 0;
-
-  font-size: clamp(45px, 8vw, 75px);
-
-  line-height: .95;
-
-  letter-spacing: -2px;
-
+.search-section{
+  margin:25px 0 65px;
 }
 
-.hero p {
-
-  max-width: 760px;
-
-  margin: 30px 0 0;
-
-  color: #d3eee2;
-
-  font-size: 20px;
-
-  line-height: 1.7;
-
+.search-box{
+  display:flex;
+  gap:10px;
 }
 
-
-/* =========================================================
-   SEARCH
-========================================================= */
-
-.search-area {
-
-  padding: 55px 0 25px;
-
+.search-box input{
+  flex:1;
+  min-width:0;
+  padding:18px 20px;
+  border:1px solid #d3e2db;
+  border-radius:18px;
+  background:#fff;
+  font-size:17px;
+  outline:none;
 }
 
-.search-box {
-
-  display: flex;
-
-  gap: 12px;
-
+.search-box input:focus{
+  border-color:#087f55;
 }
 
-.search-box input {
-
-  flex: 1;
-
-  min-width: 0;
-
-  padding: 20px;
-
-  border: 1px solid #d6e4de;
-
-  border-radius: 18px;
-
-  background: #ffffff;
-
-  color: #10251d;
-
-  font-size: 17px;
-
-  outline: none;
-
+.search-box button{
+  border:0;
+  background:#087f55;
+  color:#fff;
+  padding:0 30px;
+  border-radius:18px;
+  font-size:16px;
+  font-weight:800;
+  cursor:pointer;
 }
 
-.search-box input:focus {
-
-  border-color: #087f55;
-
+.section-label{
+  color:#087f55;
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:4px;
 }
 
-.search-box button {
-
-  border: 0;
-
-  padding: 0 30px;
-
-  border-radius: 18px;
-
-  background: #087f55;
-
-  color: #ffffff;
-
-  font-size: 17px;
-
-  font-weight: 800;
-
-  cursor: pointer;
-
+.section-title{
+  font-size:clamp(38px,6vw,58px);
+  margin:12px 0 35px;
 }
 
-
-/* =========================================================
-   SECTION TITLE
-========================================================= */
-
-.section-heading {
-
-  padding: 45px 0 25px;
-
+.subject-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:20px;
 }
 
-.eyebrow {
-
-  color: #087f55;
-
-  font-size: 13px;
-
-  font-weight: 900;
-
-  letter-spacing: 4px;
-
+.subject-card{
+  position:relative;
+  background:#fff;
+  border:1px solid #d6e4de;
+  border-radius:30px;
+  padding:32px;
+  cursor:pointer;
+  transition:.25s;
+  min-height:245px;
+  box-shadow:0 8px 25px rgba(0,70,40,.04);
 }
 
-.section-heading h2 {
-
-  margin: 12px 0 0;
-
-  font-size: clamp(35px, 6vw, 55px);
-
-  letter-spacing: -1px;
-
+.subject-card:hover{
+  transform:translateY(-5px);
+  border-color:#70cda9;
+  box-shadow:0 18px 40px rgba(0,100,60,.10);
 }
 
-
-/* =========================================================
-   SUBJECT GRID
-========================================================= */
-
-.subject-grid {
-
-  display: grid;
-
-  grid-template-columns:
-    repeat(3, 1fr);
-
-  gap: 18px;
-
-  padding-bottom: 60px;
-
+.subject-icon{
+  width:100px;
+  height:100px;
+  border-radius:28px;
+  background:#e9f8f1;
+  display:grid;
+  place-items:center;
+  font-size:50px;
+  margin-bottom:25px;
 }
 
-.subject-card {
-
-  position: relative;
-
-  min-height: 230px;
-
-  padding: 30px;
-
-  border: 1px solid #d8e5df;
-
-  border-radius: 28px;
-
-  background: #ffffff;
-
-  cursor: pointer;
-
-  transition:
-    transform .2s ease,
-    box-shadow .2s ease,
-    border-color .2s ease;
-
+.subject-card h2{
+  margin:0 0 10px;
+  font-size:28px;
 }
 
-.subject-card:hover {
-
-  transform: translateY(-6px);
-
-  border-color: #79cda9;
-
-  box-shadow:
-    0 20px 45px rgba(8,127,85,.12);
-
+.subject-card p{
+  margin:0;
+  color:#718078;
+  font-size:16px;
+  line-height:1.6;
+  padding-right:35px;
 }
 
-.subject-icon {
-
-  width: 70px;
-  height: 70px;
-
-  display: grid;
-  place-items: center;
-
-  border-radius: 20px;
-
-  background: #e7f7ef;
-
-  font-size: 38px;
-
-  margin-bottom: 20px;
-
+.arrow{
+  position:absolute;
+  right:28px;
+  bottom:28px;
+  color:#087f55;
+  font-size:32px;
+  font-weight:900;
 }
 
-.subject-card h3 {
-
-  margin: 0 0 10px;
-
-  font-size: 24px;
-
+.loading,
+.no-results,
+.error{
+  grid-column:1/-1;
+  background:#fff;
+  border:1px dashed #c8dbd3;
+  border-radius:22px;
+  padding:40px;
+  text-align:center;
+  color:#718078;
+  font-size:17px;
 }
 
-.subject-card p {
-
-  margin: 0;
-
-  color: #718078;
-
-  line-height: 1.5;
-
-  font-size: 14px;
-
+.error{
+  color:#b42318;
+  background:#fff5f5;
 }
 
-.subject-card .arrow {
-
-  position: absolute;
-
-  right: 25px;
-
-  bottom: 25px;
-
-  color: #087f55;
-
-  font-size: 22px;
-
-  font-weight: 900;
-
+.result-count{
+  color:#718078;
+  margin-top:-20px;
+  margin-bottom:25px;
 }
 
-
-/* =========================================================
-   RESOURCE AREA
-========================================================= */
-
-.resource-section {
-
-  display: none;
-
-  padding: 45px 0 80px;
-
+footer{
+  margin-top:70px;
+  padding:30px 5%;
+  background:#10251d;
+  color:#dce9e3;
+  display:flex;
+  justify-content:center;
+  gap:25px;
+  flex-wrap:wrap;
 }
 
-.resource-section.show {
-
-  display: block;
-
+footer b{
+  color:#70e7bc;
 }
 
-.selected-subject {
+@media(max-width:700px){
 
-  margin-bottom: 25px;
-
-}
-
-.selected-subject h2 {
-
-  margin: 8px 0;
-
-  font-size: 38px;
-
-}
-
-.selected-subject p {
-
-  color: #718078;
-
-}
-
-.resource-grid {
-
-  display: grid;
-
-  grid-template-columns:
-    repeat(3, 1fr);
-
-  gap: 18px;
-
-}
-
-.resource-card {
-
-  padding: 18px;
-
-  border: 1px solid #d8e5df;
-
-  border-radius: 22px;
-
-  background: #ffffff;
-
-}
-
-.resource-icon {
-
-  height: 140px;
-
-  display: grid;
-
-  place-items: center;
-
-  margin-bottom: 15px;
-
-  border-radius: 17px;
-
-  background: #eaf8f1;
-
-  font-size: 52px;
-
-}
-
-.resource-card small {
-
-  color: #087f55;
-
-  font-weight: 900;
-
-  letter-spacing: 1px;
-
-}
-
-.resource-card h3 {
-
-  margin: 8px 0;
-
-  font-size: 20px;
-
-}
-
-.resource-card p {
-
-  min-height: 42px;
-
-  color: #718078;
-
-  line-height: 1.5;
-
-  font-size: 14px;
-
-}
-
-.open-resource {
-
-  width: 100%;
-
-  border: 0;
-
-  padding: 13px;
-
-  border-radius: 13px;
-
-  background: #087f55;
-
-  color: #ffffff;
-
-  font-weight: 800;
-
-  cursor: pointer;
-
-}
-
-
-/* =========================================================
-   EMPTY
-========================================================= */
-
-.empty {
-
-  grid-column: 1 / -1;
-
-  padding: 45px;
-
-  text-align: center;
-
-  border: 1px dashed #c7d9d1;
-
-  border-radius: 20px;
-
-  background: #ffffff;
-
-  color: #718078;
-
-}
-
-
-/* =========================================================
-   FOOTER
-========================================================= */
-
-footer {
-
-  padding: 35px 5%;
-
-  background: #10251d;
-
-  color: #ffffff;
-
-  text-align: center;
-
-}
-
-footer b {
-
-  display: block;
-
-  font-size: 20px;
-
-  margin-bottom: 8px;
-
-}
-
-footer span {
-
-  color: #9fb5ab;
-
-  font-size: 13px;
-
-}
-
-
-/* =========================================================
-   MOBILE
-========================================================= */
-
-@media(max-width:900px) {
-
-  .subject-grid {
-
-    grid-template-columns:
-      repeat(2, 1fr);
-
+  .subject-nav{
+    padding:12px 5%;
   }
 
-  .resource-grid {
-
-    grid-template-columns:
-      repeat(2, 1fr);
-
+  .brand-mark{
+    width:62px;
+    height:62px;
+    border-radius:20px;
   }
 
+  .brand-name b{
+    font-size:20px;
+  }
+
+  .brand-name small{
+    font-size:8px;
+  }
+
+  .dashboard-btn{
+    padding:13px 15px;
+    font-size:14px;
+  }
+
+  .hero{
+    padding:38px 30px;
+    border-radius:30px;
+  }
+
+  .hero h1{
+    font-size:48px;
+  }
+
+  .hero p{
+    font-size:17px;
+  }
+
+  .search-box{
+    flex-direction:column;
+  }
+
+  .search-box button{
+    min-height:58px;
+  }
+
+  .subject-grid{
+    grid-template-columns:1fr;
+  }
+
+  .subject-card{
+    min-height:230px;
+  }
 }
 
+@media(max-width:390px){
 
-@media(max-width:600px) {
-
-  .subject-header {
-
-    padding: 14px 5%;
-
+  .brand-name b{
+    font-size:17px;
   }
 
-  .brand-mark {
-
-    width: 58px;
-    height: 58px;
-
-    border-radius: 18px;
-
-    font-size: 23px;
-
+  .brand-name small{
+    letter-spacing:1.5px;
   }
 
-  .brand-name {
-
-    font-size: 21px;
-
+  .dashboard-btn{
+    padding:11px 12px;
   }
 
-  .brand-tagline {
-
-    font-size: 8px;
-
-    letter-spacing: 2px;
-
+  .hero h1{
+    font-size:42px;
   }
-
-  .dashboard-button {
-
-    padding: 13px 15px;
-
-    font-size: 14px;
-
-  }
-
-  .hero {
-
-    padding: 50px 7%;
-
-    border-radius: 0 0 35px 35px;
-
-  }
-
-  .hero h1 {
-
-    font-size: 52px;
-
-  }
-
-  .hero p {
-
-    font-size: 17px;
-
-  }
-
-  .search-area {
-
-    padding: 30px 0 10px;
-
-  }
-
-  .search-box {
-
-    flex-direction: column;
-
-  }
-
-  .search-box button {
-
-    padding: 16px;
-
-  }
-
-  .subject-grid,
-  .resource-grid {
-
-    grid-template-columns: 1fr;
-
-  }
-
-  .subject-card {
-
-    min-height: 205px;
-
-  }
-
 }
-
-
-/* VERY SMALL PHONES */
-
-@media(max-width:390px) {
-
-  .brand-name {
-
-    font-size: 18px;
-
-  }
-
-  .brand-tagline {
-
-    font-size: 7px;
-
-  }
-
-  .dashboard-button {
-
-    padding: 11px;
-
-    font-size: 13px;
-
-  }
-
-  .hero h1 {
-
-    font-size: 45px;
-
-  }
-
-}
-
 </style>
-
 </head>
-
 
 <body>
 
+<header class="subject-nav">
 
-<!-- =====================================================
-     HEADER
-===================================================== -->
+  <a class="brand" href="index.html">
 
-<header class="subject-header">
-
-  <a
-    href="index.html"
-    class="subject-brand">
-
-    <span class="brand-mark">
+    <div class="brand-mark">
       AG
-    </span>
+    </div>
 
-    <span>
+    <div class="brand-name">
+      <b>AGULIBRARY</b>
 
-      <b class="brand-name">
-        AGULIBRARY
-      </b>
-
-      <small class="brand-tagline">
+      <small>
         LEARN • READ • WATCH • GROW
       </small>
-
-    </span>
+    </div>
 
   </a>
 
-
   <a
-    href="student.html"
-    class="dashboard-button">
+    class="dashboard-btn"
+    href="student.html">
 
     🎓 Dashboard
 
@@ -815,17 +357,13 @@ footer span {
 </header>
 
 
-<!-- =====================================================
-     HERO
-===================================================== -->
+<main class="page">
 
-<section class="hero">
+  <section class="hero">
 
-  <div class="container">
-
-    <span class="hero-eyebrow">
+    <small>
       GLOBAL EDUCATION
-    </span>
+    </small>
 
     <h1>
       Explore<br>
@@ -835,343 +373,568 @@ footer span {
     <p>
       Choose a subject and discover books,
       PDFs, videos, lessons and other
-      educational resources available
-      in AGULIBRARY.
+      educational resources available in
+      AGULIBRARY.
     </p>
 
-  </div>
-
-</section>
+  </section>
 
 
-<main class="container">
+  <section class="search-section">
+
+    <div class="search-box">
+
+      <input
+        id="subjectSearch"
+        type="search"
+        placeholder="Search subjects or resources..."
+        autocomplete="off">
+
+      <button id="searchButton">
+        Search
+      </button>
+
+    </div>
+
+  </section>
 
 
-<!-- =====================================================
-     SEARCH
-===================================================== -->
+  <section>
 
-<section class="search-area">
-
-  <div class="search-box">
-
-    <input
-      id="subjectSearch"
-      type="search"
-      placeholder="Search subjects or resources..."
-      autocomplete="off">
-
-    <button
-      id="searchButton">
-
-      Search
-
-    </button>
-
-  </div>
-
-</section>
-
-
-<!-- =====================================================
-     SUBJECTS
-===================================================== -->
-
-<section>
-
-  <div class="section-heading">
-
-    <span class="eyebrow">
+    <div class="section-label">
       ALL SUBJECTS
-    </span>
+    </div>
 
-    <h2>
+    <h2 class="section-title">
       Choose Your Subject
     </h2>
 
-  </div>
+    <div
+      id="resultCount"
+      class="result-count">
+    </div>
 
+    <div
+      id="subjectGrid"
+      class="subject-grid">
 
-  <div
-    id="subjectGrid"
-    class="subject-grid">
-
-
-    <!-- PHYSICS -->
-
-    <article
-      class="subject-card"
-      data-subject="Physics">
-
-      <div class="subject-icon">
-        ⚛️
+      <div class="loading">
+        Loading AGULIBRARY subjects...
       </div>
 
-      <h3>
-        Physics
-      </h3>
+    </div>
 
-      <p>
-        Mechanics, electricity, waves,
-        heat, energy and modern physics.
-      </p>
+  </section>
 
-      <span class="arrow">
-        →
-      </span>
-
-    </article>
+</main>
 
 
-    <!-- CHEMISTRY -->
+<footer>
 
-    <article
-      class="subject-card"
-      data-subject="Chemistry">
+  <b>AGULIBRARY</b>
 
-      <div class="subject-icon">
-        🧪
+  <span>
+    Global Digital Education
+  </span>
+
+  <span>
+    Owner: Umar Mohammed
+  </span>
+
+</footer>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="config.js"></script>
+
+<script src="supabase.js"></script>
+
+
+<script>
+
+let allSubjects = [];
+
+
+/* =====================================================
+   DEFAULT SUBJECTS
+   BACKUP IF DATABASE IS UNAVAILABLE
+===================================================== */
+
+const defaultSubjects = [
+
+  {
+    name:"Physics",
+    icon:"⚛️",
+    description:
+      "Mechanics, electricity, waves, heat, energy and modern physics."
+  },
+
+  {
+    name:"Chemistry",
+    icon:"🧪",
+    description:
+      "Matter, atoms, chemical reactions, organic chemistry and laboratory science."
+  },
+
+  {
+    name:"Mathematics",
+    icon:"📐",
+    description:
+      "Algebra, geometry, calculus, statistics, probability and mathematical reasoning."
+  },
+
+  {
+    name:"Biology",
+    icon:"🧬",
+    description:
+      "Living organisms, genetics, ecology, anatomy, physiology and evolution."
+  },
+
+  {
+    name:"Computer Science",
+    icon:"💻",
+    description:
+      "Programming, algorithms, computer systems, databases, networking and AI."
+  },
+
+  {
+    name:"English",
+    icon:"📖",
+    description:
+      "English language, grammar, comprehension, writing and communication."
+  },
+
+  {
+    name:"Economics",
+    icon:"📊",
+    description:
+      "Microeconomics, macroeconomics, markets, finance and economic development."
+  },
+
+  {
+    name:"Geography",
+    icon:"🌍",
+    description:
+      "Physical geography, human geography, maps, environment and population."
+  },
+
+  {
+    name:"Commerce",
+    icon:"💼",
+    description:
+      "Business, trade, entrepreneurship, marketing and commercial activities."
+  },
+
+  {
+    name:"History",
+    icon:"🏛️",
+    description:
+      "World history, African history, civilizations, events and historical studies."
+  },
+
+  {
+    name:"Political Science",
+    icon:"🏛️",
+    description:
+      "Government, politics, political systems, democracy and international relations."
+  },
+
+  {
+    name:"Psychology",
+    icon:"🧠",
+    description:
+      "Human behaviour, cognition, development, personality and psychological studies."
+  },
+
+  {
+    name:"Philosophy",
+    icon:"💡",
+    description:
+      "Logic, ethics, knowledge, reasoning and philosophical thought."
+  },
+
+  {
+    name:"Fine Art",
+    icon:"🎨",
+    description:
+      "Drawing, painting, design, sculpture, visual arts and creative expression."
+  }
+
+];
+
+
+/* =====================================================
+   LOAD SUBJECTS
+===================================================== */
+
+async function loadSubjects(){
+
+  const grid =
+    document.getElementById("subjectGrid");
+
+  try{
+
+    const client =
+      typeof getSupabase === "function"
+        ? getSupabase()
+        : null;
+
+
+    if(!client){
+
+      allSubjects =
+        defaultSubjects;
+
+      renderSubjects(allSubjects);
+
+      return;
+
+    }
+
+
+    const {
+      data,
+      error
+    } =
+      await client
+        .from("subjects")
+        .select("*")
+        .order("name");
+
+
+    if(error){
+
+      console.error(
+        "Subjects loading error:",
+        error
+      );
+
+      allSubjects =
+        defaultSubjects;
+
+      renderSubjects(allSubjects);
+
+      return;
+
+    }
+
+
+    if(data && data.length){
+
+      allSubjects =
+        data;
+
+    }else{
+
+      allSubjects =
+        defaultSubjects;
+
+    }
+
+
+    renderSubjects(
+      allSubjects
+    );
+
+  }catch(error){
+
+    console.error(error);
+
+    allSubjects =
+      defaultSubjects;
+
+    renderSubjects(
+      allSubjects
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   RENDER SUBJECTS
+===================================================== */
+
+function renderSubjects(list){
+
+  const grid =
+    document.getElementById(
+      "subjectGrid"
+    );
+
+  const count =
+    document.getElementById(
+      "resultCount"
+    );
+
+
+  if(!grid) return;
+
+
+  if(!list.length){
+
+    grid.innerHTML = `
+
+      <div class="no-results">
+
+        No subjects found.
+
       </div>
 
-      <h3>
-        Chemistry
-      </h3>
+    `;
 
-      <p>
-        Matter, atoms, reactions,
-        organic chemistry and laboratory science.
-      </p>
+    if(count){
 
-      <span class="arrow">
-        →
-      </span>
+      count.textContent =
+        "0 subjects";
 
-    </article>
+    }
 
+    return;
 
-    <!-- MATHEMATICS -->
+  }
 
-    <article
-      class="subject-card"
-      data-subject="Mathematics">
 
-      <div class="subject-icon">
-        📐
-      </div>
+  if(count){
 
-      <h3>
-        Mathematics
-      </h3>
+    count.textContent =
+      list.length +
+      (
+        list.length === 1
+          ? " subject"
+          : " subjects"
+      );
 
-      <p>
-        Algebra, geometry, statistics,
-        calculus and mathematical reasoning.
-      </p>
+  }
 
-      <span class="arrow">
-        →
-      </span>
 
-    </article>
+  grid.innerHTML =
+    list.map(
+      subject => `
 
+        <article
+          class="subject-card"
+          data-subject-id="${escapeHTML(
+            subject.id || ""
+          )}"
+          data-subject-name="${escapeHTML(
+            subject.name || ""
+          )}">
 
-    <!-- BIOLOGY -->
+          <div class="subject-icon">
 
-    <article
-      class="subject-card"
-      data-subject="Biology">
+            ${subject.icon || "📚"}
 
-      <div class="subject-icon">
-        🧬
-      </div>
+          </div>
 
-      <h3>
-        Biology
-      </h3>
+          <h2>
 
-      <p>
-        Living organisms, genetics,
-        ecology, cells and human biology.
-      </p>
+            ${escapeHTML(
+              subject.name ||
+              "Subject"
+            )}
 
-      <span class="arrow">
-        →
-      </span>
+          </h2>
 
-    </article>
+          <p>
 
+            ${escapeHTML(
+              subject.description ||
+              "Explore educational resources for this subject."
+            )}
 
-    <!-- COMPUTER SCIENCE -->
+          </p>
 
-    <article
-      class="subject-card"
-      data-subject="Computer Science">
+          <span class="arrow">
+            →
+          </span>
 
-      <div class="subject-icon">
-        💻
-      </div>
+        </article>
 
-      <h3>
-        Computer Science
-      </h3>
+      `
+    ).join("");
 
-      <p>
-        Programming, software, algorithms,
-        artificial intelligence and technology.
-      </p>
 
-      <span class="arrow">
-        →
-      </span>
+  document
+    .querySelectorAll(".subject-card")
+    .forEach(card => {
 
-    </article>
+      card.addEventListener(
+        "click",
+        () => {
 
+          const id =
+            card.dataset.subjectId;
 
-    <!-- ENGLISH -->
+          const name =
+            card.dataset.subjectName;
 
-    <article
-      class="subject-card"
-      data-subject="English">
 
-      <div class="subject-icon">
-        📖
-      </div>
+          /*
+             Send the selected subject
+             to the resources page.
+          */
 
-      <h3>
-        English
-      </h3>
+          const params =
+            new URLSearchParams();
 
-      <p>
-        Grammar, reading, writing,
-        communication and language skills.
-      </p>
 
-      <span class="arrow">
-        →
-      </span>
+          if(id){
 
-    </article>
+            params.set(
+              "subject_id",
+              id
+            );
 
+          }
 
-    <!-- ECONOMICS -->
 
-    <article
-      class="subject-card"
-      data-subject="Economics">
+          if(name){
 
-      <div class="subject-icon">
-        💰
-      </div>
+            params.set(
+              "subject",
+              name
+            );
 
-      <h3>
-        Economics
-      </h3>
+          }
 
-      <p>
-        Markets, production, demand,
-        supply, finance and economic systems.
-      </p>
 
-      <span class="arrow">
-        →
-      </span>
+          window.location.href =
+            "index.html?" +
+            params.toString();
 
-    </article>
+        }
+      );
 
+    });
 
-    <!-- GEOGRAPHY -->
+}
 
-    <article
-      class="subject-card"
-      data-subject="Geography">
 
-      <div class="subject-icon">
-        🌍
-      </div>
+/* =====================================================
+   SEARCH SUBJECTS
+===================================================== */
 
-      <h3>
-        Geography
-      </h3>
+function searchSubjects(){
 
-      <p>
-        Physical geography, human geography,
-        maps, climate and the environment.
-      </p>
+  const input =
+    document.getElementById(
+      "subjectSearch"
+    );
 
-      <span class="arrow">
-        →
-      </span>
 
-    </article>
+  const query =
+    input
+      ? input.value
+          .toLowerCase()
+          .trim()
+      : "";
 
 
-    <!-- COMMERCE -->
+  if(!query){
 
-    <article
-      class="subject-card"
-      data-subject="Commerce">
+    renderSubjects(
+      allSubjects
+    );
 
-      <div class="subject-icon">
-        🏢
-      </div>
+    return;
 
-      <h3>
-        Commerce
-      </h3>
+  }
 
-      <p>
-        Trade, business, banking,
-        insurance, marketing and entrepreneurship.
-      </p>
 
-      <span class="arrow">
-        →
-      </span>
+  const filtered =
+    allSubjects.filter(
+      subject => {
 
-    </article>
+        const searchable = `
 
+          ${subject.name || ""}
 
-    <!-- HISTORY -->
+          ${subject.description || ""}
 
-    <article
-      class="subject-card"
-      data-subject="History">
+        `.toLowerCase();
 
-      <div class="subject-icon">
-        🏛️
-      </div>
 
-      <h3>
-        History
-      </h3>
+        return searchable.includes(
+          query
+        );
 
-      <p>
-        Ancient civilizations, world history,
-        African history and historical events.
-      </p>
+      }
+    );
 
-      <span class="arrow">
-        →
-      </span>
 
-    </article>
+  renderSubjects(
+    filtered
+  );
 
+}
 
-    <!-- POLITICAL SCIENCE -->
 
-    <article
-      class="subject-card"
-      data-subject="Political Science">
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
 
-      <div class="subject-icon">
-        🗳️
-      </div>
+function escapeHTML(value){
 
-      <h3>
-        Political Science
-      </h3>
+  return String(
+    value ?? ""
+  ).replace(
+    /[&<>"']/g,
+    character => {
 
-      <p>
-        Government, democracy, political systems,
-        leadership and international relations.
-      </
+      const entities = {
+
+        "&":"&amp;",
+        "<":"&lt;",
+        ">":"&gt;",
+        '"':"&quot;",
+        "'":"&#039;"
+
+      };
+
+      return entities[
+        character
+      ];
+
+    }
+  );
+
+}
+
+
+/* =====================================================
+   SEARCH EVENTS
+===================================================== */
+
+document
+  .getElementById(
+    "subjectSearch"
+  )
+  .addEventListener(
+    "input",
+    searchSubjects
+  );
+
+
+document
+  .getElementById(
+    "searchButton"
+  )
+  .addEventListener(
+    "click",
+    searchSubjects
+  );
+
+
+/* =====================================================
+   START
+===================================================== */
+
+loadSubjects();
+
+</script>
+
+</body>
+</html>

@@ -1,54 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
 <meta charset="UTF-8">
-
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>AGULIBRARY — Lesson</title>
 
 <style>
-
-*{
-  box-sizing:border-box;
-}
-
-html{
-  scroll-behavior:smooth;
-}
+*{box-sizing:border-box}
 
 body{
   margin:0;
   background:#171918;
   color:#edf8f3;
-  font-family:
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    sans-serif;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
 }
-
-/* =========================
-   HEADER
-========================= */
 
 header{
   position:sticky;
   top:0;
   z-index:1000;
-
   min-height:82px;
-
   display:flex;
   align-items:center;
   justify-content:space-between;
-
   padding:12px 5%;
-
   background:#202120;
   border-bottom:1px solid #46504b;
 }
@@ -57,7 +33,6 @@ header{
   display:flex;
   align-items:center;
   gap:12px;
-
   color:#fff;
   text-decoration:none;
 }
@@ -65,14 +40,10 @@ header{
 .brand-mark{
   width:52px;
   height:52px;
-
   display:grid;
   place-items:center;
-
   border-radius:17px;
-
   background:#087a4b;
-
   font-size:20px;
   font-weight:900;
 }
@@ -84,13 +55,9 @@ header{
 
 .brand-subtitle{
   display:block;
-
   margin-top:3px;
-
   color:#8fa09a;
-
   font-size:9px;
-
   letter-spacing:2px;
 }
 
@@ -98,51 +65,29 @@ header{
   display:inline-flex;
   align-items:center;
   justify-content:center;
-
   padding:11px 16px;
-
   border-radius:12px;
-
   background:#087a4b;
-
   color:#fff;
-
   text-decoration:none;
-
   font-weight:800;
 }
-
-/* =========================
-   MAIN
-========================= */
 
 main{
   width:min(1000px,92%);
-
   margin:auto;
-
   padding:30px 0 80px;
 }
 
-/* =========================
-   STATUS
-========================= */
-
 .status{
   display:none;
-
   padding:14px 18px;
-
   margin-bottom:18px;
-
   border-radius:13px;
-
   font-weight:800;
 }
 
-.status.show{
-  display:block;
-}
+.status.show{display:block}
 
 .status.success{
   background:#063b24;
@@ -154,198 +99,125 @@ main{
   color:#ff9b9b;
 }
 
-/* =========================
-   LESSON HERO
-========================= */
-
 .lesson-hero{
   padding:35px;
-
   border-radius:28px;
-
-  background:
-    linear-gradient(
-      135deg,
-      #003d17,
-      #087a4b
-    );
-
+  background:linear-gradient(135deg,#003d17,#087a4b);
   border:1px solid #176b40;
-
   margin-bottom:20px;
 }
 
 .eyebrow{
   color:#70e7bc;
-
   font-size:11px;
-
   font-weight:900;
-
   letter-spacing:3px;
 }
 
 .lesson-hero h1{
   margin:15px 0;
-
-  font-size:
-    clamp(34px,7vw,58px);
-
+  font-size:clamp(34px,7vw,58px);
   line-height:1.05;
-
   color:#fff;
 }
 
 .lesson-hero p{
   margin:0;
-
   max-width:780px;
-
   color:#c8ded5;
-
   font-size:17px;
-
   line-height:1.7;
 }
 
 .meta{
   display:flex;
-
   flex-wrap:wrap;
-
   gap:8px;
-
   margin-top:22px;
 }
 
 .meta span{
   padding:8px 12px;
-
   border-radius:20px;
-
   background:rgba(255,255,255,.10);
-
   color:#e7fff5;
-
   font-size:12px;
-
   font-weight:800;
 }
 
-/* =========================
-   PROGRESS
-========================= */
-
 .progress-card{
   padding:23px;
-
   margin-bottom:20px;
-
   background:#202120;
-
   border:1px solid #4b5550;
-
   border-radius:22px;
 }
 
 .progress-top{
   display:flex;
-
   align-items:center;
-
   justify-content:space-between;
-
   gap:15px;
 }
 
 .progress-top span{
   color:#a9b7b1;
-
   font-size:13px;
-
   font-weight:900;
 }
 
 .progress-top strong{
   color:#70e7bc;
-
   font-size:21px;
 }
 
 .progress-track{
   width:100%;
-
   height:14px;
-
   margin-top:12px;
-
   overflow:hidden;
-
   background:#10271d;
-
   border-radius:50px;
 }
 
 .progress-fill{
   width:0;
-
   height:100%;
-
   background:#087a4b;
-
   border-radius:50px;
-
-  transition:
-    width .4s ease;
+  transition:width .4s ease;
 }
-
-/* =========================
-   CONTENT
-========================= */
 
 .lesson-content{
   min-height:400px;
-
-  padding:
-    clamp(24px,5vw,48px);
-
+  padding:clamp(24px,5vw,48px);
   margin-bottom:20px;
-
   background:#202120;
-
   border:1px solid #4b5550;
-
   border-radius:27px;
 }
 
 .lesson-content h2{
   margin-top:0;
-
   color:#70e7bc;
-
   font-size:30px;
 }
 
 .lesson-content h3{
   margin-top:30px;
-
   color:#f0f8f5;
-
   font-size:23px;
 }
 
 .lesson-content p{
   color:#c7d4ce;
-
   font-size:17px;
-
   line-height:1.9;
 }
 
 .lesson-content ul,
 .lesson-content ol{
   color:#c7d4ce;
-
   line-height:1.9;
 }
 
@@ -357,11 +229,8 @@ main{
 .lesson-content video,
 .lesson-content iframe{
   display:block;
-
   max-width:100%;
-
   margin:20px auto;
-
   border-radius:15px;
 }
 
@@ -369,100 +238,81 @@ main{
   color:#70e7bc;
 }
 
-.lesson-content blockquote{
-  margin:25px 0;
-
-  padding:18px;
-
-  background:#18221e;
-
-  border-left:4px solid #087a4b;
-
-  border-radius:10px;
-
-  color:#c8d8d1;
-}
-
-/* =========================
-   FILE
-========================= */
-
 .file-card{
   margin-top:25px;
-
   padding:22px;
-
   border-radius:17px;
-
   background:#18221e;
-
   border:1px solid #365044;
 }
 
 .file-button{
   display:inline-block;
-
   margin-top:12px;
-
   padding:12px 18px;
-
   border-radius:11px;
-
   background:#087a4b;
-
   color:#fff;
-
   text-decoration:none;
-
   font-weight:900;
 }
 
-/* =========================
-   COMPLETE
-========================= */
+
+/* =====================================================
+   COMPLETION CARD
+===================================================== */
 
 .complete-card{
-  padding:30px;
+  display:block !important;
+  visibility:visible !important;
+  opacity:1 !important;
 
-  margin-bottom:20px;
+  padding:32px;
+  margin:25px 0;
 
   text-align:center;
 
   background:#202120;
-
-  border:1px solid #4b5550;
-
+  border:2px solid #087a4b;
   border-radius:24px;
+
+  box-shadow:0 10px 30px rgba(0,0,0,.25);
 }
 
 .complete-card h2{
-  margin-top:0;
-
-  font-size:26px;
+  margin:0 0 12px;
+  color:#ffffff;
+  font-size:28px;
 }
 
 .complete-card p{
+  margin:0 auto 22px;
+  max-width:650px;
   color:#a9b7b1;
-
   line-height:1.7;
 }
 
 .complete-button{
-  border:0;
+  display:inline-flex !important;
+  align-items:center;
+  justify-content:center;
 
-  padding:15px 25px;
+  min-width:260px;
+
+  border:0;
+  padding:16px 25px;
 
   border-radius:13px;
 
   background:#087a4b;
+  color:#ffffff;
 
-  color:#fff;
-
-  font-size:16px;
-
+  font-size:17px;
   font-weight:900;
 
   cursor:pointer;
+
+  box-shadow:0 8px 20px rgba(8,122,75,.25);
 }
 
 .complete-button:hover{
@@ -471,40 +321,24 @@ main{
 
 .complete-button.completed{
   background:#063b24;
-
   color:#70e7bc;
-
   border:1px solid #087a4b;
 }
 
-/* =========================
-   NAVIGATION
-========================= */
-
 .navigation{
   display:grid;
-
-  grid-template-columns:
-    1fr 1fr;
-
+  grid-template-columns:1fr 1fr;
   gap:15px;
 }
 
 .nav-button{
   min-height:90px;
-
   padding:18px;
-
   text-align:left;
-
   border:1px solid #4b5550;
-
   border-radius:18px;
-
   background:#202120;
-
   color:#fff;
-
   cursor:pointer;
 }
 
@@ -514,53 +348,34 @@ main{
 
 .nav-button:disabled{
   opacity:.4;
-
   cursor:not-allowed;
 }
 
 .nav-button small{
   display:block;
-
   margin-bottom:7px;
-
   color:#70e7bc;
-
   font-weight:900;
 }
 
 .nav-button strong{
   display:block;
-
   line-height:1.4;
 }
 
-/* =========================
-   LOADING
-========================= */
-
 .loading{
   padding:70px 20px;
-
   text-align:center;
-
   color:#70e7bc;
-
   font-weight:800;
 }
 
 .empty{
   padding:60px 20px;
-
   text-align:center;
-
   color:#a0ada7;
-
   line-height:1.7;
 }
-
-/* =========================
-   MOBILE
-========================= */
 
 @media(max-width:600px){
 
@@ -571,7 +386,6 @@ main{
   .brand-mark{
     width:45px;
     height:45px;
-
     font-size:17px;
   }
 
@@ -585,13 +399,11 @@ main{
 
   .back-button{
     padding:9px 11px;
-
     font-size:12px;
   }
 
   main{
     width:90%;
-
     padding-top:22px;
   }
 
@@ -611,21 +423,23 @@ main{
     grid-template-columns:1fr;
   }
 
+  .complete-card{
+    padding:25px 18px;
+  }
+
+  .complete-button{
+    width:100%;
+    min-width:0;
+  }
 }
-
 </style>
-
 </head>
-
 
 <body>
 
-
 <header>
 
-  <a
-    href="student.html"
-    class="brand">
+  <a href="student.html" class="brand">
 
     <div class="brand-mark">
       AG
@@ -645,13 +459,8 @@ main{
 
   </a>
 
-
-  <a
-    href="student.html"
-    class="back-button">
-
+  <a href="student.html" class="back-button">
     ← Dashboard
-
   </a>
 
 </header>
@@ -659,11 +468,7 @@ main{
 
 <main>
 
-
-<div
-  id="status"
-  class="status">
-</div>
+<div id="status" class="status"></div>
 
 
 <section class="lesson-hero">
@@ -672,21 +477,15 @@ main{
     AGULIBRARY • LESSON
   </div>
 
-
   <h1 id="lessonTitle">
     Loading lesson...
   </h1>
-
 
   <p id="lessonDescription">
     Please wait while your lesson loads.
   </p>
 
-
-  <div
-    id="lessonMeta"
-    class="meta">
-  </div>
+  <div id="lessonMeta" class="meta"></div>
 
 </section>
 
@@ -705,7 +504,6 @@ main{
 
   </div>
 
-
   <div class="progress-track">
 
     <div
@@ -718,9 +516,7 @@ main{
 </section>
 
 
-<section
-  id="lessonContent"
-  class="lesson-content">
+<section id="lessonContent" class="lesson-content">
 
   <div class="loading">
     Loading lesson content...
@@ -729,22 +525,26 @@ main{
 </section>
 
 
-<section class="complete-card">
+<!-- =====================================================
+     MARK LESSON COMPLETED
+===================================================== -->
+
+<section
+  id="completeCard"
+  class="complete-card">
 
   <h2>
     🎓 Complete This Lesson
   </h2>
 
-
   <p id="completeText">
-    Study the lesson carefully, then mark it
-    as completed when you finish.
+    Study the lesson carefully, then mark it as completed when you finish.
   </p>
-
 
   <button
     id="completeButton"
-    class="complete-button">
+    class="complete-button"
+    type="button">
 
     ✓ Mark Lesson as Completed
 
@@ -755,10 +555,10 @@ main{
 
 <section class="navigation">
 
-
   <button
     id="previousButton"
     class="nav-button"
+    type="button"
     disabled>
 
     <small>
@@ -775,6 +575,7 @@ main{
   <button
     id="nextButton"
     class="nav-button"
+    type="button"
     disabled>
 
     <small>
@@ -787,9 +588,7 @@ main{
 
   </button>
 
-
 </section>
-
 
 </main>
 
@@ -803,16 +602,10 @@ main{
 
 <script>
 
-/* =====================================================
-   AGULIBRARY LESSON READER
-===================================================== */
-
-
 let client =
   typeof getSupabase === "function"
     ? getSupabase()
     : null;
-
 
 let currentUser = null;
 
@@ -824,40 +617,28 @@ let completedLessons = [];
 
 
 /* =====================================================
-   MESSAGE
+   STATUS
 ===================================================== */
 
-function showStatus(
-  text,
-  type = "success"
-){
+function showStatus(text,type="success"){
 
   const box =
-    document.getElementById(
-      "status"
-    );
+    document.getElementById("status");
 
   box.textContent = text;
 
   box.className =
-    "status show " +
-    type;
+    "status show " + type;
 
-  setTimeout(
-    function(){
-
-      box.className =
-        "status";
-
-    },
-    4000
-  );
+  setTimeout(()=>{
+    box.className = "status";
+  },4000);
 
 }
 
 
 /* =====================================================
-   GET LESSON ID
+   LESSON ID
 ===================================================== */
 
 function getLessonId(){
@@ -882,16 +663,9 @@ function getLessonId(){
 
 function completionKey(){
 
-  if(!currentUser){
-
-    return "AGU_COMPLETED_GUEST";
-
-  }
-
-  return (
-    "AGU_COMPLETED_" +
-    currentUser.id
-  );
+  return currentUser
+    ? "AGU_COMPLETED_" + currentUser.id
+    : "AGU_COMPLETED_GUEST";
 
 }
 
@@ -927,47 +701,40 @@ function saveCompleted(){
 }
 
 
-/* =====================================================
-   CHECK COMPLETION
-===================================================== */
-
 function isCompleted(id){
 
   return completedLessons.some(
     item =>
-      String(item) ===
-      String(id)
+      String(item) === String(id)
   );
 
 }
 
 
 /* =====================================================
-   MARK COMPLETE
+   COMPLETE LESSON
 ===================================================== */
 
 async function completeLesson(){
 
   if(!currentLesson){
 
+    showStatus(
+      "No lesson is currently loaded.",
+      "error"
+    );
+
     return;
 
   }
 
-
   const id =
-    String(
-      currentLesson.id
-    );
+    String(currentLesson.id);
 
 
-  if(
-    !isCompleted(id)
-  ){
+  if(!isCompleted(id)){
 
-    completedLessons.push(
-      id
-    );
+    completedLessons.push(id);
 
     saveCompleted();
 
@@ -980,14 +747,14 @@ async function completeLesson(){
 
 
   showStatus(
-    "🎉 Lesson completed! Your progress has been saved."
+    "🎉 Lesson completed successfully!"
   );
 
 
   /*
-    Optional Supabase backup.
-    This does NOT stop local completion
-    if the table does not exist.
+     Optional Supabase backup.
+     Local progress remains working even
+     if the backup table is unavailable.
   */
 
   if(client && currentUser){
@@ -996,23 +763,17 @@ async function completeLesson(){
 
       const result =
         await client
-          .from(
-            "student_completed_lessons"
-          )
+          .from("student_completed_lessons")
           .upsert(
             {
-              user_id:
-                currentUser.id,
-
-              resource_id:
-                currentLesson.id
+              user_id:currentUser.id,
+              resource_id:currentLesson.id
             },
             {
               onConflict:
                 "user_id,resource_id"
             }
           );
-
 
       if(result.error){
 
@@ -1038,7 +799,7 @@ async function completeLesson(){
 
 
 /* =====================================================
-   UPDATE COMPLETION UI
+   COMPLETION UI
 ===================================================== */
 
 function updateCompletionUI(){
@@ -1049,11 +810,8 @@ function updateCompletionUI(){
 
   }
 
-
   const done =
-    isCompleted(
-      currentLesson.id
-    );
+    isCompleted(currentLesson.id);
 
 
   const button =
@@ -1130,7 +888,7 @@ function updateCompletionUI(){
 
 
 /* =====================================================
-   LOAD USER
+   USER
 ===================================================== */
 
 async function loadUser(){
@@ -1174,7 +932,7 @@ async function loadUser(){
 
 
 /* =====================================================
-   LOAD CURRENT LESSON
+   LOAD LESSON
 ===================================================== */
 
 async function loadCurrentLesson(){
@@ -1199,25 +957,18 @@ async function loadCurrentLesson(){
     await client
       .from("resources")
       .select("*")
-      .eq(
-        "id",
-        id
-      )
+      .eq("id",id)
       .maybeSingle();
 
 
   if(error){
 
-    console.error(
-      error
-    );
-
+    console.error(error);
 
     showStatus(
       "Unable to load this lesson from the database.",
       "error"
     );
-
 
     showNoLesson();
 
@@ -1235,15 +986,11 @@ async function loadCurrentLesson(){
   }
 
 
-  currentLesson =
-    data;
-
+  currentLesson = data;
 
   renderLesson();
 
-
   await loadLessonNavigation();
-
 
   updateCompletionUI();
 
@@ -1279,48 +1026,27 @@ function renderLesson(){
       "lessonMeta"
     );
 
-
-  meta.innerHTML =
-    "";
+  meta.innerHTML = "";
 
 
-  const values = [
-
+  [
     lesson.subject,
-
     lesson.level,
-
     lesson.class_level,
-
     lesson.term,
-
     lesson.type
+  ].forEach(value=>{
 
-  ];
+    if(!value)return;
 
+    const span =
+      document.createElement("span");
 
-  values.forEach(
-    function(value){
+    span.textContent = value;
 
-      if(!value)return;
+    meta.appendChild(span);
 
-
-      const span =
-        document.createElement(
-          "span"
-        );
-
-
-      span.textContent =
-        value;
-
-
-      meta.appendChild(
-        span
-      );
-
-    }
-  );
+  });
 
 
   const content =
@@ -1345,13 +1071,7 @@ function renderLesson(){
 
   if(content){
 
-    /*
-      Content from the resources table
-      is expected to contain HTML.
-    */
-
-    box.innerHTML =
-      content;
+    box.innerHTML = content;
 
   }else{
 
@@ -1359,8 +1079,7 @@ function renderLesson(){
 
       <h2>
         ${escapeHTML(
-          lesson.title ||
-          "Lesson"
+          lesson.title || "Lesson"
         )}
       </h2>
 
@@ -1385,9 +1104,7 @@ function renderLesson(){
 
             <a
               class="file-button"
-              href="${escapeAttribute(
-                fileUrl
-              )}"
+              href="${escapeAttribute(fileUrl)}"
               target="_blank"
               rel="noopener noreferrer">
 
@@ -1400,8 +1117,7 @@ function renderLesson(){
         `
         : `
           <p>
-            Lesson content has not been
-            added yet.
+            Lesson content has not been added yet.
           </p>
         `
       }
@@ -1445,14 +1161,6 @@ function showNoLesson(){
         This page needs a lesson ID.
       </p>
 
-      <p>
-        Return to the Student Dashboard
-        and open a resource marked as
-        <strong>LESSON</strong>.
-      </p>
-
-      <br>
-
       <a
         class="back-button"
         href="student.html">
@@ -1469,7 +1177,7 @@ function showNoLesson(){
 
 
 /* =====================================================
-   LOAD LESSON NAVIGATION
+   NAVIGATION
 ===================================================== */
 
 async function loadLessonNavigation(){
@@ -1483,21 +1191,15 @@ async function loadLessonNavigation(){
       .select("*")
       .order(
         "created_at",
-        {
-          ascending:true
-        }
+        {ascending:true}
       );
 
 
   if(error){
 
-    console.warn(
-      "Navigation error:",
-      error
-    );
+    console.warn(error);
 
-    allLessons =
-      [currentLesson];
+    allLessons = [currentLesson];
 
     updateNavigation();
 
@@ -1507,23 +1209,19 @@ async function loadLessonNavigation(){
 
 
   allLessons =
-    (data || [])
-      .filter(
-        function(item){
+    (data || []).filter(item=>{
 
-          const type =
-            String(
-              item.type || ""
-            ).toLowerCase();
+      const type =
+        String(
+          item.type || ""
+        ).toLowerCase();
 
-
-          return (
-            type === "lesson" ||
-            type === "course"
-          );
-
-        }
+      return (
+        type === "lesson" ||
+        type === "course"
       );
+
+    });
 
 
   if(
@@ -1534,9 +1232,7 @@ async function loadLessonNavigation(){
     )
   ){
 
-    allLessons.push(
-      currentLesson
-    );
+    allLessons.push(currentLesson);
 
   }
 
@@ -1546,26 +1242,13 @@ async function loadLessonNavigation(){
 }
 
 
-/* =====================================================
-   NAVIGATION
-===================================================== */
-
 function updateNavigation(){
-
-  if(!currentLesson){
-
-    return;
-
-  }
-
 
   const index =
     allLessons.findIndex(
       item =>
         String(item.id) ===
-        String(
-          currentLesson.id
-        )
+        String(currentLesson.id)
     );
 
 
@@ -1596,9 +1279,7 @@ function updateNavigation(){
 
   if(previous){
 
-    previousButton.disabled =
-      false;
-
+    previousButton.disabled = false;
 
     document.getElementById(
       "previousTitle"
@@ -1606,21 +1287,14 @@ function updateNavigation(){
       previous.title ||
       "Previous lesson";
 
-
     previousButton.onclick =
-      function(){
-
-        openLesson(
-          previous.id
-        );
-
+      ()=>{
+        openLesson(previous.id);
       };
 
   }else{
 
-    previousButton.disabled =
-      true;
-
+    previousButton.disabled = true;
 
     document.getElementById(
       "previousTitle"
@@ -1632,9 +1306,7 @@ function updateNavigation(){
 
   if(next){
 
-    nextButton.disabled =
-      false;
-
+    nextButton.disabled = false;
 
     document.getElementById(
       "nextTitle"
@@ -1642,21 +1314,14 @@ function updateNavigation(){
       next.title ||
       "Next lesson";
 
-
     nextButton.onclick =
-      function(){
-
-        openLesson(
-          next.id
-        );
-
+      ()=>{
+        openLesson(next.id);
       };
 
   }else{
 
-    nextButton.disabled =
-      true;
-
+    nextButton.disabled = true;
 
     document.getElementById(
       "nextTitle"
@@ -1668,17 +1333,11 @@ function updateNavigation(){
 }
 
 
-/* =====================================================
-   OPEN LESSON
-===================================================== */
-
 function openLesson(id){
 
   window.location.href =
     "lesson.html?id=" +
-    encodeURIComponent(
-      id
-    );
+    encodeURIComponent(id);
 
 }
 
@@ -1689,14 +1348,10 @@ function openLesson(id){
 
 function updateOverallProgress(){
 
-  if(!currentUser){
-
-    return;
-
-  }
-
-
-  if(!allLessons.length){
+  if(
+    !currentUser ||
+    !allLessons.length
+  ){
 
     return;
 
@@ -1710,28 +1365,20 @@ function updateOverallProgress(){
   const completed =
     allLessons.filter(
       lesson =>
-        isCompleted(
-          lesson.id
-        )
+        isCompleted(lesson.id)
     ).length;
 
 
   const percentage =
     Math.round(
-      (
-        completed /
-        total
-      ) * 100
+      completed / total * 100
     );
 
 
   localStorage.setItem(
     "AGU_PROGRESS_" +
     currentUser.id,
-
-    String(
-      percentage
-    )
+    String(percentage)
   );
 
 }
@@ -1743,46 +1390,40 @@ function updateOverallProgress(){
 
 function escapeHTML(value){
 
-  return String(
-    value ?? ""
-  ).replace(
-    /[&<>"']/g,
-    function(character){
+  return String(value ?? "")
+    .replace(
+      /[&<>"']/g,
+      character=>{
 
-      const entities = {
+        const entities = {
+          "&":"&amp;",
+          "<":"&lt;",
+          ">":"&gt;",
+          '"':"&quot;",
+          "'":"&#039;"
+        };
 
-        "&":"&amp;",
-        "<":"&lt;",
-        ">":"&gt;",
-        '"':"&quot;",
-        "'":"&#039;"
+        return entities[character];
 
-      };
-
-      return entities[
-        character
-      ];
-
-    }
-  );
+      }
+    );
 
 }
 
 
 function escapeAttribute(value){
 
-  return escapeHTML(
-    value
-  ).replace(
-    /`/g,
-    "&#096;"
-  );
+  return escapeHTML(value)
+    .replace(
+      /`/g,
+      "&#096;"
+    );
 
 }
 
 
 /* =====================================================
-   COMPLETE BUTTON
+   COMPLETE BUTTON EVENT
 ===================================================== */
 
 document

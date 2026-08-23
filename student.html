@@ -1,9 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-
 <meta charset="utf-8">
-
 <meta name="viewport" content="width=device-width,initial-scale=1">
 
 <title>AGULIBRARY — Student Dashboard</title>
@@ -11,115 +9,108 @@
 <link rel="stylesheet" href="style.css">
 
 <style>
+*{box-sizing:border-box}
 
-*{
-  box-sizing:border-box;
-}
-
-html{
-  scroll-behavior:smooth;
-}
+html{scroll-behavior:smooth}
 
 body{
   margin:0;
   background:#171918;
   color:#e8f3ee;
-  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif
 }
 
 .student-header{
   position:sticky;
   top:0;
   z-index:1000;
-  min-height:100px;
+  min-height:90px;
   display:flex;
   align-items:center;
   justify-content:space-between;
   gap:15px;
-  padding:15px 5%;
+  padding:14px 5%;
   background:#202120;
-  border-bottom:1px solid #46504b;
+  border-bottom:1px solid #46504b
 }
 
 .student-brand{
   display:flex;
   align-items:center;
-  gap:14px;
+  gap:14px
 }
 
-.student-brand .mark{
-  width:68px;
-  height:68px;
-  border-radius:20px;
+.mark{
+  width:60px;
+  height:60px;
   display:grid;
   place-items:center;
+  border-radius:20px;
   background:#004d16;
   color:#fff;
-  font-size:26px;
-  font-weight:900;
+  font-size:24px;
+  font-weight:900
 }
 
 .student-brand b{
   display:block;
-  font-size:25px;
+  font-size:23px
 }
 
 .student-brand small{
   display:block;
-  margin-top:5px;
+  margin-top:4px;
   color:#9ca9a4;
-  font-size:10px;
-  letter-spacing:2px;
+  font-size:9px;
+  letter-spacing:2px
 }
 
 .header-actions{
   display:flex;
   align-items:center;
-  gap:10px;
+  gap:10px
 }
 
 .back{
   text-decoration:none;
   color:#70e7bc;
-  font-weight:800;
+  font-weight:800
 }
 
 .logout{
   border:1px solid #555b58;
   background:#555654;
   color:#78e8c0;
-  padding:13px 20px;
+  padding:12px 19px;
   border-radius:14px;
   font-weight:800;
-  cursor:pointer;
+  cursor:pointer
 }
 
 .dashboard{
   width:min(1200px,100%);
   margin:auto;
-  padding:35px 5% 80px;
+  padding:35px 5% 80px
 }
 
-.student-message{
+.message{
   display:none;
   padding:14px 18px;
   margin-bottom:20px;
   border-radius:14px;
-  font-weight:700;
+  font-weight:800
 }
 
-.student-message.show{
-  display:block;
-}
+.message.show{display:block}
 
-.student-message.success{
+.message.success{
   background:#073c25;
-  color:#73e8bd;
+  color:#73e8bd
 }
 
-.student-message.error{
+.message.error{
   background:#421d1d;
-  color:#ff9d9d;
+  color:#ff9d9d
 }
 
 .welcome{
@@ -127,32 +118,27 @@ body{
   border:1px solid #176b40;
   border-radius:30px;
   padding:40px;
-  margin-bottom:25px;
+  margin-bottom:25px
 }
 
-.welcome small{
-  color:#73e8bd;
+.welcome small,
+.eyebrow{
+  color:#70e7bc;
   letter-spacing:3px;
-  font-weight:900;
+  font-weight:900
 }
 
 .welcome h1{
   margin:15px 0;
-  font-size:clamp(34px,6vw,56px);
-  color:#effff8;
+  font-size:clamp(36px,6vw,58px);
+  color:#effff8
 }
 
 .welcome p{
   max-width:720px;
   color:#c4d8cf;
   line-height:1.7;
-  font-size:17px;
-}
-
-.student-profile-section{
-  display:grid;
-  gap:22px;
-  margin-bottom:25px;
+  font-size:17px
 }
 
 .profile-card,
@@ -163,27 +149,28 @@ body{
   background:#202120;
   border:1px solid #4b5550;
   border-radius:28px;
+  margin-bottom:22px
 }
 
 .profile-card{
   display:flex;
   align-items:center;
   gap:25px;
-  padding:32px;
+  padding:32px
 }
 
 .profile-avatar{
   width:100px;
   height:100px;
-  flex-shrink:0;
   display:grid;
   place-items:center;
+  flex-shrink:0;
   border-radius:28px;
   background:#003d12;
   border:1px solid #075c27;
   color:#f0fff8;
   font-size:32px;
-  font-weight:900;
+  font-weight:900
 }
 
 .profile-info small,
@@ -193,41 +180,41 @@ body{
   color:#70e7bc;
   font-size:12px;
   font-weight:900;
-  letter-spacing:3px;
+  letter-spacing:3px
 }
 
 .profile-info h2{
   margin:8px 0;
-  font-size:34px;
+  font-size:34px
 }
 
 .profile-info p{
   margin:0;
   color:#a9b7b1;
   font-size:17px;
-  word-break:break-word;
+  word-break:break-word
 }
 
 .progress-card{
-  padding:32px;
+  padding:32px
 }
 
 .progress-header{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  gap:20px;
+  gap:20px
 }
 
 .progress-header h2{
   margin:12px 0 0;
-  font-size:36px;
+  font-size:36px
 }
 
 #progressPercent{
   color:#70e7bc;
-  font-size:46px;
-  font-weight:900;
+  font-size:52px;
+  font-weight:900
 }
 
 .progress-bar{
@@ -235,7 +222,7 @@ body{
   margin-top:25px;
   background:#10271d;
   border-radius:50px;
-  overflow:hidden;
+  overflow:hidden
 }
 
 .progress-fill{
@@ -243,31 +230,33 @@ body{
   width:0;
   background:#087a4b;
   border-radius:50px;
-  transition:width .5s ease;
+  transition:width .5s ease
 }
 
 .progress-card>p{
   color:#a9b7b1;
-  line-height:1.6;
+  line-height:1.6
 }
 
 .subjects-card{
-  padding:32px;
+  padding:32px
 }
 
-.subjects-card h2{
+.subjects-card h2,
+.achievement-card h2,
+.library-section h2{
   margin:12px 0 22px;
-  font-size:36px;
+  font-size:36px
 }
 
 .subjects-grid{
   display:grid;
   grid-template-columns:repeat(4,1fr);
-  gap:12px;
+  gap:12px
 }
 
 .subject-item{
-  min-height:95px;
+  min-height:105px;
   padding:16px;
   display:flex;
   flex-direction:column;
@@ -280,38 +269,31 @@ body{
   border-radius:16px;
   cursor:pointer;
   text-align:left;
-  transition:.2s;
+  transition:.2s
 }
 
 .subject-item:hover,
 .subject-item.active{
   background:#087a4b;
   border-color:#70e7bc;
-  transform:translateY(-3px);
+  transform:translateY(-3px)
 }
 
-.subject-icon{
-  font-size:28px;
-}
+.subject-icon{font-size:29px}
 
 .subject-name{
   font-weight:900;
-  font-size:15px;
+  font-size:15px
 }
 
 .achievement-card{
-  padding:32px;
-}
-
-.achievement-card h2{
-  margin:12px 0 22px;
-  font-size:36px;
+  padding:32px
 }
 
 .badges{
   display:grid;
   grid-template-columns:repeat(4,1fr);
-  gap:14px;
+  gap:14px
 }
 
 .badge{
@@ -325,47 +307,47 @@ body{
   border-radius:20px;
   background:#1b1e1c;
   font-size:42px;
-  text-align:center;
+  text-align:center
 }
 
 .badge span{
   color:#aebbb6;
   font-size:14px;
-  font-weight:800;
+  font-weight:800
 }
 
 .stats{
   display:grid;
   grid-template-columns:repeat(4,1fr);
   gap:15px;
-  margin-bottom:25px;
+  margin-bottom:25px
 }
 
 .stat{
-  min-height:155px;
+  min-height:145px;
   padding:25px;
   background:#202120;
   border:1px solid #4b5550;
-  border-radius:22px;
+  border-radius:22px
 }
 
 .stat strong{
   display:block;
   color:#70e7bc;
-  font-size:42px;
-  margin-bottom:12px;
+  font-size:40px;
+  margin-bottom:10px
 }
 
 .stat span{
   color:#a8b4af;
-  font-size:15px;
+  font-size:15px
 }
 
 .dashboard-grid{
   display:grid;
   grid-template-columns:repeat(4,1fr);
   gap:15px;
-  margin-bottom:25px;
+  margin-bottom:25px
 }
 
 .dashboard-card{
@@ -374,96 +356,80 @@ body{
   border:1px solid #4b5550;
   border-radius:22px;
   text-decoration:none;
-  color:#eaf5f1;
-  transition:.2s;
+  color:#eaf5f1
 }
 
 .dashboard-card:hover{
-  transform:translateY(-3px);
-  border-color:#70e7bc;
+  border-color:#70e7bc
 }
 
 .dashboard-card .icon{
   font-size:32px;
-  margin-bottom:12px;
+  margin-bottom:12px
 }
 
-.dashboard-card b{
-  display:block;
-}
+.dashboard-card b{display:block}
 
 .dashboard-card span{
   display:block;
   margin-top:7px;
   color:#9eaba5;
   line-height:1.5;
-  font-size:13px;
+  font-size:13px
 }
 
 .library-section{
-  padding:32px;
-  margin-bottom:25px;
-}
-
-.library-section h2{
-  margin:10px 0 20px;
-  font-size:35px;
-}
-
-.eyebrow{
-  color:#70e7bc;
-  font-size:11px;
-  font-weight:900;
-  letter-spacing:3px;
+  padding:32px
 }
 
 .search-box{
   display:flex;
   gap:10px;
-  margin:20px 0;
+  margin:20px 0
 }
 
 .search-box input{
   flex:1;
   min-width:0;
-  padding:15px;
+  padding:16px;
   background:#181a19;
   color:#eef8f4;
   border:1px solid #4b5550;
   border-radius:13px;
   outline:none;
+  font-size:16px
 }
 
 .search-box input:focus{
-  border-color:#70e7bc;
+  border-color:#70e7bc
 }
 
 .search-box button{
   border:0;
-  padding:0 22px;
+  padding:0 25px;
   border-radius:13px;
   background:#087a4b;
   color:#fff;
   font-weight:800;
-  cursor:pointer;
+  cursor:pointer
 }
 
 .selected-subject{
   display:none;
   margin:10px 0 18px;
-  padding:13px 16px;
+  padding:14px 17px;
   background:#073c25;
   border:1px solid #176b40;
   border-radius:13px;
   color:#70e7bc;
-  font-weight:800;
+  font-weight:800
 }
 
 .selected-subject.show{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  gap:10px;
+  gap:10px
 }
 
 .clear-subject{
@@ -471,50 +437,48 @@ body{
   background:transparent;
   color:#fff;
   font-weight:800;
-  cursor:pointer;
+  cursor:pointer
 }
 
 .filter-row{
   display:flex;
   gap:8px;
   overflow-x:auto;
-  padding-bottom:12px;
+  padding-bottom:12px
 }
 
 .filter{
   flex-shrink:0;
-  padding:9px 15px;
+  padding:10px 16px;
   border-radius:22px;
   border:1px solid #4b5550;
   background:#292b2a;
   color:#a9b7b1;
   font-weight:800;
-  cursor:pointer;
+  cursor:pointer
 }
 
 .filter.active{
   background:#087a4b;
   border-color:#087a4b;
-  color:#fff;
+  color:#fff
 }
 
 .resource-grid{
   display:grid;
   grid-template-columns:repeat(3,1fr);
-  gap:16px;
+  gap:16px
 }
 
 .resource-card{
   padding:16px;
   background:#1b1d1c;
   border:1px solid #4b5550;
-  border-radius:20px;
-  transition:.2s;
+  border-radius:20px
 }
 
 .resource-card:hover{
-  transform:translateY(-3px);
-  border-color:#70e7bc;
+  border-color:#70e7bc
 }
 
 .resource-icon{
@@ -524,55 +488,55 @@ body{
   margin-bottom:13px;
   border-radius:15px;
   background:#0c2418;
-  font-size:46px;
+  font-size:46px
 }
 
 .resource-card small{
   color:#70e7bc;
-  font-weight:900;
+  font-weight:900
 }
 
 .resource-card h3{
   color:#eaf5f1;
   margin:7px 0;
-  font-size:18px;
+  font-size:18px
 }
 
 .resource-card p{
   min-height:40px;
   color:#9eaba5;
   line-height:1.5;
-  font-size:13px;
+  font-size:13px
 }
 
 .resource-actions{
   display:flex;
-  gap:8px;
+  gap:8px
 }
 
 .open-resource{
   flex:1;
   border:0;
-  padding:11px;
+  padding:12px;
   border-radius:11px;
   background:#087a4b;
   color:#fff;
   font-weight:800;
-  cursor:pointer;
+  cursor:pointer
 }
 
 .save-resource{
-  width:48px;
+  width:50px;
   border:1px solid #4b5550;
   border-radius:11px;
   background:#292b2a;
   color:#fff;
-  font-size:21px;
-  cursor:pointer;
+  font-size:22px;
+  cursor:pointer
 }
 
 .save-resource.saved{
-  background:#44252d;
+  background:#44252d
 }
 
 .empty-message{
@@ -583,11 +547,12 @@ body{
   border:1px dashed #4b5550;
   border-radius:18px;
   color:#9eaba5;
+  line-height:1.7
 }
 
 .recent-list{
   display:grid;
-  gap:10px;
+  gap:10px
 }
 
 .recent-item{
@@ -597,25 +562,23 @@ body{
   padding:15px;
   background:#1b1d1c;
   border:1px solid #4b5550;
-  border-radius:15px;
+  border-radius:15px
 }
 
-.recent-icon{
-  font-size:30px;
-}
+.recent-icon{font-size:30px}
 
 .recent-info{
   flex:1;
-  min-width:0;
+  min-width:0
 }
 
 .recent-info strong{
   display:block;
-  margin-bottom:4px;
+  margin-bottom:4px
 }
 
 .recent-info small{
-  color:#89968f;
+  color:#89968f
 }
 
 .recent-open{
@@ -625,123 +588,91 @@ body{
   background:#087a4b;
   color:#fff;
   font-weight:800;
-  cursor:pointer;
+  cursor:pointer
 }
 
 @media(max-width:1000px){
-
-  .subjects-grid{
-    grid-template-columns:repeat(3,1fr);
-  }
-
-  .stats,
-  .dashboard-grid{
-    grid-template-columns:repeat(2,1fr);
-  }
-
-  .resource-grid{
-    grid-template-columns:repeat(2,1fr);
-  }
-
-  .badges{
-    grid-template-columns:repeat(2,1fr);
-  }
+  .subjects-grid{grid-template-columns:repeat(3,1fr)}
+  .stats,.dashboard-grid{grid-template-columns:repeat(2,1fr)}
+  .resource-grid{grid-template-columns:repeat(2,1fr)}
+  .badges{grid-template-columns:repeat(2,1fr)}
 }
 
 @media(max-width:600px){
 
   .student-header{
     min-height:85px;
-    padding:12px 5%;
+    padding:12px 5%
   }
 
-  .student-brand .mark{
+  .mark{
     width:52px;
     height:52px;
-    font-size:20px;
+    font-size:20px
   }
 
-  .student-brand b{
-    font-size:18px;
-  }
+  .student-brand b{font-size:18px}
 
-  .student-brand small{
-    font-size:7px;
-  }
+  .student-brand small{font-size:7px}
 
-  .back{
-    display:none;
-  }
+  .back{display:none}
 
   .logout{
     padding:10px 13px;
-    font-size:12px;
+    font-size:12px
   }
 
   .dashboard{
-    padding:25px 5% 60px;
+    padding:25px 5% 60px
   }
 
-  .welcome{
-    padding:28px;
-  }
+  .welcome{padding:28px}
 
-  .welcome h1{
-    font-size:39px;
-  }
+  .welcome h1{font-size:40px}
 
-  .profile-card{
-    padding:25px;
-  }
+  .profile-card{padding:25px}
 
   .profile-avatar{
     width:78px;
     height:78px;
-    font-size:25px;
+    font-size:25px
   }
 
-  .profile-info h2{
-    font-size:26px;
-  }
+  .profile-info h2{font-size:26px}
 
   .progress-card,
   .subjects-card,
   .achievement-card,
   .library-section{
-    padding:25px;
+    padding:25px
   }
 
   .progress-header h2,
   .subjects-card h2,
   .achievement-card h2,
   .library-section h2{
-    font-size:29px;
+    font-size:29px
   }
 
   .subjects-grid,
   .stats,
   .dashboard-grid,
   .resource-grid{
-    grid-template-columns:1fr;
+    grid-template-columns:1fr
   }
 
   .badges{
-    grid-template-columns:repeat(2,1fr);
+    grid-template-columns:repeat(2,1fr)
   }
 
   .search-box{
-    flex-direction:column;
+    flex-direction:column
   }
 
   .search-box button{
-    padding:14px;
-  }
-
-  .recent-item{
-    align-items:flex-start;
+    padding:14px
   }
 }
-
 </style>
 </head>
 
@@ -751,36 +682,31 @@ body{
 
 <header class="student-header">
 
-<div class="student-brand">
+  <div class="student-brand">
 
-<div class="mark" id="headerAvatar">
-AG
-</div>
+    <div class="mark" id="headerAvatar">
+      AG
+    </div>
 
-<div>
+    <div>
+      <b>AGULIBRARY</b>
+      <small>STUDENT DASHBOARD</small>
+    </div>
 
-<b>AGULIBRARY</b>
-
-<small>
-STUDENT DASHBOARD
-</small>
-
-</div>
-
-</div>
+  </div>
 
 
-<div class="header-actions">
+  <div class="header-actions">
 
-<a class="back" href="index.html">
-← Library
-</a>
+    <a class="back" href="index.html">
+      ← Library
+    </a>
 
-<button class="logout" id="logoutButton">
-Sign out
-</button>
+    <button class="logout" id="logoutButton">
+      Sign out
+    </button>
 
-</div>
+  </div>
 
 </header>
 
@@ -788,556 +714,395 @@ Sign out
 <main class="dashboard">
 
 
-<div id="studentMessage" class="student-message"></div>
+<div id="message" class="message"></div>
 
 
 <section class="welcome">
 
-<small>
-STUDENT LEARNING SPACE
-</small>
+  <small>STUDENT LEARNING SPACE</small>
 
-<h1 id="welcomeName">
-Welcome!
-</h1>
+  <h1 id="welcomeName">
+    Welcome!
+  </h1>
 
-<p>
-Your personal AGULIBRARY learning space.
-Explore books, videos, PDFs and educational
-resources from around the world.
-</p>
+  <p>
+    Your personal AGULIBRARY learning space.
+    Explore books, videos, PDFs and educational
+    resources from around the world.
+  </p>
 
 </section>
 
 
-<section class="student-profile-section">
+<section class="profile-card">
 
+  <div class="profile-avatar" id="profileAvatar">
+    AG
+  </div>
 
-<div class="profile-card">
+  <div class="profile-info">
 
-<div class="profile-avatar" id="profileAvatar">
-AG
-</div>
+    <small>MY PROFILE</small>
 
-<div class="profile-info">
+    <h2 id="profileName">
+      Student
+    </h2>
 
-<small>
-MY PROFILE
-</small>
+    <p id="profileEmail">
+      Loading email...
+    </p>
 
-<h2 id="profileName">
-Student
-</h2>
+  </div>
 
-<p id="profileEmail">
-Loading email...
-</p>
+</section>
 
-</div>
 
-</div>
+<section class="progress-card">
 
+  <div class="progress-header">
 
-<div class="progress-card">
+    <div>
+      <small>LEARNING PROGRESS</small>
 
-<div class="progress-header">
+      <h2>
+        Your Learning Journey
+      </h2>
+    </div>
 
-<div>
+    <strong id="progressPercent">
+      0%
+    </strong>
 
-<small>
-LEARNING PROGRESS
-</small>
+  </div>
 
-<h2>
-Your Learning Journey
-</h2>
+  <div class="progress-bar">
 
-</div>
+    <div
+      id="progressFill"
+      class="progress-fill">
+    </div>
 
-<strong id="progressPercent">
-0%
-</strong>
+  </div>
 
-</div>
+  <p id="progressText">
+    Start exploring resources to build your progress.
+  </p>
 
-<div class="progress-bar">
+</section>
 
-<div
-id="progressFill"
-class="progress-fill">
-</div>
 
-</div>
+<section class="subjects-card">
 
-<p id="progressText">
-Start exploring resources to build your progress.
-</p>
+  <small>MY SUBJECTS</small>
 
-</div>
+  <h2>
+    Explore Subjects
+  </h2>
 
 
-<div class="subjects-card">
+  <div class="subjects-grid">
 
-<small>
-MY SUBJECTS
-</small>
 
-<h2>
-Explore Subjects
-</h2>
+    <button class="subject-item" data-subject="Physics">
+      <span class="subject-icon">⚛️</span>
+      <span class="subject-name">Physics</span>
+    </button>
 
 
-<div class="subjects-grid">
+    <button class="subject-item" data-subject="Chemistry">
+      <span class="subject-icon">🧪</span>
+      <span class="subject-name">Chemistry</span>
+    </button>
 
 
-<button class="subject-item" data-subject="Physics">
+    <button class="subject-item" data-subject="Mathematics">
+      <span class="subject-icon">📐</span>
+      <span class="subject-name">Mathematics</span>
+    </button>
 
-<span class="subject-icon">⚛️</span>
 
-<span class="subject-name">
-Physics
-</span>
+    <button class="subject-item" data-subject="Biology">
+      <span class="subject-icon">🧬</span>
+      <span class="subject-name">Biology</span>
+    </button>
 
-</button>
 
+    <button class="subject-item" data-subject="Computer Science">
+      <span class="subject-icon">💻</span>
+      <span class="subject-name">Computer Science</span>
+    </button>
 
-<button class="subject-item" data-subject="Chemistry">
 
-<span class="subject-icon">🧪</span>
+    <button class="subject-item" data-subject="English">
+      <span class="subject-icon">📖</span>
+      <span class="subject-name">English</span>
+    </button>
 
-<span class="subject-name">
-Chemistry
-</span>
 
-</button>
+    <button class="subject-item" data-subject="Economics">
+      <span class="subject-icon">💰</span>
+      <span class="subject-name">Economics</span>
+    </button>
 
 
-<button class="subject-item" data-subject="Mathematics">
+    <button class="subject-item" data-subject="Geography">
+      <span class="subject-icon">🌍</span>
+      <span class="subject-name">Geography</span>
+    </button>
 
-<span class="subject-icon">📐</span>
 
-<span class="subject-name">
-Mathematics
-</span>
+    <button class="subject-item" data-subject="Commerce">
+      <span class="subject-icon">💼</span>
+      <span class="subject-name">Commerce</span>
+    </button>
 
-</button>
 
+    <button class="subject-item" data-subject="History">
+      <span class="subject-icon">🏛️</span>
+      <span class="subject-name">History</span>
+    </button>
 
-<button class="subject-item" data-subject="Biology">
 
-<span class="subject-icon">🧬</span>
+    <button class="subject-item" data-subject="Political Science">
+      <span class="subject-icon">⚖️</span>
+      <span class="subject-name">Political Science</span>
+    </button>
 
-<span class="subject-name">
-Biology
-</span>
 
-</button>
+    <button class="subject-item" data-subject="Psychology">
+      <span class="subject-icon">🧠</span>
+      <span class="subject-name">Psychology</span>
+    </button>
 
 
-<button class="subject-item" data-subject="Computer Science">
+    <button class="subject-item" data-subject="Philosophy">
+      <span class="subject-icon">💭</span>
+      <span class="subject-name">Philosophy</span>
+    </button>
 
-<span class="subject-icon">💻</span>
 
-<span class="subject-name">
-Computer Science
-</span>
+    <button class="subject-item" data-subject="Fine Art">
+      <span class="subject-icon">🎨</span>
+      <span class="subject-name">Fine Art</span>
+    </button>
 
-</button>
 
+  </div>
 
-<button class="subject-item" data-subject="English">
+</section>
 
-<span class="subject-icon">📖</span>
 
-<span class="subject-name">
-English
-</span>
+<section class="achievement-card">
 
-</button>
+  <small>🏆 ACHIEVEMENTS</small>
 
+  <h2>Your Learning Badges</h2>
 
-<button class="subject-item" data-subject="Economics">
+  <div class="badges">
 
-<span class="subject-icon">💰</span>
+    <div class="badge">
+      📚
+      <span>First Resource</span>
+    </div>
 
-<span class="subject-name">
-Economics
-</span>
+    <div class="badge">
+      ❤️
+      <span>Resource Saver</span>
+    </div>
 
-</button>
+    <div class="badge">
+      🕘
+      <span>Active Learner</span>
+    </div>
 
+    <div class="badge">
+      🌍
+      <span>Global Learner</span>
+    </div>
 
-<button class="subject-item" data-subject="Geography">
-
-<span class="subject-icon">🌍</span>
-
-<span class="subject-name">
-Geography
-</span>
-
-</button>
-
-
-<button class="subject-item" data-subject="Commerce">
-
-<span class="subject-icon">💼</span>
-
-<span class="subject-name">
-Commerce
-</span>
-
-</button>
-
-
-<button class="subject-item" data-subject="History">
-
-<span class="subject-icon">🏛️</span>
-
-<span class="subject-name">
-History
-</span>
-
-</button>
-
-
-<button class="subject-item" data-subject="Political Science">
-
-<span class="subject-icon">⚖️</span>
-
-<span class="subject-name">
-Political Science
-</span>
-
-</button>
-
-
-<button class="subject-item" data-subject="Psychology">
-
-<span class="subject-icon">🧠</span>
-
-<span class="subject-name">
-Psychology
-</span>
-
-</button>
-
-
-<button class="subject-item" data-subject="Philosophy">
-
-<span class="subject-icon">💭</span>
-
-<span class="subject-name">
-Philosophy
-</span>
-
-</button>
-
-
-<button class="subject-item" data-subject="Fine Art">
-
-<span class="subject-icon">🎨</span>
-
-<span class="subject-name">
-Fine Art
-</span>
-
-</button>
-
-
-</div>
-
-</div>
-
-
-<div class="achievement-card">
-
-<small>
-🏆 ACHIEVEMENTS
-</small>
-
-<h2>
-Your Learning Badges
-</h2>
-
-<div class="badges">
-
-<div class="badge">
-📚
-<span>First Resource</span>
-</div>
-
-<div class="badge">
-❤️
-<span>Resource Saver</span>
-</div>
-
-<div class="badge">
-🕘
-<span>Active Learner</span>
-</div>
-
-<div class="badge">
-🌍
-<span>Global Learner</span>
-</div>
-
-</div>
-
-</div>
+  </div>
 
 </section>
 
 
 <section class="stats">
 
-<div class="stat">
+  <div class="stat">
+    <strong id="totalResources">0</strong>
+    <span>Available Resources</span>
+  </div>
 
-<strong id="totalResources">
-0
-</strong>
+  <div class="stat">
+    <strong id="savedCount">0</strong>
+    <span>Saved Resources</span>
+  </div>
 
-<span>
-Available Resources
-</span>
+  <div class="stat">
+    <strong id="recentCount">0</strong>
+    <span>Recently Opened</span>
+  </div>
 
-</div>
-
-
-<div class="stat">
-
-<strong id="savedCount">
-0
-</strong>
-
-<span>
-Saved Resources
-</span>
-
-</div>
-
-
-<div class="stat">
-
-<strong id="recentCount">
-0
-</strong>
-
-<span>
-Recently Opened
-</span>
-
-</div>
-
-
-<div class="stat">
-
-<strong>
-🌍
-</strong>
-
-<span>
-Global Learning
-</span>
-
-</div>
+  <div class="stat">
+    <strong>🌍</strong>
+    <span>Global Learning</span>
+  </div>
 
 </section>
 
 
 <section class="dashboard-grid">
 
-<a class="dashboard-card" href="#library">
+  <a class="dashboard-card" href="#library">
+    <div class="icon">📚</div>
+    <b>Browse Library</b>
+    <span>Explore books, PDFs, videos and photos.</span>
+  </a>
 
-<div class="icon">📚</div>
+  <a class="dashboard-card" href="#library">
+    <div class="icon">🎓</div>
+    <b>Subjects</b>
+    <span>Explore all AGULIBRARY subjects.</span>
+  </a>
 
-<b>Browse Library</b>
+  <a class="dashboard-card" href="#saved">
+    <div class="icon">❤️</div>
+    <b>Saved Resources</b>
+    <span>Access resources saved to your account.</span>
+  </a>
 
-<span>
-Explore books, PDFs, videos and photos.
-</span>
-
-</a>
-
-
-<a class="dashboard-card" href="#library">
-
-<div class="icon">🎓</div>
-
-<b>Subjects</b>
-
-<span>
-Explore all AGULIBRARY subjects.
-</span>
-
-</a>
-
-
-<a class="dashboard-card" href="#saved">
-
-<div class="icon">❤️</div>
-
-<b>Saved Resources</b>
-
-<span>
-Access resources saved to your account.
-</span>
-
-</a>
-
-
-<a class="dashboard-card" href="#recent">
-
-<div class="icon">🕘</div>
-
-<b>Recent Learning</b>
-
-<span>
-Continue resources you recently opened.
-</span>
-
-</a>
+  <a class="dashboard-card" href="#recent">
+    <div class="icon">🕘</div>
+    <b>Recent Learning</b>
+    <span>Continue resources you recently opened.</span>
+  </a>
 
 </section>
 
 
 <section id="library" class="library-section">
 
-<small class="eyebrow">
-DIGITAL LIBRARY
-</small>
+  <small class="eyebrow">
+    DIGITAL LIBRARY
+  </small>
 
-<h2>
-Explore Learning Resources
-</h2>
-
-
-<div
-id="selectedSubject"
-class="selected-subject">
-
-<span id="selectedSubjectText"></span>
-
-<button
-id="clearSubject"
-class="clear-subject">
-
-✕ Clear
-
-</button>
-
-</div>
+  <h2>
+    Explore Learning Resources
+  </h2>
 
 
-<div class="search-box">
+  <div
+    id="selectedSubject"
+    class="selected-subject">
 
-<input
-id="studentSearch"
-type="search"
-placeholder="Search books, Physics, Economics, Geography...">
+    <span id="selectedSubjectText"></span>
 
-<button id="searchButton">
-Search
-</button>
+    <button
+      id="clearSubject"
+      class="clear-subject">
+      ✕ Clear
+    </button>
 
-</div>
-
-
-<div class="filter-row">
-
-<button
-class="filter active"
-data-filter="all">
-All
-</button>
-
-<button
-class="filter"
-data-filter="book">
-📚 Books
-</button>
-
-<button
-class="filter"
-data-filter="pdf">
-📄 PDFs
-</button>
-
-<button
-class="filter"
-data-filter="video">
-🎥 Videos
-</button>
-
-<button
-class="filter"
-data-filter="photo">
-🖼️ Photos
-</button>
-
-<button
-class="filter"
-data-filter="lesson">
-📖 Lessons
-</button>
-
-</div>
+  </div>
 
 
-<div
-id="studentResourceGrid"
-class="resource-grid">
+  <div class="search-box">
 
-<div class="empty-message">
-Loading learning resources...
-</div>
+    <input
+      id="studentSearch"
+      type="search"
+      placeholder="Search books, Physics, Economics, Geography...">
 
-</div>
+    <button id="searchButton">
+      Search
+    </button>
+
+  </div>
+
+
+  <div class="filter-row">
+
+    <button class="filter active" data-filter="all">
+      All
+    </button>
+
+    <button class="filter" data-filter="book">
+      📚 Books
+    </button>
+
+    <button class="filter" data-filter="pdf">
+      📄 PDFs
+    </button>
+
+    <button class="filter" data-filter="video">
+      🎥 Videos
+    </button>
+
+    <button class="filter" data-filter="photo">
+      🖼️ Photos
+    </button>
+
+    <button class="filter" data-filter="lesson">
+      📖 Lessons
+    </button>
+
+  </div>
+
+
+  <div
+    id="resourceGrid"
+    class="resource-grid">
+
+    <div class="empty-message">
+      Loading learning resources...
+    </div>
+
+  </div>
 
 </section>
 
 
 <section id="saved" class="library-section">
 
-<small class="eyebrow">
-MY COLLECTION
-</small>
+  <small class="eyebrow">
+    MY COLLECTION
+  </small>
 
-<h2>
-❤️ Saved Resources
-</h2>
+  <h2>
+    ❤️ Saved Resources
+  </h2>
 
-<div
-id="savedGrid"
-class="resource-grid">
+  <div
+    id="savedGrid"
+    class="resource-grid">
 
-<div class="empty-message">
-Loading saved resources...
-</div>
+    <div class="empty-message">
+      Loading saved resources...
+    </div>
 
-</div>
+  </div>
 
 </section>
 
 
 <section id="recent" class="library-section">
 
-<small class="eyebrow">
-LEARNING HISTORY
-</small>
+  <small class="eyebrow">
+    LEARNING HISTORY
+  </small>
 
-<h2>
-🕘 Recently Opened
-</h2>
+  <h2>
+    🕘 Recently Opened
+  </h2>
 
-<div
-id="recentList"
-class="recent-list">
+  <div
+    id="recentList"
+    class="recent-list">
 
-<div class="empty-message">
-Loading recent resources...
-</div>
+    <div class="empty-message">
+      Loading recent resources...
+    </div>
 
-</div>
+  </div>
 
 </section>
 
@@ -1346,1597 +1111,1599 @@ Loading recent resources...
 
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <script src="config.js"></script>
-
 <script src="supabase.js"></script>
 
 
 <script>
 
-const client =
-typeof getSupabase === "function"
-? getSupabase()
-: null;
+let client =
+  typeof getSupabase === "function"
+    ? getSupabase()
+    : null;
+
+let currentUser = null;
+
+let resources = [];
+
+let savedResourceIds = [];
+
+let recentRows = [];
+
+let currentFilter = "all";
+
+let selectedSubject = "";
 
 
-let currentUser=null;
-
-let resources=[];
-
-let savedResourceIds=[];
-
-let recentRows=[];
-
-let currentFilter="all";
-
-let selectedSubject="";
-
-
-/* =========================================================
+/* ================================
    MESSAGE
-========================================================= */
+================================ */
 
-function showMessage(message,type="success"){
+function showMessage(text,type="success"){
 
-const box=
-document.getElementById("studentMessage");
+  const box =
+    document.getElementById("message");
 
-if(!box)return;
+  box.textContent = text;
 
-box.textContent=message;
+  box.className =
+    "message show " + type;
 
-box.className=
-"student-message show "+type;
-
-setTimeout(()=>{
-
-box.classList.remove("show");
-
-},3500);
+  setTimeout(()=>{
+    box.className = "message";
+  },3500);
 
 }
 
 
-/* =========================================================
+/* ================================
    ESCAPE
-========================================================= */
+================================ */
 
 function escapeHTML(value){
 
-return String(value ?? "")
-.replace(
-/[&<>"']/g,
-character=>{
+  return String(value ?? "")
+    .replace(
+      /[&<>"']/g,
+      character => {
 
-const entities={
+        const entities = {
+          "&":"&amp;",
+          "<":"&lt;",
+          ">":"&gt;",
+          '"':"&quot;",
+          "'":"&#039;"
+        };
 
-"&":"&amp;",
-"<":"&lt;",
-">":"&gt;",
-'"':"&quot;",
-"'":"&#039;"
+        return entities[character];
 
-};
-
-return entities[character];
-
-});
+      }
+    );
 
 }
 
 
-/* =========================================================
-   ICONS
-========================================================= */
+/* ================================
+   ICON
+================================ */
 
 function getIcon(type){
 
-const icons={
+  const icons = {
 
-book:"📚",
-pdf:"📄",
-video:"🎥",
-photo:"🖼️",
-image:"🖼️",
-course:"🎓",
-lesson:"📖"
+    book:"📚",
+    pdf:"📄",
+    video:"🎥",
+    photo:"🖼️",
+    image:"🖼️",
+    course:"🎓",
+    lesson:"📖"
 
-};
+  };
 
-return icons[
-String(type || "").toLowerCase()
-] || "📘";
-
-}
-
-
-/* =========================================================
-   RESOURCE ID
-========================================================= */
-
-function resourceId(resource){
-
-return String(resource.id);
+  return (
+    icons[
+      String(type || "").toLowerCase()
+    ] || "📘"
+  );
 
 }
 
 
-/* =========================================================
+/* ================================
    PROFILE
-========================================================= */
+================================ */
 
-function loadStudentProfile(user){
+function loadProfile(user){
 
-const metadata=
-user.user_metadata || {};
+  const metadata =
+    user.user_metadata || {};
 
-const fullName=
-metadata.full_name ||
-metadata.name ||
-metadata.display_name ||
-user.email?.split("@")[0] ||
-"Student";
+  const name =
+    metadata.full_name ||
+    metadata.name ||
+    metadata.display_name ||
+    user.email?.split("@")[0] ||
+    "Student";
 
-const email=
-user.email ||
-"No email available";
-
-const initials=
-fullName
-.trim()
-.split(/\s+/)
-.slice(0,2)
-.map(
-word =>
-word.charAt(0).toUpperCase()
-)
-.join("") || "AG";
+  const initials =
+    name
+      .trim()
+      .split(/\s+/)
+      .slice(0,2)
+      .map(x=>x[0].toUpperCase())
+      .join("") || "AG";
 
 
-document.getElementById(
-"headerAvatar"
-).textContent=initials;
+  document.getElementById(
+    "headerAvatar"
+  ).textContent = initials;
 
 
-document.getElementById(
-"welcomeName"
-).textContent=
-"Welcome, "+fullName+"!";
+  document.getElementById(
+    "profileAvatar"
+  ).textContent = initials;
 
 
-document.getElementById(
-"profileName"
-).textContent=fullName;
+  document.getElementById(
+    "welcomeName"
+  ).textContent =
+    "Welcome, " + name + "!";
 
 
-document.getElementById(
-"profileEmail"
-).textContent=email;
+  document.getElementById(
+    "profileName"
+  ).textContent = name;
 
 
-document.getElementById(
-"profileAvatar"
-).textContent=initials;
+  document.getElementById(
+    "profileEmail"
+  ).textContent =
+    user.email || "";
 
 }
 
 
-/* =========================================================
-   LOGIN
-========================================================= */
+/* ================================
+   SESSION
+================================ */
 
 async function checkStudent(){
 
-if(!client){
+  if(!client){
 
-showMessage(
-"Supabase connection is not available.",
-"error"
-);
+    showMessage(
+      "Supabase connection is not available.",
+      "error"
+    );
 
-return null;
+    return null;
 
-}
+  }
 
-try{
+  const {
+    data,
+    error
+  } =
+    await client.auth.getSession();
 
-const {
-data,
-error
-}=
-await client.auth.getSession();
 
-if(
-error ||
-!data ||
-!data.session
-){
+  if(
+    error ||
+    !data ||
+    !data.session
+  ){
 
-window.location.href="auth.html";
+    window.location.href =
+      "auth.html";
 
-return null;
+    return null;
 
-}
+  }
 
-return data.session.user;
 
-}catch(error){
-
-console.error(error);
-
-showMessage(
-"Unable to check your account.",
-"error"
-);
-
-return null;
-
-}
+  return data.session.user;
 
 }
 
 
-/* =========================================================
-   LOAD STUDENT
-========================================================= */
-
-async function loadStudent(){
-
-const user=
-await checkStudent();
-
-if(!user)return;
-
-currentUser=user;
-
-loadStudentProfile(user);
-
-await loadResources();
-
-await loadSavedResources();
-
-await loadRecentResources();
-
-updateStats();
-
-updateProgress();
-
-}
-
-
-/* =========================================================
-   LOAD RESOURCES
-========================================================= */
+/* ================================
+   RESOURCES
+================================ */
 
 async function loadResources(){
 
-if(!client)return;
-
-const {
-data,
-error
-}=
-await client
-.from("resources")
-.select("*")
-.order(
-"created_at",
-{ascending:false}
-);
+  const {
+    data,
+    error
+  } =
+    await client
+      .from("resources")
+      .select("*")
+      .order(
+        "created_at",
+        {ascending:false}
+      );
 
 
-if(error){
+  if(error){
 
-console.error(error);
+    console.error(error);
 
-resources=[];
+    document.getElementById(
+      "resourceGrid"
+    ).innerHTML = `
 
-document.getElementById(
-"studentResourceGrid"
-).innerHTML=`
+      <div class="empty-message">
+        Unable to load resources.
+      </div>
 
-<div class="empty-message">
-Unable to load learning resources.
-</div>
+    `;
 
-`;
+    return;
 
-updateStats();
+  }
 
-return;
 
-}
+  resources = data || [];
 
-resources=data || [];
+  renderResources(
+    getFilteredResources()
+  );
 
-renderResources(
-getFilteredResources()
-);
+  updateStats();
 
-renderSaved();
-
-updateStats();
-
-updateProgress();
+  updateProgress();
 
 }
 
 
-/* =========================================================
+/* ================================
    SAVED
-========================================================= */
+================================ */
 
-async function loadSavedResources(){
+async function loadSaved(){
 
-if(!currentUser)return;
-
-const {
-data,
-error
-}=
-await client
-.from("student_saved_resources")
-.select("*")
-.eq(
-"user_id",
-currentUser.id
-)
-.order(
-"created_at",
-{ascending:false}
-);
+  const {
+    data,
+    error
+  } =
+    await client
+      .from("student_saved_resources")
+      .select("*")
+      .eq(
+        "user_id",
+        currentUser.id
+      )
+      .order(
+        "created_at",
+        {ascending:false}
+      );
 
 
-if(error){
+  if(error){
 
-console.warn(error);
+    console.warn(error);
 
-savedResourceIds=[];
+    savedResourceIds = [];
 
-renderSaved();
+  }else{
 
-return;
+    savedResourceIds =
+      (data || []).map(
+        row => String(
+          row.resource_id
+        )
+      );
 
-}
+  }
 
-savedResourceIds=
-(data || []).map(
-row =>
-String(row.resource_id)
-);
 
-renderSaved();
+  renderSaved();
 
-renderResources(
-getFilteredResources()
-);
-
-updateStats();
+  updateStats();
 
 }
 
 
-/* =========================================================
+/* ================================
    SAVE
-========================================================= */
-
-async function saveResource(id){
-
-if(!currentUser)return;
-
-if(
-savedResourceIds.includes(
-String(id)
-)
-)return;
-
-const {
-error
-}=
-await client
-.from("student_saved_resources")
-.insert({
-
-user_id:currentUser.id,
-
-resource_id:Number(id)
-
-});
-
-
-if(error){
-
-console.error(error);
-
-showMessage(
-"Unable to save this resource.",
-"error"
-);
-
-return;
-
-}
-
-showMessage(
-"Resource saved successfully."
-);
-
-await loadSavedResources();
-
-}
-
-
-/* =========================================================
-   REMOVE SAVE
-========================================================= */
-
-async function removeSavedResource(id){
-
-if(!currentUser)return;
-
-const {
-error
-}=
-await client
-.from("student_saved_resources")
-.delete()
-.eq(
-"user_id",
-currentUser.id
-)
-.eq(
-"resource_id",
-Number(id)
-);
-
-
-if(error){
-
-console.error(error);
-
-showMessage(
-"Unable to remove this resource.",
-"error"
-);
-
-return;
-
-}
-
-showMessage(
-"Removed from Saved Resources."
-);
-
-await loadSavedResources();
-
-}
-
-
-/* =========================================================
-   TOGGLE SAVE
-========================================================= */
+================================ */
 
 async function toggleSaved(id){
 
-if(
-savedResourceIds.includes(
-String(id)
-)
-){
+  const key = String(id);
 
-await removeSavedResource(id);
+  if(
+    savedResourceIds.includes(key)
+  ){
 
-}else{
+    const {
+      error
+    } =
+      await client
+        .from(
+          "student_saved_resources"
+        )
+        .delete()
+        .eq(
+          "user_id",
+          currentUser.id
+        )
+        .eq(
+          "resource_id",
+          Number(id)
+        );
 
-await saveResource(id);
+
+    if(error){
+
+      console.error(error);
+
+      showMessage(
+        "Unable to remove resource.",
+        "error"
+      );
+
+      return;
+
+    }
+
+    savedResourceIds =
+      savedResourceIds.filter(
+        x => x !== key
+      );
+
+    showMessage(
+      "Removed from saved resources."
+    );
+
+  }else{
+
+    const {
+      error
+    } =
+      await client
+        .from(
+          "student_saved_resources"
+        )
+        .insert({
+
+          user_id:
+            currentUser.id,
+
+          resource_id:
+            Number(id)
+
+        });
+
+
+    if(error){
+
+      console.error(error);
+
+      showMessage(
+        "Unable to save resource.",
+        "error"
+      );
+
+      return;
+
+    }
+
+    savedResourceIds.push(key);
+
+    showMessage(
+      "Resource saved successfully."
+    );
+
+  }
+
+
+  renderResources(
+    getFilteredResources()
+  );
+
+  renderSaved();
+
+  updateStats();
 
 }
 
+
+/* ================================
+   RECENT STORAGE
+================================ */
+
+function recentKey(){
+
+  return (
+    "AGU_RECENT_" +
+    currentUser.id
+  );
+
 }
 
 
-/* =========================================================
+function getRecent(){
+
+  try{
+
+    return JSON.parse(
+      localStorage.getItem(
+        recentKey()
+      ) || "[]"
+    );
+
+  }catch{
+
+    return [];
+
+  }
+
+}
+
+
+function saveRecent(list){
+
+  localStorage.setItem(
+    recentKey(),
+    JSON.stringify(list)
+  );
+
+}
+
+
+/* ================================
+   ADD RECENT
+================================ */
+
+async function addRecent(resource){
+
+  let list = getRecent();
+
+  list =
+    list.filter(
+      x =>
+        String(x.resource_id) !==
+        String(resource.id)
+    );
+
+
+  list.unshift({
+
+    resource_id:
+      resource.id,
+
+    created_at:
+      new Date().toISOString()
+
+  });
+
+
+  list =
+    list.slice(0,10);
+
+
+  saveRecent(list);
+
+  recentRows = list;
+
+  renderRecent();
+
+  updateStats();
+
+
+  try{
+
+    await client
+      .from(
+        "student_recent_resources"
+      )
+      .delete()
+      .eq(
+        "user_id",
+        currentUser.id
+      )
+      .eq(
+        "resource_id",
+        Number(resource.id)
+      );
+
+
+    await client
+      .from(
+        "student_recent_resources"
+      )
+      .insert({
+
+        user_id:
+          currentUser.id,
+
+        resource_id:
+          Number(resource.id)
+
+      });
+
+  }catch(error){
+
+    console.warn(error);
+
+  }
+
+}
+
+
+/* ================================
+   LOAD RECENT
+================================ */
+
+async function loadRecent(){
+
+  const local =
+    getRecent();
+
+  recentRows = local;
+
+  renderRecent();
+
+
+  try{
+
+    const {
+      data
+    } =
+      await client
+        .from(
+          "student_recent_resources"
+        )
+        .select("*")
+        .eq(
+          "user_id",
+          currentUser.id
+        )
+        .order(
+          "created_at",
+          {ascending:false}
+        )
+        .limit(10);
+
+
+    if(data && data.length){
+
+      recentRows = data;
+
+      saveRecent(
+        data.map(row=>({
+
+          resource_id:
+            row.resource_id,
+
+          created_at:
+            row.created_at
+
+        }))
+      );
+
+      renderRecent();
+
+    }
+
+  }catch(error){
+
+    console.warn(error);
+
+  }
+
+
+  updateStats();
+
+}
+
+
+/* ================================
+   IMPORTANT OPEN ROUTING
+================================ */
+
+async function openResource(id){
+
+  const resource =
+    resources.find(
+      item =>
+        String(item.id) ===
+        String(id)
+    );
+
+
+  if(!resource){
+
+    showMessage(
+      "Resource not found.",
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  await addRecent(resource);
+
+
+  const type =
+    String(
+      resource.type || ""
+    ).toLowerCase()
+    .trim();
+
+
+  /*
+    LESSON RESOURCES MUST OPEN
+    THE LESSON READER.
+  */
+
+  if(type === "lesson"){
+
+    window.location.href =
+      "lesson.html?id=" +
+      encodeURIComponent(
+        resource.id
+      );
+
+    return;
+
+  }
+
+
+  /*
+    Courses can also use the lesson reader.
+  */
+
+  if(type === "course"){
+
+    window.location.href =
+      "lesson.html?id=" +
+      encodeURIComponent(
+        resource.id
+      );
+
+    return;
+
+  }
+
+
+  /*
+    PDFs, videos, photos and books
+    continue opening normally.
+  */
+
+  const url =
+    resource.file_url ||
+    resource.url ||
+    "";
+
+
+  if(!url){
+
+    showMessage(
+      "This resource does not have a file attached.",
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  const opened =
+    window.open(
+      url,
+      "_blank"
+    );
+
+
+  if(!opened){
+
+    window.location.href =
+      url;
+
+  }
+
+}
+
+
+/* ================================
+   FILTER
+================================ */
+
+function getFilteredResources(){
+
+  const input =
+    document.getElementById(
+      "studentSearch"
+    );
+
+
+  const query =
+    input
+      ? input.value.toLowerCase().trim()
+      : "";
+
+
+  return resources.filter(
+    resource => {
+
+      const type =
+        String(
+          resource.type || ""
+        ).toLowerCase();
+
+
+      const matchesType =
+        currentFilter === "all" ||
+        type === currentFilter;
+
+
+      const searchable = `
+
+        ${resource.title || ""}
+
+        ${resource.description || ""}
+
+        ${resource.subject || ""}
+
+        ${resource.type || ""}
+
+        ${resource.level || ""}
+
+        ${resource.class_level || ""}
+
+        ${resource.term || ""}
+
+      `.toLowerCase();
+
+
+      const matchesSearch =
+        !query ||
+        searchable.includes(query);
+
+
+      return (
+        matchesType &&
+        matchesSearch
+      );
+
+    }
+  );
+
+}
+
+
+/* ================================
+   RENDER RESOURCES
+================================ */
+
+function renderResources(list){
+
+  const grid =
+    document.getElementById(
+      "resourceGrid"
+    );
+
+
+  if(!list.length){
+
+    grid.innerHTML = `
+
+      <div class="empty-message">
+
+        No resources found.
+
+        <br><br>
+
+        Try another search or subject.
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  grid.innerHTML =
+    list.map(resource=>{
+
+      const id =
+        String(resource.id);
+
+      const saved =
+        savedResourceIds.includes(id);
+
+
+      const type =
+        String(
+          resource.type ||
+          "resource"
+        ).toLowerCase();
+
+
+      const isLesson =
+        type === "lesson" ||
+        type === "course";
+
+
+      return `
+
+        <article
+          class="resource-card">
+
+          <div class="resource-icon">
+            ${getIcon(resource.type)}
+          </div>
+
+
+          <small>
+
+            ${escapeHTML(
+              String(
+                resource.type ||
+                "RESOURCE"
+              ).toUpperCase()
+            )}
+
+          </small>
+
+
+          <h3>
+
+            ${escapeHTML(
+              resource.title ||
+              "Untitled Resource"
+            )}
+
+          </h3>
+
+
+          <p>
+
+            ${escapeHTML(
+              resource.description ||
+              "Educational resource"
+            )}
+
+          </p>
+
+
+          <div class="resource-actions">
+
+            <button
+              class="open-resource"
+              data-action="open"
+              data-id="${id}">
+
+              ${
+                isLesson
+                  ? "📖 Open Lesson →"
+                  : "Tap to Open →"
+              }
+
+            </button>
+
+
+            <button
+              class="save-resource ${
+                saved ? "saved" : ""
+              }"
+              data-action="save"
+              data-id="${id}">
+
+              ${
+                saved ? "❤️" : "♡"
+              }
+
+            </button>
+
+          </div>
+
+        </article>
+
+      `;
+
+    }).join("");
+
+}
+
+
+/* ================================
    RENDER SAVED
-========================================================= */
+================================ */
 
 function renderSaved(){
 
-const grid=
-document.getElementById("savedGrid");
-
-if(!grid)return;
-
-const list=
-resources.filter(
-resource =>
-savedResourceIds.includes(
-resourceId(resource)
-)
-);
+  const grid =
+    document.getElementById(
+      "savedGrid"
+    );
 
 
-if(!list.length){
-
-grid.innerHTML=`
-
-<div class="empty-message">
-
-You have not saved any resources yet.
-
-<br><br>
-
-Tap ♡ on a resource to save it here.
-
-</div>
-
-`;
-
-return;
-
-}
+  const list =
+    resources.filter(
+      resource =>
+        savedResourceIds.includes(
+          String(resource.id)
+        )
+    );
 
 
-grid.innerHTML=
-list.map(resource=>{
+  if(!list.length){
 
-const id=
-resourceId(resource);
+    grid.innerHTML = `
 
-return `
+      <div class="empty-message">
 
-<article class="resource-card">
+        You have not saved any
+        resources yet.
 
-<div class="resource-icon">
+        <br><br>
 
-${getIcon(resource.type)}
+        Tap ♡ on a resource
+        to save it here.
 
-</div>
+      </div>
 
-<small>
+    `;
 
-${escapeHTML(
-String(
-resource.type ||
-"RESOURCE"
-).toUpperCase()
-)}
+    return;
 
-</small>
-
-<h3>
-
-${escapeHTML(
-resource.title ||
-"Untitled Resource"
-)}
-
-</h3>
-
-<p>
-
-${escapeHTML(
-resource.description ||
-"Educational resource"
-)}
-
-</p>
-
-<div class="resource-actions">
-
-<button
-class="open-resource"
-data-action="open"
-data-id="${id}">
-
-Open →
-
-</button>
-
-<button
-class="save-resource saved"
-data-action="save"
-data-id="${id}">
-
-❤️
-
-</button>
-
-</div>
-
-</article>
-
-`;
-
-}).join("");
-
-}
+  }
 
 
-/* =========================================================
-   RECENT STORAGE
-========================================================= */
+  grid.innerHTML =
+    list.map(resource=>{
 
-function recentStorageKey(){
+      return `
 
-return currentUser
-? "AGU_RECENT_"+currentUser.id
-: "AGU_RECENT_GUEST";
+        <article class="resource-card">
 
-}
+          <div class="resource-icon">
+
+            ${getIcon(
+              resource.type
+            )}
+
+          </div>
 
 
-function getLocalRecent(){
+          <small>
 
-try{
+            ${escapeHTML(
+              String(
+                resource.type ||
+                "RESOURCE"
+              ).toUpperCase()
+            )}
 
-return JSON.parse(
-localStorage.getItem(
-recentStorageKey()
-) || "[]"
-);
+          </small>
 
-}catch{
 
-return [];
+          <h3>
 
-}
+            ${escapeHTML(
+              resource.title ||
+              "Untitled Resource"
+            )}
+
+          </h3>
+
+
+          <p>
+
+            ${escapeHTML(
+              resource.description ||
+              "Educational resource"
+            )}
+
+          </p>
+
+
+          <div class="resource-actions">
+
+            <button
+              class="open-resource"
+              data-action="open"
+              data-id="${resource.id}">
+
+              ${
+                String(
+                  resource.type ||
+                  ""
+                ).toLowerCase()
+                === "lesson"
+                  ? "📖 Open Lesson →"
+                  : "Open →"
+              }
+
+            </button>
+
+
+            <button
+              class="save-resource saved"
+              data-action="save"
+              data-id="${resource.id}">
+
+              ❤️
+
+            </button>
+
+          </div>
+
+        </article>
+
+      `;
+
+    }).join("");
 
 }
 
 
-function setLocalRecent(list){
-
-try{
-
-localStorage.setItem(
-recentStorageKey(),
-JSON.stringify(list)
-);
-
-}catch(error){
-
-console.error(error);
-
-}
-
-}
-
-
-/* =========================================================
-   LOAD RECENT
-========================================================= */
-
-async function loadRecentResources(){
-
-if(!currentUser)return;
-
-const local=
-getLocalRecent();
-
-if(local.length){
-
-recentRows=local;
-
-renderRecent();
-
-}
-
-
-const {
-data,
-error
-}=
-await client
-.from("student_recent_resources")
-.select("*")
-.eq(
-"user_id",
-currentUser.id
-)
-.order(
-"created_at",
-{ascending:false}
-)
-.limit(10);
-
-
-if(error){
-
-renderRecent();
-
-updateStats();
-
-updateProgress();
-
-return;
-
-}
-
-
-if(data && data.length){
-
-recentRows=data;
-
-setLocalRecent(
-data.map(row=>({
-
-resource_id:
-row.resource_id,
-
-created_at:
-row.created_at
-
-}))
-);
-
-}
-
-renderRecent();
-
-updateStats();
-
-updateProgress();
-
-}
-
-
-/* =========================================================
-   ADD RECENT
-========================================================= */
-
-async function addRecentResource(resource){
-
-if(!currentUser)return;
-
-const id=
-String(resource.id);
-
-let local=
-getLocalRecent();
-
-local=
-local.filter(
-item =>
-String(item.resource_id)!==id
-);
-
-local.unshift({
-
-resource_id:resource.id,
-
-created_at:
-new Date().toISOString()
-
-});
-
-local=
-local.slice(0,10);
-
-setLocalRecent(local);
-
-recentRows=local;
-
-renderRecent();
-
-updateStats();
-
-updateProgress();
-
-
-try{
-
-await client
-.from("student_recent_resources")
-.delete()
-.eq(
-"user_id",
-currentUser.id
-)
-.eq(
-"resource_id",
-Number(resource.id)
-);
-
-await client
-.from("student_recent_resources")
-.insert({
-
-user_id:
-currentUser.id,
-
-resource_id:
-Number(resource.id)
-
-});
-
-}catch(error){
-
-console.warn(error);
-
-}
-
-}
-
-
-/* =========================================================
-   RENDER RECENT
-========================================================= */
+/* ================================
+   RECENT
+================================ */
 
 function renderRecent(){
 
-const box=
-document.getElementById("recentList");
-
-if(!box)return;
-
-if(!recentRows.length){
-
-box.innerHTML=`
-
-<div class="empty-message">
-No resources opened yet.
-</div>
-
-`;
-
-return;
-
-}
-
-const html=[];
-
-recentRows.forEach(row=>{
-
-const resource=
-resources.find(
-item =>
-String(item.id)===
-String(row.resource_id)
-);
-
-if(!resource)return;
-
-html.push(`
-
-<div class="recent-item">
-
-<div class="recent-icon">
-
-${getIcon(resource.type)}
-
-</div>
-
-<div class="recent-info">
-
-<strong>
-
-${escapeHTML(
-resource.title ||
-"Resource"
-)}
-
-</strong>
-
-<small>
-Recently opened
-</small>
-
-</div>
-
-<button
-class="recent-open"
-data-action="open"
-data-id="${resource.id}">
-
-Open
-
-</button>
-
-</div>
-
-`);
-
-});
+  const box =
+    document.getElementById(
+      "recentList"
+    );
 
 
-box.innerHTML=
-html.length
-?html.join("")
-:`
+  const valid =
+    recentRows
+      .map(row =>
+        resources.find(
+          resource =>
+            String(resource.id) ===
+            String(row.resource_id)
+        )
+      )
+      .filter(Boolean);
 
-<div class="empty-message">
-No resources opened yet.
-</div>
 
-`;
+  if(!valid.length){
+
+    box.innerHTML = `
+
+      <div class="empty-message">
+        No resources opened yet.
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  box.innerHTML =
+    valid.map(resource=>{
+
+      return `
+
+        <div class="recent-item">
+
+          <div class="recent-icon">
+
+            ${getIcon(
+              resource.type
+            )}
+
+          </div>
+
+
+          <div class="recent-info">
+
+            <strong>
+
+              ${escapeHTML(
+                resource.title ||
+                "Resource"
+              )}
+
+            </strong>
+
+            <small>
+              Recently opened
+            </small>
+
+          </div>
+
+
+          <button
+            class="recent-open"
+            data-action="open"
+            data-id="${resource.id}">
+
+            Open
+
+          </button>
+
+        </div>
+
+      `;
+
+    }).join("");
 
 }
 
 
-/* =========================================================
-   FIND RESOURCE
-========================================================= */
+/* ================================
+   STATS
+================================ */
 
-function findResource(id){
+function updateStats(){
 
-return resources.find(
-resource =>
-String(resource.id)===
-String(id)
-);
-
-}
+  document.getElementById(
+    "totalResources"
+  ).textContent =
+    resources.length;
 
 
-/* =========================================================
-   OPEN RESOURCE
-========================================================= */
+  document.getElementById(
+    "savedCount"
+  ).textContent =
+    savedResourceIds.length;
 
-async function openResourceById(id){
 
-const resource=
-findResource(id);
-
-if(!resource){
-
-showMessage(
-"Resource could not be found.",
-"error"
-);
-
-return;
-
-}
-
-const url=
-resource.file_url ||
-resource.url ||
-"";
-
-if(!url){
-
-showMessage(
-"This resource does not have a file attached.",
-"error"
-);
-
-return;
-
-}
-
-await addRecentResource(resource);
-
-const newWindow=
-window.open(
-url,
-"_blank"
-);
-
-if(!newWindow){
-
-window.location.href=url;
-
-}
+  document.getElementById(
+    "recentCount"
+  ).textContent =
+    recentRows.length;
 
 }
 
 
-/* =========================================================
-   SUBJECT FILTER
-========================================================= */
+/* ================================
+   PROGRESS
+================================ */
 
-function normalize(value){
+function updateProgress(){
 
-return String(value || "")
-.toLowerCase()
-.trim()
-.replace(/&/g,"and")
-.replace(/\s+/g," ");
+  const percent =
+    document.getElementById(
+      "progressPercent"
+    );
+
+  const fill =
+    document.getElementById(
+      "progressFill"
+    );
+
+  const text =
+    document.getElementById(
+      "progressText"
+    );
+
+
+  const stored =
+    localStorage.getItem(
+      "AGU_PROGRESS_" +
+      currentUser.id
+    );
+
+
+  let value =
+    stored
+      ? Number(stored)
+      : 0;
+
+
+  /*
+    Keep the existing progress
+    shown on the dashboard.
+  */
+
+  value =
+    Math.max(
+      0,
+      Math.min(
+        100,
+        value
+      )
+    );
+
+
+  percent.textContent =
+    value + "%";
+
+
+  fill.style.width =
+    value + "%";
+
+
+  if(value === 0){
+
+    text.textContent =
+      "Start exploring resources to build your progress.";
+
+  }else if(value < 25){
+
+    text.textContent =
+      "Great start! Keep exploring learning resources.";
+
+  }else if(value < 50){
+
+    text.textContent =
+      "You're making progress. Keep learning!";
+
+  }else if(value < 75){
+
+    text.textContent =
+      "Excellent progress! You're becoming an active learner.";
+
+  }else if(value < 100){
+
+    text.textContent =
+      "Amazing! You're close to completing your learning journey.";
+
+  }else{
+
+    text.textContent =
+      "Outstanding! You've completed your learning journey.";
+
+  }
 
 }
 
+
+/* ================================
+   SUBJECTS
+================================ */
 
 function selectSubject(subject){
 
-selectedSubject=subject;
-
-document
-.querySelectorAll(".subject-item")
-.forEach(button=>{
-
-button.classList.toggle(
-"active",
-button.dataset.subject===subject
-);
-
-});
+  selectedSubject =
+    subject;
 
 
-const box=
-document.getElementById(
-"selectedSubject"
-);
+  document
+    .querySelectorAll(
+      ".subject-item"
+    )
+    .forEach(button=>{
 
-const text=
-document.getElementById(
-"selectedSubjectText"
-);
+      button.classList.toggle(
+        "active",
+        button.dataset.subject ===
+        subject
+      );
 
-text.textContent=
-"🎓 Showing resources for: "+
-subject;
-
-box.classList.add("show");
+    });
 
 
-const input=
-document.getElementById(
-"studentSearch"
-);
-
-input.value=subject;
-
-currentFilter="all";
+  const box =
+    document.getElementById(
+      "selectedSubject"
+    );
 
 
-document
-.querySelectorAll(".filter")
-.forEach(item=>{
-item.classList.remove("active");
-});
+  document.getElementById(
+    "selectedSubjectText"
+  ).textContent =
+    "🎓 Showing resources for: " +
+    subject;
 
 
-document
-.querySelector(
-'[data-filter="all"]'
-)
-.classList.add("active");
+  box.classList.add(
+    "show"
+  );
 
 
-renderResources(
-getFilteredResources()
-);
+  document.getElementById(
+    "studentSearch"
+  ).value =
+    subject;
 
 
-document
-.getElementById("library")
-.scrollIntoView({
-behavior:"smooth"
-});
+  currentFilter =
+    "all";
+
+
+  document
+    .querySelectorAll(
+      ".filter"
+    )
+    .forEach(button=>{
+      button.classList.remove(
+        "active"
+      );
+    });
+
+
+  document
+    .querySelector(
+      '[data-filter="all"]'
+    )
+    .classList.add(
+      "active"
+    );
+
+
+  renderResources(
+    getFilteredResources()
+  );
+
+
+  document
+    .getElementById(
+      "library"
+    )
+    .scrollIntoView({
+      behavior:"smooth"
+    });
 
 }
 
 
 function clearSubject(){
 
-selectedSubject="";
+  selectedSubject = "";
 
-document
-.querySelectorAll(".subject-item")
-.forEach(button=>{
-button.classList.remove("active");
-});
-
-
-document
-.getElementById(
-"selectedSubject"
-)
-.classList.remove("show");
+  document
+    .querySelectorAll(
+      ".subject-item"
+    )
+    .forEach(button=>{
+      button.classList.remove(
+        "active"
+      );
+    });
 
 
-document
-.getElementById(
-"studentSearch"
-).value="";
+  document
+    .getElementById(
+      "selectedSubject"
+    )
+    .classList.remove(
+      "show"
+    );
 
 
-renderResources(
-getFilteredResources()
-);
-
-}
+  document.getElementById(
+    "studentSearch"
+  ).value = "";
 
 
-/* =========================================================
-   FILTER RESOURCES
-========================================================= */
-
-function getFilteredResources(){
-
-const input=
-document.getElementById(
-"studentSearch"
-);
-
-const query=
-input
-?input.value.toLowerCase().trim()
-:"";
-
-
-return resources.filter(resource=>{
-
-const type=
-String(
-resource.type || ""
-).toLowerCase();
-
-
-const matchesType=
-currentFilter==="all" ||
-type===currentFilter;
-
-
-const searchable=`
-
-${resource.title || ""}
-
-${resource.description || ""}
-
-${resource.subject || ""}
-
-${resource.type || ""}
-
-${resource.level || ""}
-
-${resource.class_level || ""}
-
-${resource.term || ""}
-
-`.toLowerCase();
-
-
-const matchesSearch=
-!query ||
-searchable.includes(query);
-
-
-return (
-matchesType &&
-matchesSearch
-);
-
-});
+  renderResources(
+    getFilteredResources()
+  );
 
 }
 
 
-/* =========================================================
-   RENDER RESOURCES
-========================================================= */
-
-function renderResources(list){
-
-const grid=
-document.getElementById(
-"studentResourceGrid"
-);
-
-if(!grid)return;
-
-if(!list.length){
-
-grid.innerHTML=`
-
-<div class="empty-message">
-
-No resources found for
-${selectedSubject
-?escapeHTML(selectedSubject)
-:"your search"}.
-
-<br><br>
-
-Try another subject or search term.
-
-</div>
-
-`;
-
-return;
-
-}
-
-
-grid.innerHTML=
-list.map(resource=>{
-
-const id=
-resourceId(resource);
-
-const saved=
-savedResourceIds.includes(id);
-
-return `
-
-<article class="resource-card">
-
-<div class="resource-icon">
-
-${getIcon(resource.type)}
-
-</div>
-
-<small>
-
-${escapeHTML(
-String(
-resource.type ||
-"RESOURCE"
-).toUpperCase()
-)}
-
-</small>
-
-<h3>
-
-${escapeHTML(
-resource.title ||
-"Untitled Resource"
-)}
-
-</h3>
-
-<p>
-
-${escapeHTML(
-resource.description ||
-"Educational resource"
-)}
-
-</p>
-
-<div class="resource-actions">
-
-<button
-class="open-resource"
-data-action="open"
-data-id="${id}">
-
-Tap to Open →
-
-</button>
-
-<button
-class="save-resource ${
-saved?"saved":""
-}"
-data-action="save"
-data-id="${id}">
-
-${saved?"❤️":"♡"}
-
-</button>
-
-</div>
-
-</article>
-
-`;
-
-}).join("");
-
-}
-
-
-/* =========================================================
-   STATS
-========================================================= */
-
-function updateStats(){
-
-document.getElementById(
-"totalResources"
-).textContent=
-resources.length;
-
-document.getElementById(
-"savedCount"
-).textContent=
-savedResourceIds.length;
-
-document.getElementById(
-"recentCount"
-).textContent=
-recentRows.length;
-
-}
-
-
-/* =========================================================
-   PROGRESS
-========================================================= */
-
-function updateProgress(){
-
-const percent=
-document.getElementById(
-"progressPercent"
-);
-
-const fill=
-document.getElementById(
-"progressFill"
-);
-
-const text=
-document.getElementById(
-"progressText"
-);
-
-if(!percent || !fill || !text)return;
-
-let progress=0;
-
-if(resources.length){
-
-const opened=
-new Set(
-recentRows.map(
-row =>
-String(row.resource_id)
-)
-).size;
-
-progress=
-Math.round(
-Math.min(
-100,
-opened/resources.length*100
-)
-);
-
-}
-
-percent.textContent=
-progress+"%";
-
-fill.style.width=
-progress+"%";
-
-
-if(progress===0){
-
-text.textContent=
-"Start exploring resources to build your progress.";
-
-}else if(progress<25){
-
-text.textContent=
-"Great start! Keep exploring learning resources.";
-
-}else if(progress<50){
-
-text.textContent=
-"You're making progress. Keep learning!";
-
-}else if(progress<75){
-
-text.textContent=
-"Excellent progress! You're becoming an active learner.";
-
-}else if(progress<100){
-
-text.textContent=
-"Amazing! You're close to completing your learning journey.";
-
-}else{
-
-text.textContent=
-"Outstanding! You've explored the available resources.";
-
-}
-
-}
-
-
-/* =========================================================
-   RESOURCE BUTTONS
-========================================================= */
+/* ================================
+   EVENTS
+================================ */
 
 document.addEventListener(
-"click",
-async event=>{
+  "click",
+  async event => {
 
-const button=
-event.target.closest(
-"[data-action]"
-);
-
-if(!button)return;
-
-const action=
-button.dataset.action;
-
-const id=
-button.dataset.id;
-
-if(action==="open"){
-
-await openResourceById(id);
-
-}
-
-if(action==="save"){
-
-button.disabled=true;
-
-await toggleSaved(id);
-
-button.disabled=false;
-
-}
-
-});
+    const button =
+      event.target.closest(
+        "[data-action]"
+      );
 
 
-/* =========================================================
-   SUBJECT BUTTONS
-========================================================= */
-
-document
-.querySelectorAll(
-".subject-item"
-)
-.forEach(button=>{
-
-button.addEventListener(
-"click",
-()=>{
-
-selectSubject(
-button.dataset.subject
-);
-
-});
-
-});
+    if(!button)return;
 
 
-/* =========================================================
-   CLEAR SUBJECT
-========================================================= */
+    const action =
+      button.dataset.action;
 
-document
-.getElementById(
-"clearSubject"
-)
-.addEventListener(
-"click",
-clearSubject
+
+    const id =
+      button.dataset.id;
+
+
+    if(action === "open"){
+
+      await openResource(id);
+
+    }
+
+
+    if(action === "save"){
+
+      await toggleSaved(id);
+
+    }
+
+  }
 );
 
 
-/* =========================================================
-   SEARCH
-========================================================= */
+document
+  .querySelectorAll(
+    ".subject-item"
+  )
+  .forEach(button=>{
 
-const searchInput=
-document.getElementById(
-"studentSearch"
-);
+    button.addEventListener(
+      "click",
+      ()=>{
+        selectSubject(
+          button.dataset.subject
+        );
+      }
+    );
 
-const searchButton=
-document.getElementById(
-"searchButton"
-);
+  });
 
-
-searchInput.addEventListener(
-"input",
-()=>{
-
-selectedSubject="";
 
 document
-.querySelectorAll(".subject-item")
-.forEach(button=>{
-button.classList.remove("active");
-});
+  .getElementById(
+    "clearSubject"
+  )
+  .addEventListener(
+    "click",
+    clearSubject
+  );
+
 
 document
-.getElementById(
-"selectedSubject"
-)
-.classList.remove("show");
+  .getElementById(
+    "studentSearch"
+  )
+  .addEventListener(
+    "input",
+    ()=>{
 
-renderResources(
-getFilteredResources()
-);
+      selectedSubject = "";
 
-});
+      document
+        .querySelectorAll(
+          ".subject-item"
+        )
+        .forEach(button=>{
+          button.classList.remove(
+            "active"
+          );
+        });
 
 
-searchButton.addEventListener(
-"click",
-()=>{
+      document
+        .getElementById(
+          "selectedSubject"
+        )
+        .classList.remove(
+          "show"
+        );
 
-renderResources(
-getFilteredResources()
-);
+
+      renderResources(
+        getFilteredResources()
+      );
+
+    }
+  );
+
 
 document
-.getElementById("library")
-.scrollIntoView({
-behavior:"smooth"
-});
+  .getElementById(
+    "searchButton"
+  )
+  .addEventListener(
+    "click",
+    ()=>{
+      renderResources(
+        getFilteredResources()
+      );
+    }
+  );
 
-});
-
-
-/* =========================================================
-   FILTERS
-========================================================= */
 
 document
-.querySelectorAll(".filter")
-.forEach(button=>{
+  .querySelectorAll(
+    ".filter"
+  )
+  .forEach(button=>{
 
-button.addEventListener(
-"click",
-()=>{
+    button.addEventListener(
+      "click",
+      ()=>{
+
+        document
+          .querySelectorAll(
+            ".filter"
+          )
+          .forEach(item=>{
+            item.classList.remove(
+              "active"
+            );
+          });
+
+
+        button.classList.add(
+          "active"
+        );
+
+
+        currentFilter =
+          button.dataset.filter;
+
+
+        renderResources(
+          getFilteredResources()
+        );
+
+      }
+    );
+
+  });
+
+
+/* ================================
+   LOGOUT
+================================ */
 
 document
-.querySelectorAll(".filter")
-.forEach(item=>{
-item.classList.remove("active");
-});
+  .getElementById(
+    "logoutButton"
+  )
+  .addEventListener(
+    "click",
+    async()=>{
 
-button.classList.add("active");
+      if(client){
 
-currentFilter=
-button.dataset.filter;
+        await client.auth.signOut();
 
-renderResources(
-getFilteredResources()
-);
+      }
 
-});
+      window.location.href =
+        "index.html";
 
-});
-
-
-/* =========================================================
-   SIGN OUT
-========================================================= */
-
-document
-.getElementById(
-"logoutButton"
-)
-.addEventListener(
-"click",
-async()=>{
-
-try{
-
-if(client){
-
-await client.auth.signOut();
-
-}
-
-}catch(error){
-
-console.error(error);
-
-}
-
-window.location.href=
-"index.html";
-
-});
+    }
+  );
 
 
-/* =========================================================
+/* ================================
    START
-========================================================= */
+================================ */
 
-loadStudent();
+async function start(){
+
+  currentUser =
+    await checkStudent();
+
+
+  if(!currentUser)return;
+
+
+  loadProfile(
+    currentUser
+  );
+
+
+  await loadResources();
+
+  await loadSaved();
+
+  await loadRecent();
+
+  updateStats();
+
+  updateProgress();
+
+}
+
+
+start();
 
 </script>
 
 </body>
-  </html>
+</html>

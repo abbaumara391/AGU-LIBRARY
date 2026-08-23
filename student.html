@@ -1,3 +1,1242 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+
+<meta charset="utf-8">
+
+<meta name="viewport"
+      content="width=device-width,initial-scale=1">
+
+<title>AGULIBRARY — Student Dashboard</title>
+
+<style>
+
+/* =========================================================
+   GLOBAL
+========================================================= */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: #171918;
+  color: #e8f3ee;
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.student-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+
+  min-height: 100px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 15px;
+
+  padding: 14px 5%;
+
+  background: #202120;
+  border-bottom: 1px solid #46504b;
+}
+
+.student-brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.student-brand .mark {
+  width: 68px;
+  height: 68px;
+
+  border-radius: 20px;
+
+  display: grid;
+  place-items: center;
+
+  background: #004d16;
+  color: #ffffff;
+
+  font-size: 25px;
+  font-weight: 900;
+}
+
+.student-brand b {
+  display: block;
+  font-size: 25px;
+  color: #e6f2ed;
+}
+
+.student-brand small {
+  display: block;
+  margin-top: 6px;
+
+  color: #9ca9a4;
+  font-size: 10px;
+  letter-spacing: 3px;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.back {
+  text-decoration: none;
+  color: #70e7bc;
+  font-weight: 800;
+}
+
+.logout {
+  border: 1px solid #555b58;
+  background: #555654;
+  color: #78e8c0;
+
+  padding: 13px 22px;
+
+  border-radius: 15px;
+
+  font-weight: 800;
+  cursor: pointer;
+}
+
+
+/* =========================================================
+   MAIN
+========================================================= */
+
+.dashboard {
+  width: min(1200px, 100%);
+  margin: auto;
+  padding: 35px 5% 80px;
+}
+
+
+/* =========================================================
+   MESSAGE
+========================================================= */
+
+.student-message {
+  display: none;
+
+  padding: 14px 18px;
+  margin-bottom: 20px;
+
+  border-radius: 14px;
+  font-weight: 700;
+}
+
+.student-message.show {
+  display: block;
+}
+
+.student-message.success {
+  background: #073c25;
+  color: #73e8bd;
+}
+
+.student-message.error {
+  background: #421d1d;
+  color: #ff9d9d;
+}
+
+
+/* =========================================================
+   WELCOME
+========================================================= */
+
+.welcome {
+  background:
+    linear-gradient(
+      135deg,
+      #003d17,
+      #005a25
+    );
+
+  border: 1px solid #176b40;
+  border-radius: 30px;
+
+  padding: 40px;
+
+  margin-bottom: 25px;
+}
+
+.welcome small {
+  color: #73e8bd;
+  letter-spacing: 3px;
+  font-weight: 900;
+}
+
+.welcome h1 {
+  margin: 15px 0;
+
+  font-size: clamp(36px, 6vw, 58px);
+  line-height: 1;
+
+  color: #effff8;
+}
+
+.welcome p {
+  max-width: 720px;
+
+  color: #c4d8cf;
+  line-height: 1.7;
+  font-size: 17px;
+}
+
+
+/* =========================================================
+   PROFILE
+========================================================= */
+
+.student-profile-section {
+  display: grid;
+  gap: 25px;
+  margin-bottom: 30px;
+}
+
+.profile-card,
+.progress-card,
+.subjects-card,
+.achievement-card,
+.library-section {
+  background: #202120;
+  border: 1px solid #4b5550;
+  border-radius: 28px;
+}
+
+.profile-card {
+  display: flex;
+  align-items: center;
+
+  gap: 25px;
+
+  padding: 35px;
+}
+
+.profile-avatar {
+  width: 105px;
+  height: 105px;
+
+  flex-shrink: 0;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 28px;
+
+  background: #003d12;
+  border: 1px solid #075c27;
+
+  color: #f0fff8;
+
+  font-size: 34px;
+  font-weight: 900;
+}
+
+.profile-info small,
+.progress-card small,
+.subjects-card > small,
+.achievement-card > small {
+  display: block;
+
+  color: #70e7bc;
+
+  font-size: 12px;
+  font-weight: 900;
+
+  letter-spacing: 3px;
+}
+
+.profile-info h2 {
+  margin: 8px 0;
+
+  font-size: 34px;
+  color: #e9f5f0;
+}
+
+.profile-info p {
+  margin: 0;
+
+  color: #a9b7b1;
+  font-size: 17px;
+
+  word-break: break-word;
+}
+
+
+/* =========================================================
+   PROGRESS
+========================================================= */
+
+.progress-card {
+  padding: 35px;
+}
+
+.progress-header {
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 20px;
+}
+
+.progress-header h2 {
+  margin: 12px 0 0;
+
+  font-size: 38px;
+  color: #eaf5f1;
+}
+
+#progressPercent {
+  color: #70e7bc;
+  font-size: 48px;
+  font-weight: 900;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 18px;
+
+  margin-top: 25px;
+
+  background: #10271d;
+  border-radius: 50px;
+
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+
+  background: #087a4b;
+
+  border-radius: 50px;
+
+  transition: width .5s ease;
+}
+
+.progress-card > p {
+  margin-top: 20px;
+
+  color: #a9b7b1;
+
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+
+/* =========================================================
+   SUBJECTS
+========================================================= */
+
+.subjects-card {
+  padding: 35px;
+}
+
+.subjects-card h2 {
+  margin: 12px 0 25px;
+
+  font-size: 38px;
+
+  color: #eaf5f1;
+}
+
+.subjects-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, 1fr);
+
+  gap: 12px;
+}
+
+.subject-item {
+  min-height: 70px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  padding: 14px 16px;
+
+  border: 1px solid #555d59;
+
+  background: #2b2d2c;
+
+  color: #eef8f4;
+
+  border-radius: 14px;
+
+  font-size: 15px;
+  font-weight: 700;
+
+  cursor: pointer;
+  text-align: left;
+
+  transition: .2s;
+}
+
+.subject-item:hover {
+  background: #087a4b;
+  border-color: #087a4b;
+
+  transform: translateY(-3px);
+}
+
+.subject-item:active {
+  transform: scale(.98);
+}
+
+
+/* =========================================================
+   ACHIEVEMENTS
+========================================================= */
+
+.achievement-card {
+  padding: 35px;
+}
+
+.achievement-card h2 {
+  margin: 12px 0 25px;
+
+  font-size: 38px;
+
+  color: #eaf5f1;
+}
+
+.badges {
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, 1fr);
+
+  gap: 15px;
+}
+
+.badge {
+  min-height: 145px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 12px;
+
+  border: 1px solid #4b5550;
+
+  border-radius: 22px;
+
+  background: #1b1e1c;
+
+  font-size: 45px;
+
+  text-align: center;
+}
+
+.badge span {
+  font-size: 14px;
+
+  color: #aebbb6;
+
+  font-weight: 800;
+}
+
+
+/* =========================================================
+   STATISTICS
+========================================================= */
+
+.stats {
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, 1fr);
+
+  gap: 16px;
+
+  margin-bottom: 30px;
+}
+
+.stat {
+  min-height: 160px;
+
+  padding: 27px;
+
+  background: #202120;
+
+  border: 1px solid #4b5550;
+
+  border-radius: 23px;
+}
+
+.stat strong {
+  display: block;
+
+  margin-bottom: 12px;
+
+  font-size: 43px;
+
+  color: #70e7bc;
+}
+
+.stat span {
+  color: #a8b4af;
+  font-size: 15px;
+}
+
+
+/* =========================================================
+   QUICK ACCESS
+========================================================= */
+
+.dashboard-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, 1fr);
+
+  gap: 15px;
+
+  margin-bottom: 30px;
+}
+
+.dashboard-card {
+  padding: 24px;
+
+  background: #202120;
+
+  border: 1px solid #4b5550;
+
+  border-radius: 22px;
+
+  text-decoration: none;
+
+  color: #eaf5f1;
+
+  transition: .2s;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-4px);
+
+  border-color: #70e7bc;
+}
+
+.dashboard-card .icon {
+  font-size: 32px;
+  margin-bottom: 14px;
+}
+
+.dashboard-card b {
+  display: block;
+  font-size: 17px;
+}
+
+.dashboard-card span {
+  display: block;
+
+  margin-top: 8px;
+
+  color: #9eaba5;
+
+  line-height: 1.5;
+
+  font-size: 12px;
+}
+
+
+/* =========================================================
+   LIBRARY
+========================================================= */
+
+.library-section {
+  padding: 32px;
+  margin-bottom: 28px;
+}
+
+.library-section h2 {
+  margin: 10px 0 20px;
+
+  font-size: 35px;
+
+  color: #eaf5f1;
+}
+
+.eyebrow {
+  color: #70e7bc;
+
+  font-size: 11px;
+
+  font-weight: 900;
+
+  letter-spacing: 3px;
+}
+
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+.search-box {
+  display: flex;
+
+  gap: 10px;
+
+  margin: 20px 0;
+}
+
+.search-box input {
+  flex: 1;
+
+  min-width: 0;
+
+  padding: 15px;
+
+  background: #181a19;
+
+  color: #eef8f4;
+
+  border: 1px solid #4b5550;
+
+  border-radius: 13px;
+
+  outline: none;
+
+  font-size: 15px;
+}
+
+.search-box input::placeholder {
+  color: #7e8c86;
+}
+
+.search-box input:focus {
+  border-color: #70e7bc;
+}
+
+.search-box button {
+  border: 0;
+
+  padding: 0 22px;
+
+  border-radius: 13px;
+
+  background: #087a4b;
+
+  color: #fff;
+
+  font-weight: 800;
+
+  cursor: pointer;
+}
+
+
+/* =========================================================
+   FILTERS
+========================================================= */
+
+.filter-row {
+  display: flex;
+
+  gap: 8px;
+
+  overflow-x: auto;
+
+  padding-bottom: 15px;
+}
+
+.filter {
+  flex-shrink: 0;
+
+  padding: 10px 16px;
+
+  border-radius: 25px;
+
+  border: 1px solid #4b5550;
+
+  background: #292b2a;
+
+  color: #a9b7b1;
+
+  font-weight: 800;
+
+  cursor: pointer;
+}
+
+.filter.active {
+  background: #087a4b;
+
+  border-color: #087a4b;
+
+  color: #fff;
+}
+
+
+/* =========================================================
+   RESOURCES
+========================================================= */
+
+.resource-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, 1fr);
+
+  gap: 17px;
+}
+
+.resource-card {
+  padding: 16px;
+
+  background: #1b1d1c;
+
+  border: 1px solid #4b5550;
+
+  border-radius: 20px;
+
+  transition: .2s;
+}
+
+.resource-card:hover {
+  transform: translateY(-3px);
+
+  border-color: #70e7bc;
+}
+
+.resource-icon {
+  height: 125px;
+
+  display: grid;
+  place-items: center;
+
+  margin-bottom: 14px;
+
+  border-radius: 15px;
+
+  background: #0c2418;
+
+  font-size: 47px;
+}
+
+.resource-card small {
+  color: #70e7bc;
+  font-weight: 900;
+}
+
+.resource-card h3 {
+  margin: 8px 0;
+
+  color: #eaf5f1;
+
+  font-size: 17px;
+}
+
+.resource-card p {
+  min-height: 40px;
+
+  color: #9eaba5;
+
+  line-height: 1.5;
+
+  font-size: 12px;
+}
+
+.resource-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.open-resource {
+  flex: 1;
+
+  border: 0;
+
+  padding: 12px;
+
+  border-radius: 12px;
+
+  background: #087a4b;
+
+  color: #fff;
+
+  font-weight: 800;
+
+  cursor: pointer;
+}
+
+.save-resource {
+  width: 50px;
+
+  border: 1px solid #4b5550;
+
+  border-radius: 12px;
+
+  background: #292b2a;
+
+  color: #fff;
+
+  font-size: 22px;
+
+  cursor: pointer;
+}
+
+.save-resource.saved {
+  background: #44252d;
+}
+
+
+/* =========================================================
+   EMPTY
+========================================================= */
+
+.empty-message {
+  grid-column: 1 / -1;
+
+  padding: 40px;
+
+  text-align: center;
+
+  background: #1b1d1c;
+
+  border: 1px dashed #4b5550;
+
+  border-radius: 18px;
+
+  color: #9eaba5;
+}
+
+
+/* =========================================================
+   RECENT
+========================================================= */
+
+.recent-list {
+  display: grid;
+  gap: 12px;
+}
+
+.recent-item {
+  display: flex;
+
+  align-items: center;
+
+  gap: 15px;
+
+  padding: 16px;
+
+  background: #1b1d1c;
+
+  border: 1px solid #4b5550;
+
+  border-radius: 16px;
+}
+
+.recent-icon {
+  font-size: 32px;
+}
+
+.recent-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.recent-info strong {
+  display: block;
+
+  color: #eaf5f1;
+
+  margin-bottom: 5px;
+}
+
+.recent-info small {
+  color: #89968f;
+}
+
+.recent-open {
+  border: 0;
+
+  padding: 10px 15px;
+
+  border-radius: 11px;
+
+  background: #087a4b;
+
+  color: #fff;
+
+  font-weight: 800;
+
+  cursor: pointer;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 1000px) {
+
+  .subjects-grid {
+    grid-template-columns:
+      repeat(3, 1fr);
+  }
+
+  .stats,
+  .dashboard-grid {
+    grid-template-columns:
+      repeat(2, 1fr);
+  }
+
+  .resource-grid {
+    grid-template-columns:
+      repeat(2, 1fr);
+  }
+
+  .badges {
+    grid-template-columns:
+      repeat(2, 1fr);
+  }
+
+}
+
+
+@media (max-width: 650px) {
+
+  .student-header {
+    min-height: 90px;
+    padding: 12px 5%;
+  }
+
+  .student-brand .mark {
+    width: 55px;
+    height: 55px;
+
+    border-radius: 16px;
+
+    font-size: 21px;
+  }
+
+  .student-brand b {
+    font-size: 19px;
+  }
+
+  .student-brand small {
+    font-size: 7px;
+    letter-spacing: 2px;
+  }
+
+  .back {
+    display: none;
+  }
+
+  .logout {
+    padding: 11px 14px;
+    font-size: 13px;
+  }
+
+  .dashboard {
+    padding: 25px 5% 60px;
+  }
+
+  .welcome {
+    padding: 28px;
+  }
+
+  .welcome h1 {
+    font-size: 40px;
+  }
+
+  .profile-card {
+    padding: 27px;
+  }
+
+  .profile-avatar {
+    width: 82px;
+    height: 82px;
+
+    border-radius: 22px;
+
+    font-size: 27px;
+  }
+
+  .profile-info h2 {
+    font-size: 27px;
+  }
+
+  .profile-info p {
+    font-size: 14px;
+  }
+
+  .progress-card,
+  .subjects-card,
+  .achievement-card,
+  .library-section {
+    padding: 27px;
+  }
+
+  .progress-header h2,
+  .subjects-card h2,
+  .achievement-card h2,
+  .library-section h2 {
+    font-size: 30px;
+  }
+
+  #progressPercent {
+    font-size: 38px;
+  }
+
+  .subjects-grid,
+  .stats,
+  .dashboard-grid,
+  .resource-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .badges {
+    grid-template-columns:
+      repeat(2, 1fr);
+  }
+
+  .search-box {
+    flex-direction: column;
+  }
+
+  .search-box button {
+    padding: 14px;
+  }
+
+  .recent-item {
+    align-items: flex-start;
+  }
+
+}
+
+
+@media (max-width: 390px) {
+
+  .student-brand b {
+    font-size: 17px;
+  }
+
+  .student-brand small {
+    font-size: 6px;
+  }
+
+  .profile-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .progress-header {
+    align-items: flex-start;
+  }
+
+  .badges {
+    grid-template-columns: 1fr;
+  }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- ======================================================
+     HEADER
+====================================================== -->
+
+<header class="student-header">
+
+  <div class="student-brand">
+
+    <div
+      class="mark"
+      id="headerAvatar">
+      AG
+    </div>
+
+    <div>
+
+      <b>AGULIBRARY</b>
+
+      <small>
+        STUDENT DASHBOARD
+      </small>
+
+    </div>
+
+  </div>
+
+
+  <div class="header-actions">
+
+    <a
+      class="back"
+      href="index.html">
+      ← Library
+    </a>
+
+    <button
+      class="logout"
+      id="logoutButton">
+      Sign out
+    </button>
+
+  </div>
+
+</header>
+
+
+<main class="dashboard">
+
+
+<!-- ======================================================
+     MESSAGE
+====================================================== -->
+
+<div
+  id="studentMessage"
+  class="student-message">
+</div>
+
+
+<!-- ======================================================
+     WELCOME
+====================================================== -->
+
+<section class="welcome">
+
+  <small>
+    STUDENT LEARNING SPACE
+  </small>
+
+  <h1 id="welcomeName">
+    Welcome!
+  </h1>
+
+  <p>
+    Your personal AGULIBRARY learning space.
+    Explore books, videos, PDFs and educational
+    resources from around the world.
+  </p>
+
+</section>
+
+
+<!-- ======================================================
+     PROFILE
+====================================================== -->
+
+<section class="student-profile-section">
+
+
+  <div class="profile-card">
+
+    <div
+      class="profile-avatar"
+      id="profileAvatar">
+      AG
+    </div>
+
+
+    <div class="profile-info">
+
+      <small>
+        MY PROFILE
+      </small>
+
+      <h2 id="profileName">
+        Student
+      </h2>
+
+      <p id="profileEmail">
+        Loading email...
+      </p>
+
+    </div>
+
+  </div>
+
+
+<!-- ======================================================
+     PROGRESS
+====================================================== -->
+
+<div class="progress-card">
+
+  <div class="progress-header">
+
+    <div>
+
+      <small>
+        LEARNING PROGRESS
+      </small>
+
+      <h2>
+        Your Learning Journey
+      </h2>
+
+    </div>
+
+    <strong id="progressPercent">
+      0%
+    </strong>
+
+  </div>
+
+
+  <div class="progress-bar">
+
+    <div
+      id="progressFill"
+      class="progress-fill"
+      style="width:0%">
+    </div>
+
+  </div>
+
+
+  <p id="progressText">
+    Start exploring resources to build your progress.
+  </p>
+
+</div>
+
+
+<!-- ======================================================
+     SUBJECTS — 14 GLOBAL SUBJECTS
+====================================================== -->
+
 <div class="subjects-card">
 
   <small>
@@ -8,7 +1247,9 @@
     Explore Subjects
   </h2>
 
+
   <div class="subjects-grid">
+
 
     <button
       class="subject-item"
@@ -17,12 +1258,14 @@
       <span>Physics</span>
     </button>
 
+
     <button
       class="subject-item"
       data-subject="Chemistry">
       🧪
       <span>Chemistry</span>
     </button>
+
 
     <button
       class="subject-item"
@@ -31,12 +1274,14 @@
       <span>Mathematics</span>
     </button>
 
+
     <button
       class="subject-item"
       data-subject="Biology">
       🧬
       <span>Biology</span>
     </button>
+
 
     <button
       class="subject-item"
@@ -45,12 +1290,54 @@
       <span>Computer Science</span>
     </button>
 
+
     <button
       class="subject-item"
       data-subject="English">
       📖
       <span>English</span>
     </button>
+
+
+    <button
+      class="subject-item"
+      data-subject="History">
+      🏛️
+      <span>History</span>
+    </button>
+
+
+    <button
+      class="subject-item"
+      data-subject="Political Science">
+      🗳️
+      <span>Political Science</span>
+    </button>
+
+
+    <button
+      class="subject-item"
+      data-subject="Psychology">
+      🧠
+      <span>Psychology</span>
+    </button>
+
+
+    <button
+      class="subject-item"
+      data-subject="Philosophy">
+      🏛️
+      <span>Philosophy</span>
+    </button>
+
+
+    <button
+      class="subject-item"
+      data-subject="Fine Art">
+      🎨
+      <span>Fine Art</span>
+    </button>
+
 
     <button
       class="subject-item"
@@ -59,12 +1346,14 @@
       <span>Economics</span>
     </button>
 
+
     <button
       class="subject-item"
       data-subject="Geography">
       🌍
       <span>Geography</span>
     </button>
+
 
     <button
       class="subject-item"
@@ -73,6 +1362,2239 @@
       <span>Commerce</span>
     </button>
 
+
   </div>
 
 </div>
+
+
+<!-- ======================================================
+     ACHIEVEMENTS
+====================================================== -->
+
+<div class="achievement-card">
+
+  <small>
+    🏆 ACHIEVEMENTS
+  </small>
+
+  <h2>
+    Your Learning Badges
+  </h2>
+
+
+  <div class="badges">
+
+
+    <div class="badge">
+      📚
+      <span>First Resource</span>
+    </div>
+
+
+    <div class="badge">
+      ❤️
+      <span>Resource Saver</span>
+    </div>
+
+
+    <div class="badge">
+      🕘
+      <span>Active Learner</span>
+    </div>
+
+
+    <div class="badge">
+      🌍
+      <span>Global Learner</span>
+    </div>
+
+
+  </div>
+
+</div>
+
+
+</section>
+
+
+<!-- ======================================================
+     STATISTICS
+====================================================== -->
+
+<section class="stats">
+
+
+  <div class="stat">
+
+    <strong id="totalResources">
+      0
+    </strong>
+
+    <span>
+      Available Resources
+    </span>
+
+  </div>
+
+
+  <div class="stat">
+
+    <strong id="savedCount">
+      0
+    </strong>
+
+    <span>
+      Saved Resources
+    </span>
+
+  </div>
+
+
+  <div class="stat">
+
+    <strong id="recentCount">
+      0
+    </strong>
+
+    <span>
+      Recently Opened
+    </span>
+
+  </div>
+
+
+  <div class="stat">
+
+    <strong>
+      🌍
+    </strong>
+
+    <span>
+      Global Learning
+    </span>
+
+  </div>
+
+
+</section>
+
+
+<!-- ======================================================
+     QUICK ACCESS
+====================================================== -->
+
+<section class="dashboard-grid">
+
+
+  <a
+    class="dashboard-card"
+    href="#library">
+
+    <div class="icon">
+      📚
+    </div>
+
+    <b>
+      Browse Library
+    </b>
+
+    <span>
+      Explore books, PDFs, videos and photos.
+    </span>
+
+  </a>
+
+
+  <a
+    class="dashboard-card"
+    href="#library">
+
+    <div class="icon">
+      🎓
+    </div>
+
+    <b>
+      Subjects
+    </b>
+
+    <span>
+      Search Physics, Chemistry, Mathematics and more.
+    </span>
+
+  </a>
+
+
+  <a
+    class="dashboard-card"
+    href="#saved">
+
+    <div class="icon">
+      ❤️
+    </div>
+
+    <b>
+      Saved Resources
+    </b>
+
+    <span>
+      Access resources saved to your account.
+    </span>
+
+  </a>
+
+
+  <a
+    class="dashboard-card"
+    href="#recent">
+
+    <div class="icon">
+      🕘
+    </div>
+
+    <b>
+      Recent Learning
+    </b>
+
+    <span>
+      Continue resources you recently opened.
+    </span>
+
+  </a>
+
+
+</section>
+
+
+<!-- ======================================================
+     DIGITAL LIBRARY
+====================================================== -->
+
+<section
+  id="library"
+  class="library-section">
+
+
+  <small class="eyebrow">
+    DIGITAL LIBRARY
+  </small>
+
+  <h2>
+    Explore Learning Resources
+  </h2>
+
+
+  <div class="search-box">
+
+    <input
+      id="studentSearch"
+      type="search"
+      placeholder="Search books, Physics, Chemistry...">
+
+    <button
+      id="searchButton">
+      Search
+    </button>
+
+  </div>
+
+
+  <div class="filter-row">
+
+
+    <button
+      class="filter active"
+      data-filter="all">
+      All
+    </button>
+
+
+    <button
+      class="filter"
+      data-filter="book">
+      📚 Books
+    </button>
+
+
+    <button
+      class="filter"
+      data-filter="pdf">
+      📄 PDFs
+    </button>
+
+
+    <button
+      class="filter"
+      data-filter="video">
+      🎥 Videos
+    </button>
+
+
+    <button
+      class="filter"
+      data-filter="photo">
+      🖼️ Photos
+    </button>
+
+
+    <button
+      class="filter"
+      data-filter="lesson">
+      📖 Lessons
+    </button>
+
+
+  </div>
+
+
+  <div
+    id="studentResourceGrid"
+    class="resource-grid">
+
+    <div class="empty-message">
+      Loading learning resources...
+    </div>
+
+  </div>
+
+
+</section>
+
+
+<!-- ======================================================
+     SAVED
+====================================================== -->
+
+<section
+  id="saved"
+  class="library-section">
+
+
+  <small class="eyebrow">
+    MY COLLECTION
+  </small>
+
+  <h2>
+    ❤️ Saved Resources
+  </h2>
+
+
+  <div
+    id="savedGrid"
+    class="resource-grid">
+
+    <div class="empty-message">
+      Loading saved resources...
+    </div>
+
+  </div>
+
+
+</section>
+
+
+<!-- ======================================================
+     RECENT
+====================================================== -->
+
+<section
+  id="recent"
+  class="library-section">
+
+
+  <small class="eyebrow">
+    LEARNING HISTORY
+  </small>
+
+  <h2>
+    🕘 Recently Opened
+  </h2>
+
+
+  <div
+    id="recentList"
+    class="recent-list">
+
+    <div class="empty-message">
+      Loading recent resources...
+    </div>
+
+  </div>
+
+
+</section>
+
+
+</main>
+
+
+<!-- ======================================================
+     SUPABASE
+====================================================== -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="config.js"></script>
+
+<script src="supabase.js"></script>
+
+
+<script>
+
+/* =========================================================
+   SUPABASE CLIENT
+========================================================= */
+
+const client =
+  typeof getSupabase === "function"
+    ? getSupabase()
+    : null;
+
+
+let currentUser = null;
+
+let resources = [];
+
+let savedResourceIds = [];
+
+let recentRows = [];
+
+let currentFilter = "all";
+
+
+/* =========================================================
+   MESSAGE
+========================================================= */
+
+function showMessage(
+  message,
+  type = "success"
+) {
+
+  const box =
+    document.getElementById(
+      "studentMessage"
+    );
+
+  if (!box) return;
+
+  box.textContent =
+    message;
+
+  box.className =
+    "student-message show " +
+    type;
+
+  setTimeout(() => {
+
+    box.classList.remove(
+      "show"
+    );
+
+  }, 3500);
+
+}
+
+
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
+
+function escapeHTML(value) {
+
+  return String(
+    value ?? ""
+  ).replace(
+    /[&<>"']/g,
+    character => {
+
+      const entities = {
+
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#039;"
+
+      };
+
+      return entities[
+        character
+      ];
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   RESOURCE ICON
+========================================================= */
+
+function getIcon(type) {
+
+  const icons = {
+
+    book: "📚",
+    pdf: "📄",
+    video: "🎥",
+    photo: "🖼️",
+    image: "🖼️",
+    course: "🎓",
+    lesson: "📖"
+
+  };
+
+  return icons[
+    String(type || "")
+      .toLowerCase()
+  ] || "📘";
+
+}
+
+
+/* =========================================================
+   RESOURCE ID
+========================================================= */
+
+function resourceId(resource) {
+
+  return String(
+    resource.id
+  );
+
+}
+
+
+/* =========================================================
+   LOCAL RECENT
+========================================================= */
+
+function recentStorageKey() {
+
+  if (!currentUser) {
+
+    return "AGU_RECENT_GUEST";
+
+  }
+
+  return (
+    "AGU_RECENT_" +
+    currentUser.id
+  );
+
+}
+
+
+function getLocalRecent() {
+
+  try {
+
+    return JSON.parse(
+      localStorage.getItem(
+        recentStorageKey()
+      ) || "[]"
+    );
+
+  } catch {
+
+    return [];
+
+  }
+
+}
+
+
+function setLocalRecent(list) {
+
+  try {
+
+    localStorage.setItem(
+      recentStorageKey(),
+      JSON.stringify(list)
+    );
+
+  } catch(error) {
+
+    console.error(
+      "Local storage error:",
+      error
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   LOAD PROFILE
+========================================================= */
+
+function loadStudentProfile(user) {
+
+  const metadata =
+    user.user_metadata || {};
+
+
+  const name =
+    metadata.full_name ||
+    metadata.name ||
+    metadata.display_name ||
+    user.email?.split("@")[0] ||
+    "Student";
+
+
+  const email =
+    user.email ||
+    "No email available";
+
+
+  const initials =
+    name
+      .trim()
+      .split(/\s+/)
+      .slice(0, 2)
+      .map(
+        word =>
+          word.charAt(0)
+            .toUpperCase()
+      )
+      .join("") ||
+    "AG";
+
+
+  const headerAvatar =
+    document.getElementById(
+      "headerAvatar"
+    );
+
+  if (headerAvatar) {
+
+    headerAvatar.textContent =
+      initials;
+
+  }
+
+
+  const welcomeName =
+    document.getElementById(
+      "welcomeName"
+    );
+
+  if (welcomeName) {
+
+    welcomeName.textContent =
+      "Welcome, " +
+      name +
+      "!";
+
+  }
+
+
+  const profileName =
+    document.getElementById(
+      "profileName"
+    );
+
+  if (profileName) {
+
+    profileName.textContent =
+      name;
+
+  }
+
+
+  const profileEmail =
+    document.getElementById(
+      "profileEmail"
+    );
+
+  if (profileEmail) {
+
+    profileEmail.textContent =
+      email;
+
+  }
+
+
+  const profileAvatar =
+    document.getElementById(
+      "profileAvatar"
+    );
+
+  if (profileAvatar) {
+
+    profileAvatar.textContent =
+      initials;
+
+  }
+
+}
+
+
+/* =========================================================
+   CHECK STUDENT
+========================================================= */
+
+async function checkStudent() {
+
+  if (!client) {
+
+    showMessage(
+      "Supabase connection is not available.",
+      "error"
+    );
+
+    return null;
+
+  }
+
+
+  try {
+
+    const {
+      data,
+      error
+    } =
+      await client.auth.getSession();
+
+
+    if (
+      error ||
+      !data ||
+      !data.session
+    ) {
+
+      window.location.href =
+        "auth.html";
+
+      return null;
+
+    }
+
+
+    return data.session.user;
+
+  } catch(error) {
+
+    console.error(
+      "Authentication error:",
+      error
+    );
+
+    return null;
+
+  }
+
+}
+
+
+/* =========================================================
+   START
+========================================================= */
+
+async function loadStudent() {
+
+  const user =
+    await checkStudent();
+
+
+  if (!user) return;
+
+
+  currentUser =
+    user;
+
+
+  loadStudentProfile(
+    user
+  );
+
+
+  await loadResources();
+
+  await loadSavedResources();
+
+  await loadRecentResources();
+
+  updateStats();
+
+  updateProgress();
+
+}
+
+
+/* =========================================================
+   LOAD RESOURCES
+========================================================= */
+
+async function loadResources() {
+
+  if (!client) return;
+
+
+  const {
+    data,
+    error
+  } =
+    await client
+      .from("resources")
+      .select("*")
+      .order(
+        "created_at",
+        {
+          ascending: false
+        }
+      );
+
+
+  if (error) {
+
+    console.error(
+      "Resources error:",
+      error
+    );
+
+    resources = [];
+
+    document.getElementById(
+      "studentResourceGrid"
+    ).innerHTML = `
+
+      <div class="empty-message">
+
+        Unable to load learning resources.
+
+      </div>
+
+    `;
+
+    updateStats();
+
+    return;
+
+  }
+
+
+  resources =
+    data || [];
+
+
+  renderResources(
+    getFilteredResources()
+  );
+
+  renderSaved();
+
+  updateStats();
+
+  updateProgress();
+
+}
+
+
+/* =========================================================
+   LOAD SAVED
+========================================================= */
+
+async function loadSavedResources() {
+
+  if (!currentUser ||
+      !client) return;
+
+
+  const {
+    data,
+    error
+  } =
+    await client
+      .from(
+        "student_saved_resources"
+      )
+      .select("*")
+      .eq(
+        "user_id",
+        currentUser.id
+      )
+      .order(
+        "created_at",
+        {
+          ascending: false
+        }
+      );
+
+
+  if (error) {
+
+    console.warn(
+      "Saved resources unavailable:",
+      error
+    );
+
+    savedResourceIds = [];
+
+    renderSaved();
+
+    updateStats();
+
+    return;
+
+  }
+
+
+  savedResourceIds =
+    (data || []).map(
+      row =>
+        String(
+          row.resource_id
+        )
+    );
+
+
+  renderSaved();
+
+  renderResources(
+    getFilteredResources()
+  );
+
+  updateStats();
+
+}
+
+
+/* =========================================================
+   SAVE
+========================================================= */
+
+async function saveResource(id) {
+
+  if (!currentUser ||
+      !client) return;
+
+
+  if (
+    savedResourceIds.includes(
+      String(id)
+    )
+  ) {
+
+    return;
+
+  }
+
+
+  const {
+    error
+  } =
+    await client
+      .from(
+        "student_saved_resources"
+      )
+      .insert({
+
+        user_id:
+          currentUser.id,
+
+        resource_id:
+          Number(id)
+
+      });
+
+
+  if (error) {
+
+    console.error(
+      "Save error:",
+      error
+    );
+
+    showMessage(
+      "Unable to save this resource.",
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  showMessage(
+    "Resource saved successfully."
+  );
+
+
+  await loadSavedResources();
+
+}
+
+
+/* =========================================================
+   REMOVE SAVED
+========================================================= */
+
+async function removeSavedResource(id) {
+
+  if (!currentUser ||
+      !client) return;
+
+
+  const {
+    error
+  } =
+    await client
+      .from(
+        "student_saved_resources"
+      )
+      .delete()
+      .eq(
+        "user_id",
+        currentUser.id
+      )
+      .eq(
+        "resource_id",
+        Number(id)
+      );
+
+
+  if (error) {
+
+    console.error(
+      "Remove saved error:",
+      error
+    );
+
+    showMessage(
+      "Unable to remove this resource.",
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  showMessage(
+    "Removed from Saved Resources."
+  );
+
+
+  await loadSavedResources();
+
+}
+
+
+/* =========================================================
+   TOGGLE SAVED
+========================================================= */
+
+async function toggleSaved(id) {
+
+  if (
+    savedResourceIds.includes(
+      String(id)
+    )
+  ) {
+
+    await removeSavedResource(
+      id
+    );
+
+  } else {
+
+    await saveResource(
+      id
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   RENDER SAVED
+========================================================= */
+
+function renderSaved() {
+
+  const grid =
+    document.getElementById(
+      "savedGrid"
+    );
+
+  if (!grid) return;
+
+
+  const list =
+    resources.filter(
+      resource =>
+        savedResourceIds.includes(
+          resourceId(resource)
+        )
+    );
+
+
+  if (!list.length) {
+
+    grid.innerHTML = `
+
+      <div class="empty-message">
+
+        You have not saved any resources yet.
+
+        <br><br>
+
+        Tap ♡ on a resource to save it here.
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  grid.innerHTML =
+    list.map(
+      resource => {
+
+        const id =
+          resourceId(
+            resource
+          );
+
+
+        return `
+
+          <article class="resource-card">
+
+            <div class="resource-icon">
+
+              ${getIcon(
+                resource.type
+              )}
+
+            </div>
+
+            <small>
+
+              ${escapeHTML(
+                String(
+                  resource.type ||
+                  "RESOURCE"
+                ).toUpperCase()
+              )}
+
+            </small>
+
+            <h3>
+
+              ${escapeHTML(
+                resource.title ||
+                "Untitled Resource"
+              )}
+
+            </h3>
+
+            <p>
+
+              ${escapeHTML(
+                resource.description ||
+                "Educational resource"
+              )}
+
+            </p>
+
+            <div class="resource-actions">
+
+              <button
+                class="open-resource"
+                data-action="open"
+                data-id="${id}">
+
+                Open →
+
+              </button>
+
+              <button
+                class="save-resource saved"
+                data-action="save"
+                data-id="${id}">
+
+                ❤️
+
+              </button>
+
+            </div>
+
+          </article>
+
+        `;
+
+      }
+    ).join("");
+
+}
+
+
+/* =========================================================
+   LOAD RECENT
+========================================================= */
+
+async function loadRecentResources() {
+
+  if (!currentUser) return;
+
+
+  const local =
+    getLocalRecent();
+
+
+  if (local.length) {
+
+    recentRows =
+      local;
+
+    renderRecent();
+
+  }
+
+
+  if (!client) {
+
+    updateStats();
+    updateProgress();
+
+    return;
+
+  }
+
+
+  const {
+    data,
+    error
+  } =
+    await client
+      .from(
+        "student_recent_resources"
+      )
+      .select("*")
+      .eq(
+        "user_id",
+        currentUser.id
+      )
+      .order(
+        "created_at",
+        {
+          ascending: false
+        }
+      )
+      .limit(10);
+
+
+  if (error) {
+
+    console.warn(
+      "Recent database unavailable:",
+      error
+    );
+
+    renderRecent();
+
+    updateStats();
+    updateProgress();
+
+    return;
+
+  }
+
+
+  if (data &&
+      data.length) {
+
+    recentRows =
+      data;
+
+    setLocalRecent(
+      data.map(
+        row => ({
+
+          resource_id:
+            row.resource_id,
+
+          created_at:
+            row.created_at
+
+        })
+      )
+    );
+
+  }
+
+
+  renderRecent();
+
+  updateStats();
+
+  updateProgress();
+
+}
+
+
+/* =========================================================
+   ADD RECENT
+========================================================= */
+
+async function addRecentResource(
+  resource
+) {
+
+  if (!currentUser) return;
+
+
+  const id =
+    String(
+      resource.id
+    );
+
+
+  let local =
+    getLocalRecent();
+
+
+  local =
+    local.filter(
+      item =>
+        String(
+          item.resource_id
+        ) !== id
+    );
+
+
+  local.unshift({
+
+    resource_id:
+      resource.id,
+
+    created_at:
+      new Date().toISOString()
+
+  });
+
+
+  local =
+    local.slice(
+      0,
+      10
+    );
+
+
+  setLocalRecent(
+    local
+  );
+
+
+  recentRows =
+    local;
+
+
+  renderRecent();
+
+  updateStats();
+
+  updateProgress();
+
+
+  if (!client) return;
+
+
+  try {
+
+    await client
+      .from(
+        "student_recent_resources"
+      )
+      .delete()
+      .eq(
+        "user_id",
+        currentUser.id
+      )
+      .eq(
+        "resource_id",
+        Number(
+          resource.id
+        )
+      );
+
+
+    await client
+      .from(
+        "student_recent_resources"
+      )
+      .insert({
+
+        user_id:
+          currentUser.id,
+
+        resource_id:
+          Number(
+            resource.id
+          )
+
+      });
+
+  } catch(error) {
+
+    console.warn(
+      "Recent save warning:",
+      error
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   RENDER RECENT
+========================================================= */
+
+function renderRecent() {
+
+  const box =
+    document.getElementById(
+      "recentList"
+    );
+
+  if (!box) return;
+
+
+  if (!recentRows.length) {
+
+    box.innerHTML = `
+
+      <div class="empty-message">
+
+        No resources opened yet.
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  const html = [];
+
+
+  recentRows.forEach(
+    row => {
+
+      const resource =
+        resources.find(
+          item =>
+            String(
+              item.id
+            ) ===
+            String(
+              row.resource_id
+            )
+        );
+
+
+      if (!resource) return;
+
+
+      html.push(`
+
+        <div class="recent-item">
+
+          <div class="recent-icon">
+
+            ${getIcon(
+              resource.type
+            )}
+
+          </div>
+
+          <div class="recent-info">
+
+            <strong>
+
+              ${escapeHTML(
+                resource.title ||
+                "Resource"
+              )}
+
+            </strong>
+
+            <small>
+              Recently opened
+            </small>
+
+          </div>
+
+          <button
+            class="recent-open"
+            data-action="open"
+            data-id="${resource.id}">
+
+            Open
+
+          </button>
+
+        </div>
+
+      `);
+
+    }
+  );
+
+
+  box.innerHTML =
+    html.length
+      ? html.join("")
+      : `
+
+        <div class="empty-message">
+
+          No resources opened yet.
+
+        </div>
+
+      `;
+
+}
+
+
+/* =========================================================
+   FIND RESOURCE
+========================================================= */
+
+function findResource(id) {
+
+  return resources.find(
+    resource =>
+      String(
+        resource.id
+      ) ===
+      String(id)
+  );
+
+}
+
+
+/* =========================================================
+   OPEN RESOURCE
+========================================================= */
+
+async function openResourceById(id) {
+
+  const resource =
+    findResource(id);
+
+
+  if (!resource) {
+
+    showMessage(
+      "Resource could not be found.",
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  const url =
+    resource.file_url ||
+    resource.url ||
+    "";
+
+
+  if (!url) {
+
+    showMessage(
+      "This resource does not have a file attached.",
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  await addRecentResource(
+    resource
+  );
+
+
+  const newWindow =
+    window.open(
+      url,
+      "_blank",
+      "noopener,noreferrer"
+    );
+
+
+  if (!newWindow) {
+
+    window.location.href =
+      url;
+
+  }
+
+}
+
+
+/* =========================================================
+   SEARCH + SUBJECT FILTER
+========================================================= */
+
+function getFilteredResources() {
+
+  const input =
+    document.getElementById(
+      "studentSearch"
+    );
+
+
+  const query =
+    input
+      ? input.value
+          .toLowerCase()
+          .trim()
+      : "";
+
+
+  return resources.filter(
+    resource => {
+
+      const type =
+        String(
+          resource.type ||
+          ""
+        ).toLowerCase();
+
+
+      const matchesType =
+        currentFilter === "all" ||
+        type === currentFilter;
+
+
+      const searchable = `
+
+        ${resource.title || ""}
+
+        ${resource.description || ""}
+
+        ${resource.subject || ""}
+
+        ${resource.type || ""}
+
+        ${resource.level || ""}
+
+        ${resource.class_level || ""}
+
+        ${resource.term || ""}
+
+      `.toLowerCase();
+
+
+      const matchesSearch =
+        !query ||
+        searchable.includes(
+          query
+        );
+
+
+      return (
+        matchesType &&
+        matchesSearch
+      );
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   RENDER RESOURCES
+========================================================= */
+
+function renderResources(list) {
+
+  const grid =
+    document.getElementById(
+      "studentResourceGrid"
+    );
+
+  if (!grid) return;
+
+
+  if (!list.length) {
+
+    grid.innerHTML = `
+
+      <div class="empty-message">
+
+        No resources found.
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  grid.innerHTML =
+    list.map(
+      resource => {
+
+        const id =
+          resourceId(
+            resource
+          );
+
+
+        const saved =
+          savedResourceIds.includes(
+            id
+          );
+
+
+        return `
+
+          <article
+            class="resource-card">
+
+            <div
+              class="resource-icon">
+
+              ${getIcon(
+                resource.type
+              )}
+
+            </div>
+
+            <small>
+
+              ${escapeHTML(
+                String(
+                  resource.type ||
+                  "RESOURCE"
+                ).toUpperCase()
+              )}
+
+            </small>
+
+            <h3>
+
+              ${escapeHTML(
+                resource.title ||
+                "Untitled Resource"
+              )}
+
+            </h3>
+
+            <p>
+
+              ${escapeHTML(
+                resource.description ||
+                "Educational resource"
+              )}
+
+            </p>
+
+            <div
+              class="resource-actions">
+
+              <button
+                class="open-resource"
+                data-action="open"
+                data-id="${id}">
+
+                Tap to Open →
+
+              </button>
+
+              <button
+                class="save-resource ${
+                  saved
+                    ? "saved"
+                    : ""
+                }"
+                data-action="save"
+                data-id="${id}">
+
+                ${
+                  saved
+                    ? "❤️"
+                    : "♡"
+                }
+
+              </button>
+
+            </div>
+
+          </article>
+
+        `;
+
+      }
+    ).join("");
+
+}
+
+
+/* =========================================================
+   STATISTICS
+========================================================= */
+
+function updateStats() {
+
+  const total =
+    document.getElementById(
+      "totalResources"
+    );
+
+  const saved =
+    document.getElementById(
+      "savedCount"
+    );
+
+  const recent =
+    document.getElementById(
+      "recentCount"
+    );
+
+
+  if (total) {
+
+    total.textContent =
+      resources.length;
+
+  }
+
+
+  if (saved) {
+
+    saved.textContent =
+      savedResourceIds.length;
+
+  }
+
+
+  if (recent) {
+
+    recent.textContent =
+      recentRows.length;
+
+  }
+
+}
+
+
+/* =========================================================
+   LEARNING PROGRESS
+========================================================= */
+
+function updateProgress() {
+
+  const percent =
+    document.getElementById(
+      "progressPercent"
+    );
+
+  const fill =
+    document.getElementById(
+      "progressFill"
+    );
+
+  const text =
+    document.getElementById(
+      "progressText"
+    );
+
+
+  if (
+    !percent ||
+    !fill ||
+    !text
+  ) {
+
+    return;
+
+  }
+
+
+  let progress = 0;
+
+
+  if (resources.length) {
+
+    const opened =
+      new Set(
+        recentRows.map(
+          row =>
+            String(
+              row.resource_id
+            )
+        )
+      ).size;
+
+
+    progress =
+      Math.round(
+        Math.min(
+          100,
+          (
+            opened /
+            resources.length
+          ) *
+          100
+        )
+      );
+
+  }
+
+
+  percent.textContent =
+    progress + "%";
+
+
+  fill.style.width =
+    progress + "%";
+
+
+  if (progress === 0) {
+
+    text.textContent =
+      "Start exploring resources to build your progress.";
+
+  } else if (progress < 25) {
+
+    text.textContent =
+      "Great start! Keep exploring learning resources.";
+
+  } else if (progress < 50) {
+
+    text.textContent =
+      "You're making progress. Keep learning!";
+
+  } else if (progress < 75) {
+
+    text.textContent =
+      "Excellent progress! You're becoming an active learner.";
+
+  } else if (progress < 100) {
+
+    text.textContent =
+      "Amazing! You're close to completing your learning journey.";
+
+  } else {
+
+    text.textContent =
+      "Outstanding! You've explored the available resources.";
+
+  }
+
+}
+
+
+/* =========================================================
+   RESOURCE BUTTON EVENTS
+========================================================= */
+
+document.addEventListener(
+  "click",
+  async event => {
+
+    const button =
+      event.target.closest(
+        "[data-action]"
+      );
+
+
+    if (!button) return;
+
+
+    const action =
+      button.dataset.action;
+
+
+    const id =
+      button.dataset.id;
+
+
+    if (
+      action === "open"
+    ) {
+
+      await openResourceById(
+        id
+      );
+
+    }
+
+
+    if (
+      action === "save"
+    ) {
+
+      button.disabled =
+        true;
+
+      await toggleSaved(
+        id
+      );
+
+      button.disabled =
+        false;
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+const searchInput =
+  document.getElementById(
+    "studentSearch"
+  );
+
+
+const searchButton =
+  document.getElementById(
+    "searchButton"
+  );
+
+
+if (searchInput) {
+
+  searchInput.addEventListener(
+    "input",
+    () => {
+
+      renderResources(
+        getFilteredResources()
+      );
+
+    }
+  );
+
+}
+
+
+if (searchButton) {
+
+  searchButton.addEventListener(
+    "click",
+    () => {
+
+      renderResources(
+        getFilteredResources()
+      );
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   RESOURCE TYPE FILTERS
+========================================================= */
+
+document
+  .querySelectorAll(
+    ".filter"
+  )
+  .forEach(
+    button => {
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          document
+            .querySelectorAll(
+              ".filter"
+            )
+            .forEach(
+              item => {
+
+                item.classList.remove(
+                  "active"
+                );
+
+              }
+            );
+
+
+          button.classList.add(
+            "active"
+          );
+
+
+          currentFilter =
+            button.dataset.filter;
+
+
+          renderResources(
+            getFilteredResources()
+          );
+
+        }
+      );
+
+    }
+  );
+
+
+/* =========================================================
+   SUBJECT BUTTONS
+========================================================= */
+
+document
+  .querySelectorAll(
+    ".subject-item"
+  )
+  .forEach(
+    button => {
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          const subject =
+            button.dataset.subject;
+
+
+          const input =
+            document.getElementById(
+              "studentSearch"
+            );
+
+
+          if (input) {
+
+            input.value =
+              subject;
+
+          }
+
+
+          currentFilter =
+            "all";
+
+
+          document
+            .querySelectorAll(
+              ".filter"
+            )
+            .forEach(
+              item => {
+
+                item.classList.remove(
+                  "active"
+                );
+
+              }
+            );
+
+
+          const allFilter =
+            document.querySelector(
+              '[data-filter="all"]'
+            );
+
+
+          if (allFilter) {
+
+            allFilter.classList.add(
+              "active"
+            );
+
+          }
+
+
+          renderResources(
+            getFilteredResources()
+          );
+
+
+          document
+            .getElementById(
+              "library"
+            )
+            ?.scrollIntoView({
+              behavior: "smooth"
+            });
+
+        }
+      );
+
+    }
+  );
+
+
+/* =========================================================
+   SIGN OUT
+========================================================= */
+
+document
+  .getElementById(
+    "logoutButton"
+  )
+  .addEventListener(
+    "click",
+    async () => {
+
+      try {
+
+        if (client) {
+
+          await client.auth.signOut();
+
+        }
+
+      } catch(error) {
+
+        console.error(
+          "Sign out error:",
+          error
+        );
+
+      }
+
+
+      window.location.href =
+        "index.html";
+
+    }
+  );
+
+
+/* =========================================================
+   START DASHBOARD
+========================================================= */
+
+loadStudent();
+
+</script>
+
+
+</body>
+
+  </html>

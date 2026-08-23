@@ -1,16 +1,14 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 
-<meta charset="utf-8">
+<meta charset="UTF-8">
 
 <meta
   name="viewport"
-  content="width=device-width,initial-scale=1">
+  content="width=device-width, initial-scale=1.0">
 
-<title>AGULIBRARY — Lesson Reader</title>
-
-<link rel="stylesheet" href="style.css">
+<title>AGULIBRARY — Lesson</title>
 
 <style>
 
@@ -25,7 +23,7 @@ html{
 body{
   margin:0;
   background:#171918;
-  color:#e8f3ee;
+  color:#edf8f3;
   font-family:
     system-ui,
     -apple-system,
@@ -34,20 +32,22 @@ body{
     sans-serif;
 }
 
-.reader-header{
+/* =========================
+   HEADER
+========================= */
+
+header{
   position:sticky;
   top:0;
   z-index:1000;
 
-  min-height:90px;
+  min-height:82px;
 
   display:flex;
   align-items:center;
   justify-content:space-between;
 
-  gap:15px;
-
-  padding:14px 5%;
+  padding:12px 5%;
 
   background:#202120;
   border-bottom:1px solid #46504b;
@@ -58,107 +58,121 @@ body{
   align-items:center;
   gap:12px;
 
-  text-decoration:none;
   color:#fff;
+  text-decoration:none;
 }
 
 .brand-mark{
-  width:55px;
-  height:55px;
+  width:52px;
+  height:52px;
 
   display:grid;
   place-items:center;
 
   border-radius:17px;
 
-  background:#004d16;
+  background:#087a4b;
 
-  font-size:21px;
+  font-size:20px;
   font-weight:900;
 }
 
-.brand b{
-  display:block;
+.brand-title{
   font-size:20px;
+  font-weight:900;
 }
 
-.brand small{
+.brand-subtitle{
   display:block;
-  margin-top:4px;
-  color:#9ca9a4;
+
+  margin-top:3px;
+
+  color:#8fa09a;
+
   font-size:9px;
+
   letter-spacing:2px;
 }
 
-.header-actions{
-  display:flex;
-  gap:9px;
-  align-items:center;
-}
-
-.header-btn{
+.back-button{
   display:inline-flex;
   align-items:center;
   justify-content:center;
 
-  padding:11px 15px;
+  padding:11px 16px;
 
-  border:1px solid #555b58;
   border-radius:12px;
 
-  background:#292b2a;
-  color:#70e7bc;
+  background:#087a4b;
+
+  color:#fff;
 
   text-decoration:none;
+
   font-weight:800;
 }
 
-.reader{
+/* =========================
+   MAIN
+========================= */
+
+main{
   width:min(1000px,92%);
+
   margin:auto;
-  padding:35px 0 80px;
+
+  padding:30px 0 80px;
 }
 
-.message{
+/* =========================
+   STATUS
+========================= */
+
+.status{
   display:none;
 
   padding:14px 18px;
-  margin-bottom:20px;
 
-  border-radius:14px;
+  margin-bottom:18px;
+
+  border-radius:13px;
 
   font-weight:800;
 }
 
-.message.show{
+.status.show{
   display:block;
 }
 
-.message.success{
-  background:#073c25;
-  color:#73e8bd;
+.status.success{
+  background:#063b24;
+  color:#70e7bc;
 }
 
-.message.error{
+.status.error{
   background:#421d1d;
-  color:#ff9d9d;
+  color:#ff9b9b;
 }
 
-.lesson-top{
+/* =========================
+   LESSON HERO
+========================= */
+
+.lesson-hero{
+  padding:35px;
+
+  border-radius:28px;
+
   background:
     linear-gradient(
       135deg,
       #003d17,
-      #005a25
+      #087a4b
     );
 
   border:1px solid #176b40;
 
-  border-radius:30px;
-
-  padding:38px;
-
-  margin-bottom:22px;
+  margin-bottom:20px;
 }
 
 .eyebrow{
@@ -171,31 +185,32 @@ body{
   letter-spacing:3px;
 }
 
-.lesson-top h1{
-  margin:14px 0 12px;
+.lesson-hero h1{
+  margin:15px 0;
 
   font-size:
-    clamp(32px,6vw,54px);
+    clamp(34px,7vw,58px);
 
   line-height:1.05;
 
-  color:#effff8;
+  color:#fff;
 }
 
-.lesson-top p{
+.lesson-hero p{
   margin:0;
 
-  max-width:760px;
+  max-width:780px;
 
-  color:#c4d8cf;
-
-  line-height:1.7;
+  color:#c8ded5;
 
   font-size:17px;
+
+  line-height:1.7;
 }
 
-.lesson-meta{
+.meta{
   display:flex;
+
   flex-wrap:wrap;
 
   gap:8px;
@@ -203,40 +218,47 @@ body{
   margin-top:22px;
 }
 
-.meta{
+.meta span{
   padding:8px 12px;
 
   border-radius:20px;
 
-  background:rgba(255,255,255,.09);
+  background:rgba(255,255,255,.10);
 
-  color:#dff8ec;
+  color:#e7fff5;
 
   font-size:12px;
 
   font-weight:800;
 }
 
+/* =========================
+   PROGRESS
+========================= */
+
 .progress-card{
+  padding:23px;
+
+  margin-bottom:20px;
+
   background:#202120;
 
   border:1px solid #4b5550;
 
   border-radius:22px;
-
-  padding:22px;
-
-  margin-bottom:22px;
 }
 
-.progress-line{
+.progress-top{
   display:flex;
 
   align-items:center;
+
   justify-content:space-between;
 
   gap:15px;
+}
 
+.progress-top span{
   color:#a9b7b1;
 
   font-size:13px;
@@ -244,26 +266,29 @@ body{
   font-weight:900;
 }
 
-.progress-line strong{
+.progress-top strong{
   color:#70e7bc;
 
-  font-size:18px;
+  font-size:21px;
 }
 
-.progress-bar{
+.progress-track{
+  width:100%;
+
   height:14px;
 
-  margin-top:13px;
+  margin-top:12px;
+
+  overflow:hidden;
 
   background:#10271d;
 
   border-radius:50px;
-
-  overflow:hidden;
 }
 
 .progress-fill{
   width:0;
+
   height:100%;
 
   background:#087a4b;
@@ -271,20 +296,26 @@ body{
   border-radius:50px;
 
   transition:
-    width .5s ease;
+    width .4s ease;
 }
 
+/* =========================
+   CONTENT
+========================= */
+
 .lesson-content{
-  background:#202120;
-
-  border:1px solid #4b5550;
-
-  border-radius:28px;
+  min-height:400px;
 
   padding:
     clamp(24px,5vw,48px);
 
-  min-height:450px;
+  margin-bottom:20px;
+
+  background:#202120;
+
+  border:1px solid #4b5550;
+
+  border-radius:27px;
 }
 
 .lesson-content h2{
@@ -298,13 +329,13 @@ body{
 .lesson-content h3{
   margin-top:30px;
 
-  color:#eaf5f1;
+  color:#f0f8f5;
 
   font-size:23px;
 }
 
 .lesson-content p{
-  color:#c5d2cc;
+  color:#c7d4ce;
 
   font-size:17px;
 
@@ -313,11 +344,9 @@ body{
 
 .lesson-content ul,
 .lesson-content ol{
-  color:#c5d2cc;
+  color:#c7d4ce;
 
   line-height:1.9;
-
-  padding-left:26px;
 }
 
 .lesson-content li{
@@ -331,9 +360,9 @@ body{
 
   max-width:100%;
 
-  border-radius:16px;
+  margin:20px auto;
 
-  margin:18px auto;
+  border-radius:15px;
 }
 
 .lesson-content a{
@@ -343,51 +372,59 @@ body{
 .lesson-content blockquote{
   margin:25px 0;
 
-  padding:18px 20px;
-
-  border-left:4px solid #087a4b;
+  padding:18px;
 
   background:#18221e;
+
+  border-left:4px solid #087a4b;
 
   border-radius:10px;
 
   color:#c8d8d1;
 }
 
-.lesson-file{
-  margin-top:30px;
+/* =========================
+   FILE
+========================= */
+
+.file-card{
+  margin-top:25px;
 
   padding:22px;
+
+  border-radius:17px;
 
   background:#18221e;
 
   border:1px solid #365044;
-
-  border-radius:18px;
 }
 
-.lesson-file a{
+.file-button{
   display:inline-block;
 
   margin-top:12px;
 
-  padding:12px 17px;
+  padding:12px 18px;
+
+  border-radius:11px;
 
   background:#087a4b;
 
   color:#fff;
-
-  border-radius:12px;
 
   text-decoration:none;
 
   font-weight:900;
 }
 
-.complete-card{
-  margin-top:22px;
+/* =========================
+   COMPLETE
+========================= */
 
-  padding:28px;
+.complete-card{
+  padding:30px;
+
+  margin-bottom:20px;
 
   text-align:center;
 
@@ -398,24 +435,22 @@ body{
   border-radius:24px;
 }
 
-.complete-card h3{
+.complete-card h2{
   margin-top:0;
 
-  color:#eaf5f1;
-
-  font-size:24px;
+  font-size:26px;
 }
 
 .complete-card p{
   color:#a9b7b1;
 
-  line-height:1.6;
+  line-height:1.7;
 }
 
 .complete-button{
   border:0;
 
-  padding:14px 25px;
+  padding:15px 25px;
 
   border-radius:13px;
 
@@ -423,7 +458,7 @@ body{
 
   color:#fff;
 
-  font-size:15px;
+  font-size:16px;
 
   font-weight:900;
 
@@ -431,16 +466,20 @@ body{
 }
 
 .complete-button:hover{
-  background:#09915a;
+  background:#09935b;
 }
 
 .complete-button.completed{
-  background:#075c3b;
+  background:#063b24;
 
   color:#70e7bc;
 
-  cursor:pointer;
+  border:1px solid #087a4b;
 }
+
+/* =========================
+   NAVIGATION
+========================= */
 
 .navigation{
   display:grid;
@@ -449,39 +488,37 @@ body{
     1fr 1fr;
 
   gap:15px;
-
-  margin-top:22px;
 }
 
-.nav-card{
+.nav-button{
   min-height:90px;
 
-  padding:20px;
+  padding:18px;
+
+  text-align:left;
 
   border:1px solid #4b5550;
 
-  border-radius:20px;
+  border-radius:18px;
 
   background:#202120;
 
-  color:#eaf5f1;
-
-  text-align:left;
+  color:#fff;
 
   cursor:pointer;
 }
 
-.nav-card:hover{
+.nav-button:hover{
   border-color:#70e7bc;
 }
 
-.nav-card:disabled{
-  opacity:.45;
+.nav-button:disabled{
+  opacity:.4;
 
   cursor:not-allowed;
 }
 
-.nav-card small{
+.nav-button small{
   display:block;
 
   margin-bottom:7px;
@@ -491,11 +528,15 @@ body{
   font-weight:900;
 }
 
-.nav-card strong{
+.nav-button strong{
   display:block;
 
   line-height:1.4;
 }
+
+/* =========================
+   LOADING
+========================= */
 
 .loading{
   padding:70px 20px;
@@ -508,18 +549,22 @@ body{
 }
 
 .empty{
-  padding:70px 20px;
+  padding:60px 20px;
 
   text-align:center;
 
-  color:#9eaba5;
+  color:#a0ada7;
 
   line-height:1.7;
 }
 
+/* =========================
+   MOBILE
+========================= */
+
 @media(max-width:600px){
 
-  .reader-header{
+  header{
     min-height:75px;
   }
 
@@ -527,30 +572,30 @@ body{
     width:45px;
     height:45px;
 
-    font-size:18px;
-  }
-
-  .brand b{
     font-size:17px;
   }
 
-  .brand small{
+  .brand-title{
+    font-size:17px;
+  }
+
+  .brand-subtitle{
     font-size:7px;
   }
 
-  .header-btn{
+  .back-button{
     padding:9px 11px;
 
     font-size:12px;
   }
 
-  .reader{
+  main{
     width:90%;
 
-    padding-top:25px;
+    padding-top:22px;
   }
 
-  .lesson-top{
+  .lesson-hero{
     padding:28px;
   }
 
@@ -576,103 +621,99 @@ body{
 <body>
 
 
-<header class="reader-header">
+<header>
 
-<a
-  class="brand"
-  href="student.html">
+  <a
+    href="student.html"
+    class="brand">
 
-  <div class="brand-mark">
-    AG
-  </div>
+    <div class="brand-mark">
+      AG
+    </div>
 
-  <div>
+    <div>
 
-    <b>
-      AGULIBRARY
-    </b>
+      <div class="brand-title">
+        AGULIBRARY
+      </div>
 
-    <small>
-      LESSON READER
-    </small>
+      <span class="brand-subtitle">
+        LESSON READER
+      </span>
 
-  </div>
+    </div>
 
-</a>
+  </a>
 
 
-<div class="header-actions">
+  <a
+    href="student.html"
+    class="back-button">
 
-<a
-  class="header-btn"
-  href="student.html">
+    ← Dashboard
 
-  ← Dashboard
-
-</a>
-
-</div>
+  </a>
 
 </header>
 
 
-<main class="reader">
+<main>
 
 
 <div
-  id="message"
-  class="message">
+  id="status"
+  class="status">
 </div>
 
 
-<section class="lesson-top">
+<section class="lesson-hero">
 
-<span class="eyebrow">
-AGULIBRARY LESSON
-</span>
-
-
-<h1 id="lessonTitle">
-Loading lesson...
-</h1>
+  <div class="eyebrow">
+    AGULIBRARY • LESSON
+  </div>
 
 
-<p id="lessonDescription">
-Please wait while the lesson is loading.
-</p>
+  <h1 id="lessonTitle">
+    Loading lesson...
+  </h1>
 
 
-<div
-  id="lessonMeta"
-  class="lesson-meta">
-</div>
+  <p id="lessonDescription">
+    Please wait while your lesson loads.
+  </p>
+
+
+  <div
+    id="lessonMeta"
+    class="meta">
+  </div>
 
 </section>
 
 
 <section class="progress-card">
 
-<div class="progress-line">
+  <div class="progress-top">
 
-<span>
-LESSON PROGRESS
-</span>
+    <span>
+      LESSON PROGRESS
+    </span>
 
-<strong id="progressPercent">
-0%
-</strong>
+    <strong id="lessonPercent">
+      0%
+    </strong>
 
-</div>
+  </div>
 
 
-<div class="progress-bar">
+  <div class="progress-track">
 
-<div
-  id="progressFill"
-  class="progress-fill">
-</div>
+    <div
+      id="lessonFill"
+      class="progress-fill">
+    </div>
 
-</div>
+  </div>
 
 </section>
 
@@ -681,32 +722,33 @@ LESSON PROGRESS
   id="lessonContent"
   class="lesson-content">
 
-<div class="loading">
-Loading lesson content...
-</div>
+  <div class="loading">
+    Loading lesson content...
+  </div>
 
 </section>
 
 
 <section class="complete-card">
 
-<h3>
-🎓 Learning Progress
-</h3>
-
-<p id="completionMessage">
-Study this lesson and mark it as completed
-when you finish.
-</p>
+  <h2>
+    🎓 Complete This Lesson
+  </h2>
 
 
-<button
-  id="completeButton"
-  class="complete-button">
+  <p id="completeText">
+    Study the lesson carefully, then mark it
+    as completed when you finish.
+  </p>
 
-  ✓ Mark Lesson as Completed
 
-</button>
+  <button
+    id="completeButton"
+    class="complete-button">
+
+    ✓ Mark Lesson as Completed
+
+  </button>
 
 </section>
 
@@ -714,38 +756,36 @@ when you finish.
 <section class="navigation">
 
 
-<button
-  id="previousButton"
-  class="nav-card"
-  type="button"
-  disabled>
+  <button
+    id="previousButton"
+    class="nav-button"
+    disabled>
 
-  <small>
-    ← PREVIOUS LESSON
-  </small>
+    <small>
+      ← PREVIOUS LESSON
+    </small>
 
-  <strong id="previousTitle">
-    No previous lesson
-  </strong>
+    <strong id="previousTitle">
+      No previous lesson
+    </strong>
 
-</button>
+  </button>
 
 
-<button
-  id="nextButton"
-  class="nav-card"
-  type="button"
-  disabled>
+  <button
+    id="nextButton"
+    class="nav-button"
+    disabled>
 
-  <small>
-    NEXT LESSON →
-  </small>
+    <small>
+      NEXT LESSON →
+    </small>
 
-  <strong id="nextTitle">
-    No next lesson
-  </strong>
+    <strong id="nextTitle">
+      No next lesson
+    </strong>
 
-</button>
+  </button>
 
 
 </section>
@@ -763,12 +803,12 @@ when you finish.
 
 <script>
 
+/* =====================================================
+   AGULIBRARY LESSON READER
+===================================================== */
 
-/* =========================================================
-   SUPABASE
-========================================================= */
 
-const client =
+let client =
   typeof getSupabase === "function"
     ? getSupabase()
     : null;
@@ -778,49 +818,47 @@ let currentUser = null;
 
 let currentLesson = null;
 
-let lessons = [];
+let allLessons = [];
 
 let completedLessons = [];
 
 
-/* =========================================================
+/* =====================================================
    MESSAGE
-========================================================= */
+===================================================== */
 
-function showMessage(
-  message,
+function showStatus(
+  text,
   type = "success"
 ){
 
   const box =
     document.getElementById(
-      "message"
+      "status"
     );
 
-  if(!box)return;
-
-  box.textContent =
-    message;
+  box.textContent = text;
 
   box.className =
-    "message show " +
+    "status show " +
     type;
 
   setTimeout(
-    ()=>{
-      box.classList.remove(
-        "show"
-      );
+    function(){
+
+      box.className =
+        "status";
+
     },
-    3500
+    4000
   );
 
 }
 
 
-/* =========================================================
-   URL LESSON ID
-========================================================= */
+/* =====================================================
+   GET LESSON ID
+===================================================== */
 
 function getLessonId(){
 
@@ -838,78 +876,17 @@ function getLessonId(){
 }
 
 
-/* =========================================================
-   LOGIN
-========================================================= */
-
-async function checkStudent(){
-
-  if(!client){
-
-    showMessage(
-      "Supabase connection is not available.",
-      "error"
-    );
-
-    return null;
-  }
-
-
-  try{
-
-    const {
-      data,
-      error
-    } =
-      await client.auth.getSession();
-
-
-    if(
-      error ||
-      !data ||
-      !data.session
-    ){
-
-      window.location.href =
-        "auth.html";
-
-      return null;
-
-    }
-
-
-    return data.session.user;
-
-  }catch(error){
-
-    console.error(
-      error
-    );
-
-    showMessage(
-      "Unable to check your account.",
-      "error"
-    );
-
-    return null;
-
-  }
-
-}
-
-
-/* =========================================================
+/* =====================================================
    COMPLETION STORAGE
-========================================================= */
+===================================================== */
 
-function completedStorageKey(){
+function completionKey(){
 
   if(!currentUser){
 
     return "AGU_COMPLETED_GUEST";
 
   }
-
 
   return (
     "AGU_COMPLETED_" +
@@ -919,21 +896,17 @@ function completedStorageKey(){
 }
 
 
-function getCompletedLessons(){
+function getCompleted(){
 
   try{
 
     return JSON.parse(
       localStorage.getItem(
-        completedStorageKey()
+        completionKey()
       ) || "[]"
     );
 
   }catch(error){
-
-    console.error(
-      error
-    );
 
     return [];
 
@@ -942,31 +915,23 @@ function getCompletedLessons(){
 }
 
 
-function setCompletedLessons(list){
+function saveCompleted(){
 
-  try{
-
-    localStorage.setItem(
-      completedStorageKey(),
-      JSON.stringify(list)
-    );
-
-  }catch(error){
-
-    console.error(
-      error
-    );
-
-  }
+  localStorage.setItem(
+    completionKey(),
+    JSON.stringify(
+      completedLessons
+    )
+  );
 
 }
 
 
-/* =========================================================
-   IS COMPLETED
-========================================================= */
+/* =====================================================
+   CHECK COMPLETION
+===================================================== */
 
-function isLessonCompleted(id){
+function isCompleted(id){
 
   return completedLessons.some(
     item =>
@@ -977,16 +942,13 @@ function isLessonCompleted(id){
 }
 
 
-/* =========================================================
-   MARK COMPLETED
-========================================================= */
+/* =====================================================
+   MARK COMPLETE
+===================================================== */
 
-async function markLessonCompleted(){
+async function completeLesson(){
 
-  if(
-    !currentUser ||
-    !currentLesson
-  ){
+  if(!currentLesson){
 
     return;
 
@@ -1000,16 +962,14 @@ async function markLessonCompleted(){
 
 
   if(
-    !isLessonCompleted(id)
+    !isCompleted(id)
   ){
 
     completedLessons.push(
       id
     );
 
-    setCompletedLessons(
-      completedLessons
-    );
+    saveCompleted();
 
   }
 
@@ -1018,67 +978,68 @@ async function markLessonCompleted(){
 
   updateOverallProgress();
 
-  showMessage(
-    "🎉 Lesson completed! Your learning progress has been updated."
+
+  showStatus(
+    "🎉 Lesson completed! Your progress has been saved."
   );
 
 
   /*
-    Try to save completion in Supabase
-    if a table named student_completed_lessons
-    exists.
+    Optional Supabase backup.
+    This does NOT stop local completion
+    if the table does not exist.
   */
 
-  try{
+  if(client && currentUser){
 
-    const {
-      error
-    } =
-      await client
-        .from(
-          "student_completed_lessons"
-        )
-        .upsert(
-          {
-            user_id:
-              currentUser.id,
+    try{
 
-            resource_id:
-              Number(
+      const result =
+        await client
+          .from(
+            "student_completed_lessons"
+          )
+          .upsert(
+            {
+              user_id:
+                currentUser.id,
+
+              resource_id:
                 currentLesson.id
-              )
-          },
-          {
-            onConflict:
-              "user_id,resource_id"
-          }
+            },
+            {
+              onConflict:
+                "user_id,resource_id"
+            }
+          );
+
+
+      if(result.error){
+
+        console.warn(
+          "Completion backup:",
+          result.error
         );
 
+      }
 
-    if(error){
+    }catch(error){
 
       console.warn(
-        "Supabase completion backup:",
+        "Completion backup unavailable:",
         error
       );
 
     }
-
-  }catch(error){
-
-    console.warn(
-      "Completion backup unavailable:",
-      error
-    );
 
   }
 
 }
 
 
-/* =========================================================
-   COMPLETION UI
-========================================================= */
+/* =====================================================
+   UPDATE COMPLETION UI
+===================================================== */
 
 function updateCompletionUI(){
 
@@ -1089,8 +1050,8 @@ function updateCompletionUI(){
   }
 
 
-  const completed =
-    isLessonCompleted(
+  const done =
+    isCompleted(
       currentLesson.id
     );
 
@@ -1101,36 +1062,37 @@ function updateCompletionUI(){
     );
 
 
-  const message =
+  const text =
     document.getElementById(
-      "completionMessage"
+      "completeText"
     );
 
 
   const percent =
     document.getElementById(
-      "progressPercent"
+      "lessonPercent"
     );
 
 
   const fill =
     document.getElementById(
-      "progressFill"
+      "lessonFill"
     );
 
 
-  if(completed){
+  if(done){
 
     button.textContent =
       "✓ Lesson Completed";
+
 
     button.classList.add(
       "completed"
     );
 
 
-    message.textContent =
-      "Excellent! You have completed this lesson. You can continue to the next lesson.";
+    text.textContent =
+      "Excellent! You have completed this lesson. Continue to the next lesson when you are ready.";
 
 
     percent.textContent =
@@ -1145,13 +1107,14 @@ function updateCompletionUI(){
     button.textContent =
       "✓ Mark Lesson as Completed";
 
+
     button.classList.remove(
       "completed"
     );
 
 
-    message.textContent =
-      "Study this lesson and mark it as completed when you finish.";
+    text.textContent =
+      "Study the lesson carefully, then mark it as completed when you finish.";
 
 
     percent.textContent =
@@ -1166,61 +1129,63 @@ function updateCompletionUI(){
 }
 
 
-/* =========================================================
-   LOAD LESSON
-========================================================= */
+/* =====================================================
+   LOAD USER
+===================================================== */
 
-async function loadLesson(){
+async function loadUser(){
 
-  currentUser =
-    await checkStudent();
+  if(!client){
 
+    showStatus(
+      "Supabase connection is not available.",
+      "error"
+    );
 
-  if(!currentUser){
-
-    return;
+    return null;
 
   }
 
 
-  completedLessons =
-    getCompletedLessons();
+  const {
+    data,
+    error
+  } =
+    await client.auth.getSession();
 
 
-  const lessonId =
+  if(
+    error ||
+    !data ||
+    !data.session
+  ){
+
+    window.location.href =
+      "auth.html";
+
+    return null;
+
+  }
+
+
+  return data.session.user;
+
+}
+
+
+/* =====================================================
+   LOAD CURRENT LESSON
+===================================================== */
+
+async function loadCurrentLesson(){
+
+  const id =
     getLessonId();
 
 
-  if(!lessonId){
+  if(!id){
 
-    document.getElementById(
-      "lessonTitle"
-    ).textContent =
-      "No Lesson Selected";
-
-
-    document.getElementById(
-      "lessonDescription"
-    ).textContent =
-      "Please return to the Student Dashboard and select a lesson.";
-
-
-    document.getElementById(
-      "lessonContent"
-    ).innerHTML = `
-
-      <div class="empty">
-
-        No lesson ID was provided.
-
-        <br><br>
-
-        Return to your Student Dashboard
-        and select a lesson.
-
-      </div>
-
-    `;
+    showNoLesson();
 
     return;
 
@@ -1236,7 +1201,7 @@ async function loadLesson(){
       .select("*")
       .eq(
         "id",
-        lessonId
+        id
       )
       .maybeSingle();
 
@@ -1248,10 +1213,13 @@ async function loadLesson(){
     );
 
 
-    showMessage(
-      "Unable to load this lesson.",
+    showStatus(
+      "Unable to load this lesson from the database.",
       "error"
     );
+
+
+    showNoLesson();
 
     return;
 
@@ -1260,4 +1228,602 @@ async function loadLesson(){
 
   if(!data){
 
-    document.getElementBy
+    showNoLesson();
+
+    return;
+
+  }
+
+
+  currentLesson =
+    data;
+
+
+  renderLesson();
+
+
+  await loadLessonNavigation();
+
+
+  updateCompletionUI();
+
+}
+
+
+/* =====================================================
+   RENDER LESSON
+===================================================== */
+
+function renderLesson(){
+
+  const lesson =
+    currentLesson;
+
+
+  document.getElementById(
+    "lessonTitle"
+  ).textContent =
+    lesson.title ||
+    "Untitled Lesson";
+
+
+  document.getElementById(
+    "lessonDescription"
+  ).textContent =
+    lesson.description ||
+    "AGULIBRARY educational lesson.";
+
+
+  const meta =
+    document.getElementById(
+      "lessonMeta"
+    );
+
+
+  meta.innerHTML =
+    "";
+
+
+  const values = [
+
+    lesson.subject,
+
+    lesson.level,
+
+    lesson.class_level,
+
+    lesson.term,
+
+    lesson.type
+
+  ];
+
+
+  values.forEach(
+    function(value){
+
+      if(!value)return;
+
+
+      const span =
+        document.createElement(
+          "span"
+        );
+
+
+      span.textContent =
+        value;
+
+
+      meta.appendChild(
+        span
+      );
+
+    }
+  );
+
+
+  const content =
+    lesson.content ||
+    lesson.lesson_content ||
+    lesson.body ||
+    lesson.text ||
+    "";
+
+
+  const fileUrl =
+    lesson.file_url ||
+    lesson.url ||
+    "";
+
+
+  const box =
+    document.getElementById(
+      "lessonContent"
+    );
+
+
+  if(content){
+
+    /*
+      Content from the resources table
+      is expected to contain HTML.
+    */
+
+    box.innerHTML =
+      content;
+
+  }else{
+
+    box.innerHTML = `
+
+      <h2>
+        ${escapeHTML(
+          lesson.title ||
+          "Lesson"
+        )}
+      </h2>
+
+      <p>
+        ${escapeHTML(
+          lesson.description ||
+          "This lesson does not have text content yet."
+        )}
+      </p>
+
+      ${
+        fileUrl
+        ? `
+
+          <div class="file-card">
+
+            <strong>
+              📚 Lesson Material
+            </strong>
+
+            <br>
+
+            <a
+              class="file-button"
+              href="${escapeAttribute(
+                fileUrl
+              )}"
+              target="_blank"
+              rel="noopener noreferrer">
+
+              Open Lesson Material →
+
+            </a>
+
+          </div>
+
+        `
+        : `
+          <p>
+            Lesson content has not been
+            added yet.
+          </p>
+        `
+      }
+
+    `;
+
+  }
+
+}
+
+
+/* =====================================================
+   NO LESSON
+===================================================== */
+
+function showNoLesson(){
+
+  document.getElementById(
+    "lessonTitle"
+  ).textContent =
+    "Lesson Not Found";
+
+
+  document.getElementById(
+    "lessonDescription"
+  ).textContent =
+    "Return to the Student Dashboard and select a lesson.";
+
+
+  document.getElementById(
+    "lessonContent"
+  ).innerHTML = `
+
+    <div class="empty">
+
+      <h2>
+        📖 No Lesson Selected
+      </h2>
+
+      <p>
+        This page needs a lesson ID.
+      </p>
+
+      <p>
+        Return to the Student Dashboard
+        and open a resource marked as
+        <strong>LESSON</strong>.
+      </p>
+
+      <br>
+
+      <a
+        class="back-button"
+        href="student.html">
+
+        ← Return to Dashboard
+
+      </a>
+
+    </div>
+
+  `;
+
+}
+
+
+/* =====================================================
+   LOAD LESSON NAVIGATION
+===================================================== */
+
+async function loadLessonNavigation(){
+
+  const {
+    data,
+    error
+  } =
+    await client
+      .from("resources")
+      .select("*")
+      .order(
+        "created_at",
+        {
+          ascending:true
+        }
+      );
+
+
+  if(error){
+
+    console.warn(
+      "Navigation error:",
+      error
+    );
+
+    allLessons =
+      [currentLesson];
+
+    updateNavigation();
+
+    return;
+
+  }
+
+
+  allLessons =
+    (data || [])
+      .filter(
+        function(item){
+
+          const type =
+            String(
+              item.type || ""
+            ).toLowerCase();
+
+
+          return (
+            type === "lesson" ||
+            type === "course"
+          );
+
+        }
+      );
+
+
+  if(
+    !allLessons.some(
+      item =>
+        String(item.id) ===
+        String(currentLesson.id)
+    )
+  ){
+
+    allLessons.push(
+      currentLesson
+    );
+
+  }
+
+
+  updateNavigation();
+
+}
+
+
+/* =====================================================
+   NAVIGATION
+===================================================== */
+
+function updateNavigation(){
+
+  if(!currentLesson){
+
+    return;
+
+  }
+
+
+  const index =
+    allLessons.findIndex(
+      item =>
+        String(item.id) ===
+        String(
+          currentLesson.id
+        )
+    );
+
+
+  const previous =
+    index > 0
+      ? allLessons[index - 1]
+      : null;
+
+
+  const next =
+    index >= 0 &&
+    index < allLessons.length - 1
+      ? allLessons[index + 1]
+      : null;
+
+
+  const previousButton =
+    document.getElementById(
+      "previousButton"
+    );
+
+
+  const nextButton =
+    document.getElementById(
+      "nextButton"
+    );
+
+
+  if(previous){
+
+    previousButton.disabled =
+      false;
+
+
+    document.getElementById(
+      "previousTitle"
+    ).textContent =
+      previous.title ||
+      "Previous lesson";
+
+
+    previousButton.onclick =
+      function(){
+
+        openLesson(
+          previous.id
+        );
+
+      };
+
+  }else{
+
+    previousButton.disabled =
+      true;
+
+
+    document.getElementById(
+      "previousTitle"
+    ).textContent =
+      "No previous lesson";
+
+  }
+
+
+  if(next){
+
+    nextButton.disabled =
+      false;
+
+
+    document.getElementById(
+      "nextTitle"
+    ).textContent =
+      next.title ||
+      "Next lesson";
+
+
+    nextButton.onclick =
+      function(){
+
+        openLesson(
+          next.id
+        );
+
+      };
+
+  }else{
+
+    nextButton.disabled =
+      true;
+
+
+    document.getElementById(
+      "nextTitle"
+    ).textContent =
+      "No next lesson";
+
+  }
+
+}
+
+
+/* =====================================================
+   OPEN LESSON
+===================================================== */
+
+function openLesson(id){
+
+  window.location.href =
+    "lesson.html?id=" +
+    encodeURIComponent(
+      id
+    );
+
+}
+
+
+/* =====================================================
+   OVERALL PROGRESS
+===================================================== */
+
+function updateOverallProgress(){
+
+  if(!currentUser){
+
+    return;
+
+  }
+
+
+  if(!allLessons.length){
+
+    return;
+
+  }
+
+
+  const total =
+    allLessons.length;
+
+
+  const completed =
+    allLessons.filter(
+      lesson =>
+        isCompleted(
+          lesson.id
+        )
+    ).length;
+
+
+  const percentage =
+    Math.round(
+      (
+        completed /
+        total
+      ) * 100
+    );
+
+
+  localStorage.setItem(
+    "AGU_PROGRESS_" +
+    currentUser.id,
+
+    String(
+      percentage
+    )
+  );
+
+}
+
+
+/* =====================================================
+   ESCAPE
+===================================================== */
+
+function escapeHTML(value){
+
+  return String(
+    value ?? ""
+  ).replace(
+    /[&<>"']/g,
+    function(character){
+
+      const entities = {
+
+        "&":"&amp;",
+        "<":"&lt;",
+        ">":"&gt;",
+        '"':"&quot;",
+        "'":"&#039;"
+
+      };
+
+      return entities[
+        character
+      ];
+
+    }
+  );
+
+}
+
+
+function escapeAttribute(value){
+
+  return escapeHTML(
+    value
+  ).replace(
+    /`/g,
+    "&#096;"
+  );
+
+}
+
+
+/* =====================================================
+   COMPLETE BUTTON
+===================================================== */
+
+document
+  .getElementById(
+    "completeButton"
+  )
+  .addEventListener(
+    "click",
+    completeLesson
+  );
+
+
+/* =====================================================
+   START
+===================================================== */
+
+async function start(){
+
+  currentUser =
+    await loadUser();
+
+
+  if(!currentUser){
+
+    return;
+
+  }
+
+
+  completedLessons =
+    getCompleted();
+
+
+  await loadCurrentLesson();
+
+}
+
+
+start();
+
+</script>
+
+</body>
+</html>

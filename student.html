@@ -1,2709 +1,546 @@
 <!doctype html>
 <html lang="en">
 <head>
+
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<meta
+  name="viewport"
+  content="width=device-width,initial-scale=1"
+>
 
 <title>AGULIBRARY — Student Dashboard</title>
 
 <link rel="stylesheet" href="style.css">
 
 <style>
-*{box-sizing:border-box}
 
-html{scroll-behavior:smooth}
+/* =========================================================
+   AGULIBRARY — PHASE 4 STUDENT DASHBOARD
+========================================================= */
+
+*{
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
 
 body{
   margin:0;
-  background:#171918;
-  color:#e8f3ee;
-  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif
+  background:#111513;
+  color:#eaf7f1;
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
 }
+
+
+/* =========================================================
+   HEADER
+========================================================= */
 
 .student-header{
   position:sticky;
   top:0;
   z-index:1000;
-  min-height:90px;
+
+  min-height:82px;
+
   display:flex;
   align-items:center;
   justify-content:space-between;
+
   gap:15px;
-  padding:14px 5%;
-  background:#202120;
-  border-bottom:1px solid #46504b
+
+  padding:12px 5%;
+
+  background:#1b1e1d;
+
+  border-bottom:1px solid #39433e;
+
+  backdrop-filter:blur(14px);
 }
 
 .student-brand{
   display:flex;
   align-items:center;
-  gap:14px
+  gap:13px;
 }
 
 .mark{
-  width:60px;
-  height:60px;
+  width:56px;
+  height:56px;
+
   display:grid;
   place-items:center;
-  border-radius:20px;
-  background:#004d16;
-  color:#fff;
-  font-size:24px;
-  font-weight:900
+
+  border-radius:18px;
+
+  background:#087a4b;
+
+  color:white;
+
+  font-size:22px;
+  font-weight:900;
 }
 
 .student-brand b{
   display:block;
-  font-size:23px
+  font-size:21px;
 }
 
 .student-brand small{
   display:block;
-  margin-top:4px;
-  color:#9ca9a4;
+  margin-top:3px;
+
+  color:#8d9c95;
+
   font-size:9px;
-  letter-spacing:2px
+  letter-spacing:2px;
 }
 
 .header-actions{
   display:flex;
   align-items:center;
-  gap:10px
+  gap:10px;
 }
 
 .back{
+  color:#6de5ba;
   text-decoration:none;
-  color:#70e7bc;
-  font-weight:800
+  font-weight:800;
 }
 
 .logout{
-  border:1px solid #555b58;
-  background:#555654;
-  color:#78e8c0;
-  padding:12px 19px;
-  border-radius:14px;
+  border:1px solid #4c5751;
+  background:#292d2b;
+  color:#70e7bc;
+
+  padding:11px 17px;
+
+  border-radius:12px;
+
   font-weight:800;
-  cursor:pointer
+
+  cursor:pointer;
 }
 
-.dashboard{
-  width:min(1200px,100%);
-  margin:auto;
-  padding:35px 5% 80px
+.logout:hover{
+  background:#087a4b;
+  color:#fff;
 }
+
+
+/* =========================================================
+   MAIN
+========================================================= */
+
+.dashboard{
+  width:min(1250px,100%);
+  margin:auto;
+
+  padding:32px 5% 80px;
+}
+
+
+/* =========================================================
+   MESSAGE
+========================================================= */
 
 .message{
   display:none;
+
   padding:14px 18px;
+
   margin-bottom:20px;
+
   border-radius:14px;
-  font-weight:800
+
+  font-weight:800;
 }
 
-.message.show{display:block}
+.message.show{
+  display:block;
+}
 
 .message.success{
-  background:#073c25;
-  color:#73e8bd
+  background:#073d27;
+  color:#71e8bd;
 }
 
 .message.error{
-  background:#421d1d;
-  color:#ff9d9d
+  background:#421e1e;
+  color:#ff9e9e;
 }
+
+
+/* =========================================================
+   WELCOME
+========================================================= */
 
 .welcome{
-  background:linear-gradient(135deg,#003d17,#005a25);
-  border:1px solid #176b40;
+  background:
+    linear-gradient(
+      135deg,
+      #003b18,
+      #00602a
+    );
+
+  border:1px solid #176c41;
+
   border-radius:30px;
+
   padding:40px;
-  margin-bottom:25px
+
+  margin-bottom:22px;
 }
 
-.welcome small,
 .eyebrow{
   color:#70e7bc;
+
+  font-size:12px;
+
+  font-weight:900;
+
   letter-spacing:3px;
-  font-weight:900
 }
 
 .welcome h1{
-  margin:15px 0;
-  font-size:clamp(36px,6vw,58px);
-  color:#effff8
+  margin:14px 0;
+
+  font-size:
+    clamp(38px,6vw,60px);
+
+  line-height:1.05;
+
+  color:#f0fff8;
 }
 
 .welcome p{
-  max-width:720px;
-  color:#c4d8cf;
+  max-width:760px;
+
+  color:#c3d8ce;
+
   line-height:1.7;
-  font-size:17px
+
+  font-size:17px;
+}
+
+
+/* =========================================================
+   TOP STAT CARDS
+========================================================= */
+
+.stats{
+  display:grid;
+
+  grid-template-columns:
+    repeat(4,1fr);
+
+  gap:14px;
+
+  margin-bottom:22px;
+}
+
+.stat{
+  padding:23px;
+
+  min-height:135px;
+
+  background:#1d211f;
+
+  border:1px solid #414c46;
+
+  border-radius:22px;
+}
+
+.stat strong{
+  display:block;
+
+  color:#70e7bc;
+
+  font-size:38px;
+
+  margin-bottom:8px;
+}
+
+.stat span{
+  color:#a9b7b0;
+
+  font-size:14px;
+}
+
+
+/* =========================================================
+   PROFILE + ACCOUNT
+========================================================= */
+
+.profile-layout{
+  display:grid;
+
+  grid-template-columns:
+    1.2fr .8fr;
+
+  gap:16px;
+
+  margin-bottom:22px;
 }
 
 .profile-card,
-.progress-card,
-.subjects-card,
-.achievement-card,
-.library-section{
-  background:#202120;
-  border:1px solid #4b5550;
-  border-radius:28px;
-  margin-bottom:22px
+.account-card{
+  background:#1d211f;
+
+  border:1px solid #414c46;
+
+  border-radius:26px;
+
+  padding:30px;
 }
 
 .profile-card{
   display:flex;
+
   align-items:center;
-  gap:25px;
-  padding:32px
+
+  gap:22px;
 }
 
 .profile-avatar{
   width:100px;
   height:100px;
+
+  flex-shrink:0;
+
   display:grid;
   place-items:center;
-  flex-shrink:0;
-  border-radius:28px;
-  background:#003d12;
-  border:1px solid #075c27;
-  color:#f0fff8;
-  font-size:32px;
-  font-weight:900
-}
 
-.profile-info small,
-.progress-card small,
-.subjects-card>small,
-.achievement-card>small{
-  color:#70e7bc;
-  font-size:12px;
+  border-radius:30px;
+
+  background:#003e18;
+
+  border:1px solid #087a4b;
+
+  color:#f2fff9;
+
+  font-size:30px;
+
   font-weight:900;
-  letter-spacing:3px
 }
 
 .profile-info h2{
   margin:8px 0;
-  font-size:34px
+
+  font-size:32px;
 }
 
 .profile-info p{
   margin:0;
+
   color:#a9b7b1;
-  font-size:17px;
-  word-break:break-word
+
+  word-break:break-word;
 }
 
+.profile-tag{
+  display:inline-flex;
+
+  margin-top:10px;
+
+  padding:6px 11px;
+
+  border-radius:20px;
+
+  background:#073c25;
+
+  color:#70e7bc;
+
+  font-size:12px;
+
+  font-weight:800;
+}
+
+.account-card h2{
+  margin:9px 0 20px;
+
+  font-size:28px;
+}
+
+.account-status{
+  display:flex;
+
+  align-items:center;
+
+  gap:9px;
+
+  margin-bottom:15px;
+
+  color:#70e7bc;
+
+  font-weight:800;
+}
+
+.status-dot{
+  width:10px;
+  height:10px;
+
+  border-radius:50%;
+
+  background:#35d978;
+
+  box-shadow:
+    0 0 12px rgba(53,217,120,.7);
+}
+
+.account-info{
+  color:#aab7b1;
+
+  line-height:1.7;
+
+  font-size:14px;
+}
+
+.account-code{
+  display:none;
+
+  margin-top:15px;
+
+  padding:10px 13px;
+
+  border-radius:10px;
+
+  background:#28202e;
+
+  color:#d89bff;
+
+  font-weight:800;
+
+  letter-spacing:1px;
+}
+
+.account-code.show{
+  display:block;
+}
+
+
+/* =========================================================
+   PROGRESS
+========================================================= */
+
 .progress-card{
-  padding:32px
+  background:#1d211f;
+
+  border:1px solid #414c46;
+
+  border-radius:26px;
+
+  padding:30px;
+
+  margin-bottom:22px;
 }
 
 .progress-header{
   display:flex;
+
   justify-content:space-between;
+
   align-items:center;
-  gap:20px
+
+  gap:20px;
 }
 
 .progress-header h2{
-  margin:12px 0 0;
-  font-size:36px
+  margin:9px 0 0;
+
+  font-size:32px;
 }
 
 #progressPercent{
   color:#70e7bc;
-  font-size:52px;
-  font-weight:900
+
+  font-size:48px;
+
+  font-weight:900;
 }
 
 .progress-bar{
-  height:18px;
-  margin-top:25px;
-  background:#10271d;
+  height:17px;
+
+  margin-top:24px;
+
+  overflow:hidden;
+
+  background:#10251b;
+
   border-radius:50px;
-  overflow:hidden
 }
 
 .progress-fill{
-  height:100%;
   width:0;
+
+  height:100%;
+
   background:#087a4b;
+
   border-radius:50px;
-  transition:width .5s ease
+
+  transition:
+    width .5s ease;
 }
 
 .progress-card>p{
   color:#a9b7b1;
-  line-height:1.6
+
+  line-height:1.6;
 }
+
+
+/* =========================================================
+   SUBJECTS
+========================================================= */
 
 .subjects-card{
-  padding:32px
+  background:#1d211f;
+
+  border:1px solid #414c46;
+
+  border-radius:26px;
+
+  padding:30px;
+
+  margin-bottom:22px;
 }
 
-.subjects-card h2,
-.achievement-card h2,
-.library-section h2{
-  margin:12px 0 22px;
-  font-size:36px
+.subjects-card h2{
+  margin:9px 0 22px;
+
+  font-size:32px;
 }
 
 .subjects-grid{
   display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:12px
+
+  grid-template-columns:
+    repeat(5,1fr);
+
+  gap:11px;
 }
 
 .subject-item{
-  min-height:105px;
-  padding:16px;
-  display:flex;
-  flex-direction:column;
-  align-items:flex-start;
-  justify-content:center;
-  gap:7px;
-  border:1px solid #555d59;
-  background:#2b2d2c;
-  color:#eef8f4;
-  border-radius:16px;
-  cursor:pointer;
-  text-align:left;
-  transition:.2s
-}
+  min-height:100px;
 
-.subject-item:hover,
-.subject-item.active{
-  background:#087a4b;
-  border-color:#70e7bc;
-  transform:translateY(-3px)
-}
-
-.subject-icon{font-size:29px}
-
-.subject-name{
-  font-weight:900;
-  font-size:15px
-}
-
-.achievement-card{
-  padding:32px
-}
-
-.badges{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:14px
-}
-
-.badge{
-  min-height:140px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:12px;
-  border:1px solid #4b5550;
-  border-radius:20px;
-  background:#1b1e1c;
-  font-size:42px;
-  text-align:center
-}
-
-.badge span{
-  color:#aebbb6;
-  font-size:14px;
-  font-weight:800
-}
-
-.stats{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:15px;
-  margin-bottom:25px
-}
-
-.stat{
-  min-height:145px;
-  padding:25px;
-  background:#202120;
-  border:1px solid #4b5550;
-  border-radius:22px
-}
-
-.stat strong{
-  display:block;
-  color:#70e7bc;
-  font-size:40px;
-  margin-bottom:10px
-}
-
-.stat span{
-  color:#a8b4af;
-  font-size:15px
-}
-
-.dashboard-grid{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:15px;
-  margin-bottom:25px
-}
-
-.dashboard-card{
-  padding:23px;
-  background:#202120;
-  border:1px solid #4b5550;
-  border-radius:22px;
-  text-decoration:none;
-  color:#eaf5f1
-}
-
-.dashboard-card:hover{
-  border-color:#70e7bc
-}
-
-.dashboard-card .icon{
-  font-size:32px;
-  margin-bottom:12px
-}
-
-.dashboard-card b{display:block}
-
-.dashboard-card span{
-  display:block;
-  margin-top:7px;
-  color:#9eaba5;
-  line-height:1.5;
-  font-size:13px
-}
-
-.library-section{
-  padding:32px
-}
-
-.search-box{
-  display:flex;
-  gap:10px;
-  margin:20px 0
-}
-
-.search-box input{
-  flex:1;
-  min-width:0;
-  padding:16px;
-  background:#181a19;
-  color:#eef8f4;
-  border:1px solid #4b5550;
-  border-radius:13px;
-  outline:none;
-  font-size:16px
-}
-
-.search-box input:focus{
-  border-color:#70e7bc
-}
-
-.search-box button{
-  border:0;
-  padding:0 25px;
-  border-radius:13px;
-  background:#087a4b;
-  color:#fff;
-  font-weight:800;
-  cursor:pointer
-}
-
-.selected-subject{
-  display:none;
-  margin:10px 0 18px;
-  padding:14px 17px;
-  background:#073c25;
-  border:1px solid #176b40;
-  border-radius:13px;
-  color:#70e7bc;
-  font-weight:800
-}
-
-.selected-subject.show{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:10px
-}
-
-.clear-subject{
-  border:0;
-  background:transparent;
-  color:#fff;
-  font-weight:800;
-  cursor:pointer
-}
-
-.filter-row{
-  display:flex;
-  gap:8px;
-  overflow-x:auto;
-  padding-bottom:12px
-}
-
-.filter{
-  flex-shrink:0;
-  padding:10px 16px;
-  border-radius:22px;
-  border:1px solid #4b5550;
-  background:#292b2a;
-  color:#a9b7b1;
-  font-weight:800;
-  cursor:pointer
-}
-
-.filter.active{
-  background:#087a4b;
-  border-color:#087a4b;
-  color:#fff
-}
-
-.resource-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:16px
-}
-
-.resource-card{
-  padding:16px;
-  background:#1b1d1c;
-  border:1px solid #4b5550;
-  border-radius:20px
-}
-
-.resource-card:hover{
-  border-color:#70e7bc
-}
-
-.resource-icon{
-  height:125px;
-  display:grid;
-  place-items:center;
-  margin-bottom:13px;
-  border-radius:15px;
-  background:#0c2418;
-  font-size:46px
-}
-
-.resource-card small{
-  color:#70e7bc;
-  font-weight:900
-}
-
-.resource-card h3{
-  color:#eaf5f1;
-  margin:7px 0;
-  font-size:18px
-}
-
-.resource-card p{
-  min-height:40px;
-  color:#9eaba5;
-  line-height:1.5;
-  font-size:13px
-}
-
-.resource-actions{
-  display:flex;
-  gap:8px
-}
-
-.open-resource{
-  flex:1;
-  border:0;
-  padding:12px;
-  border-radius:11px;
-  background:#087a4b;
-  color:#fff;
-  font-weight:800;
-  cursor:pointer
-}
-
-.save-resource{
-  width:50px;
-  border:1px solid #4b5550;
-  border-radius:11px;
-  background:#292b2a;
-  color:#fff;
-  font-size:22px;
-  cursor:pointer
-}
-
-.save-resource.saved{
-  background:#44252d
-}
-
-.empty-message{
-  grid-column:1/-1;
-  padding:40px;
-  text-align:center;
-  background:#1b1d1c;
-  border:1px dashed #4b5550;
-  border-radius:18px;
-  color:#9eaba5;
-  line-height:1.7
-}
-
-.recent-list{
-  display:grid;
-  gap:10px
-}
-
-.recent-item{
-  display:flex;
-  align-items:center;
-  gap:14px;
   padding:15px;
-  background:#1b1d1c;
-  border:1px solid #4b5550;
-  border-radius:15px
-}
 
-.recent-icon{font-size:30px}
+  display:flex;
 
-.recent-info{
-  flex:1;
-  min-width:0
-}
+  flex-direction:column;
 
-.recent-info strong{
-  display:block;
-  margin-bottom:4px
-}
+  justify-content:center;
 
-.recent-info small{
-  color:#89968f
-}
+  align-items:flex-start;
 
-.recent-open{
-  border:0;
-  padding:9px 13px;
-  border-radius:10px;
-  background:#087a4b;
-  color:#fff;
-  font-weight:800;
-  cursor:pointer
-}
-
-@media(max-width:1000px){
-  .subjects-grid{grid-template-columns:repeat(3,1fr)}
-  .stats,.dashboard-grid{grid-template-columns:repeat(2,1fr)}
-  .resource-grid{grid-template-columns:repeat(2,1fr)}
-  .badges{grid-template-columns:repeat(2,1fr)}
-}
-
-@media(max-width:600px){
-
-  .student-header{
-    min-height:85px;
-    padding:12px 5%
-  }
-
-  .mark{
-    width:52px;
-    height:52px;
-    font-size:20px
-  }
-
-  .student-brand b{font-size:18px}
-
-  .student-brand small{font-size:7px}
-
-  .back{display:none}
-
-  .logout{
-    padding:10px 13px;
-    font-size:12px
-  }
-
-  .dashboard{
-    padding:25px 5% 60px
-  }
-
-  .welcome{padding:28px}
-
-  .welcome h1{font-size:40px}
-
-  .profile-card{padding:25px}
-
-  .profile-avatar{
-    width:78px;
-    height:78px;
-    font-size:25px
-  }
-
-  .profile-info h2{font-size:26px}
-
-  .progress-card,
-  .subjects-card,
-  .achievement-card,
-  .library-section{
-    padding:25px
-  }
-
-  .progress-header h2,
-  .subjects-card h2,
-  .achievement-card h2,
-  .library-section h2{
-    font-size:29px
-  }
-
-  .subjects-grid,
-  .stats,
-  .dashboard-grid,
-  .resource-grid{
-    grid-template-columns:1fr
-  }
-
-  .badges{
-    grid-template-columns:repeat(2,1fr)
-  }
-
-  .search-box{
-    flex-direction:column
-  }
-
-  .search-box button{
-    padding:14px
-  }
-}
-</style>
-</head>
-
-
-<body>
-
-
-<header class="student-header">
-
-  <div class="student-brand">
-
-    <div class="mark" id="headerAvatar">
-      AG
-    </div>
-
-    <div>
-      <b>AGULIBRARY</b>
-      <small>STUDENT DASHBOARD</small>
-    </div>
-
-  </div>
-
-
-  <div class="header-actions">
-
-    <a class="back" href="index.html">
-      ← Library
-    </a>
-
-    <button class="logout" id="logoutButton">
-      Sign out
-    </button>
-
-  </div>
-
-</header>
-
-
-<main class="dashboard">
-
-
-<div id="message" class="message"></div>
-
-
-<section class="welcome">
-
-  <small>STUDENT LEARNING SPACE</small>
-
-  <h1 id="welcomeName">
-    Welcome!
-  </h1>
-
-  <p>
-    Your personal AGULIBRARY learning space.
-    Explore books, videos, PDFs and educational
-    resources from around the world.
-  </p>
-
-</section>
-
-
-<section class="profile-card">
-
-  <div class="profile-avatar" id="profileAvatar">
-    AG
-  </div>
-
-  <div class="profile-info">
-
-    <small>MY PROFILE</small>
-
-    <h2 id="profileName">
-      Student
-    </h2>
-
-    <p id="profileEmail">
-      Loading email...
-    </p>
-
-  </div>
-
-</section>
-
-
-<section class="progress-card">
-
-  <div class="progress-header">
-
-    <div>
-      <small>LEARNING PROGRESS</small>
-
-      <h2>
-        Your Learning Journey
-      </h2>
-    </div>
-
-    <strong id="progressPercent">
-      0%
-    </strong>
-
-  </div>
-
-  <div class="progress-bar">
-
-    <div
-      id="progressFill"
-      class="progress-fill">
-    </div>
-
-  </div>
-
-  <p id="progressText">
-    Start exploring resources to build your progress.
-  </p>
-
-</section>
-
-
-<section class="subjects-card">
-
-  <small>MY SUBJECTS</small>
-
-  <h2>
-    Explore Subjects
-  </h2>
-
-
-  <div class="subjects-grid">
-
-
-    <button class="subject-item" data-subject="Physics">
-      <span class="subject-icon">⚛️</span>
-      <span class="subject-name">Physics</span>
-    </button>
-
-
-    <button class="subject-item" data-subject="Chemistry">
-      <span class="subject-icon">🧪</span>
-      <span class="subject-name">Chemistry</span>
-    </button>
-
-
-    <button class="subject-item" data-subject="Mathematics">
-      <span class="subject-icon">📐</span>
-      <span class="subject-name">Mathematics</span>
-    </button>
-
-
-    <button class="subject-item" data-subject="Biology">
-      <span class="subject-icon">🧬</span>
-      <span class="subject-name">Biology</span>
-    </button>
-
-
-    <button class="subject-item" data-subject="Computer Science">
-      <span class="subject-icon">💻</span>
-      <span class="subject-name">Computer Science</span>
-    </button>
-
-
-    <button class="subject-item" data-subject="English">
-      <span class="subject-icon">📖</span>
-      <span class="subject-name">English</span>
-    </button>
-
-
-    <button class="subject-item" data-subject="Economics">
-      <span class="subject-icon">💰</span>
-      <span class="subject-name">Economics</span>
-    </button>
-
-
-    <button class="subject-item" data-subject="Geography">
-      <span class="subject-icon">🌍</span>
-      <span class="subject-name">Geography</span>
-    </button>
-
-
-    <button class="subject-item" data-subject="Commerce">
-      <span class="subject-icon">💼</span>
-      <span class="subject-name">Commerce</span>
-    </button>
-
-
-    <button class="subject-item" data-subject="History">
-      <span class="subject-icon">🏛️</span>
-      <span class="subject-name">History</span>
-    </button>
-
-
-    <button class="subject-item" data-subject="Political Science">
-      <span class="subject-icon">⚖️</span>
-      <span class="subject-name">Political Science</span>
-    </button>
-
-
-    <button class="subject-item" data-subject="Psychology">
-      <span class="subject-icon">🧠</span>
-      <span class="subject-name">Psychology</span>
-    </button>
-
-
-    <button class="subject-item" data-subject="Philosophy">
-      <span class="subject-icon">💭</span>
-      <span class="subject-name">Philosophy</span>
-    </button>
-
-
-    <button class="subject-item" data-subject="Fine Art">
-      <span class="subject-icon">🎨</span>
-      <span class="subject-name">Fine Art</span>
-    </button>
-
-
-  </div>
-
-</section>
-
-
-<section class="achievement-card">
-
-  <small>🏆 ACHIEVEMENTS</small>
-
-  <h2>Your Learning Badges</h2>
-
-  <div class="badges">
-
-    <div class="badge">
-      📚
-      <span>First Resource</span>
-    </div>
-
-    <div class="badge">
-      ❤️
-      <span>Resource Saver</span>
-    </div>
-
-    <div class="badge">
-      🕘
-      <span>Active Learner</span>
-    </div>
-
-    <div class="badge">
-      🌍
-      <span>Global Learner</span>
-    </div>
-
-  </div>
-
-</section>
-
-
-<section class="stats">
-
-  <div class="stat">
-    <strong id="totalResources">0</strong>
-    <span>Available Resources</span>
-  </div>
-
-  <div class="stat">
-    <strong id="savedCount">0</strong>
-    <span>Saved Resources</span>
-  </div>
-
-  <div class="stat">
-    <strong id="recentCount">0</strong>
-    <span>Recently Opened</span>
-  </div>
-
-  <div class="stat">
-    <strong>🌍</strong>
-    <span>Global Learning</span>
-  </div>
-
-</section>
-
-
-<section class="dashboard-grid">
-
-  <a class="dashboard-card" href="#library">
-    <div class="icon">📚</div>
-    <b>Browse Library</b>
-    <span>Explore books, PDFs, videos and photos.</span>
-  </a>
-
-  <a class="dashboard-card" href="#library">
-    <div class="icon">🎓</div>
-    <b>Subjects</b>
-    <span>Explore all AGULIBRARY subjects.</span>
-  </a>
-
-  <a class="dashboard-card" href="#saved">
-    <div class="icon">❤️</div>
-    <b>Saved Resources</b>
-    <span>Access resources saved to your account.</span>
-  </a>
-
-  <a class="dashboard-card" href="#recent">
-    <div class="icon">🕘</div>
-    <b>Recent Learning</b>
-    <span>Continue resources you recently opened.</span>
-  </a>
-
-</section>
-
-
-<section id="library" class="library-section">
-
-  <small class="eyebrow">
-    DIGITAL LIBRARY
-  </small>
-
-  <h2>
-    Explore Learning Resources
-  </h2>
-
-
-  <div
-    id="selectedSubject"
-    class="selected-subject">
-
-    <span id="selectedSubjectText"></span>
-
-    <button
-      id="clearSubject"
-      class="clear-subject">
-      ✕ Clear
-    </button>
-
-  </div>
-
-
-  <div class="search-box">
-
-    <input
-      id="studentSearch"
-      type="search"
-      placeholder="Search books, Physics, Economics, Geography...">
-
-    <button id="searchButton">
-      Search
-    </button>
-
-  </div>
-
-
-  <div class="filter-row">
-
-    <button class="filter active" data-filter="all">
-      All
-    </button>
-
-    <button class="filter" data-filter="book">
-      📚 Books
-    </button>
-
-    <button class="filter" data-filter="pdf">
-      📄 PDFs
-    </button>
-
-    <button class="filter" data-filter="video">
-      🎥 Videos
-    </button>
-
-    <button class="filter" data-filter="photo">
-      🖼️ Photos
-    </button>
-
-    <button class="filter" data-filter="lesson">
-      📖 Lessons
-    </button>
-
-  </div>
-
-
-  <div
-    id="resourceGrid"
-    class="resource-grid">
-
-    <div class="empty-message">
-      Loading learning resources...
-    </div>
-
-  </div>
-
-</section>
-
-
-<section id="saved" class="library-section">
-
-  <small class="eyebrow">
-    MY COLLECTION
-  </small>
-
-  <h2>
-    ❤️ Saved Resources
-  </h2>
-
-  <div
-    id="savedGrid"
-    class="resource-grid">
-
-    <div class="empty-message">
-      Loading saved resources...
-    </div>
-
-  </div>
-
-</section>
-
-
-<section id="recent" class="library-section">
-
-  <small class="eyebrow">
-    LEARNING HISTORY
-  </small>
-
-  <h2>
-    🕘 Recently Opened
-  </h2>
-
-  <div
-    id="recentList"
-    class="recent-list">
-
-    <div class="empty-message">
-      Loading recent resources...
-    </div>
-
-  </div>
-
-</section>
-
-
-</main>
-
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="config.js"></script>
-<script src="supabase.js"></script>
-
-
-<script>
-
-let client =
-  typeof getSupabase === "function"
-    ? getSupabase()
-    : null;
-
-let currentUser = null;
-
-let resources = [];
-
-let savedResourceIds = [];
-
-let recentRows = [];
-
-let currentFilter = "all";
-
-let selectedSubject = "";
-
-
-/* ================================
-   MESSAGE
-================================ */
-
-function showMessage(text,type="success"){
-
-  const box =
-    document.getElementById("message");
-
-  box.textContent = text;
-
-  box.className =
-    "message show " + type;
-
-  setTimeout(()=>{
-    box.className = "message";
-  },3500);
-
-}
-
-
-/* ================================
-   ESCAPE
-================================ */
-
-function escapeHTML(value){
-
-  return String(value ?? "")
-    .replace(
-      /[&<>"']/g,
-      character => {
-
-        const entities = {
-          "&":"&amp;",
-          "<":"&lt;",
-          ">":"&gt;",
-          '"':"&quot;",
-          "'":"&#039;"
-        };
-
-        return entities[character];
-
-      }
-    );
-
-}
-
-
-/* ================================
-   ICON
-================================ */
-
-function getIcon(type){
-
-  const icons = {
-
-    book:"📚",
-    pdf:"📄",
-    video:"🎥",
-    photo:"🖼️",
-    image:"🖼️",
-    course:"🎓",
-    lesson:"📖"
-
-  };
-
-  return (
-    icons[
-      String(type || "").toLowerCase()
-    ] || "📘"
-  );
-
-}
-
-
-/* ================================
-   PROFILE
-================================ */
-
-function loadProfile(user){
-
-  const metadata =
-    user.user_metadata || {};
-
-  const name =
-    metadata.full_name ||
-    metadata.name ||
-    metadata.display_name ||
-    user.email?.split("@")[0] ||
-    "Student";
-
-  const initials =
-    name
-      .trim()
-      .split(/\s+/)
-      .slice(0,2)
-      .map(x=>x[0].toUpperCase())
-      .join("") || "AG";
-
-
-  document.getElementById(
-    "headerAvatar"
-  ).textContent = initials;
-
-
-  document.getElementById(
-    "profileAvatar"
-  ).textContent = initials;
-
-
-  document.getElementById(
-    "welcomeName"
-  ).textContent =
-    "Welcome, " + name + "!";
-
-
-  document.getElementById(
-    "profileName"
-  ).textContent = name;
-
-
-  document.getElementById(
-    "profileEmail"
-  ).textContent =
-    user.email || "";
-
-}
-
-
-/* ================================
-   SESSION
-================================ */
-
-async function checkStudent(){
-
-  if(!client){
-
-    showMessage(
-      "Supabase connection is not available.",
-      "error"
-    );
-
-    return null;
-
-  }
-
-  const {
-    data,
-    error
-  } =
-    await client.auth.getSession();
-
-
-  if(
-    error ||
-    !data ||
-    !data.session
-  ){
-
-    window.location.href =
-      "auth.html";
-
-    return null;
-
-  }
-
-
-  return data.session.user;
-
-}
-
-
-/* ================================
-   RESOURCES
-================================ */
-
-async function loadResources(){
-
-  const {
-    data,
-    error
-  } =
-    await client
-      .from("resources")
-      .select("*")
-      .order(
-        "created_at",
-        {ascending:false}
-      );
-
-
-  if(error){
-
-    console.error(error);
-
-    document.getElementById(
-      "resourceGrid"
-    ).innerHTML = `
-
-      <div class="empty-message">
-        Unable to load resources.
-      </div>
-
-    `;
-
-    return;
-
-  }
-
-
-  resources = data || [];
-
-  renderResources(
-    getFilteredResources()
-  );
-
-  updateStats();
-
-  updateProgress();
-
-}
-
-
-/* ================================
-   SAVED
-================================ */
-
-async function loadSaved(){
-
-  const {
-    data,
-    error
-  } =
-    await client
-      .from("student_saved_resources")
-      .select("*")
-      .eq(
-        "user_id",
-        currentUser.id
-      )
-      .order(
-        "created_at",
-        {ascending:false}
-      );
-
-
-  if(error){
-
-    console.warn(error);
-
-    savedResourceIds = [];
-
-  }else{
-
-    savedResourceIds =
-      (data || []).map(
-        row => String(
-          row.resource_id
-        )
-      );
-
-  }
-
-
-  renderSaved();
-
-  updateStats();
-
-}
-
-
-/* ================================
-   SAVE
-================================ */
-
-async function toggleSaved(id){
-
-  const key = String(id);
-
-  if(
-    savedResourceIds.includes(key)
-  ){
-
-    const {
-      error
-    } =
-      await client
-        .from(
-          "student_saved_resources"
-        )
-        .delete()
-        .eq(
-          "user_id",
-          currentUser.id
-        )
-        .eq(
-          "resource_id",
-          Number(id)
-        );
-
-
-    if(error){
-
-      console.error(error);
-
-      showMessage(
-        "Unable to remove resource.",
-        "error"
-      );
-
-      return;
-
-    }
-
-    savedResourceIds =
-      savedResourceIds.filter(
-        x => x !== key
-      );
-
-    showMessage(
-      "Removed from saved resources."
-    );
-
-  }else{
-
-    const {
-      error
-    } =
-      await client
-        .from(
-          "student_saved_resources"
-        )
-        .insert({
-
-          user_id:
-            currentUser.id,
-
-          resource_id:
-            Number(id)
-
-        });
-
-
-    if(error){
-
-      console.error(error);
-
-      showMessage(
-        "Unable to save resource.",
-        "error"
-      );
-
-      return;
-
-    }
-
-    savedResourceIds.push(key);
-
-    showMessage(
-      "Resource saved successfully."
-    );
-
-  }
-
-
-  renderResources(
-    getFilteredResources()
-  );
-
-  renderSaved();
-
-  updateStats();
-
-}
-
-
-/* ================================
-   RECENT STORAGE
-================================ */
-
-function recentKey(){
-
-  return (
-    "AGU_RECENT_" +
-    currentUser.id
-  );
-
-}
-
-
-function getRecent(){
-
-  try{
-
-    return JSON.parse(
-      localStorage.getItem(
-        recentKey()
-      ) || "[]"
-    );
-
-  }catch{
-
-    return [];
-
-  }
-
-}
-
-
-function saveRecent(list){
-
-  localStorage.setItem(
-    recentKey(),
-    JSON.stringify(list)
-  );
-
-}
-
-
-/* ================================
-   ADD RECENT
-================================ */
-
-async function addRecent(resource){
-
-  let list = getRecent();
-
-  list =
-    list.filter(
-      x =>
-        String(x.resource_id) !==
-        String(resource.id)
-    );
-
-
-  list.unshift({
-
-    resource_id:
-      resource.id,
-
-    created_at:
-      new Date().toISOString()
-
-  });
-
-
-  list =
-    list.slice(0,10);
-
-
-  saveRecent(list);
-
-  recentRows = list;
-
-  renderRecent();
-
-  updateStats();
-
-
-  try{
-
-    await client
-      .from(
-        "student_recent_resources"
-      )
-      .delete()
-      .eq(
-        "user_id",
-        currentUser.id
-      )
-      .eq(
-        "resource_id",
-        Number(resource.id)
-      );
-
-
-    await client
-      .from(
-        "student_recent_resources"
-      )
-      .insert({
-
-        user_id:
-          currentUser.id,
-
-        resource_id:
-          Number(resource.id)
-
-      });
-
-  }catch(error){
-
-    console.warn(error);
-
-  }
-
-}
-
-
-/* ================================
-   LOAD RECENT
-================================ */
-
-async function loadRecent(){
-
-  const local =
-    getRecent();
-
-  recentRows = local;
-
-  renderRecent();
-
-
-  try{
-
-    const {
-      data
-    } =
-      await client
-        .from(
-          "student_recent_resources"
-        )
-        .select("*")
-        .eq(
-          "user_id",
-          currentUser.id
-        )
-        .order(
-          "created_at",
-          {ascending:false}
-        )
-        .limit(10);
-
-
-    if(data && data.length){
-
-      recentRows = data;
-
-      saveRecent(
-        data.map(row=>({
-
-          resource_id:
-            row.resource_id,
-
-          created_at:
-            row.created_at
-
-        }))
-      );
-
-      renderRecent();
-
-    }
-
-  }catch(error){
-
-    console.warn(error);
-
-  }
-
-
-  updateStats();
-
-}
-
-
-/* ================================
-   IMPORTANT OPEN ROUTING
-================================ */
-
-async function openResource(id){
-
-  const resource =
-    resources.find(
-      item =>
-        String(item.id) ===
-        String(id)
-    );
-
-
-  if(!resource){
-
-    showMessage(
-      "Resource not found.",
-      "error"
-    );
-
-    return;
-
-  }
-
-
-  await addRecent(resource);
-
-
-  const type =
-    String(
-      resource.type || ""
-    ).toLowerCase()
-    .trim();
-
-
-  /*
-    LESSON RESOURCES MUST OPEN
-    THE LESSON READER.
-  */
-
-  if(type === "lesson"){
-
-    window.location.href =
-      "lesson.html?id=" +
-      encodeURIComponent(
-        resource.id
-      );
-
-    return;
-
-  }
-
-
-  /*
-    Courses can also use the lesson reader.
-  */
-
-  if(type === "course"){
-
-    window.location.href =
-      "lesson.html?id=" +
-      encodeURIComponent(
-        resource.id
-      );
-
-    return;
-
-  }
-
-
-  /*
-    PDFs, videos, photos and books
-    continue opening normally.
-  */
-
-  const url =
-    resource.file_url ||
-    resource.url ||
-    "";
-
-
-  if(!url){
-
-    showMessage(
-      "This resource does not have a file attached.",
-      "error"
-    );
-
-    return;
-
-  }
-
-
-  const opened =
-    window.open(
-      url,
-      "_blank"
-    );
-
-
-  if(!opened){
-
-    window.location.href =
-      url;
-
-  }
-
-}
-
-
-/* ================================
-   FILTER
-================================ */
-
-function getFilteredResources(){
-
-  const input =
-    document.getElementById(
-      "studentSearch"
-    );
-
-
-  const query =
-    input
-      ? input.value.toLowerCase().trim()
-      : "";
-
-
-  return resources.filter(
-    resource => {
-
-      const type =
-        String(
-          resource.type || ""
-        ).toLowerCase();
-
-
-      const matchesType =
-        currentFilter === "all" ||
-        type === currentFilter;
-
-
-      const searchable = `
-
-        ${resource.title || ""}
-
-        ${resource.description || ""}
-
-        ${resource.subject || ""}
-
-        ${resource.type || ""}
-
-        ${resource.level || ""}
-
-        ${resource.class_level || ""}
-
-        ${resource.term || ""}
-
-      `.toLowerCase();
-
-
-      const matchesSearch =
-        !query ||
-        searchable.includes(query);
-
-
-      return (
-        matchesType &&
-        matchesSearch
-      );
-
-    }
-  );
-
-}
-
-
-/* ================================
-   RENDER RESOURCES
-================================ */
-
-function renderResources(list){
-
-  const grid =
-    document.getElementById(
-      "resourceGrid"
-    );
-
-
-  if(!list.length){
-
-    grid.innerHTML = `
-
-      <div class="empty-message">
-
-        No resources found.
-
-        <br><br>
-
-        Try another search or subject.
-
-      </div>
-
-    `;
-
-    return;
-
-  }
-
-
-  grid.innerHTML =
-    list.map(resource=>{
-
-      const id =
-        String(resource.id);
-
-      const saved =
-        savedResourceIds.includes(id);
-
-
-      const type =
-        String(
-          resource.type ||
-          "resource"
-        ).toLowerCase();
-
-
-      const isLesson =
-        type === "lesson" ||
-        type === "course";
-
-
-      return `
-
-        <article
-          class="resource-card">
-
-          <div class="resource-icon">
-            ${getIcon(resource.type)}
-          </div>
-
-
-          <small>
-
-            ${escapeHTML(
-              String(
-                resource.type ||
-                "RESOURCE"
-              ).toUpperCase()
-            )}
-
-          </small>
-
-
-          <h3>
-
-            ${escapeHTML(
-              resource.title ||
-              "Untitled Resource"
-            )}
-
-          </h3>
-
-
-          <p>
-
-            ${escapeHTML(
-              resource.description ||
-              "Educational resource"
-            )}
-
-          </p>
-
-
-          <div class="resource-actions">
-
-            <button
-              class="open-resource"
-              data-action="open"
-              data-id="${id}">
-
-              ${
-                isLesson
-                  ? "📖 Open Lesson →"
-                  : "Tap to Open →"
-              }
-
-            </button>
-
-
-            <button
-              class="save-resource ${
-                saved ? "saved" : ""
-              }"
-              data-action="save"
-              data-id="${id}">
-
-              ${
-                saved ? "❤️" : "♡"
-              }
-
-            </button>
-
-          </div>
-
-        </article>
-
-      `;
-
-    }).join("");
-
-}
-
-
-/* ================================
-   RENDER SAVED
-================================ */
-
-function renderSaved(){
-
-  const grid =
-    document.getElementById(
-      "savedGrid"
-    );
-
-
-  const list =
-    resources.filter(
-      resource =>
-        savedResourceIds.includes(
-          String(resource.id)
-        )
-    );
-
-
-  if(!list.length){
-
-    grid.innerHTML = `
-
-      <div class="empty-message">
-
-        You have not saved any
-        resources yet.
-
-        <br><br>
-
-        Tap ♡ on a resource
-        to save it here.
-
-      </div>
-
-    `;
-
-    return;
-
-  }
-
-
-  grid.innerHTML =
-    list.map(resource=>{
-
-      return `
-
-        <article class="resource-card">
-
-          <div class="resource-icon">
-
-            ${getIcon(
-              resource.type
-            )}
-
-          </div>
-
-
-          <small>
-
-            ${escapeHTML(
-              String(
-                resource.type ||
-                "RESOURCE"
-              ).toUpperCase()
-            )}
-
-          </small>
-
-
-          <h3>
-
-            ${escapeHTML(
-              resource.title ||
-              "Untitled Resource"
-            )}
-
-          </h3>
-
-
-          <p>
-
-            ${escapeHTML(
-              resource.description ||
-              "Educational resource"
-            )}
-
-          </p>
-
-
-          <div class="resource-actions">
-
-            <button
-              class="open-resource"
-              data-action="open"
-              data-id="${resource.id}">
-
-              ${
-                String(
-                  resource.type ||
-                  ""
-                ).toLowerCase()
-                === "lesson"
-                  ? "📖 Open Lesson →"
-                  : "Open →"
-              }
-
-            </button>
-
-
-            <button
-              class="save-resource saved"
-              data-action="save"
-              data-id="${resource.id}">
-
-              ❤️
-
-            </button>
-
-          </div>
-
-        </article>
-
-      `;
-
-    }).join("");
-
-}
-
-
-/* ================================
-   RECENT
-================================ */
-
-function renderRecent(){
-
-  const box =
-    document.getElementById(
-      "recentList"
-    );
-
-
-  const valid =
-    recentRows
-      .map(row =>
-        resources.find(
-          resource =>
-            String(resource.id) ===
-            String(row.resource_id)
-        )
-      )
-      .filter(Boolean);
-
-
-  if(!valid.length){
-
-    box.innerHTML = `
-
-      <div class="empty-message">
-        No resources opened yet.
-      </div>
-
-    `;
-
-    return;
-
-  }
-
-
-  box.innerHTML =
-    valid.map(resource=>{
-
-      return `
-
-        <div class="recent-item">
-
-          <div class="recent-icon">
-
-            ${getIcon(
-              resource.type
-            )}
-
-          </div>
-
-
-          <div class="recent-info">
-
-            <strong>
-
-              ${escapeHTML(
-                resource.title ||
-                "Resource"
-              )}
-
-            </strong>
-
-            <small>
-              Recently opened
-            </small>
-
-          </div>
-
-
-          <button
-            class="recent-open"
-            data-action="open"
-            data-id="${resource.id}">
-
-            Open
-
-          </button>
-
-        </div>
-
-      `;
-
-    }).join("");
-
-}
-
-
-/* ================================
-   STATS
-================================ */
-
-function updateStats(){
-
-  document.getElementById(
-    "totalResources"
-  ).textContent =
-    resources.length;
-
-
-  document.getElementById(
-    "savedCount"
-  ).textContent =
-    savedResourceIds.length;
-
-
-  document.getElementById(
-    "recentCount"
-  ).textContent =
-    recentRows.length;
-
-}
-
-
-/* ================================
-   PROGRESS
-================================ */
-
-function updateProgress(){
-
-  const percent =
-    document.getElementById(
-      "progressPercent"
-    );
-
-  const fill =
-    document.getElementById(
-      "progressFill"
-    );
-
-  const text =
-    document.getElementById(
-      "progressText"
-    );
-
-
-  const stored =
-    localStorage.getItem(
-      "AGU_PROGRESS_" +
-      currentUser.id
-    );
-
-
-  let value =
-    stored
-      ? Number(stored)
-      : 0;
-
-
-  /*
-    Keep the existing progress
-    shown on the dashboard.
-  */
-
-  value =
-    Math.max(
-      0,
-      Math.min(
-        100,
-        value
-      )
-    );
-
-
-  percent.textContent =
-    value + "%";
-
-
-  fill.style.width =
-    value + "%";
-
-
-  if(value === 0){
-
-    text.textContent =
-      "Start exploring resources to build your progress.";
-
-  }else if(value < 25){
-
-    text.textContent =
-      "Great start! Keep exploring learning resources.";
-
-  }else if(value < 50){
-
-    text.textContent =
-      "You're making progress. Keep learning!";
-
-  }else if(value < 75){
-
-    text.textContent =
-      "Excellent progress! You're becoming an active learner.";
-
-  }else if(value < 100){
-
-    text.textContent =
-      "Amazing! You're close to completing your learning journey.";
-
-  }else{
-
-    text.textContent =
-      "Outstanding! You've completed your learning journey.";
-
-  }
-
-}
-
-
-/* ================================
-   SUBJECTS
-================================ */
-
-function selectSubject(subject){
-
-  selectedSubject =
-    subject;
-
-
-  document
-    .querySelectorAll(
-      ".subject-item"
-    )
-    .forEach(button=>{
-
-      button.classList.toggle(
-        "active",
-        button.dataset.subject ===
-        subject
-      );
-
-    });
-
-
-  const box =
-    document.getElementById(
-      "selectedSubject"
-    );
-
-
-  document.getElementById(
-    "selectedSubjectText"
-  ).textContent =
-    "🎓 Showing resources for: " +
-    subject;
-
-
-  box.classList.add(
-    "show"
-  );
-
-
-  document.getElementById(
-    "studentSearch"
-  ).value =
-    subject;
-
-
-  currentFilter =
-    "all";
-
-
-  document
-    .querySelectorAll(
-      ".filter"
-    )
-    .forEach(button=>{
-      button.classList.remove(
-        "active"
-      );
-    });
-
-
-  document
-    .querySelector(
-      '[data-filter="all"]'
-    )
-    .classList.add(
-      "active"
-    );
-
-
-  renderResources(
-    getFilteredResources()
-  );
-
-
-  document
-    .getElementById(
-      "library"
-    )
-    .scrollIntoView({
-      behavior:"smooth"
-    });
-
-}
-
-
-function clearSubject(){
-
-  selectedSubject = "";
-
-  document
-    .querySelectorAll(
-      ".subject-item"
-    )
-    .forEach(button=>{
-      button.classList.remove(
-        "active"
-      );
-    });
-
-
-  document
-    .getElementById(
-      "selectedSubject"
-    )
-    .classList.remove(
-      "show"
-    );
-
-
-  document.getElementById(
-    "studentSearch"
-  ).value = "";
-
-
-  renderResources(
-    getFilteredResources()
-  );
-
-}
-
-
-/* ================================
-   EVENTS
-================================ */
-
-document.addEventListener(
-  "click",
-  async event => {
-
-    const button =
-      event.target.closest(
-        "[data-action]"
-      );
-
-
-    if(!button)return;
-
-
-    const action =
-      button.dataset.action;
-
-
-    const id =
-      button.dataset.id;
-
-
-    if(action === "open"){
-
-      await openResource(id);
-
-    }
-
-
-    if(action === "save"){
-
-      await toggleSaved(id);
-
-    }
-
-  }
-);
-
-
-document
-  .querySelectorAll(
-    ".subject-item"
-  )
-  .forEach(button=>{
-
-    button.addEventListener(
-      "click",
-      ()=>{
-        selectSubject(
-          button.dataset.subject
-        );
-      }
-    );
-
-  });
-
-
-document
-  .getElementById(
-    "clearSubject"
-  )
-  .addEventListener(
-    "click",
-    clearSubject
-  );
-
-
-document
-  .getElementById(
-    "studentSearch"
-  )
-  .addEventListener(
-    "input",
-    ()=>{
-
-      selectedSubject = "";
-
-      document
-        .querySelectorAll(
-          ".subject-item"
-        )
-        .forEach(button=>{
-          button.classList.remove(
-            "active"
-          );
-        });
-
-
-      document
-        .getElementById(
-          "selectedSubject"
-        )
-        .classList.remove(
-          "show"
-        );
-
-
-      renderResources(
-        getFilteredResources()
-      );
-
-    }
-  );
-
-
-document
-  .getElementById(
-    "searchButton"
-  )
-  .addEventListener(
-    "click",
-    ()=>{
-      renderResources(
-        getFilteredResources()
-      );
-    }
-  );
-
-
-document
-  .querySelectorAll(
-    ".filter"
-  )
-  .forEach(button=>{
-
-    button.addEventListener(
-      "click",
-      ()=>{
-
-        document
-          .querySelectorAll(
-            ".filter"
-          )
-          .forEach(item=>{
-            item.classList.remove(
-              "active"
-            );
-          });
-
-
-        button.classList.add(
-          "active"
-        );
-
-
-        currentFilter =
-          button.dataset.filter;
-
-
-        renderResources(
-          getFilteredResources()
-        );
-
-      }
-    );
-
-  });
-
-
-/* ================================
-   LOGOUT
-================================ */
-
-document
-  .getElementById(
-    "logoutButton"
-  )
-  .addEventListener(
-    "click",
-    async()=>{
-
-      if(client){
-
-        await client.auth.signOut();
-
-      }
-
-      window.location.href =
-        "index.html";
-
-    }
-  );
-
-
-/* ================================
-   START
-================================ */
-
-async function start(){
-
-  currentUser =
-    await checkStudent();
-
-
-  if(!currentUser)return;
-
-
-  loadProfile(
-    currentUser
-  );
-
-
-  await loadResources();
-
-  await loadSaved();
-
-  await loadRecent();
-
-  updateStats();
-
-  updateProgress();
-
-}
-
-
-start();
-
-</script>
-
-</body>
-</html>
+ 

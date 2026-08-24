@@ -60,7 +60,7 @@ body{
 
   padding:11px 5%;
 
-  background:rgba(255,255,255,.96);
+  background:rgba(255,255,255,.97);
 
   border-bottom:1px solid #dceee6;
 
@@ -87,10 +87,9 @@ body{
 
   background:#087a4b;
 
-  color:white;
+  color:#ffffff;
 
   font-size:21px;
-
   font-weight:900;
 
   box-shadow:
@@ -1109,11 +1108,15 @@ body{
 
 
     <h1>
+
       Welcome,
+
       <span id="welcomeName">
         Student
       </span>
+
       👋
+
     </h1>
 
 
@@ -1973,14 +1976,11 @@ body{
      SUPABASE
 ========================================================= -->
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
-</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<script src="config.js">
-</script>
+<script src="config.js"></script>
 
-<script src="supabase.js">
-</script>
+<script src="supabase.js"></script>
 
 
 <!-- =========================================================
@@ -2047,22 +2047,57 @@ document.addEventListener(
 
 
 /* =========================================================
-   LOAD STUDENT
+   LOAD STUDENT DASHBOARD
 ========================================================= */
 
 async function loadStudentDashboard(){
 
   try{
 
+    /*
+      IMPORTANT:
+      This project uses getSupabase()
+      from supabase.js.
+
+      Do NOT use window.supabase.auth
+      directly here because window.supabase
+      is the CDN library object.
+    */
+
     if(
-      typeof supabase === "undefined" ||
-      !supabase ||
-      !supabase.auth
+      typeof getSupabase !== "function"
     ){
 
       showMessage(
         "Authentication service is unavailable.",
         "error"
+      );
+
+      console.error(
+        "getSupabase() was not found. Check supabase.js."
+      );
+
+      return;
+
+    }
+
+
+    const client =
+      getSupabase();
+
+
+    if(
+      !client ||
+      !client.auth
+    ){
+
+      showMessage(
+        "Authentication service is unavailable.",
+        "error"
+      );
+
+      console.error(
+        "Supabase client could not be initialized."
       );
 
       return;
@@ -2071,12 +2106,13 @@ async function loadStudentDashboard(){
 
 
     const result =
-      await supabase.auth.getSession();
+      await client.auth.getSession();
 
 
     if(result.error){
 
       console.error(
+        "Session error:",
         result.error
       );
 
@@ -2402,30 +2438,65 @@ async function signOutStudent(){
 
   try{
 
+    /*
+      Use the same Supabase client
+      architecture as the rest of the project.
+    */
+
     if(
-      typeof supabase !== "undefined" &&
-      supabase &&
-      supabase.auth
+      typeof getSupabase !== "function"
     ){
 
-      const result =
-        await supabase.auth.signOut();
+      console.error(
+        "getSupabase() is unavailable."
+      );
+
+      window.location.href =
+        "index.html";
+
+      return;
+
+    }
 
 
-      if(result.error){
+    const client =
+      getSupabase();
 
-        console.error(
-          result.error
-        );
 
-        showMessage(
-          "Unable to sign out. Please try again.",
-          "error"
-        );
+    if(
+      !client ||
+      !client.auth
+    ){
 
-        return;
+      console.error(
+        "Supabase client is unavailable."
+      );
 
-      }
+      window.location.href =
+        "index.html";
+
+      return;
+
+    }
+
+
+    const result =
+      await client.auth.signOut();
+
+
+    if(result.error){
+
+      console.error(
+        "Sign out error:",
+        result.error
+      );
+
+      showMessage(
+        "Unable to sign out. Please try again.",
+        "error"
+      );
+
+      return;
 
     }
 
@@ -2451,4 +2522,4 @@ async function signOutStudent(){
 
 
 </body>
-  </html>
+          </html>

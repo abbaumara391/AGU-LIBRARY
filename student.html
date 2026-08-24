@@ -17,7 +17,8 @@
 <style>
 
 /* =========================================================
-   AGULIBRARY — LIGHT STUDENT DASHBOARD
+   AGULIBRARY — STUDENT DASHBOARD
+   LIGHT PREMIUM + REAL RESOURCE CONNECTION
 ========================================================= */
 
 *{
@@ -32,6 +33,7 @@ body{
   margin:0;
   background:#f5fbf8;
   color:#17352a;
+
   font-family:
     system-ui,
     -apple-system,
@@ -156,7 +158,6 @@ body{
 
 .logout:hover{
   background:#087a4b;
-
   color:#ffffff;
 }
 
@@ -302,7 +303,7 @@ body{
 
 
 /* =========================================================
-   STAT CARDS
+   STATISTICS
 ========================================================= */
 
 .stats{
@@ -330,9 +331,7 @@ body{
   box-shadow:
     0 10px 30px rgba(8,122,75,.05);
 
-  transition:
-    transform .2s ease,
-    box-shadow .2s ease;
+  transition:.2s ease;
 }
 
 .stat:hover{
@@ -360,7 +359,7 @@ body{
 
 
 /* =========================================================
-   PROFILE + ACCOUNT
+   PROFILE
 ========================================================= */
 
 .profile-layout{
@@ -495,28 +494,6 @@ body{
   font-size:14px;
 }
 
-.account-code{
-  display:none;
-
-  margin-top:15px;
-
-  padding:10px 13px;
-
-  border-radius:10px;
-
-  background:#f4edff;
-
-  color:#7444a8;
-
-  font-weight:800;
-
-  letter-spacing:1px;
-}
-
-.account-code.show{
-  display:block;
-}
-
 
 /* =========================================================
    PROGRESS
@@ -584,14 +561,314 @@ body{
 
   border-radius:50px;
 
-  transition:
-    width .5s ease;
+  transition:width .5s ease;
 }
 
 .progress-card>p{
   color:#71847b;
 
   line-height:1.6;
+}
+
+
+/* =========================================================
+   RESOURCE CENTER
+========================================================= */
+
+.resource-section{
+  background:#ffffff;
+
+  border:1px solid #dceee6;
+
+  border-radius:24px;
+
+  padding:28px;
+
+  margin-bottom:22px;
+
+  box-shadow:
+    0 10px 30px rgba(8,122,75,.05);
+}
+
+.resource-heading{
+  display:flex;
+
+  justify-content:space-between;
+
+  align-items:flex-end;
+
+  gap:20px;
+
+  margin-bottom:18px;
+}
+
+.resource-heading h2{
+  margin:7px 0 4px;
+
+  color:#173b2d;
+
+  font-size:30px;
+}
+
+.resource-heading p{
+  margin:0;
+
+  color:#74877f;
+}
+
+
+/* =========================================================
+   RESOURCE CONTROLS
+========================================================= */
+
+.resource-controls{
+  display:grid;
+
+  grid-template-columns:
+    1fr 210px;
+
+  gap:10px;
+
+  margin-bottom:20px;
+}
+
+.resource-search{
+  width:100%;
+
+  padding:14px 16px;
+
+  border:1px solid #cfe5da;
+
+  border-radius:13px;
+
+  outline:none;
+
+  background:#fbfefd;
+
+  color:#17352a;
+
+  font-size:15px;
+}
+
+.resource-search:focus{
+  border-color:#79c49e;
+
+  box-shadow:
+    0 0 0 3px rgba(8,122,75,.08);
+}
+
+.resource-filter{
+  width:100%;
+
+  padding:14px 13px;
+
+  border:1px solid #cfe5da;
+
+  border-radius:13px;
+
+  outline:none;
+
+  background:#ffffff;
+
+  color:#294c3e;
+
+  font-weight:700;
+}
+
+
+/* =========================================================
+   RESOURCE GRID
+========================================================= */
+
+.resource-grid{
+  display:grid;
+
+  grid-template-columns:
+    repeat(3,1fr);
+
+  gap:15px;
+}
+
+.resource-card{
+  display:flex;
+
+  flex-direction:column;
+
+  background:#ffffff;
+
+  border:1px solid #dceee6;
+
+  border-radius:21px;
+
+  padding:20px;
+
+  box-shadow:
+    0 10px 28px rgba(8,122,75,.05);
+
+  transition:.2s ease;
+}
+
+.resource-card:hover{
+  transform:translateY(-4px);
+
+  border-color:#a8dcc1;
+
+  box-shadow:
+    0 16px 34px rgba(8,122,75,.09);
+}
+
+.resource-icon{
+  width:52px;
+  height:52px;
+
+  display:grid;
+
+  place-items:center;
+
+  border-radius:15px;
+
+  background:#e8f8f0;
+
+  font-size:25px;
+
+  margin-bottom:13px;
+}
+
+.resource-type{
+  display:inline-flex;
+
+  align-self:flex-start;
+
+  padding:5px 9px;
+
+  border-radius:20px;
+
+  background:#f0f8f4;
+
+  color:#087a4b;
+
+  font-size:10px;
+
+  font-weight:900;
+
+  letter-spacing:1px;
+}
+
+.resource-card h3{
+  margin:11px 0 6px;
+
+  color:#214638;
+
+  font-size:18px;
+
+  line-height:1.35;
+}
+
+.resource-subject{
+  color:#087a4b;
+
+  font-size:12px;
+
+  font-weight:800;
+
+  margin-bottom:6px;
+}
+
+.resource-card p{
+  color:#75877f;
+
+  font-size:14px;
+
+  line-height:1.6;
+
+  margin:0 0 15px;
+
+  flex:1;
+}
+
+.resource-open{
+  display:inline-flex;
+
+  justify-content:center;
+
+  align-items:center;
+
+  padding:10px 13px;
+
+  border-radius:10px;
+
+  background:#087a4b;
+
+  color:#ffffff;
+
+  border:none;
+
+  text-decoration:none;
+
+  font-weight:800;
+
+  font-size:13px;
+
+  cursor:pointer;
+}
+
+.resource-open:hover{
+  background:#06683f;
+}
+
+.resource-meta{
+  display:flex;
+
+  flex-wrap:wrap;
+
+  gap:7px;
+
+  margin-bottom:12px;
+}
+
+.resource-meta span{
+  padding:4px 7px;
+
+  background:#f4f9f6;
+
+  border-radius:7px;
+
+  color:#70847b;
+
+  font-size:11px;
+}
+
+
+/* =========================================================
+   EMPTY / LOADING
+========================================================= */
+
+.empty-state{
+  grid-column:1/-1;
+
+  padding:35px 20px;
+
+  text-align:center;
+
+  background:#f7fcfa;
+
+  border:1px dashed #bfded0;
+
+  border-radius:18px;
+
+  color:#73877e;
+}
+
+.loading{
+  grid-column:1/-1;
+
+  padding:35px;
+
+  text-align:center;
+
+  color:#087a4b;
+
+  font-weight:800;
 }
 
 
@@ -652,10 +929,7 @@ body{
 
   cursor:pointer;
 
-  transition:
-    transform .2s ease,
-    border-color .2s ease,
-    box-shadow .2s ease;
+  transition:.2s ease;
 }
 
 .subject-item:hover{
@@ -689,128 +963,20 @@ body{
 
 
 /* =========================================================
-   LEARNING SECTIONS
+   QUICK ACTIONS
 ========================================================= */
 
-.learning-section{
+.quick-section{
   margin-bottom:22px;
 }
 
-.section-title{
-  margin-bottom:14px;
-}
-
-.section-title h2{
-  margin:7px 0 4px;
-
-  font-size:30px;
+.quick-section h2{
+  margin:7px 0 15px;
 
   color:#173b2d;
+
+  font-size:30px;
 }
-
-.section-title p{
-  margin:0;
-
-  color:#74877f;
-}
-
-
-/* =========================================================
-   RESOURCE GRID
-========================================================= */
-
-.resource-grid{
-  display:grid;
-
-  grid-template-columns:
-    repeat(3,1fr);
-
-  gap:15px;
-}
-
-.resource-card{
-  background:#ffffff;
-
-  border:1px solid #dceee6;
-
-  border-radius:21px;
-
-  padding:21px;
-
-  box-shadow:
-    0 10px 28px rgba(8,122,75,.05);
-
-  transition:.2s ease;
-}
-
-.resource-card:hover{
-  transform:translateY(-4px);
-
-  box-shadow:
-    0 16px 34px rgba(8,122,75,.09);
-}
-
-.resource-icon{
-  width:48px;
-  height:48px;
-
-  display:grid;
-
-  place-items:center;
-
-  border-radius:14px;
-
-  background:#e8f8f0;
-
-  font-size:23px;
-
-  margin-bottom:13px;
-}
-
-.resource-card h3{
-  margin:0 0 7px;
-
-  color:#214638;
-
-  font-size:18px;
-}
-
-.resource-card p{
-  color:#75877f;
-
-  font-size:14px;
-
-  line-height:1.6;
-}
-
-.resource-button{
-  display:inline-flex;
-
-  margin-top:7px;
-
-  padding:9px 13px;
-
-  border-radius:10px;
-
-  background:#087a4b;
-
-  color:#ffffff;
-
-  text-decoration:none;
-
-  font-weight:800;
-
-  font-size:13px;
-}
-
-.resource-button:hover{
-  background:#06683f;
-}
-
-
-/* =========================================================
-   QUICK ACTIONS
-========================================================= */
 
 .quick-grid{
   display:grid;
@@ -866,25 +1032,6 @@ body{
 
 
 /* =========================================================
-   EMPTY
-========================================================= */
-
-.empty-state{
-  padding:28px;
-
-  text-align:center;
-
-  background:#f7fcfa;
-
-  border:1px dashed #bfded0;
-
-  border-radius:18px;
-
-  color:#73877e;
-}
-
-
-/* =========================================================
    FOOTER
 ========================================================= */
 
@@ -935,7 +1082,6 @@ body{
 
 }
 
-
 @media(max-width:760px){
 
   .student-header{
@@ -970,8 +1116,15 @@ body{
       repeat(2,1fr);
   }
 
-}
+  .resource-heading{
+    display:block;
+  }
 
+  .resource-controls{
+    grid-template-columns:1fr;
+  }
+
+}
 
 @media(max-width:520px){
 
@@ -1084,7 +1237,7 @@ body{
 
 
 <!-- =========================================================
-     MAIN DASHBOARD
+     MAIN
 ========================================================= -->
 
 <main class="dashboard">
@@ -1147,7 +1300,7 @@ body{
       </strong>
 
       <span>
-        Courses Started
+        Available Resources
       </span>
 
     </div>
@@ -1155,12 +1308,12 @@ body{
 
     <div class="stat">
 
-      <strong id="statCompleted">
+      <strong id="statLessons">
         0
       </strong>
 
       <span>
-        Lessons Completed
+        Lessons & Courses
       </span>
 
     </div>
@@ -1168,12 +1321,12 @@ body{
 
     <div class="stat">
 
-      <strong id="statSaved">
+      <strong id="statSubjects">
         0
       </strong>
 
       <span>
-        Saved Resources
+        Subjects Available
       </span>
 
     </div>
@@ -1181,12 +1334,12 @@ body{
 
     <div class="stat">
 
-      <strong id="statQuizzes">
+      <strong id="statRecent">
         0
       </strong>
 
       <span>
-        Quizzes Completed
+        Recently Viewed
       </span>
 
     </div>
@@ -1264,13 +1417,14 @@ body{
 
       <div class="account-info">
 
-        Your AGULIBRARY account is ready
-        for global learning.
+        Your AGULIBRARY account is connected
+        and ready for global learning.
 
         <br><br>
 
-        Your learning activity and progress
-        will appear here as you use the library.
+        Explore books, PDFs, videos,
+        lessons and other educational
+        resources from around the world.
 
       </div>
 
@@ -1296,7 +1450,7 @@ body{
         </span>
 
         <h2>
-          Your overall progress
+          Your learning journey
         </h2>
 
       </div>
@@ -1321,10 +1475,118 @@ body{
 
     <p id="progressText">
 
-      Start exploring AGULIBRARY resources
-      to begin building your learning progress.
+      Explore resources and open lessons
+      to begin building your learning activity.
 
     </p>
+
+  </section>
+
+
+
+  <!-- =======================================================
+       RESOURCE CENTER
+  ======================================================== -->
+
+  <section
+    id="resources"
+    class="resource-section">
+
+
+    <div class="resource-heading">
+
+      <div>
+
+        <span class="eyebrow">
+          AGULIBRARY RESOURCES
+        </span>
+
+        <h2 id="resourceHeading">
+          Latest learning resources
+        </h2>
+
+        <p id="resourceDescription">
+          Published educational resources
+          from the global library.
+        </p>
+
+      </div>
+
+    </div>
+
+
+
+    <div class="resource-controls">
+
+
+      <input
+        id="studentResourceSearch"
+        class="resource-search"
+        type="search"
+        placeholder="Search books, lessons, videos, subjects..."
+        autocomplete="off"
+      >
+
+
+      <select
+        id="resourceTypeFilter"
+        class="resource-filter">
+
+        <option value="">
+          All resource types
+        </option>
+
+        <option value="book">
+          📚 Books
+        </option>
+
+        <option value="pdf">
+          📄 PDFs
+        </option>
+
+        <option value="video">
+          🎥 Videos
+        </option>
+
+        <option value="image">
+          🖼️ Images
+        </option>
+
+        <option value="lesson">
+          📖 Lessons
+        </option>
+
+        <option value="course">
+          🎓 Courses
+        </option>
+
+        <option value="document">
+          📄 Documents
+        </option>
+
+        <option value="audio">
+          🎧 Audio
+        </option>
+
+      </select>
+
+
+    </div>
+
+
+
+    <div
+      id="studentResourceGrid"
+      class="resource-grid">
+
+      <div class="loading">
+
+        📚 Loading AGULIBRARY resources...
+
+      </div>
+
+    </div>
+
 
   </section>
 
@@ -1368,7 +1630,6 @@ body{
       </div>
 
 
-
       <div
         class="subject-item"
         data-subject="Mathematics">
@@ -1386,7 +1647,6 @@ body{
         </small>
 
       </div>
-
 
 
       <div
@@ -1408,7 +1668,6 @@ body{
       </div>
 
 
-
       <div
         class="subject-item"
         data-subject="Languages & Literature">
@@ -1426,7 +1685,6 @@ body{
         </small>
 
       </div>
-
 
 
       <div
@@ -1448,7 +1706,6 @@ body{
       </div>
 
 
-
       <div
         class="subject-item"
         data-subject="Business & Finance">
@@ -1466,7 +1723,6 @@ body{
         </small>
 
       </div>
-
 
 
       <div
@@ -1488,7 +1744,6 @@ body{
       </div>
 
 
-
       <div
         class="subject-item"
         data-subject="Professional & Career">
@@ -1508,7 +1763,6 @@ body{
       </div>
 
 
-
       <div
         class="subject-item"
         data-subject="Exam Preparation">
@@ -1526,7 +1780,6 @@ body{
         </small>
 
       </div>
-
 
 
       <div
@@ -1558,24 +1811,15 @@ body{
        QUICK ACTIONS
   ======================================================== -->
 
-  <section class="learning-section">
+  <section class="quick-section">
 
-    <div class="section-title">
+    <span class="eyebrow">
+      MY LEARNING
+    </span>
 
-      <span class="eyebrow">
-        MY LEARNING
-      </span>
-
-      <h2>
-        Continue your learning journey
-      </h2>
-
-      <p>
-        Everything you need to continue learning
-        from one place.
-      </p>
-
-    </div>
+    <h2>
+      Continue your learning journey
+    </h2>
 
 
     <div class="quick-grid">
@@ -1590,37 +1834,55 @@ body{
         </div>
 
         <b>
-          My Courses
+          Browse Resources
         </b>
 
         <small>
-          Continue courses and lessons
-          you have started.
+          Explore books, PDFs, videos,
+          lessons and courses.
         </small>
 
       </a>
-
 
 
       <a
-        href="#saved"
+        href="#subjects"
         class="quick-card">
 
         <div class="icon">
-          🔖
+          🌍
         </div>
 
         <b>
-          Saved Resources
+          Explore Subjects
         </b>
 
         <small>
-          Quickly return to resources
-          you saved.
+          Discover learning materials
+          across global subject areas.
         </small>
 
       </a>
 
+
+      <a
+        href="#resources"
+        class="quick-card">
+
+        <div class="icon">
+          🔎
+        </div>
+
+        <b>
+          Search Library
+        </b>
+
+        <small>
+          Find educational resources
+          quickly.
+        </small>
+
+      </a>
 
 
       <a
@@ -1636,29 +1898,8 @@ body{
         </b>
 
         <small>
-          Continue from where you
-          last stopped.
-        </small>
-
-      </a>
-
-
-
-      <a
-        href="#practice"
-        class="quick-card">
-
-        <div class="icon">
-          📝
-        </div>
-
-        <b>
-          Practice & Quizzes
-        </b>
-
-        <small>
-          Test your knowledge and
-          improve your skills.
+          Return to resources you
+          opened recently.
         </small>
 
       </a>
@@ -1671,138 +1912,31 @@ body{
 
 
   <!-- =======================================================
-       MY COURSES
-  ======================================================== -->
-
-  <section
-    id="resources"
-    class="learning-section">
-
-    <div class="section-title">
-
-      <span class="eyebrow">
-        MY COURSES
-      </span>
-
-      <h2>
-        Learning resources
-      </h2>
-
-      <p>
-        Your enrolled and recently started
-        learning resources will appear here.
-      </p>
-
-    </div>
-
-
-    <div
-      id="courseGrid"
-      class="resource-grid">
-
-      <div class="empty-state">
-
-        📚
-
-        <br><br>
-
-        You have not started a course yet.
-
-        <br>
-
-        Explore the AGULIBRARY to begin learning.
-
-        <br><br>
-
-        <a
-          class="resource-button"
-          href="index.html#resources">
-
-          Explore Library
-
-        </a>
-
-      </div>
-
-    </div>
-
-  </section>
-
-
-
-  <!-- =======================================================
-       SAVED
-  ======================================================== -->
-
-  <section
-    id="saved"
-    class="learning-section">
-
-    <div class="section-title">
-
-      <span class="eyebrow">
-        SAVED RESOURCES
-      </span>
-
-      <h2>
-        Your saved learning materials
-      </h2>
-
-      <p>
-        Books, videos, PDFs and other resources
-        you save will appear here.
-      </p>
-
-    </div>
-
-
-    <div
-      id="savedGrid"
-      class="resource-grid">
-
-      <div class="empty-state">
-
-        🔖
-
-        <br><br>
-
-        No saved resources yet.
-
-        <br>
-
-        Save useful resources while exploring
-        the global library.
-
-      </div>
-
-    </div>
-
-  </section>
-
-
-
-  <!-- =======================================================
-       RECENT
+       RECENTLY VIEWED
   ======================================================== -->
 
   <section
     id="recent"
-    class="learning-section">
+    class="resource-section">
 
-    <div class="section-title">
+    <div class="resource-heading">
 
-      <span class="eyebrow">
-        RECENTLY VIEWED
-      </span>
+      <div>
 
-      <h2>
-        Continue where you stopped
-      </h2>
+        <span class="eyebrow">
+          LEARNING ACTIVITY
+        </span>
 
-      <p>
-        Your recently opened resources will
-        appear here.
-      </p>
+        <h2>
+          Recently viewed
+        </h2>
+
+        <p>
+          Continue exploring resources
+          you opened recently.
+        </p>
+
+      </div>
 
     </div>
 
@@ -1817,12 +1951,7 @@ body{
 
         <br><br>
 
-        Nothing viewed yet.
-
-        <br>
-
-        Your recent learning activity
-        will appear here.
+        You haven't opened a resource yet.
 
       </div>
 
@@ -1836,27 +1965,15 @@ body{
        PRACTICE
   ======================================================== -->
 
-  <section
-    id="practice"
-    class="learning-section">
+  <section class="quick-section">
 
-    <div class="section-title">
+    <span class="eyebrow">
+      PRACTICE & QUIZZES
+    </span>
 
-      <span class="eyebrow">
-        PRACTICE & QUIZZES
-      </span>
-
-      <h2>
-        Test your knowledge
-      </h2>
-
-      <p>
-        Practice questions and quizzes will
-        become available as you explore
-        learning resources.
-      </p>
-
-    </div>
+    <h2>
+      Test your knowledge
+    </h2>
 
 
     <div class="quick-grid">
@@ -1873,12 +1990,11 @@ body{
         </b>
 
         <small>
-          Strengthen your understanding
-          with topic-based questions.
+          Topic-based practice questions
+          will be connected to resources.
         </small>
 
       </div>
-
 
 
       <div class="quick-card">
@@ -1892,12 +2008,11 @@ body{
         </b>
 
         <small>
-          Challenge yourself and track
-          your performance.
+          Test your understanding and
+          improve your performance.
         </small>
 
       </div>
-
 
 
       <div class="quick-card">
@@ -1911,12 +2026,11 @@ body{
         </b>
 
         <small>
-          Review your quiz performance
-          and learning progress.
+          Your quiz results will be
+          displayed here.
         </small>
 
       </div>
-
 
 
       <div class="quick-card">
@@ -1930,8 +2044,8 @@ body{
         </b>
 
         <small>
-          Build consistent learning habits
-          and reach your goals.
+          Build consistent learning
+          habits as the platform grows.
         </small>
 
       </div>
@@ -1989,9 +2103,21 @@ body{
 
 <script>
 
+let studentResources = [];
+
+let studentUser = null;
+
+const RECENT_STORAGE_KEY =
+  "AGU_RECENT_RESOURCES";
+
+
+/* =========================================================
+   START
+========================================================= */
+
 document.addEventListener(
   "DOMContentLoaded",
-  () => {
+  async () => {
 
     const year =
       document.getElementById("year");
@@ -2004,43 +2130,11 @@ document.addEventListener(
     }
 
 
-    loadStudentDashboard();
+    setupStudentSearch();
 
+    setupSubjectButtons();
 
-    document
-      .querySelectorAll(".subject-item")
-      .forEach(item => {
-
-        item.addEventListener(
-          "click",
-          () => {
-
-            const subject =
-              item.dataset.subject;
-
-            window.location.href =
-              "index.html?subject=" +
-              encodeURIComponent(subject);
-
-          }
-        );
-
-      });
-
-
-    const logout =
-      document.getElementById(
-        "logoutButton"
-      );
-
-    if(logout){
-
-      logout.addEventListener(
-        "click",
-        signOutStudent
-      );
-
-    }
+    await loadStudentDashboard();
 
   }
 );
@@ -2054,16 +2148,6 @@ async function loadStudentDashboard(){
 
   try{
 
-    /*
-      IMPORTANT:
-      This project uses getSupabase()
-      from supabase.js.
-
-      Do NOT use window.supabase.auth
-      directly here because window.supabase
-      is the CDN library object.
-    */
-
     if(
       typeof getSupabase !== "function"
     ){
@@ -2074,7 +2158,7 @@ async function loadStudentDashboard(){
       );
 
       console.error(
-        "getSupabase() was not found. Check supabase.js."
+        "getSupabase() was not found."
       );
 
       return;
@@ -2094,10 +2178,6 @@ async function loadStudentDashboard(){
       showMessage(
         "Authentication service is unavailable.",
         "error"
-      );
-
-      console.error(
-        "Supabase client could not be initialized."
       );
 
       return;
@@ -2130,10 +2210,6 @@ async function loadStudentDashboard(){
       result.data?.session;
 
 
-    /* =====================================================
-       SESSION PROTECTION
-    ===================================================== */
-
     if(!session){
 
       window.location.href =
@@ -2144,25 +2220,21 @@ async function loadStudentDashboard(){
     }
 
 
-    const user =
+    studentUser =
       session.user;
 
 
     const email =
-      user.email ||
+      studentUser.email ||
       "Student";
 
 
     const fullName =
-      user.user_metadata?.full_name ||
-      user.user_metadata?.name ||
+      studentUser.user_metadata?.full_name ||
+      studentUser.user_metadata?.name ||
       email.split("@")[0] ||
       "Student";
 
-
-    /* =====================================================
-       PROFILE
-    ===================================================== */
 
     setText(
       "welcomeName",
@@ -2180,41 +2252,17 @@ async function loadStudentDashboard(){
     );
 
 
-    const avatar =
-      document.getElementById(
-        "profileAvatar"
-      );
-
-
-    if(avatar){
-
-      const initials =
-        fullName
-          .split(" ")
-          .filter(Boolean)
-          .map(
-            word =>
-              word.charAt(0)
-          )
-          .join("")
-          .substring(0,2)
-          .toUpperCase();
-
-
-      avatar.textContent =
-        initials || "AG";
-
-    }
-
-
-    /* =====================================================
-       INITIAL LOCAL LEARNING DATA
-    ===================================================== */
-
-    loadLocalLearningData(
-      user.id
+    setAvatar(
+      fullName
     );
 
+
+    await loadStudentResources(
+      client
+    );
+
+
+    loadRecentlyViewed();
 
   }catch(error){
 
@@ -2234,144 +2282,1043 @@ async function loadStudentDashboard(){
 
 
 /* =========================================================
-   LOCAL LEARNING DATA
+   LOAD REAL RESOURCES
 ========================================================= */
 
-function loadLocalLearningData(userId){
+async function loadStudentResources(client){
+
+  const grid =
+    document.getElementById(
+      "studentResourceGrid"
+    );
+
+
+  if(!grid){
+
+    return;
+
+  }
+
+
+  grid.innerHTML = `
+
+    <div class="loading">
+
+      📚 Loading AGULIBRARY resources...
+
+    </div>
+
+  `;
+
 
   try{
 
-    const progress =
-      Number(
-        localStorage.getItem(
-          "AGU_PROGRESS_" + userId
-        ) || 0
+    const {
+      data,
+      error
+    } =
+      await client
+        .from("resources")
+        .select("*")
+        .order(
+          "created_at",
+          {
+            ascending:false
+          }
+        );
+
+
+    if(error){
+
+      console.error(
+        "Student resource loading error:",
+        error
       );
 
 
-    const courses =
-      Number(
-        localStorage.getItem(
-          "AGU_COURSES_" + userId
-        ) || 0
-      );
+      grid.innerHTML = `
 
+        <div class="empty-state">
 
-    const completed =
-      Number(
-        localStorage.getItem(
-          "AGU_COMPLETED_" + userId
-        ) || 0
-      );
+          ⚠️
 
+          <br><br>
 
-    const saved =
-      Number(
-        localStorage.getItem(
-          "AGU_SAVED_" + userId
-        ) || 0
-      );
+          AGULIBRARY resources could not
+          be loaded right now.
 
+          <br><br>
 
-    const quizzes =
-      Number(
-        localStorage.getItem(
-          "AGU_QUIZZES_" + userId
-        ) || 0
-      );
+          Please refresh the page and try again.
 
+        </div>
 
-    setText(
-      "statCourses",
-      courses
-    );
+      `;
 
-    setText(
-      "statCompleted",
-      completed
-    );
-
-    setText(
-      "statSaved",
-      saved
-    );
-
-    setText(
-      "statQuizzes",
-      quizzes
-    );
-
-
-    const safeProgress =
-      Math.min(
-        100,
-        Math.max(
-          0,
-          progress
-        )
-      );
-
-
-    setText(
-      "progressPercent",
-      safeProgress + "%"
-    );
-
-
-    const fill =
-      document.getElementById(
-        "progressFill"
-      );
-
-
-    if(fill){
-
-      fill.style.width =
-        safeProgress + "%";
+      return;
 
     }
 
 
-    const progressText =
-      document.getElementById(
-        "progressText"
-      );
+    studentResources =
+      data || [];
 
 
-    if(progressText){
+    updateStatistics();
 
-      if(safeProgress === 0){
+    renderStudentResources(
+      studentResources
+    );
 
-        progressText.textContent =
-          "Start exploring AGULIBRARY resources to begin building your learning progress.";
-
-      }else if(safeProgress < 50){
-
-        progressText.textContent =
-          "Great start! Continue learning to build your progress.";
-
-      }else if(safeProgress < 100){
-
-        progressText.textContent =
-          "You're making excellent progress. Keep learning and move closer to your goal.";
-
-      }else{
-
-        progressText.textContent =
-          "Excellent! You have completed your current learning progress.";
-
-      }
-
-    }
 
   }catch(error){
 
     console.error(
-      "Learning data error:",
+      "Resource error:",
+      error
+    );
+
+
+    grid.innerHTML = `
+
+      <div class="empty-state">
+
+        ⚠️
+
+        <br><br>
+
+        Unable to load learning resources.
+
+      </div>
+
+    `;
+
+  }
+
+}
+
+
+/* =========================================================
+   STATISTICS
+========================================================= */
+
+function updateStatistics(){
+
+  const total =
+    studentResources.length;
+
+
+  const lessons =
+    studentResources.filter(
+      resource => {
+
+        const type =
+          String(
+            resource.type || ""
+          )
+          .toLowerCase()
+          .trim();
+
+        return (
+          type === "lesson" ||
+          type === "course"
+        );
+
+      }
+    ).length;
+
+
+  const subjects =
+    new Set(
+      studentResources
+        .map(
+          resource =>
+            String(
+              resource.subject ||
+              resource.subject_name ||
+              ""
+            )
+            .trim()
+        )
+        .filter(Boolean)
+    ).size;
+
+
+  const recent =
+    getRecentIds().length;
+
+
+  setText(
+    "statCourses",
+    total
+  );
+
+  setText(
+    "statLessons",
+    lessons
+  );
+
+  setText(
+    "statSubjects",
+    subjects
+  );
+
+  setText(
+    "statRecent",
+    recent
+  );
+
+
+  const progress =
+    total > 0
+      ? Math.min(
+          100,
+          Math.round(
+            (recent / total) * 100
+          )
+        )
+      : 0;
+
+
+  setText(
+    "progressPercent",
+    progress + "%"
+  );
+
+
+  const fill =
+    document.getElementById(
+      "progressFill"
+    );
+
+
+  if(fill){
+
+    fill.style.width =
+      progress + "%";
+
+  }
+
+
+  const progressText =
+    document.getElementById(
+      "progressText"
+    );
+
+
+  if(progressText){
+
+    if(total === 0){
+
+      progressText.textContent =
+        "No resources are available yet. Your learning progress will appear as resources are published.";
+
+    }else if(recent === 0){
+
+      progressText.textContent =
+        "Start exploring AGULIBRARY resources to begin building your learning activity.";
+
+    }else{
+
+      progressText.textContent =
+        "You've explored " +
+        recent +
+        " resource" +
+        (recent === 1 ? "" : "s") +
+        " from the AGULIBRARY.";
+
+    }
+
+  }
+
+}
+
+
+/* =========================================================
+   RENDER RESOURCES
+========================================================= */
+
+function renderStudentResources(list){
+
+  const grid =
+    document.getElementById(
+      "studentResourceGrid"
+    );
+
+
+  if(!grid){
+
+    return;
+
+  }
+
+
+  if(!list.length){
+
+    grid.innerHTML = `
+
+      <div class="empty-state">
+
+        📚
+
+        <br><br>
+
+        No educational resources
+        are available yet.
+
+        <br><br>
+
+        Please check back as AGULIBRARY
+        continues to grow.
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  grid.innerHTML =
+    list.map(
+      resource =>
+        createResourceCard(
+          resource
+        )
+    ).join("");
+
+}
+
+
+/* =========================================================
+   CREATE RESOURCE CARD
+========================================================= */
+
+function createResourceCard(resource){
+
+  const id =
+    String(
+      resource.id || ""
+    );
+
+
+  const title =
+    escapeHTML(
+      resource.title ||
+      "Untitled Resource"
+    );
+
+
+  const description =
+    escapeHTML(
+      resource.description ||
+      "Educational resource"
+    );
+
+
+  const subject =
+    escapeHTML(
+      resource.subject ||
+      resource.subject_name ||
+      ""
+    );
+
+
+  const typeValue =
+    String(
+      resource.type ||
+      "resource"
+    )
+    .toLowerCase()
+    .trim();
+
+
+  const type =
+    escapeHTML(
+      typeValue.toUpperCase()
+    );
+
+
+  const icon =
+    getResourceIcon(
+      typeValue
+    );
+
+
+  const level =
+    resource.level ||
+    resource.class_level ||
+    "";
+
+
+  const term =
+    resource.term ||
+    "";
+
+
+  const meta = [];
+
+
+  if(level){
+
+    meta.push(
+      `<span>${escapeHTML(level)}</span>`
+    );
+
+  }
+
+
+  if(term){
+
+    meta.push(
+      `<span>${escapeHTML(term)}</span>`
+    );
+
+  }
+
+
+  const isLesson =
+    typeValue === "lesson" ||
+    typeValue === "course";
+
+
+  const button =
+    isLesson
+      ? "📖 Open Lesson →"
+      : "Open Resource →";
+
+
+  return `
+
+    <article
+      class="resource-card"
+      data-resource-id="${escapeAttr(id)}">
+
+
+      <div class="resource-icon">
+
+        ${icon}
+
+      </div>
+
+
+      <span class="resource-type">
+
+        ${type}
+
+      </span>
+
+
+      <h3>
+
+        ${title}
+
+      </h3>
+
+
+      ${
+        subject
+          ? `
+            <div class="resource-subject">
+
+              ${subject}
+
+            </div>
+          `
+          : ""
+      }
+
+
+      ${
+        meta.length
+          ? `
+            <div class="resource-meta">
+
+              ${meta.join("")}
+
+            </div>
+          `
+          : ""
+      }
+
+
+      <p>
+
+        ${description}
+
+      </p>
+
+
+      <button
+        class="resource-open"
+        type="button"
+        onclick="openStudentResourceById('${escapeJS(id)}')">
+
+        ${button}
+
+      </button>
+
+
+    </article>
+
+  `;
+
+}
+
+
+/* =========================================================
+   SEARCH + FILTER
+========================================================= */
+
+function setupStudentSearch(){
+
+  const search =
+    document.getElementById(
+      "studentResourceSearch"
+    );
+
+
+  const filter =
+    document.getElementById(
+      "resourceTypeFilter"
+    );
+
+
+  if(search){
+
+    search.addEventListener(
+      "input",
+      applyStudentResourceFilters
+    );
+
+  }
+
+
+  if(filter){
+
+    filter.addEventListener(
+      "change",
+      applyStudentResourceFilters
+    );
+
+  }
+
+}
+
+
+function applyStudentResourceFilters(){
+
+  const search =
+    document.getElementById(
+      "studentResourceSearch"
+    );
+
+
+  const filter =
+    document.getElementById(
+      "resourceTypeFilter"
+    );
+
+
+  const query =
+    search
+      ? search.value
+          .toLowerCase()
+          .trim()
+      : "";
+
+
+  const type =
+    filter
+      ? filter.value
+          .toLowerCase()
+          .trim()
+      : "";
+
+
+  const filtered =
+    studentResources.filter(
+      resource => {
+
+        const resourceType =
+          String(
+            resource.type || ""
+          )
+          .toLowerCase()
+          .trim();
+
+
+        const searchable = `
+
+          ${resource.title || ""}
+
+          ${resource.description || ""}
+
+          ${resource.subject || ""}
+
+          ${resource.subject_name || ""}
+
+          ${resource.type || ""}
+
+          ${resource.level || ""}
+
+          ${resource.class_level || ""}
+
+          ${resource.term || ""}
+
+          ${resource.course || ""}
+
+          ${resource.chapter || ""}
+
+          ${resource.lesson || ""}
+
+          ${resource.lesson_title || ""}
+
+        `.toLowerCase();
+
+
+        const matchesSearch =
+          !query ||
+          searchable.includes(
+            query
+          );
+
+
+        const matchesType =
+          !type ||
+          resourceType === type;
+
+
+        return (
+          matchesSearch &&
+          matchesType
+        );
+
+      }
+    );
+
+
+  renderStudentResources(
+    filtered
+  );
+
+}
+
+
+/* =========================================================
+   SUBJECT BUTTONS
+========================================================= */
+
+function setupSubjectButtons(){
+
+  document
+    .querySelectorAll(
+      ".subject-item"
+    )
+    .forEach(
+      item => {
+
+        item.addEventListener(
+          "click",
+          () => {
+
+            const subject =
+              item.dataset.subject;
+
+
+            if(!subject){
+
+              return;
+
+            }
+
+
+            const search =
+              document.getElementById(
+                "studentResourceSearch"
+              );
+
+
+            if(search){
+
+              search.value =
+                subject;
+
+            }
+
+
+            document
+              .getElementById(
+                "resources"
+              )
+              ?.scrollIntoView({
+                behavior:"smooth"
+              });
+
+
+            applyStudentResourceFilters();
+
+          }
+        );
+
+      }
+    );
+
+}
+
+
+/* =========================================================
+   OPEN RESOURCE
+========================================================= */
+
+function openStudentResourceById(id){
+
+  const resource =
+    studentResources.find(
+      item =>
+        String(item.id) ===
+        String(id)
+    );
+
+
+  if(!resource){
+
+    alert(
+      "This AGULIBRARY resource could not be found."
+    );
+
+    return;
+
+  }
+
+
+  recordRecentlyViewed(
+    resource
+  );
+
+
+  const type =
+    String(
+      resource.type ||
+      ""
+    )
+    .toLowerCase()
+    .trim();
+
+
+  /*
+    Lessons and courses use
+    the existing lesson.html
+    architecture.
+  */
+
+  if(
+    type === "lesson" ||
+    type === "course"
+  ){
+
+    window.location.href =
+      "lesson.html?id=" +
+      encodeURIComponent(
+        resource.id
+      );
+
+    return;
+
+  }
+
+
+  /*
+    Normal resources use their
+    existing file_url/url.
+  */
+
+  const url =
+    resource.file_url ||
+    resource.url ||
+    "";
+
+
+  if(!url){
+
+    alert(
+      "This resource does not have a file attached yet."
+    );
+
+    return;
+
+  }
+
+
+  window.open(
+    url,
+    "_blank",
+    "noopener,noreferrer"
+  );
+
+}
+
+
+/* =========================================================
+   RECENTLY VIEWED
+========================================================= */
+
+function getRecentIds(){
+
+  try{
+
+    const key =
+      studentUser?.id
+        ? RECENT_STORAGE_KEY +
+          "_" +
+          studentUser.id
+        : RECENT_STORAGE_KEY;
+
+
+    const data =
+      JSON.parse(
+        localStorage.getItem(
+          key
+        ) || "[]"
+      );
+
+
+    return Array.isArray(data)
+      ? data
+      : [];
+
+  }catch(error){
+
+    console.error(
+      "Recent IDs error:",
+      error
+    );
+
+    return [];
+
+  }
+
+}
+
+
+function recordRecentlyViewed(resource){
+
+  if(!studentUser){
+
+    return;
+
+  }
+
+
+  try{
+
+    const key =
+      RECENT_STORAGE_KEY +
+      "_" +
+      studentUser.id;
+
+
+    let items =
+      getRecentIds();
+
+
+    items =
+      items.filter(
+        id =>
+          String(id) !==
+          String(resource.id)
+      );
+
+
+    items.unshift(
+      String(resource.id)
+    );
+
+
+    items =
+      items.slice(
+        0,
+        12
+      );
+
+
+    localStorage.setItem(
+      key,
+      JSON.stringify(items)
+    );
+
+
+    renderRecentlyViewed();
+
+    updateStatistics();
+
+  }catch(error){
+
+    console.error(
+      "Recent resource error:",
       error
     );
 
   }
+
+}
+
+
+function loadRecentlyViewed(){
+
+  renderRecentlyViewed();
+
+}
+
+
+function renderRecentlyViewed(){
+
+  const grid =
+    document.getElementById(
+      "recentGrid"
+    );
+
+
+  if(!grid){
+
+    return;
+
+  }
+
+
+  const ids =
+    getRecentIds();
+
+
+  const recentResources =
+    ids
+      .map(
+        id =>
+          studentResources.find(
+            resource =>
+              String(resource.id) ===
+              String(id)
+          )
+      )
+      .filter(Boolean);
+
+
+  if(!recentResources.length){
+
+    grid.innerHTML = `
+
+      <div class="empty-state">
+
+        🕐
+
+        <br><br>
+
+        You haven't opened a resource yet.
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  grid.innerHTML =
+    recentResources
+      .map(
+        resource =>
+          createResourceCard(
+            resource
+          )
+      )
+      .join("");
+
+}
+
+
+/* =========================================================
+   AVATAR
+========================================================= */
+
+function setAvatar(name){
+
+  const avatar =
+    document.getElementById(
+      "profileAvatar"
+    );
+
+
+  if(!avatar){
+
+    return;
+
+  }
+
+
+  const initials =
+    String(name)
+      .split(" ")
+      .filter(Boolean)
+      .map(
+        word =>
+          word.charAt(0)
+      )
+      .join("")
+      .substring(
+        0,
+        2
+      )
+      .toUpperCase();
+
+
+  avatar.textContent =
+    initials || "AG";
+
+}
+
+
+/* =========================================================
+   RESOURCE ICON
+========================================================= */
+
+function getResourceIcon(type){
+
+  const icons = {
+
+    book:"📚",
+
+    pdf:"📄",
+
+    video:"🎥",
+
+    photo:"🖼️",
+
+    image:"🖼️",
+
+    course:"🎓",
+
+    lesson:"📖",
+
+    document:"📄",
+
+    audio:"🎧"
+
+  };
+
+
+  return (
+    icons[
+      String(
+        type || ""
+      )
+      .toLowerCase()
+      .trim()
+    ]
+    ||
+    "📘"
+  );
 
 }
 
@@ -2386,7 +3333,10 @@ function setText(
 ){
 
   const element =
-    document.getElementById(id);
+    document.getElementById(
+      id
+    );
+
 
   if(element){
 
@@ -2412,6 +3362,7 @@ function showMessage(
       "message"
     );
 
+
   if(!message){
 
     return;
@@ -2431,6 +3382,92 @@ function showMessage(
 
 
 /* =========================================================
+   HTML ESCAPE
+========================================================= */
+
+function escapeHTML(value){
+
+  return String(
+    value ?? ""
+  ).replace(
+    /[&<>"']/g,
+    character => {
+
+      const entities = {
+
+        "&":"&amp;",
+
+        "<":"&lt;",
+
+        ">":"&gt;",
+
+        '"':"&quot;",
+
+        "'":"&#039;"
+
+      };
+
+
+      return entities[
+        character
+      ];
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   ATTRIBUTE ESCAPE
+========================================================= */
+
+function escapeAttr(value){
+
+  return escapeHTML(
+    value
+  ).replace(
+    /`/g,
+    "&#096;"
+  );
+
+}
+
+
+/* =========================================================
+   JAVASCRIPT STRING ESCAPE
+========================================================= */
+
+function escapeJS(value){
+
+  return String(
+    value ?? ""
+  )
+  .replace(
+    /\\/g,
+    "\\\\"
+  )
+  .replace(
+    /'/g,
+    "\\'"
+  )
+  .replace(
+    /"/g,
+    '\\"'
+  )
+  .replace(
+    /\r/g,
+    "\\r"
+  )
+  .replace(
+    /\n/g,
+    "\\n"
+  );
+
+}
+
+
+/* =========================================================
    SIGN OUT
 ========================================================= */
 
@@ -2438,18 +3475,9 @@ async function signOutStudent(){
 
   try{
 
-    /*
-      Use the same Supabase client
-      architecture as the rest of the project.
-    */
-
     if(
       typeof getSupabase !== "function"
     ){
-
-      console.error(
-        "getSupabase() is unavailable."
-      );
 
       window.location.href =
         "index.html";
@@ -2467,10 +3495,6 @@ async function signOutStudent(){
       !client ||
       !client.auth
     ){
-
-      console.error(
-        "Supabase client is unavailable."
-      );
 
       window.location.href =
         "index.html";
@@ -2490,6 +3514,7 @@ async function signOutStudent(){
         "Sign out error:",
         result.error
       );
+
 
       showMessage(
         "Unable to sign out. Please try again.",
@@ -2511,6 +3536,7 @@ async function signOutStudent(){
       error
     );
 
+
     window.location.href =
       "index.html";
 
@@ -2518,8 +3544,28 @@ async function signOutStudent(){
 
 }
 
+
+/* =========================================================
+   LOGOUT BUTTON
+========================================================= */
+
+const logoutButton =
+  document.getElementById(
+    "logoutButton"
+  );
+
+
+if(logoutButton){
+
+  logoutButton.addEventListener(
+    "click",
+    signOutStudent
+  );
+
+}
+
 </script>
 
 
 </body>
-          </html>
+  </html>

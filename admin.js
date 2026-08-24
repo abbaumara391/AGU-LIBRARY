@@ -576,7 +576,11 @@ if (uploadForm) {
               .getElementById("description")
               .value
               .trim(),
-
+      content:
+        document
+          .getElementById("content")
+          .value
+          .trim(),
 
           type:
             document

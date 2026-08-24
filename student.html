@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+
 <head>
 
 <meta charset="utf-8">
@@ -16,7 +17,7 @@
 <style>
 
 /* =========================================================
-   AGULIBRARY — PHASE 4 STUDENT DASHBOARD
+   AGULIBRARY — LIGHT STUDENT DASHBOARD
 ========================================================= */
 
 *{
@@ -29,8 +30,8 @@ html{
 
 body{
   margin:0;
-  background:#111513;
-  color:#eaf7f1;
+  background:#f5fbf8;
+  color:#17352a;
   font-family:
     system-ui,
     -apple-system,
@@ -49,7 +50,7 @@ body{
   top:0;
   z-index:1000;
 
-  min-height:82px;
+  min-height:78px;
 
   display:flex;
   align-items:center;
@@ -57,11 +58,14 @@ body{
 
   gap:15px;
 
-  padding:12px 5%;
+  padding:11px 5%;
 
-  background:#1b1e1d;
+  background:rgba(255,255,255,.96);
 
-  border-bottom:1px solid #39433e;
+  border-bottom:1px solid #dceee6;
+
+  box-shadow:
+    0 5px 22px rgba(8,122,75,.06);
 
   backdrop-filter:blur(14px);
 }
@@ -69,70 +73,92 @@ body{
 .student-brand{
   display:flex;
   align-items:center;
-  gap:13px;
+  gap:12px;
 }
 
 .mark{
-  width:56px;
-  height:56px;
+  width:52px;
+  height:52px;
 
   display:grid;
   place-items:center;
 
-  border-radius:18px;
+  border-radius:16px;
 
   background:#087a4b;
 
   color:white;
 
-  font-size:22px;
+  font-size:21px;
+
   font-weight:900;
+
+  box-shadow:
+    0 8px 18px rgba(8,122,75,.18);
 }
 
 .student-brand b{
   display:block;
-  font-size:21px;
+
+  color:#123d2d;
+
+  font-size:20px;
 }
 
 .student-brand small{
   display:block;
+
   margin-top:3px;
 
-  color:#8d9c95;
+  color:#6d8178;
 
   font-size:9px;
+
   letter-spacing:2px;
 }
 
 .header-actions{
   display:flex;
+
   align-items:center;
+
   gap:10px;
 }
 
 .back{
-  color:#6de5ba;
+  color:#087a4b;
+
   text-decoration:none;
+
   font-weight:800;
 }
 
+.back:hover{
+  text-decoration:underline;
+}
+
 .logout{
-  border:1px solid #4c5751;
-  background:#292d2b;
-  color:#70e7bc;
+  border:1px solid #b9dccd;
 
-  padding:11px 17px;
+  background:#ffffff;
 
-  border-radius:12px;
+  color:#087a4b;
+
+  padding:10px 16px;
+
+  border-radius:11px;
 
   font-weight:800;
 
   cursor:pointer;
+
+  transition:.2s ease;
 }
 
 .logout:hover{
   background:#087a4b;
-  color:#fff;
+
+  color:#ffffff;
 }
 
 
@@ -142,9 +168,10 @@ body{
 
 .dashboard{
   width:min(1250px,100%);
+
   margin:auto;
 
-  padding:32px 5% 80px;
+  padding:30px 5% 80px;
 }
 
 
@@ -169,13 +196,19 @@ body{
 }
 
 .message.success{
-  background:#073d27;
-  color:#71e8bd;
+  background:#e8f8f0;
+
+  border:1px solid #c5ead8;
+
+  color:#087a4b;
 }
 
 .message.error{
-  background:#421e1e;
-  color:#ff9e9e;
+  background:#fff0f0;
+
+  border:1px solid #f1cccc;
+
+  color:#b42323;
 }
 
 
@@ -184,26 +217,51 @@ body{
 ========================================================= */
 
 .welcome{
+  position:relative;
+
+  overflow:hidden;
+
   background:
     linear-gradient(
       135deg,
-      #003b18,
-      #00602a
+      #e9f9f1,
+      #ffffff
     );
 
-  border:1px solid #176c41;
+  border:1px solid #ccebdd;
 
-  border-radius:30px;
+  border-radius:28px;
 
-  padding:40px;
+  padding:38px;
 
   margin-bottom:22px;
+
+  box-shadow:
+    0 15px 40px rgba(8,122,75,.07);
+}
+
+.welcome:after{
+  content:"";
+
+  position:absolute;
+
+  width:220px;
+  height:220px;
+
+  right:-70px;
+  top:-90px;
+
+  border-radius:50%;
+
+  background:#d7f4e6;
+
+  opacity:.7;
 }
 
 .eyebrow{
-  color:#70e7bc;
+  color:#087a4b;
 
-  font-size:12px;
+  font-size:11px;
 
   font-weight:900;
 
@@ -211,29 +269,41 @@ body{
 }
 
 .welcome h1{
-  margin:14px 0;
+  position:relative;
+
+  z-index:2;
+
+  margin:13px 0;
 
   font-size:
-    clamp(38px,6vw,60px);
+    clamp(34px,6vw,58px);
 
   line-height:1.05;
 
-  color:#f0fff8;
+  color:#123d2d;
+}
+
+.welcome h1 span{
+  color:#087a4b;
 }
 
 .welcome p{
+  position:relative;
+
+  z-index:2;
+
   max-width:760px;
 
-  color:#c3d8ce;
+  color:#61766d;
 
   line-height:1.7;
 
-  font-size:17px;
+  font-size:16px;
 }
 
 
 /* =========================================================
-   TOP STAT CARDS
+   STAT CARDS
 ========================================================= */
 
 .stats{
@@ -252,25 +322,39 @@ body{
 
   min-height:135px;
 
-  background:#1d211f;
+  background:#ffffff;
 
-  border:1px solid #414c46;
+  border:1px solid #dceee6;
 
-  border-radius:22px;
+  border-radius:21px;
+
+  box-shadow:
+    0 10px 30px rgba(8,122,75,.05);
+
+  transition:
+    transform .2s ease,
+    box-shadow .2s ease;
+}
+
+.stat:hover{
+  transform:translateY(-3px);
+
+  box-shadow:
+    0 16px 35px rgba(8,122,75,.09);
 }
 
 .stat strong{
   display:block;
 
-  color:#70e7bc;
+  color:#087a4b;
 
-  font-size:38px;
+  font-size:36px;
 
-  margin-bottom:8px;
+  margin-bottom:7px;
 }
 
 .stat span{
-  color:#a9b7b0;
+  color:#70837b;
 
   font-size:14px;
 }
@@ -293,13 +377,16 @@ body{
 
 .profile-card,
 .account-card{
-  background:#1d211f;
+  background:#ffffff;
 
-  border:1px solid #414c46;
+  border:1px solid #dceee6;
 
-  border-radius:26px;
+  border-radius:24px;
 
-  padding:30px;
+  padding:28px;
+
+  box-shadow:
+    0 10px 30px rgba(8,122,75,.05);
 }
 
 .profile-card{
@@ -307,41 +394,44 @@ body{
 
   align-items:center;
 
-  gap:22px;
+  gap:20px;
 }
 
 .profile-avatar{
-  width:100px;
-  height:100px;
+  width:96px;
+  height:96px;
 
   flex-shrink:0;
 
   display:grid;
+
   place-items:center;
 
-  border-radius:30px;
+  border-radius:28px;
 
-  background:#003e18;
+  background:#e5f7ee;
 
-  border:1px solid #087a4b;
+  border:1px solid #bfe6d3;
 
-  color:#f2fff9;
+  color:#087a4b;
 
-  font-size:30px;
+  font-size:29px;
 
   font-weight:900;
 }
 
 .profile-info h2{
-  margin:8px 0;
+  margin:7px 0;
 
-  font-size:32px;
+  font-size:29px;
+
+  color:#173b2d;
 }
 
 .profile-info p{
   margin:0;
 
-  color:#a9b7b1;
+  color:#72847c;
 
   word-break:break-word;
 }
@@ -355,9 +445,9 @@ body{
 
   border-radius:20px;
 
-  background:#073c25;
+  background:#e8f8f0;
 
-  color:#70e7bc;
+  color:#087a4b;
 
   font-size:12px;
 
@@ -365,9 +455,11 @@ body{
 }
 
 .account-card h2{
-  margin:9px 0 20px;
+  margin:7px 0 18px;
 
-  font-size:28px;
+  font-size:26px;
+
+  color:#173b2d;
 }
 
 .account-status{
@@ -377,9 +469,9 @@ body{
 
   gap:9px;
 
-  margin-bottom:15px;
+  margin-bottom:13px;
 
-  color:#70e7bc;
+  color:#087a4b;
 
   font-weight:800;
 }
@@ -390,14 +482,14 @@ body{
 
   border-radius:50%;
 
-  background:#35d978;
+  background:#22b573;
 
   box-shadow:
-    0 0 12px rgba(53,217,120,.7);
+    0 0 10px rgba(34,181,115,.35);
 }
 
 .account-info{
-  color:#aab7b1;
+  color:#72847c;
 
   line-height:1.7;
 
@@ -413,9 +505,9 @@ body{
 
   border-radius:10px;
 
-  background:#28202e;
+  background:#f4edff;
 
-  color:#d89bff;
+  color:#7444a8;
 
   font-weight:800;
 
@@ -432,15 +524,18 @@ body{
 ========================================================= */
 
 .progress-card{
-  background:#1d211f;
+  background:#ffffff;
 
-  border:1px solid #414c46;
+  border:1px solid #dceee6;
 
-  border-radius:26px;
+  border-radius:24px;
 
-  padding:30px;
+  padding:28px;
 
   margin-bottom:22px;
+
+  box-shadow:
+    0 10px 30px rgba(8,122,75,.05);
 }
 
 .progress-header{
@@ -454,27 +549,29 @@ body{
 }
 
 .progress-header h2{
-  margin:9px 0 0;
+  margin:7px 0 0;
 
-  font-size:32px;
+  font-size:30px;
+
+  color:#173b2d;
 }
 
 #progressPercent{
-  color:#70e7bc;
+  color:#087a4b;
 
-  font-size:48px;
+  font-size:44px;
 
   font-weight:900;
 }
 
 .progress-bar{
-  height:17px;
+  height:16px;
 
-  margin-top:24px;
+  margin-top:22px;
 
   overflow:hidden;
 
-  background:#10251b;
+  background:#e7f3ed;
 
   border-radius:50px;
 }
@@ -493,7 +590,7 @@ body{
 }
 
 .progress-card>p{
-  color:#a9b7b1;
+  color:#71847b;
 
   line-height:1.6;
 }
@@ -504,21 +601,26 @@ body{
 ========================================================= */
 
 .subjects-card{
-  background:#1d211f;
+  background:#ffffff;
 
-  border:1px solid #414c46;
+  border:1px solid #dceee6;
 
-  border-radius:26px;
+  border-radius:24px;
 
-  padding:30px;
+  padding:28px;
 
   margin-bottom:22px;
+
+  box-shadow:
+    0 10px 30px rgba(8,122,75,.05);
 }
 
 .subjects-card h2{
-  margin:9px 0 22px;
+  margin:7px 0 22px;
 
-  font-size:32px;
+  font-size:30px;
+
+  color:#173b2d;
 }
 
 .subjects-grid{
@@ -531,9 +633,9 @@ body{
 }
 
 .subject-item{
-  min-height:100px;
+  min-height:105px;
 
-  padding:15px;
+  padding:16px;
 
   display:flex;
 
@@ -543,4 +645,1810 @@ body{
 
   align-items:flex-start;
 
- 
+  background:#f7fcfa;
+
+  border:1px solid #dceee6;
+
+  border-radius:17px;
+
+  cursor:pointer;
+
+  transition:
+    transform .2s ease,
+    border-color .2s ease,
+    box-shadow .2s ease;
+}
+
+.subject-item:hover{
+  transform:translateY(-4px);
+
+  border-color:#9ed9bb;
+
+  box-shadow:
+    0 12px 25px rgba(8,122,75,.08);
+}
+
+.subject-icon{
+  font-size:24px;
+
+  margin-bottom:8px;
+}
+
+.subject-item b{
+  color:#214638;
+
+  font-size:14px;
+}
+
+.subject-item small{
+  margin-top:4px;
+
+  color:#7b8d85;
+
+  line-height:1.4;
+}
+
+
+/* =========================================================
+   LEARNING SECTIONS
+========================================================= */
+
+.learning-section{
+  margin-bottom:22px;
+}
+
+.section-title{
+  margin-bottom:14px;
+}
+
+.section-title h2{
+  margin:7px 0 4px;
+
+  font-size:30px;
+
+  color:#173b2d;
+}
+
+.section-title p{
+  margin:0;
+
+  color:#74877f;
+}
+
+
+/* =========================================================
+   RESOURCE GRID
+========================================================= */
+
+.resource-grid{
+  display:grid;
+
+  grid-template-columns:
+    repeat(3,1fr);
+
+  gap:15px;
+}
+
+.resource-card{
+  background:#ffffff;
+
+  border:1px solid #dceee6;
+
+  border-radius:21px;
+
+  padding:21px;
+
+  box-shadow:
+    0 10px 28px rgba(8,122,75,.05);
+
+  transition:.2s ease;
+}
+
+.resource-card:hover{
+  transform:translateY(-4px);
+
+  box-shadow:
+    0 16px 34px rgba(8,122,75,.09);
+}
+
+.resource-icon{
+  width:48px;
+  height:48px;
+
+  display:grid;
+
+  place-items:center;
+
+  border-radius:14px;
+
+  background:#e8f8f0;
+
+  font-size:23px;
+
+  margin-bottom:13px;
+}
+
+.resource-card h3{
+  margin:0 0 7px;
+
+  color:#214638;
+
+  font-size:18px;
+}
+
+.resource-card p{
+  color:#75877f;
+
+  font-size:14px;
+
+  line-height:1.6;
+}
+
+.resource-button{
+  display:inline-flex;
+
+  margin-top:7px;
+
+  padding:9px 13px;
+
+  border-radius:10px;
+
+  background:#087a4b;
+
+  color:#ffffff;
+
+  text-decoration:none;
+
+  font-weight:800;
+
+  font-size:13px;
+}
+
+.resource-button:hover{
+  background:#06683f;
+}
+
+
+/* =========================================================
+   QUICK ACTIONS
+========================================================= */
+
+.quick-grid{
+  display:grid;
+
+  grid-template-columns:
+    repeat(4,1fr);
+
+  gap:14px;
+}
+
+.quick-card{
+  padding:23px;
+
+  background:#ffffff;
+
+  border:1px solid #dceee6;
+
+  border-radius:21px;
+
+  text-decoration:none;
+
+  color:#173b2d;
+
+  box-shadow:
+    0 10px 28px rgba(8,122,75,.05);
+
+  transition:.2s ease;
+}
+
+.quick-card:hover{
+  transform:translateY(-4px);
+
+  border-color:#a8dcc1;
+}
+
+.quick-card .icon{
+  font-size:27px;
+
+  margin-bottom:12px;
+}
+
+.quick-card b{
+  display:block;
+
+  margin-bottom:5px;
+}
+
+.quick-card small{
+  color:#788a82;
+
+  line-height:1.5;
+}
+
+
+/* =========================================================
+   EMPTY
+========================================================= */
+
+.empty-state{
+  padding:28px;
+
+  text-align:center;
+
+  background:#f7fcfa;
+
+  border:1px dashed #bfded0;
+
+  border-radius:18px;
+
+  color:#73877e;
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.student-footer{
+  padding:30px 5%;
+
+  text-align:center;
+
+  background:#ffffff;
+
+  border-top:1px solid #dceee6;
+
+  color:#70837b;
+
+  font-size:14px;
+}
+
+.student-footer b{
+  color:#087a4b;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:1000px){
+
+  .stats{
+    grid-template-columns:
+      repeat(2,1fr);
+  }
+
+  .subjects-grid{
+    grid-template-columns:
+      repeat(3,1fr);
+  }
+
+  .resource-grid{
+    grid-template-columns:
+      repeat(2,1fr);
+  }
+
+  .quick-grid{
+    grid-template-columns:
+      repeat(2,1fr);
+  }
+
+}
+
+
+@media(max-width:760px){
+
+  .student-header{
+    padding:10px 4%;
+
+    flex-wrap:wrap;
+  }
+
+  .header-actions{
+    width:100%;
+
+    justify-content:space-between;
+  }
+
+  .dashboard{
+    padding:
+      22px 4% 60px;
+  }
+
+  .welcome{
+    padding:27px;
+
+    border-radius:23px;
+  }
+
+  .profile-layout{
+    grid-template-columns:1fr;
+  }
+
+  .subjects-grid{
+    grid-template-columns:
+      repeat(2,1fr);
+  }
+
+}
+
+
+@media(max-width:520px){
+
+  .stats{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .stat{
+    padding:17px;
+
+    min-height:115px;
+  }
+
+  .stat strong{
+    font-size:29px;
+  }
+
+  .profile-card{
+    flex-direction:column;
+
+    align-items:flex-start;
+  }
+
+  .profile-avatar{
+    width:80px;
+    height:80px;
+  }
+
+  .progress-header{
+    align-items:flex-start;
+  }
+
+  #progressPercent{
+    font-size:36px;
+  }
+
+  .resource-grid,
+  .quick-grid{
+    grid-template-columns:1fr;
+  }
+
+  .subjects-grid{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .student-brand small{
+    letter-spacing:1px;
+  }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     HEADER
+========================================================= -->
+
+<header class="student-header">
+
+  <div class="student-brand">
+
+    <div class="mark">
+      AG
+    </div>
+
+    <div>
+
+      <b>
+        AGULIBRARY
+      </b>
+
+      <small>
+        GLOBAL DIGITAL EDUCATION
+      </small>
+
+    </div>
+
+  </div>
+
+
+  <div class="header-actions">
+
+    <a
+      class="back"
+      href="index.html">
+
+      🏠 AGULIBRARY
+
+    </a>
+
+
+    <button
+      id="logoutButton"
+      class="logout">
+
+      🚪 Sign out
+
+    </button>
+
+  </div>
+
+</header>
+
+
+
+<!-- =========================================================
+     MAIN DASHBOARD
+========================================================= -->
+
+<main class="dashboard">
+
+
+  <div
+    id="message"
+    class="message">
+  </div>
+
+
+  <!-- =======================================================
+       WELCOME
+  ======================================================== -->
+
+  <section class="welcome">
+
+    <span class="eyebrow">
+      STUDENT LEARNING CENTER
+    </span>
+
+
+    <h1>
+      Welcome,
+      <span id="welcomeName">
+        Student
+      </span>
+      👋
+    </h1>
+
+
+    <p>
+
+      Your personal AGULIBRARY learning space.
+      Explore global educational resources,
+      continue your studies, track your progress
+      and discover new subjects.
+
+    </p>
+
+  </section>
+
+
+
+  <!-- =======================================================
+       STATISTICS
+  ======================================================== -->
+
+  <section class="stats">
+
+
+    <div class="stat">
+
+      <strong id="statCourses">
+        0
+      </strong>
+
+      <span>
+        Courses Started
+      </span>
+
+    </div>
+
+
+    <div class="stat">
+
+      <strong id="statCompleted">
+        0
+      </strong>
+
+      <span>
+        Lessons Completed
+      </span>
+
+    </div>
+
+
+    <div class="stat">
+
+      <strong id="statSaved">
+        0
+      </strong>
+
+      <span>
+        Saved Resources
+      </span>
+
+    </div>
+
+
+    <div class="stat">
+
+      <strong id="statQuizzes">
+        0
+      </strong>
+
+      <span>
+        Quizzes Completed
+      </span>
+
+    </div>
+
+
+  </section>
+
+
+
+  <!-- =======================================================
+       PROFILE
+  ======================================================== -->
+
+  <section class="profile-layout">
+
+
+    <div class="profile-card">
+
+      <div
+        id="profileAvatar"
+        class="profile-avatar">
+
+        AG
+
+      </div>
+
+
+      <div class="profile-info">
+
+        <span class="eyebrow">
+          STUDENT PROFILE
+        </span>
+
+
+        <h2 id="profileName">
+          Student
+        </h2>
+
+
+        <p id="profileEmail">
+          Loading account...
+        </p>
+
+
+        <span class="profile-tag">
+          🎓 Active Student
+        </span>
+
+      </div>
+
+    </div>
+
+
+
+    <div class="account-card">
+
+      <span class="eyebrow">
+        ACCOUNT CENTER
+      </span>
+
+
+      <h2>
+        Account Status
+      </h2>
+
+
+      <div class="account-status">
+
+        <span class="status-dot"></span>
+
+        Account Active
+
+      </div>
+
+
+      <div class="account-info">
+
+        Your AGULIBRARY account is ready
+        for global learning.
+
+        <br><br>
+
+        Your learning activity and progress
+        will appear here as you use the library.
+
+      </div>
+
+    </div>
+
+
+  </section>
+
+
+
+  <!-- =======================================================
+       PROGRESS
+  ======================================================== -->
+
+  <section class="progress-card">
+
+    <div class="progress-header">
+
+      <div>
+
+        <span class="eyebrow">
+          LEARNING PROGRESS
+        </span>
+
+        <h2>
+          Your overall progress
+        </h2>
+
+      </div>
+
+
+      <strong id="progressPercent">
+        0%
+      </strong>
+
+    </div>
+
+
+    <div class="progress-bar">
+
+      <div
+        id="progressFill"
+        class="progress-fill">
+      </div>
+
+    </div>
+
+
+    <p id="progressText">
+
+      Start exploring AGULIBRARY resources
+      to begin building your learning progress.
+
+    </p>
+
+  </section>
+
+
+
+  <!-- =======================================================
+       SUBJECTS
+  ======================================================== -->
+
+  <section class="subjects-card">
+
+    <span class="eyebrow">
+      GLOBAL SUBJECTS
+    </span>
+
+
+    <h2>
+      Explore your subjects
+    </h2>
+
+
+    <div class="subjects-grid">
+
+
+      <div
+        class="subject-item"
+        data-subject="Science">
+
+        <span class="subject-icon">
+          🔬
+        </span>
+
+        <b>
+          Science
+        </b>
+
+        <small>
+          Physics • Chemistry • Biology
+        </small>
+
+      </div>
+
+
+
+      <div
+        class="subject-item"
+        data-subject="Mathematics">
+
+        <span class="subject-icon">
+          📐
+        </span>
+
+        <b>
+          Mathematics
+        </b>
+
+        <small>
+          Algebra • Statistics
+        </small>
+
+      </div>
+
+
+
+      <div
+        class="subject-item"
+        data-subject="Technology">
+
+        <span class="subject-icon">
+          💻
+        </span>
+
+        <b>
+          Technology
+        </b>
+
+        <small>
+          Programming • AI
+        </small>
+
+      </div>
+
+
+
+      <div
+        class="subject-item"
+        data-subject="Languages & Literature">
+
+        <span class="subject-icon">
+          📚
+        </span>
+
+        <b>
+          Languages & Literature
+        </b>
+
+        <small>
+          English • French • Spanish
+        </small>
+
+      </div>
+
+
+
+      <div
+        class="subject-item"
+        data-subject="Social Sciences & Humanities">
+
+        <span class="subject-icon">
+          🌎
+        </span>
+
+        <b>
+          Social Sciences
+        </b>
+
+        <small>
+          History • Geography • Economics
+        </small>
+
+      </div>
+
+
+
+      <div
+        class="subject-item"
+        data-subject="Business & Finance">
+
+        <span class="subject-icon">
+          💼
+        </span>
+
+        <b>
+          Business & Finance
+        </b>
+
+        <small>
+          Accounting • Finance • Marketing
+        </small>
+
+      </div>
+
+
+
+      <div
+        class="subject-item"
+        data-subject="Arts & Creative Studies">
+
+        <span class="subject-icon">
+          🎨
+        </span>
+
+        <b>
+          Arts & Creative Studies
+        </b>
+
+        <small>
+          Art • Music • Film
+        </small>
+
+      </div>
+
+
+
+      <div
+        class="subject-item"
+        data-subject="Professional & Career">
+
+        <span class="subject-icon">
+          🧑‍⚕️
+        </span>
+
+        <b>
+          Professional & Career
+        </b>
+
+        <small>
+          Medicine • Law • Engineering
+        </small>
+
+      </div>
+
+
+
+      <div
+        class="subject-item"
+        data-subject="Exam Preparation">
+
+        <span class="subject-icon">
+          📝
+        </span>
+
+        <b>
+          Exam Preparation
+        </b>
+
+        <small>
+          WAEC • NECO • International Exams
+        </small>
+
+      </div>
+
+
+
+      <div
+        class="subject-item"
+        data-subject="Professional Development">
+
+        <span class="subject-icon">
+          🚀
+        </span>
+
+        <b>
+          Professional Development
+        </b>
+
+        <small>
+          Skills • Careers • Certifications
+        </small>
+
+      </div>
+
+
+    </div>
+
+  </section>
+
+
+
+  <!-- =======================================================
+       QUICK ACTIONS
+  ======================================================== -->
+
+  <section class="learning-section">
+
+    <div class="section-title">
+
+      <span class="eyebrow">
+        MY LEARNING
+      </span>
+
+      <h2>
+        Continue your learning journey
+      </h2>
+
+      <p>
+        Everything you need to continue learning
+        from one place.
+      </p>
+
+    </div>
+
+
+    <div class="quick-grid">
+
+
+      <a
+        href="#resources"
+        class="quick-card">
+
+        <div class="icon">
+          📚
+        </div>
+
+        <b>
+          My Courses
+        </b>
+
+        <small>
+          Continue courses and lessons
+          you have started.
+        </small>
+
+      </a>
+
+
+
+      <a
+        href="#saved"
+        class="quick-card">
+
+        <div class="icon">
+          🔖
+        </div>
+
+        <b>
+          Saved Resources
+        </b>
+
+        <small>
+          Quickly return to resources
+          you saved.
+        </small>
+
+      </a>
+
+
+
+      <a
+        href="#recent"
+        class="quick-card">
+
+        <div class="icon">
+          🕐
+        </div>
+
+        <b>
+          Recently Viewed
+        </b>
+
+        <small>
+          Continue from where you
+          last stopped.
+        </small>
+
+      </a>
+
+
+
+      <a
+        href="#practice"
+        class="quick-card">
+
+        <div class="icon">
+          📝
+        </div>
+
+        <b>
+          Practice & Quizzes
+        </b>
+
+        <small>
+          Test your knowledge and
+          improve your skills.
+        </small>
+
+      </a>
+
+
+    </div>
+
+  </section>
+
+
+
+  <!-- =======================================================
+       MY COURSES
+  ======================================================== -->
+
+  <section
+    id="resources"
+    class="learning-section">
+
+    <div class="section-title">
+
+      <span class="eyebrow">
+        MY COURSES
+      </span>
+
+      <h2>
+        Learning resources
+      </h2>
+
+      <p>
+        Your enrolled and recently started
+        learning resources will appear here.
+      </p>
+
+    </div>
+
+
+    <div
+      id="courseGrid"
+      class="resource-grid">
+
+      <div class="empty-state">
+
+        📚
+
+        <br><br>
+
+        You have not started a course yet.
+
+        <br>
+
+        Explore the AGULIBRARY to begin learning.
+
+        <br><br>
+
+        <a
+          class="resource-button"
+          href="index.html#resources">
+
+          Explore Library
+
+        </a>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+
+  <!-- =======================================================
+       SAVED
+  ======================================================== -->
+
+  <section
+    id="saved"
+    class="learning-section">
+
+    <div class="section-title">
+
+      <span class="eyebrow">
+        SAVED RESOURCES
+      </span>
+
+      <h2>
+        Your saved learning materials
+      </h2>
+
+      <p>
+        Books, videos, PDFs and other resources
+        you save will appear here.
+      </p>
+
+    </div>
+
+
+    <div
+      id="savedGrid"
+      class="resource-grid">
+
+      <div class="empty-state">
+
+        🔖
+
+        <br><br>
+
+        No saved resources yet.
+
+        <br>
+
+        Save useful resources while exploring
+        the global library.
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+
+  <!-- =======================================================
+       RECENT
+  ======================================================== -->
+
+  <section
+    id="recent"
+    class="learning-section">
+
+    <div class="section-title">
+
+      <span class="eyebrow">
+        RECENTLY VIEWED
+      </span>
+
+      <h2>
+        Continue where you stopped
+      </h2>
+
+      <p>
+        Your recently opened resources will
+        appear here.
+      </p>
+
+    </div>
+
+
+    <div
+      id="recentGrid"
+      class="resource-grid">
+
+      <div class="empty-state">
+
+        🕐
+
+        <br><br>
+
+        Nothing viewed yet.
+
+        <br>
+
+        Your recent learning activity
+        will appear here.
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+
+  <!-- =======================================================
+       PRACTICE
+  ======================================================== -->
+
+  <section
+    id="practice"
+    class="learning-section">
+
+    <div class="section-title">
+
+      <span class="eyebrow">
+        PRACTICE & QUIZZES
+      </span>
+
+      <h2>
+        Test your knowledge
+      </h2>
+
+      <p>
+        Practice questions and quizzes will
+        become available as you explore
+        learning resources.
+      </p>
+
+    </div>
+
+
+    <div class="quick-grid">
+
+
+      <div class="quick-card">
+
+        <div class="icon">
+          🧠
+        </div>
+
+        <b>
+          Practice Questions
+        </b>
+
+        <small>
+          Strengthen your understanding
+          with topic-based questions.
+        </small>
+
+      </div>
+
+
+
+      <div class="quick-card">
+
+        <div class="icon">
+          🏆
+        </div>
+
+        <b>
+          Quiz Challenges
+        </b>
+
+        <small>
+          Challenge yourself and track
+          your performance.
+        </small>
+
+      </div>
+
+
+
+      <div class="quick-card">
+
+        <div class="icon">
+          📊
+        </div>
+
+        <b>
+          Results
+        </b>
+
+        <small>
+          Review your quiz performance
+          and learning progress.
+        </small>
+
+      </div>
+
+
+
+      <div class="quick-card">
+
+        <div class="icon">
+          🎯
+        </div>
+
+        <b>
+          Learning Goals
+        </b>
+
+        <small>
+          Build consistent learning habits
+          and reach your goals.
+        </small>
+
+      </div>
+
+
+    </div>
+
+  </section>
+
+
+</main>
+
+
+
+<!-- =========================================================
+     FOOTER
+========================================================= -->
+
+<footer class="student-footer">
+
+  <b>
+    AGULIBRARY
+  </b>
+
+  — Global Digital Education Library
+
+  <br><br>
+
+  Owner: Umar Mohammed
+
+  <br>
+
+  ©
+  <span id="year"></span>
+  AGULIBRARY. All rights reserved.
+
+</footer>
+
+
+
+<!-- =========================================================
+     SUPABASE
+========================================================= -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+</script>
+
+<script src="config.js">
+</script>
+
+<script src="supabase.js">
+</script>
+
+
+<!-- =========================================================
+     STUDENT DASHBOARD JAVASCRIPT
+========================================================= -->
+
+<script>
+
+document.addEventListener(
+  "DOMContentLoaded",
+  () => {
+
+    const year =
+      document.getElementById("year");
+
+    if(year){
+
+      year.textContent =
+        new Date().getFullYear();
+
+    }
+
+
+    loadStudentDashboard();
+
+
+    document
+      .querySelectorAll(".subject-item")
+      .forEach(item => {
+
+        item.addEventListener(
+          "click",
+          () => {
+
+            const subject =
+              item.dataset.subject;
+
+            window.location.href =
+              "index.html?subject=" +
+              encodeURIComponent(subject);
+
+          }
+        );
+
+      });
+
+
+    const logout =
+      document.getElementById(
+        "logoutButton"
+      );
+
+    if(logout){
+
+      logout.addEventListener(
+        "click",
+        signOutStudent
+      );
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   LOAD STUDENT
+========================================================= */
+
+async function loadStudentDashboard(){
+
+  try{
+
+    if(
+      typeof supabase === "undefined" ||
+      !supabase ||
+      !supabase.auth
+    ){
+
+      showMessage(
+        "Authentication service is unavailable.",
+        "error"
+      );
+
+      return;
+
+    }
+
+
+    const result =
+      await supabase.auth.getSession();
+
+
+    if(result.error){
+
+      console.error(
+        result.error
+      );
+
+      showMessage(
+        "Unable to verify your account.",
+        "error"
+      );
+
+      return;
+
+    }
+
+
+    const session =
+      result.data?.session;
+
+
+    /* =====================================================
+       SESSION PROTECTION
+    ===================================================== */
+
+    if(!session){
+
+      window.location.href =
+        "auth.html";
+
+      return;
+
+    }
+
+
+    const user =
+      session.user;
+
+
+    const email =
+      user.email ||
+      "Student";
+
+
+    const fullName =
+      user.user_metadata?.full_name ||
+      user.user_metadata?.name ||
+      email.split("@")[0] ||
+      "Student";
+
+
+    /* =====================================================
+       PROFILE
+    ===================================================== */
+
+    setText(
+      "welcomeName",
+      fullName
+    );
+
+    setText(
+      "profileName",
+      fullName
+    );
+
+    setText(
+      "profileEmail",
+      email
+    );
+
+
+    const avatar =
+      document.getElementById(
+        "profileAvatar"
+      );
+
+
+    if(avatar){
+
+      const initials =
+        fullName
+          .split(" ")
+          .filter(Boolean)
+          .map(
+            word =>
+              word.charAt(0)
+          )
+          .join("")
+          .substring(0,2)
+          .toUpperCase();
+
+
+      avatar.textContent =
+        initials || "AG";
+
+    }
+
+
+    /* =====================================================
+       INITIAL LOCAL LEARNING DATA
+    ===================================================== */
+
+    loadLocalLearningData(
+      user.id
+    );
+
+
+  }catch(error){
+
+    console.error(
+      "Dashboard error:",
+      error
+    );
+
+    showMessage(
+      "Something went wrong while loading your dashboard.",
+      "error"
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   LOCAL LEARNING DATA
+========================================================= */
+
+function loadLocalLearningData(userId){
+
+  try{
+
+    const progress =
+      Number(
+        localStorage.getItem(
+          "AGU_PROGRESS_" + userId
+        ) || 0
+      );
+
+
+    const courses =
+      Number(
+        localStorage.getItem(
+          "AGU_COURSES_" + userId
+        ) || 0
+      );
+
+
+    const completed =
+      Number(
+        localStorage.getItem(
+          "AGU_COMPLETED_" + userId
+        ) || 0
+      );
+
+
+    const saved =
+      Number(
+        localStorage.getItem(
+          "AGU_SAVED_" + userId
+        ) || 0
+      );
+
+
+    const quizzes =
+      Number(
+        localStorage.getItem(
+          "AGU_QUIZZES_" + userId
+        ) || 0
+      );
+
+
+    setText(
+      "statCourses",
+      courses
+    );
+
+    setText(
+      "statCompleted",
+      completed
+    );
+
+    setText(
+      "statSaved",
+      saved
+    );
+
+    setText(
+      "statQuizzes",
+      quizzes
+    );
+
+
+    const safeProgress =
+      Math.min(
+        100,
+        Math.max(
+          0,
+          progress
+        )
+      );
+
+
+    setText(
+      "progressPercent",
+      safeProgress + "%"
+    );
+
+
+    const fill =
+      document.getElementById(
+        "progressFill"
+      );
+
+
+    if(fill){
+
+      fill.style.width =
+        safeProgress + "%";
+
+    }
+
+
+    const progressText =
+      document.getElementById(
+        "progressText"
+      );
+
+
+    if(progressText){
+
+      if(safeProgress === 0){
+
+        progressText.textContent =
+          "Start exploring AGULIBRARY resources to begin building your learning progress.";
+
+      }else if(safeProgress < 50){
+
+        progressText.textContent =
+          "Great start! Continue learning to build your progress.";
+
+      }else if(safeProgress < 100){
+
+        progressText.textContent =
+          "You're making excellent progress. Keep learning and move closer to your goal.";
+
+      }else{
+
+        progressText.textContent =
+          "Excellent! You have completed your current learning progress.";
+
+      }
+
+    }
+
+  }catch(error){
+
+    console.error(
+      "Learning data error:",
+      error
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   TEXT HELPER
+========================================================= */
+
+function setText(
+  id,
+  value
+){
+
+  const element =
+    document.getElementById(id);
+
+  if(element){
+
+    element.textContent =
+      value;
+
+  }
+
+}
+
+
+/* =========================================================
+   MESSAGE
+========================================================= */
+
+function showMessage(
+  text,
+  type="success"
+){
+
+  const message =
+    document.getElementById(
+      "message"
+    );
+
+  if(!message){
+
+    return;
+
+  }
+
+
+  message.textContent =
+    text;
+
+
+  message.className =
+    "message show " +
+    type;
+
+}
+
+
+/* =========================================================
+   SIGN OUT
+========================================================= */
+
+async function signOutStudent(){
+
+  try{
+
+    if(
+      typeof supabase !== "undefined" &&
+      supabase &&
+      supabase.auth
+    ){
+
+      const result =
+        await supabase.auth.signOut();
+
+
+      if(result.error){
+
+        console.error(
+          result.error
+        );
+
+        showMessage(
+          "Unable to sign out. Please try again.",
+          "error"
+        );
+
+        return;
+
+      }
+
+    }
+
+
+    window.location.href =
+      "index.html";
+
+  }catch(error){
+
+    console.error(
+      "Sign out error:",
+      error
+    );
+
+    window.location.href =
+      "index.html";
+
+  }
+
+}
+
+</script>
+
+
+</body>
+  </html>

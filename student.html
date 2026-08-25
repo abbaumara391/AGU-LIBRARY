@@ -1135,170 +1135,431 @@ body{
 
 </section>
 
-<!-- =========================================================
-     AGU AI LEARNING AGENT
-========================================================= -->
 
-<section class="ai-agent-section">
+/* =========================================================
+   AGULIBRARY AI LEARNING AGENT
+========================================================= */
 
-  <div class="ai-agent-header">
+.ai-agent{
+  background:#ffffff;
+  border:1px solid #dceee6;
+  border-radius:28px;
+  padding:30px;
+  margin-bottom:22px;
+  box-shadow:0 15px 40px rgba(8,122,75,.07);
+}
 
-    <div class="ai-agent-icon">
-      🤖
-    </div>
+.ai-agent-header{
+  display:flex;
+  align-items:center;
+  gap:22px;
+  margin-bottom:25px;
+}
 
-    <div>
+.ai-agent-avatar{
+  width:120px;
+  height:120px;
+  flex-shrink:0;
 
-      <span class="eyebrow">
-        AGULIBRARY AI
-      </span>
+  border-radius:50%;
 
-      <h2>
-        AI Learning Agent
-      </h2>
+  object-fit:cover;
 
-      <p>
-        Your personal learning assistant for
-        understanding, practicing and improving.
-      </p>
+  border:5px solid #ffffff;
 
-    </div>
+  box-shadow:
+    0 5px 20px rgba(8,122,75,.16);
 
-  </div>
+  background:#e8f8f0;
+}
 
+.ai-agent-heading{
+  flex:1;
+}
 
-  <div class="ai-agent-chat">
+.ai-agent-label{
+  display:inline-block;
 
+  padding:7px 13px;
 
-    <div
-      id="aiAgentMessages"
-      class="ai-agent-messages">
+  border-radius:20px;
 
-      <div class="ai-message">
+  background:#e8f8f0;
 
-        <div class="ai-message-avatar">
-          🤖
-        </div>
+  color:#087a4b;
 
-        <div class="ai-message-content">
+  font-size:12px;
 
-          Hello! 👋 I'm your AGULIBRARY AI
-          Learning Agent.
+  font-weight:900;
 
-          <br><br>
+  letter-spacing:1px;
 
-          I can help you understand difficult
-          topics, explain lessons step-by-step,
-          create practice questions, check your
-          answers and help you study.
+  margin-bottom:10px;
+}
 
-          <br><br>
+.ai-agent-heading h2{
+  margin:0 0 7px;
 
-          What would you like to learn today?
+  color:#173b2d;
 
-        </div>
+  font-size:
+    clamp(28px,5vw,40px);
+}
 
-      </div>
+.ai-agent-heading p{
+  margin:0;
 
-    </div>
+  color:#71847b;
 
+  line-height:1.6;
 
-    <div
-      id="aiAgentStatus"
-      class="ai-status">
+  font-size:15px;
+}
 
-      🤖 AI is thinking...
+.ai-agent-status{
+  padding:10px 15px;
 
-    </div>
+  border-radius:14px;
 
+  background:#e8f8f0;
 
-    <div class="ai-quick-actions">
+  color:#087a4b;
 
-      <button
-        type="button"
-        class="ai-quick-button"
-        onclick="aiQuickPrompt('Teach me a topic step-by-step')">
+  font-weight:800;
 
-        📚 Teach Me
+  white-space:nowrap;
+}
 
-      </button>
+.ai-agent-status::before{
+  content:"";
+  display:inline-block;
 
+  width:10px;
+  height:10px;
 
-      <button
-        type="button"
-        class="ai-quick-button"
-        onclick="aiQuickPrompt('Explain a difficult topic in simple terms')">
+  margin-right:8px;
 
-        💡 Explain
+  border-radius:50%;
 
-      </button>
+  background:#20b36b;
+}
 
 
-      <button
-        type="button"
-        class="ai-quick-button"
-        onclick="aiQuickPrompt('Give me practice questions')">
+/* =========================================================
+   AI CHAT CARD
+========================================================= */
 
-        🧠 Practice
+.ai-chat-card{
+  background:#f7fcfa;
 
-      </button>
+  border:1px solid #d5ebe0;
 
+  border-radius:23px;
 
-      <button
-        type="button"
-        class="ai-quick-button"
-        onclick="aiQuickPrompt('Help me prepare for an exam')">
+  padding:22px;
+}
 
-        📝 Exam Prep
+.ai-agent-messages{
+  min-height:180px;
+  max-height:480px;
 
-      </button>
+  overflow-y:auto;
 
+  padding:5px;
 
-      <button
-        type="button"
-        class="ai-quick-button"
-        onclick="aiQuickPrompt('Summarize a lesson for me')">
+  margin-bottom:18px;
+}
 
-        📖 Summarize
+.ai-message{
+  display:flex;
 
-      </button>
+  align-items:flex-start;
 
+  gap:12px;
 
-      <button
-        type="button"
-        class="ai-quick-button"
-        onclick="aiQuickPrompt('Help me solve a question')">
+  margin-bottom:18px;
+}
 
-        🎯 Solve
+.ai-message.user{
+  flex-direction:row-reverse;
+}
 
-      </button>
+.ai-message-avatar{
+  width:48px;
+  height:48px;
 
-    </div>
+  flex-shrink:0;
 
+  border-radius:50%;
 
-    <div class="ai-input-area">
+  overflow:hidden;
 
-      <textarea
-        id="aiAgentInput"
-        class="ai-input"
-        placeholder="Ask your AI Learning Agent anything..."
-        rows="1"></textarea>
+  background:#e8f8f0;
+}
 
+.ai-message-avatar img{
+  width:100%;
+  height:100%;
 
-      <button
-        id="aiAgentSend"
-        class="ai-send"
-        type="button">
+  object-fit:cover;
+}
 
-        Send ➤
+.ai-message.user .ai-message-avatar{
+  display:grid;
+  place-items:center;
 
-      </button>
+  background:#087a4b;
 
-    </div>
+  color:#ffffff;
 
+  font-size:20px;
+}
 
-  </div>
+.ai-message-content{
+  max-width:78%;
 
+  padding:14px 17px;
+
+  border-radius:17px;
+
+  background:#ffffff;
+
+  border:1px solid #dceee6;
+
+  color:#17352a;
+
+  line-height:1.6;
+
+  font-size:15px;
+
+  box-shadow:
+    0 5px 18px rgba(8,122,75,.04);
+}
+
+.ai-message.user .ai-message-content{
+  background:#087a4b;
+
+  color:#ffffff;
+
+  border-color:#087a4b;
+}
+
+
+/* =========================================================
+   QUICK ACTIONS
+========================================================= */
+
+.ai-quick-actions{
+  display:grid;
+
+  grid-template-columns:
+    repeat(3,1fr);
+
+  gap:10px;
+
+  margin-top:15px;
+
+  margin-bottom:18px;
+}
+
+.ai-quick-button{
+  min-height:72px;
+
+  padding:12px;
+
+  background:#ffffff;
+
+  border:1px solid #cfe5da;
+
+  border-radius:15px;
+
+  cursor:pointer;
+
+  text-align:left;
+
+  color:#17352a;
+
+  font-weight:800;
+
+  transition:.2s;
+}
+
+.ai-quick-button:hover{
+  transform:translateY(-2px);
+
+  border-color:#73cfa9;
+
+  box-shadow:
+    0 8px 20px rgba(8,122,75,.08);
+}
+
+.ai-quick-button strong{
+  display:block;
+
+  margin-bottom:4px;
+
+  font-size:14px;
+}
+
+.ai-quick-button small{
+  color:#71847b;
+
+  font-size:11px;
+}
+
+
+/* =========================================================
+   AI INPUT
+========================================================= */
+
+.ai-input-row{
+  display:flex;
+
+  gap:10px;
+}
+
+.ai-agent-input{
+  flex:1;
+
+  min-width:0;
+
+  min-height:55px;
+
+  padding:14px 17px;
+
+  border:1px solid #bcdccc;
+
+  border-radius:14px;
+
+  background:#ffffff;
+
+  color:#17352a;
+
+  font-size:15px;
+
+  outline:none;
+}
+
+.ai-agent-input:focus{
+  border-color:#087a4b;
+
+  box-shadow:
+    0 0 0 3px rgba(8,122,75,.08);
+}
+
+.ai-agent-send{
+  min-width:120px;
+
+  padding:0 20px;
+
+  border:0;
+
+  border-radius:14px;
+
+  background:#087a4b;
+
+  color:#ffffff;
+
+  font-weight:900;
+
+  cursor:pointer;
+
+  font-size:14px;
+}
+
+.ai-agent-send:hover{
+  background:#06683f;
+}
+
+.ai-agent-send:disabled{
+  opacity:.6;
+
+  cursor:not-allowed;
+}
+
+
+/* =========================================================
+   AI THINKING
+========================================================= */
+
+.ai-agent-status-text{
+  display:none;
+
+  margin-top:12px;
+
+  color:#087a4b;
+
+  font-size:13px;
+
+  font-weight:800;
+}
+
+.ai-agent-status-text.show{
+  display:block;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(max-width:700px){
+
+  .ai-agent{
+    padding:20px;
+
+    border-radius:23px;
+  }
+
+  .ai-agent-header{
+    align-items:flex-start;
+
+    flex-wrap:wrap;
+
+    gap:15px;
+  }
+
+  .ai-agent-avatar{
+    width:85px;
+    height:85px;
+  }
+
+  .ai-agent-heading{
+    min-width:200px;
+  }
+
+  .ai-agent-status{
+    width:100%;
+
+    text-align:center;
+  }
+
+  .ai-quick-actions{
+    grid-template-columns:
+      repeat(2,1fr);
+  }
+
+}
+
+@media(max-width:480px){
+
+  .ai-quick-actions{
+    grid-template-columns:1fr;
+  }
+
+  .ai-input-row{
+    flex-direction:column;
+  }
+
+  .ai-agent-send{
+    min-height:52px;
+  }
+
+  .ai-message-content{
+    max-width:82%;
+  }
+
+}
 </section>
 
 <section class="stats">

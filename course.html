@@ -1,0 +1,2567 @@
+<!doctype html>
+<html lang="en">
+<head>
+
+<meta charset="utf-8">
+
+<meta
+  name="viewport"
+  content="width=device-width,initial-scale=1">
+
+<title>AGULIBRARY — Course Learning</title>
+
+<link rel="stylesheet" href="style.css">
+
+<style>
+
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  background:#f4faf7;
+  color:#10251d;
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.course-nav{
+  position:sticky;
+  top:0;
+  z-index:1000;
+
+  background:#fff;
+
+  border-bottom:1px solid #dce9e2;
+
+  padding:14px 5%;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  gap:15px;
+}
+
+.course-brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+
+  text-decoration:none;
+  color:#10251d;
+}
+
+.course-mark{
+  width:62px;
+  height:62px;
+
+  border-radius:20px;
+
+  display:grid;
+  place-items:center;
+
+  background:#087f55;
+  color:#fff;
+
+  font-size:24px;
+  font-weight:900;
+}
+
+.course-brand b{
+  display:block;
+  font-size:22px;
+}
+
+.course-brand small{
+  display:block;
+  margin-top:4px;
+
+  color:#718078;
+
+  font-size:9px;
+  letter-spacing:2px;
+}
+
+.nav-actions{
+  display:flex;
+  align-items:center;
+  gap:9px;
+}
+
+.nav-button{
+  text-decoration:none;
+
+  border:1px solid #d1e2da;
+
+  background:#fff;
+
+  color:#087f55;
+
+  padding:11px 16px;
+
+  border-radius:13px;
+
+  font-weight:800;
+}
+
+.nav-button.primary{
+  background:#087f55;
+  color:#fff;
+  border-color:#087f55;
+}
+
+/* =========================================================
+   PAGE
+========================================================= */
+
+.page{
+  width:min(1200px,100%);
+  margin:auto;
+
+  padding:30px 5% 80px;
+}
+
+/* =========================================================
+   BREADCRUMB
+========================================================= */
+
+.breadcrumb{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:8px;
+
+  color:#718078;
+
+  font-size:13px;
+
+  margin-bottom:20px;
+}
+
+.breadcrumb a{
+  color:#087f55;
+  text-decoration:none;
+  font-weight:800;
+}
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.course-hero{
+
+  background:
+    linear-gradient(
+      135deg,
+      #003f20,
+      #087f55
+    );
+
+  color:#fff;
+
+  border-radius:32px;
+
+  padding:42px;
+
+  margin-bottom:28px;
+
+  border:1px solid #087f55;
+}
+
+.course-hero small{
+
+  display:block;
+
+  color:#82efc6;
+
+  font-weight:900;
+
+  letter-spacing:3px;
+}
+
+.course-hero h1{
+
+  margin:13px 0;
+
+  font-size:
+    clamp(38px,6vw,62px);
+
+  line-height:1;
+}
+
+.course-hero p{
+
+  max-width:760px;
+
+  color:#d4eee4;
+
+  font-size:17px;
+
+  line-height:1.7;
+}
+
+.hero-actions{
+
+  display:flex;
+  flex-wrap:wrap;
+
+  gap:10px;
+
+  margin-top:25px;
+}
+
+.hero-button{
+
+  border:1px solid rgba(255,255,255,.3);
+
+  background:rgba(255,255,255,.1);
+
+  color:#fff;
+
+  padding:12px 17px;
+
+  border-radius:13px;
+
+  text-decoration:none;
+
+  font-weight:800;
+
+}
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+.search-box{
+
+  display:flex;
+
+  gap:10px;
+
+  margin-bottom:30px;
+}
+
+.search-box input{
+
+  flex:1;
+  min-width:0;
+
+  padding:16px 18px;
+
+  border:1px solid #d4e3dc;
+
+  background:#fff;
+
+  border-radius:15px;
+
+  font-size:15px;
+
+  outline:none;
+}
+
+.search-box input:focus{
+
+  border-color:#087f55;
+}
+
+.search-box button{
+
+  border:0;
+
+  padding:0 22px;
+
+  border-radius:15px;
+
+  background:#087f55;
+
+  color:#fff;
+
+  font-weight:800;
+
+  cursor:pointer;
+}
+
+/* =========================================================
+   SELECT LEVEL
+========================================================= */
+
+.control-card{
+
+  background:#fff;
+
+  border:1px solid #dce9e2;
+
+  border-radius:24px;
+
+  padding:25px;
+
+  margin-bottom:25px;
+}
+
+.control-card label{
+
+  display:block;
+
+  margin-bottom:8px;
+
+  color:#087f55;
+
+  font-size:11px;
+
+  font-weight:900;
+
+  letter-spacing:2px;
+}
+
+.control-card select{
+
+  width:100%;
+
+  padding:14px;
+
+  border:1px solid #dce9e2;
+
+  border-radius:12px;
+
+  background:#fff;
+
+  font-size:15px;
+
+  outline:none;
+}
+
+/* =========================================================
+   SECTION
+========================================================= */
+
+.section-label{
+
+  color:#087f55;
+
+  font-size:11px;
+
+  font-weight:900;
+
+  letter-spacing:3px;
+}
+
+.section-title{
+
+  margin:9px 0 25px;
+
+  font-size:
+    clamp(30px,5vw,45px);
+}
+
+/* =========================================================
+   COURSE GRID
+========================================================= */
+
+.course-grid{
+
+  display:grid;
+
+  grid-template-columns:
+    repeat(2,1fr);
+
+  gap:17px;
+
+  margin-bottom:35px;
+}
+
+.course-card{
+
+  position:relative;
+
+  background:#fff;
+
+  border:1px solid #d8e5df;
+
+  border-radius:24px;
+
+  padding:25px;
+
+  cursor:pointer;
+
+  transition:.2s;
+}
+
+.course-card:hover{
+
+  transform:translateY(-4px);
+
+  border-color:#73cfa9;
+
+  box-shadow:
+    0 15px 35px
+    rgba(0,90,55,.09);
+}
+
+.course-icon{
+
+  width:72px;
+  height:72px;
+
+  display:grid;
+  place-items:center;
+
+  border-radius:20px;
+
+  background:#e9f8f1;
+
+  font-size:36px;
+
+  margin-bottom:17px;
+}
+
+.course-card h3{
+
+  margin:0 0 8px;
+
+  font-size:22px;
+}
+
+.course-card p{
+
+  color:#718078;
+
+  line-height:1.6;
+
+  font-size:13px;
+
+  margin:0;
+
+  padding-right:30px;
+}
+
+.course-arrow{
+
+  position:absolute;
+
+  right:22px;
+  bottom:20px;
+
+  color:#087f55;
+
+  font-size:27px;
+
+  font-weight:900;
+}
+
+/* =========================================================
+   TERM
+========================================================= */
+
+.term-grid{
+
+  display:grid;
+
+  grid-template-columns:
+    repeat(3,1fr);
+
+  gap:15px;
+
+  margin-bottom:30px;
+}
+
+.term-card{
+
+  background:#fff;
+
+  border:1px solid #dce9e2;
+
+  border-radius:20px;
+
+  padding:22px;
+
+  cursor:pointer;
+
+  transition:.2s;
+}
+
+.term-card:hover{
+
+  transform:translateY(-3px);
+
+  border-color:#70cda9;
+}
+
+.term-card strong{
+
+  display:block;
+
+  color:#087f55;
+
+  font-size:18px;
+
+  margin-bottom:8px;
+}
+
+.term-card span{
+
+  color:#718078;
+
+  font-size:13px;
+
+  line-height:1.5;
+}
+
+/* =========================================================
+   CHAPTERS
+========================================================= */
+
+.chapter-list{
+
+  display:grid;
+
+  gap:12px;
+
+  margin-bottom:30px;
+}
+
+.chapter-card{
+
+  background:#fff;
+
+  border:1px solid #dce9e2;
+
+  border-radius:18px;
+
+  padding:18px 20px;
+
+  display:flex;
+
+  align-items:center;
+
+  gap:15px;
+
+  cursor:pointer;
+
+  transition:.2s;
+}
+
+.chapter-card:hover{
+
+  border-color:#70cda9;
+
+  transform:translateX(3px);
+}
+
+.chapter-number{
+
+  width:48px;
+  height:48px;
+
+  flex-shrink:0;
+
+  display:grid;
+  place-items:center;
+
+  border-radius:15px;
+
+  background:#e9f8f1;
+
+  color:#087f55;
+
+  font-weight:900;
+}
+
+.chapter-info{
+
+  flex:1;
+  min-width:0;
+}
+
+.chapter-info h3{
+
+  margin:0 0 5px;
+
+  font-size:17px;
+}
+
+.chapter-info p{
+
+  margin:0;
+
+  color:#718078;
+
+  font-size:12px;
+}
+
+.chapter-arrow{
+
+  color:#087f55;
+
+  font-size:23px;
+
+  font-weight:900;
+}
+
+/* =========================================================
+   LESSONS
+========================================================= */
+
+.lesson-list{
+
+  display:grid;
+
+  gap:12px;
+}
+
+.lesson-card{
+
+  background:#fff;
+
+  border:1px solid #dce9e2;
+
+  border-radius:18px;
+
+  padding:19px;
+
+  display:flex;
+
+  align-items:center;
+
+  gap:14px;
+}
+
+.lesson-icon{
+
+  width:52px;
+  height:52px;
+
+  flex-shrink:0;
+
+  display:grid;
+  place-items:center;
+
+  border-radius:15px;
+
+  background:#e9f8f1;
+
+  font-size:24px;
+}
+
+.lesson-info{
+
+  flex:1;
+  min-width:0;
+}
+
+.lesson-info h3{
+
+  margin:0 0 5px;
+
+  font-size:17px;
+}
+
+.lesson-info p{
+
+  margin:0;
+
+  color:#718078;
+
+  font-size:12px;
+}
+
+.lesson-open{
+
+  border:0;
+
+  background:#087f55;
+
+  color:#fff;
+
+  padding:10px 14px;
+
+  border-radius:10px;
+
+  font-weight:800;
+
+  cursor:pointer;
+}
+
+/* =========================================================
+   EMPTY
+========================================================= */
+
+.empty{
+
+  padding:38px;
+
+  background:#fff;
+
+  border:1px dashed #cbdcd5;
+
+  border-radius:20px;
+
+  text-align:center;
+
+  color:#718078;
+
+}
+
+.error{
+
+  color:#b42318;
+
+  background:#fff5f5;
+
+  border-color:#efcaca;
+}
+
+/* =========================================================
+   HIDDEN
+========================================================= */
+
+.hidden{
+  display:none !important;
+}
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+footer{
+
+  background:#10251d;
+
+  color:#d8e7e1;
+
+  padding:28px 5%;
+
+  display:flex;
+
+  justify-content:center;
+
+  flex-wrap:wrap;
+
+  gap:20px;
+}
+
+footer b{
+  color:#70e7bc;
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(max-width:800px){
+
+  .course-grid{
+    grid-template-columns:1fr;
+  }
+
+  .term-grid{
+    grid-template-columns:1fr;
+  }
+
+}
+
+@media(max-width:600px){
+
+  .course-nav{
+    padding:11px 5%;
+  }
+
+  .course-mark{
+    width:57px;
+    height:57px;
+  }
+
+  .course-brand b{
+    font-size:19px;
+  }
+
+  .course-brand small{
+    font-size:7px;
+    letter-spacing:1.5px;
+  }
+
+  .nav-button{
+    padding:10px 12px;
+    font-size:12px;
+  }
+
+  .page{
+    padding-top:22px;
+  }
+
+  .course-hero{
+    padding:32px 26px;
+  }
+
+  .course-hero h1{
+    font-size:43px;
+  }
+
+  .search-box{
+    flex-direction:column;
+  }
+
+  .search-box button{
+    min-height:52px;
+  }
+
+  .chapter-card{
+    padding:15px;
+  }
+
+  .lesson-card{
+    align-items:flex-start;
+    flex-wrap:wrap;
+  }
+
+  .lesson-open{
+    width:100%;
+  }
+
+}
+
+</style>
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<header class="course-nav">
+
+  <a
+    class="course-brand"
+    href="subjects.html">
+
+    <div class="course-mark">
+      AG
+    </div>
+
+    <div>
+
+      <b>
+        AGULIBRARY
+      </b>
+
+      <small>
+        COURSE LEARNING
+      </small>
+
+    </div>
+
+  </a>
+
+
+  <div class="nav-actions">
+
+    <a
+      class="nav-button"
+      href="subjects.html">
+
+      ← Subjects
+
+    </a>
+
+
+    <a
+      class="nav-button primary"
+      href="student.html">
+
+      🎓 Dashboard
+
+    </a>
+
+  </div>
+
+</header>
+
+
+<main class="page">
+
+
+<!-- =====================================================
+     BREADCRUMB
+===================================================== -->
+
+<div class="breadcrumb">
+
+  <a href="index.html">
+    AGULIBRARY
+  </a>
+
+  <span>›</span>
+
+  <a href="subjects.html">
+    Subjects
+  </a>
+
+  <span>›</span>
+
+  <span id="breadcrumbSubject">
+    Course
+  </span>
+
+</div>
+
+
+<!-- =====================================================
+     HERO
+===================================================== -->
+
+<section class="course-hero">
+
+  <small id="heroLabel">
+    COURSE LEARNING
+  </small>
+
+  <h1 id="courseTitle">
+    Select a Course
+  </h1>
+
+  <p id="courseDescription">
+    Choose your education level and course
+    to continue your learning journey.
+  </p>
+
+
+  <div class="hero-actions">
+
+    <a
+      class="hero-button"
+      href="subjects.html">
+
+      ← Change Subject
+
+    </a>
+
+    <a
+      class="hero-button"
+      href="student.html">
+
+      🎓 Student Dashboard
+
+    </a>
+
+  </div>
+
+</section>
+
+
+<!-- =====================================================
+     SEARCH
+===================================================== -->
+
+<div class="search-box">
+
+  <input
+    id="courseSearch"
+    type="search"
+    placeholder="Search courses, chapters or lessons..."
+    autocomplete="off">
+
+  <button id="courseSearchButton">
+    Search
+  </button>
+
+</div>
+
+
+<!-- =====================================================
+     EDUCATION LEVEL
+===================================================== -->
+
+<section class="control-card">
+
+  <label>
+    EDUCATION LEVEL
+  </label>
+
+  <select id="levelSelect">
+
+    <option value="">
+      All Education Levels
+    </option>
+
+  </select>
+
+</section>
+
+
+<!-- =====================================================
+     COURSES
+===================================================== -->
+
+<section>
+
+  <div class="section-label">
+    COURSES & CLASSES
+  </div>
+
+  <h2 class="section-title">
+    Choose Your Course
+  </h2>
+
+  <div
+    id="courseGrid"
+    class="course-grid">
+
+    <div class="empty">
+      Loading courses...
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =====================================================
+     TERMS
+===================================================== -->
+
+<section
+  id="termsSection"
+  class="hidden">
+
+  <div class="section-label">
+    TERMS / SEMESTERS
+  </div>
+
+  <h2 class="section-title">
+    Choose Your Term
+  </h2>
+
+  <div
+    id="termGrid"
+    class="term-grid">
+  </div>
+
+</section>
+
+
+<!-- =====================================================
+     CHAPTERS
+===================================================== -->
+
+<section
+  id="chaptersSection"
+  class="hidden">
+
+  <div class="section-label">
+    COURSE CHAPTERS
+  </div>
+
+  <h2 class="section-title">
+    Chapters
+  </h2>
+
+  <div
+    id="chapterList"
+    class="chapter-list">
+  </div>
+
+</section>
+
+
+<!-- =====================================================
+     LESSONS
+===================================================== -->
+
+<section
+  id="lessonsSection"
+  class="hidden">
+
+  <div class="section-label">
+    LESSONS
+  </div>
+
+  <h2 class="section-title">
+    Lessons
+  </h2>
+
+  <div
+    id="lessonList"
+    class="lesson-list">
+  </div>
+
+</section>
+
+
+</main>
+
+
+<footer>
+
+  <b>
+    AGULIBRARY
+  </b>
+
+  <span>
+    Global Digital Education
+  </span>
+
+  <span>
+    Owner: Umar Mohammed
+  </span>
+
+</footer>
+
+
+<!-- =====================================================
+     SUPABASE
+===================================================== -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="config.js"></script>
+
+<script src="supabase.js"></script>
+
+
+<script>
+
+/* =========================================================
+   STATE
+========================================================= */
+
+let client = null;
+
+let subjectId = "";
+
+let subjectName = "";
+
+let courses = [];
+
+let levels = [];
+
+let terms = [];
+
+let chapters = [];
+
+let lessons = [];
+
+let selectedCourse = null;
+
+let selectedTerm = null;
+
+let selectedChapter = null;
+
+
+/* =========================================================
+   DEFAULT SUBJECT MAP
+========================================================= */
+
+const subjectDescriptions = {
+
+  "Physics":
+    "Explore mechanics, electricity, waves, heat, energy and modern physics.",
+
+  "Chemistry":
+    "Study matter, atoms, chemical reactions, organic chemistry and laboratory science.",
+
+  "Mathematics":
+    "Learn algebra, geometry, calculus, statistics, probability and mathematical reasoning.",
+
+  "Biology":
+    "Study living organisms, genetics, ecology, anatomy, physiology and evolution.",
+
+  "Computer Science":
+    "Learn programming, algorithms, computer systems, databases, networking and artificial intelligence.",
+
+  "English":
+    "Improve English language, grammar, comprehension, writing and communication.",
+
+  "Economics":
+    "Study microeconomics, macroeconomics, markets, finance and economic development.",
+
+  "Geography":
+    "Explore physical geography, human geography, maps, environment and population.",
+
+  "Commerce":
+    "Learn business, trade, entrepreneurship, marketing and commercial activities.",
+
+  "History":
+    "Explore world history, African history, civilizations and historical events.",
+
+  "Political Science":
+    "Study government, politics, democracy, political systems and international relations.",
+
+  "Psychology":
+    "Explore human behaviour, cognition, development, personality and psychological studies.",
+
+  "Philosophy":
+    "Study logic, ethics, knowledge, reasoning and philosophical thought.",
+
+  "Fine Art":
+    "Explore drawing, painting, design, sculpture, visual arts and creative expression."
+
+};
+
+
+/* =========================================================
+   READ URL
+========================================================= */
+
+function readURL(){
+
+  const params =
+    new URLSearchParams(
+      window.location.search
+    );
+
+
+  subjectId =
+    params.get("subject_id") || "";
+
+
+  subjectName =
+    params.get("subject") || "";
+
+
+  if(subjectName){
+
+    subjectName =
+      decodeURIComponent(
+        subjectName
+      );
+
+  }
+
+}
+
+
+/* =========================================================
+   SET HERO
+========================================================= */
+
+function updateHero(){
+
+  const title =
+    document.getElementById(
+      "courseTitle"
+    );
+
+  const description =
+    document.getElementById(
+      "courseDescription"
+    );
+
+  const breadcrumb =
+    document.getElementById(
+      "breadcrumbSubject"
+    );
+
+
+  if(subjectName){
+
+    title.textContent =
+      subjectName;
+
+
+    description.textContent =
+      subjectDescriptions[
+        subjectName
+      ] ||
+      "Explore courses, chapters, lessons and educational resources for this subject.";
+
+
+    breadcrumb.textContent =
+      subjectName;
+
+  }
+
+}
+
+
+/* =========================================================
+   GET SUPABASE
+========================================================= */
+
+function getClient(){
+
+  if(
+    typeof getSupabase ===
+    "function"
+  ){
+
+    return getSupabase();
+
+  }
+
+  return null;
+
+}
+
+
+/* =========================================================
+   LOAD LEVELS
+========================================================= */
+
+async function loadLevels(){
+
+  const select =
+    document.getElementById(
+      "levelSelect"
+    );
+
+
+  if(!select) return;
+
+
+  const {
+    data,
+    error
+  } =
+    await client
+      .from("education_levels")
+      .select("*")
+      .order("name");
+
+
+  if(error){
+
+    console.error(
+      "Education levels:",
+      error
+    );
+
+    return;
+
+  }
+
+
+  levels =
+    data || [];
+
+
+  select.innerHTML = `
+
+    <option value="">
+      All Education Levels
+    </option>
+
+    ${
+      levels.map(
+        level => `
+
+          <option
+            value="${escapeAttr(
+              level.id
+            )}">
+
+            ${escapeHTML(
+              level.name
+            )}
+
+          </option>
+
+        `
+      ).join("")
+    }
+
+  `;
+
+}
+
+
+/* =========================================================
+   LOAD COURSES
+========================================================= */
+
+async function loadCourses(){
+
+  const grid =
+    document.getElementById(
+      "courseGrid"
+    );
+
+
+  if(!grid) return;
+
+
+  let query =
+    client
+      .from("courses")
+      .select(
+        `
+        *,
+        education_levels (
+          id,
+          name
+        ),
+        subjects (
+          id,
+          name,
+          icon
+        )
+        `
+      )
+      .order(
+        "name"
+      );
+
+
+  if(subjectId){
+
+    query =
+      query.eq(
+        "subject_id",
+        Number(subjectId)
+      );
+
+  }
+
+
+  const {
+    data,
+    error
+  } =
+    await query;
+
+
+  if(error){
+
+    console.error(
+      "Courses:",
+      error
+    );
+
+
+    grid.innerHTML = `
+
+      <div class="empty error">
+
+        Unable to load courses.
+
+        <br><br>
+
+        Please make sure courses have
+        been added in Supabase.
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  courses =
+    data || [];
+
+
+  renderCourses(
+    courses
+  );
+
+}
+
+
+/* =========================================================
+   RENDER COURSES
+========================================================= */
+
+function renderCourses(list){
+
+  const grid =
+    document.getElementById(
+      "courseGrid"
+    );
+
+
+  if(!list.length){
+
+    grid.innerHTML = `
+
+      <div class="empty">
+
+        No courses have been created
+        for this subject yet.
+
+        <br><br>
+
+        Add courses from the
+        AGULIBRARY admin system.
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  grid.innerHTML =
+    list.map(
+      course => {
+
+        const subject =
+          course.subjects || {};
+
+
+        const icon =
+          subject.icon ||
+          "📚";
+
+
+        const level =
+          course.education_levels
+            ?.name ||
+          "General";
+
+
+        return `
+
+          <article
+            class="course-card"
+            data-course-id="${escapeAttr(
+              course.id
+            )}">
+
+            <div class="course-icon">
+
+              ${icon}
+
+            </div>
+
+            <h3>
+
+              ${escapeHTML(
+                course.name ||
+                "Course"
+              )}
+
+            </h3>
+
+            <p>
+
+              ${escapeHTML(
+                course.description ||
+                "Explore this course."
+              )}
+
+              <br><br>
+
+              <strong>
+                🎓 ${escapeHTML(
+                  level
+                )}
+              </strong>
+
+            </p>
+
+            <span class="course-arrow">
+              →
+            </span>
+
+          </article>
+
+        `;
+
+      }
+    ).join("");
+
+
+  document
+    .querySelectorAll(
+      ".course-card"
+    )
+    .forEach(card => {
+
+      card.addEventListener(
+        "click",
+        () => {
+
+          const id =
+            card.dataset.courseId;
+
+
+          selectCourse(
+            id
+          );
+
+        }
+      );
+
+    });
+
+}
+
+
+/* =========================================================
+   SELECT COURSE
+========================================================= */
+
+async function selectCourse(id){
+
+  selectedCourse =
+    courses.find(
+      course =>
+        String(
+          course.id
+        ) ===
+        String(id)
+    );
+
+
+  if(!selectedCourse)
+    return;
+
+
+  document
+    .getElementById(
+      "termsSection"
+    )
+    .classList.remove(
+      "hidden"
+    );
+
+
+  document
+    .getElementById(
+      "termsSection"
+    )
+    .scrollIntoView({
+      behavior:"smooth"
+    });
+
+
+  await loadTerms();
+
+}
+
+
+/* =========================================================
+   LOAD TERMS
+========================================================= */
+
+async function loadTerms(){
+
+  const grid =
+    document.getElementById(
+      "termGrid"
+    );
+
+
+  grid.innerHTML = `
+
+    <div class="empty">
+
+      Loading terms...
+
+    </div>
+
+  `;
+
+
+  const {
+    data,
+    error
+  } =
+    await client
+      .from("terms")
+      .select("*")
+      .eq(
+        "course_id",
+        selectedCourse.id
+      )
+      .order(
+        "created_at"
+      );
+
+
+  if(error){
+
+    console.error(
+      "Terms:",
+      error
+    );
+
+
+    grid.innerHTML = `
+
+      <div class="empty error">
+
+        Unable to load terms.
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  terms =
+    data || [];
+
+
+  renderTerms(
+    terms
+  );
+
+}
+
+
+/* =========================================================
+   RENDER TERMS
+========================================================= */
+
+function renderTerms(list){
+
+  const grid =
+    document.getElementById(
+      "termGrid"
+    );
+
+
+  if(!list.length){
+
+    grid.innerHTML = `
+
+      <div class="empty">
+
+        No terms have been created
+        for this course yet.
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  grid.innerHTML =
+    list.map(
+      (term,index) => `
+
+        <article
+          class="term-card"
+          data-term-id="${escapeAttr(
+            term.id
+          )}">
+
+          <strong>
+
+            ${
+              escapeHTML(
+                term.name ||
+                "Term " +
+                (index + 1)
+              )
+            }
+
+          </strong>
+
+          <span>
+
+            ${escapeHTML(
+              term.description ||
+              "Explore this term."
+            )}
+
+          </span>
+
+        </article>
+
+      `
+    ).join("");
+
+
+  document
+    .querySelectorAll(
+      ".term-card"
+    )
+    .forEach(card => {
+
+      card.addEventListener(
+        "click",
+        () => {
+
+          selectTerm(
+            card.dataset.termId
+          );
+
+        }
+      );
+
+    });
+
+}
+
+
+/* =========================================================
+   SELECT TERM
+========================================================= */
+
+async function selectTerm(id){
+
+  selectedTerm =
+    terms.find(
+      term =>
+        String(
+          term.id
+        ) ===
+        String(id)
+    );
+
+
+  if(!selectedTerm)
+    return;
+
+
+  document
+    .getElementById(
+      "chaptersSection"
+    )
+    .classList.remove(
+      "hidden"
+    );
+
+
+  document
+    .getElementById(
+      "chaptersSection"
+    )
+    .scrollIntoView({
+      behavior:"smooth"
+    });
+
+
+  await loadChapters();
+
+}
+
+
+/* =========================================================
+   LOAD CHAPTERS
+========================================================= */
+
+async function loadChapters(){
+
+  const list =
+    document.getElementById(
+      "chapterList"
+    );
+
+
+  list.innerHTML = `
+
+    <div class="empty">
+
+      Loading chapters...
+
+    </div>
+
+  `;
+
+
+  const {
+    data,
+    error
+  } =
+    await client
+      .from("chapters")
+      .select("*")
+      .eq(
+        "course_id",
+        selectedCourse.id
+      )
+      .eq(
+        "term_id",
+        selectedTerm.id
+      )
+      .order(
+        "chapter_number",
+        {
+          ascending:true,
+          nullsFirst:false
+        }
+      );
+
+
+  if(error){
+
+    console.error(
+      "Chapters:",
+      error
+    );
+
+
+    list.innerHTML = `
+
+      <div class="empty error">
+
+        Unable to load chapters.
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  chapters =
+    data || [];
+
+
+  renderChapters(
+    chapters
+  );
+
+}
+
+
+/* =========================================================
+   RENDER CHAPTERS
+========================================================= */
+
+function renderChapters(list){
+
+  const box =
+    document.getElementById(
+      "chapterList"
+    );
+
+
+  if(!list.length){
+
+    box.innerHTML = `
+
+      <div class="empty">
+
+        No chapters have been created
+        for this term yet.
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  box.innerHTML =
+    list.map(
+      (chapter,index) => `
+
+        <article
+          class="chapter-card"
+          data-chapter-id="${escapeAttr(
+            chapter.id
+          )}">
+
+          <div class="chapter-number">
+
+            ${
+              chapter.chapter_number ||
+              index + 1
+            }
+
+          </div>
+
+          <div class="chapter-info">
+
+            <h3>
+
+              ${escapeHTML(
+                chapter.title ||
+                "Chapter"
+              )}
+
+            </h3>
+
+            <p>
+
+              ${escapeHTML(
+                chapter.description ||
+                "Open to view lessons."
+              )}
+
+            </p>
+
+          </div>
+
+          <div class="chapter-arrow">
+            →
+          </div>
+
+        </article>
+
+      `
+    ).join("");
+
+
+  document
+    .querySelectorAll(
+      ".chapter-card"
+    )
+    .forEach(card => {
+
+      card.addEventListener(
+        "click",
+        () => {
+
+          selectChapter(
+            card.dataset.chapterId
+          );
+
+        }
+      );
+
+    });
+
+}
+
+
+/* =========================================================
+   SELECT CHAPTER
+========================================================= */
+
+async function selectChapter(id){
+
+  selectedChapter =
+    chapters.find(
+      chapter =>
+        String(
+          chapter.id
+        ) ===
+        String(id)
+    );
+
+
+  if(!selectedChapter)
+    return;
+
+
+  document
+    .getElementById(
+      "lessonsSection"
+    )
+    .classList.remove(
+      "hidden"
+    );
+
+
+  document
+    .getElementById(
+      "lessonsSection"
+    )
+    .scrollIntoView({
+      behavior:"smooth"
+    });
+
+
+  await loadLessons();
+
+}
+
+
+/* =========================================================
+   LOAD LESSONS
+========================================================= */
+
+async function loadLessons(){
+
+  const list =
+    document.getElementById(
+      "lessonList"
+    );
+
+
+  list.innerHTML = `
+
+    <div class="empty">
+
+      Loading lessons...
+
+    </div>
+
+  `;
+
+
+  const {
+    data,
+    error
+  } =
+    await client
+      .from("lessons")
+      .select("*")
+      .eq(
+        "chapter_id",
+        selectedChapter.id
+      )
+      .order(
+        "lesson_number",
+        {
+          ascending:true,
+          nullsFirst:false
+        }
+      );
+
+
+  if(error){
+
+    console.error(
+      "Lessons:",
+      error
+    );
+
+
+    list.innerHTML = `
+
+      <div class="empty error">
+
+        Unable to load lessons.
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  lessons =
+    data || [];
+
+
+  renderLessons(
+    lessons
+  );
+
+}
+
+
+/* =========================================================
+   RENDER LESSONS
+========================================================= */
+
+function renderLessons(list){
+
+  const box =
+    document.getElementById(
+      "lessonList"
+    );
+
+
+  if(!list.length){
+
+    box.innerHTML = `
+
+      <div class="empty">
+
+        No lessons have been created
+        for this chapter yet.
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  box.innerHTML =
+    list.map(
+      (lesson,index) => `
+
+        <article
+          class="lesson-card">
+
+          <div class="lesson-icon">
+            📖
+          </div>
+
+          <div class="lesson-info">
+
+            <h3>
+
+              ${
+                lesson.lesson_number ||
+                index + 1
+              }.
+
+              ${escapeHTML(
+                lesson.title ||
+                "Lesson"
+              )}
+
+            </h3>
+
+            <p>
+
+              ${escapeHTML(
+                lesson.description ||
+                "Open lesson to begin learning."
+              )}
+
+              ${
+                lesson.duration_minutes
+                  ? `
+                    •
+                    ${lesson.duration_minutes}
+                    minutes
+                  `
+                  : ""
+              }
+
+            </p>
+
+          </div>
+
+          <button
+            class="lesson-open"
+            data-lesson-id="${escapeAttr(
+              lesson.id
+            )}">
+
+            Open
+
+          </button>
+
+        </article>
+
+      `
+    ).join("");
+
+
+  document
+    .querySelectorAll(
+      ".lesson-open"
+    )
+    .forEach(button => {
+
+      button.addEventListener(
+        "click",
+        event => {
+
+          event.stopPropagation();
+
+
+          openLesson(
+            button.dataset.lessonId
+          );
+
+        }
+      );
+
+    });
+
+}
+
+
+/* =========================================================
+   OPEN LESSON
+========================================================= */
+
+function openLesson(id){
+
+  const lesson =
+    lessons.find(
+      item =>
+        String(
+          item.id
+        ) ===
+        String(id)
+    );
+
+
+  if(!lesson)
+    return;
+
+
+  /*
+    Lesson page will be connected
+    in the next phase.
+
+    For now, save the lesson
+    information locally so the
+    next page can use it.
+  */
+
+  try{
+
+    localStorage.setItem(
+      "AGU_SELECTED_LESSON",
+      JSON.stringify(
+        lesson
+      )
+    );
+
+  }catch(error){
+
+    console.error(error);
+
+  }
+
+
+  window.location.href =
+    "lesson.html?id=" +
+    encodeURIComponent(
+      lesson.id
+    );
+
+}
+
+
+/* =========================================================
+   SEARCH COURSES
+========================================================= */
+
+function searchCourses(){
+
+  const input =
+    document.getElementById(
+      "courseSearch"
+    );
+
+
+  const query =
+    input
+      ? input.value
+          .toLowerCase()
+          .trim()
+      : "";
+
+
+  if(!query){
+
+    renderCourses(
+      courses
+    );
+
+    return;
+
+  }
+
+
+  const filtered =
+    courses.filter(
+      course => {
+
+        const searchable = `
+
+          ${course.name || ""}
+
+          ${course.description || ""}
+
+          ${course.education_levels?.name || ""}
+
+        `.toLowerCase();
+
+
+        return searchable.includes(
+          query
+        );
+
+      }
+    );
+
+
+  renderCourses(
+    filtered
+  );
+
+}
+
+
+/* =========================================================
+   LEVEL FILTER
+========================================================= */
+
+function filterByLevel(){
+
+  const select =
+    document.getElementById(
+      "levelSelect"
+    );
+
+
+  const value =
+    select.value;
+
+
+  if(!value){
+
+    renderCourses(
+      courses
+    );
+
+    return;
+
+  }
+
+
+  const filtered =
+    courses.filter(
+      course =>
+        String(
+          course.education_level_id
+        ) ===
+        String(value)
+    );
+
+
+  renderCourses(
+    filtered
+  );
+
+}
+
+
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
+
+function escapeHTML(value){
+
+  return String(
+    value ?? ""
+  ).replace(
+    /[&<>"']/g,
+    character => {
+
+      const entities = {
+
+        "&":"&amp;",
+        "<":"&lt;",
+        ">":"&gt;",
+        '"':"&quot;",
+        "'":"&#039;"
+
+      };
+
+      return entities[
+        character
+      ];
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   ESCAPE ATTRIBUTE
+========================================================= */
+
+function escapeAttr(value){
+
+  return escapeHTML(
+    value
+  ).replace(
+    /`/g,
+    "&#096;"
+  );
+
+}
+
+
+/* =========================================================
+   EVENTS
+========================================================= */
+
+document
+  .getElementById(
+    "courseSearch"
+  )
+  .addEventListener(
+    "input",
+    searchCourses
+  );
+
+
+document
+  .getElementById(
+    "courseSearchButton"
+  )
+  .addEventListener(
+    "click",
+    searchCourses
+  );
+
+
+document
+  .getElementById(
+    "levelSelect"
+  )
+  .addEventListener(
+    "change",
+    filterByLevel
+  );
+
+
+/* =========================================================
+   START
+========================================================= */
+
+async function start(){
+
+  readURL();
+
+  updateHero();
+
+
+  client =
+    getClient();
+
+
+  if(!client){
+
+    document.getElementById(
+      "courseGrid"
+    ).innerHTML = `
+
+      <div class="empty error">
+
+        Supabase connection is not available.
+
+        <br><br>
+
+        Please check config.js and supabase.js.
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  await loadLevels();
+
+  await loadCourses();
+
+}
+
+
+start();
+
+</script>
+
+</body>
+</html>

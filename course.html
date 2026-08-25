@@ -235,7 +235,6 @@ body{
   text-decoration:none;
 
   font-weight:800;
-
 }
 
 /* =========================================================
@@ -655,6 +654,7 @@ body{
 .lesson-info{
 
   flex:1;
+
   min-width:0;
 }
 
@@ -708,7 +708,6 @@ body{
   text-align:center;
 
   color:#718078;
-
 }
 
 .error{
@@ -832,13 +831,7 @@ footer b{
 </style>
 </head>
 
-
 <body>
-
-
-<!-- =====================================================
-     HEADER
-===================================================== -->
 
 <header class="course-nav">
 
@@ -864,7 +857,6 @@ footer b{
 
   </a>
 
-
   <div class="nav-actions">
 
     <a
@@ -874,7 +866,6 @@ footer b{
       ← Subjects
 
     </a>
-
 
     <a
       class="nav-button primary"
@@ -888,13 +879,7 @@ footer b{
 
 </header>
 
-
 <main class="page">
-
-
-<!-- =====================================================
-     BREADCRUMB
-===================================================== -->
 
 <div class="breadcrumb">
 
@@ -916,11 +901,6 @@ footer b{
 
 </div>
 
-
-<!-- =====================================================
-     HERO
-===================================================== -->
-
 <section class="course-hero">
 
   <small id="heroLabel">
@@ -935,7 +915,6 @@ footer b{
     Choose your education level and course
     to continue your learning journey.
   </p>
-
 
   <div class="hero-actions">
 
@@ -959,11 +938,6 @@ footer b{
 
 </section>
 
-
-<!-- =====================================================
-     SEARCH
-===================================================== -->
-
 <div class="search-box">
 
   <input
@@ -977,11 +951,6 @@ footer b{
   </button>
 
 </div>
-
-
-<!-- =====================================================
-     EDUCATION LEVEL
-===================================================== -->
 
 <section class="control-card">
 
@@ -998,11 +967,6 @@ footer b{
   </select>
 
 </section>
-
-
-<!-- =====================================================
-     COURSES
-===================================================== -->
 
 <section>
 
@@ -1026,11 +990,6 @@ footer b{
 
 </section>
 
-
-<!-- =====================================================
-     TERMS
-===================================================== -->
-
 <section
   id="termsSection"
   class="hidden">
@@ -1049,11 +1008,6 @@ footer b{
   </div>
 
 </section>
-
-
-<!-- =====================================================
-     CHAPTERS
-===================================================== -->
 
 <section
   id="chaptersSection"
@@ -1074,11 +1028,6 @@ footer b{
 
 </section>
 
-
-<!-- =====================================================
-     LESSONS
-===================================================== -->
-
 <section
   id="lessonsSection"
   class="hidden">
@@ -1098,9 +1047,7 @@ footer b{
 
 </section>
 
-
 </main>
-
 
 <footer>
 
@@ -1118,17 +1065,11 @@ footer b{
 
 </footer>
 
-
-<!-- =====================================================
-     SUPABASE
-===================================================== -->
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script src="config.js"></script>
 
 <script src="supabase.js"></script>
-
 
 <script>
 
@@ -1139,28 +1080,21 @@ footer b{
 let client = null;
 
 let subjectId = "";
-
 let subjectName = "";
 
 let courses = [];
-
 let levels = [];
-
 let terms = [];
-
 let chapters = [];
-
 let lessons = [];
 
 let selectedCourse = null;
-
 let selectedTerm = null;
-
 let selectedChapter = null;
 
 
 /* =========================================================
-   DEFAULT SUBJECT MAP
+   SUBJECT DESCRIPTIONS
 ========================================================= */
 
 const subjectDescriptions = {
@@ -1221,29 +1155,45 @@ function readURL(){
       window.location.search
     );
 
-
   subjectId =
     params.get("subject_id") || "";
-
 
   subjectName =
     params.get("subject") || "";
 
-
   if(subjectName){
 
-    subjectName =
-      decodeURIComponent(
-        subjectName
+    try{
+
+      subjectName =
+        decodeURIComponent(
+          subjectName
+        );
+
+    }catch(error){
+
+      console.warn(
+        "Subject decode error:",
+        error
       );
 
+    }
+
   }
+
+  console.log(
+    "Course page URL:",
+    {
+      subjectId,
+      subjectName
+    }
+  );
 
 }
 
 
 /* =========================================================
-   SET HERO
+   UPDATE HERO
 ========================================================= */
 
 function updateHero(){
@@ -1263,19 +1213,16 @@ function updateHero(){
       "breadcrumbSubject"
     );
 
-
   if(subjectName){
 
     title.textContent =
       subjectName;
-
 
     description.textContent =
       subjectDescriptions[
         subjectName
       ] ||
       "Explore courses, chapters, lessons and educational resources for this subject.";
-
 
     breadcrumb.textContent =
       subjectName;
@@ -1306,6 +1253,119 @@ function getClient(){
 
 
 /* =========================================================
+   RESOLVE SUBJECT
+========================================================= */
+
+async function resolveSubject(){
+
+  /*
+    If the subjects page already supplied
+    subject_id, keep using it.
+  */
+
+  if(subjectId){
+
+    console.log(
+      "Using URL subject_id:",
+      subjectId
+    );
+
+    return true;
+
+  }
+
+
+  /*
+    If subject_id was not supplied,
+    find the subject using its name.
+  */
+
+  if(!subjectName){
+
+    console.warn(
+      "No subject_id or subject name found."
+    );
+
+    return false;
+
+  }
+
+
+  console.log(
+    "Finding subject by name:",
+    subjectName
+  );
+
+
+  const {
+    data,
+    error
+  } =
+    await client
+      .from("subjects")
+      .select(
+        "id,name,icon"
+      )
+      .ilike(
+        "name",
+        subjectName
+      )
+      .limit(1);
+
+
+  if(error){
+
+    console.error(
+      "Subject lookup:",
+      error
+    );
+
+    return false;
+
+  }
+
+
+  if(!data || !data.length){
+
+    console.warn(
+      "Subject not found:",
+      subjectName
+    );
+
+    return false;
+
+  }
+
+
+  subjectId =
+    String(
+      data[0].id
+    );
+
+
+  subjectName =
+    data[0].name ||
+    subjectName;
+
+
+  updateHero();
+
+
+  console.log(
+    "Resolved subject:",
+    {
+      subjectId,
+      subjectName
+    }
+  );
+
+
+  return true;
+
+}
+
+
+/* =========================================================
    LOAD LEVELS
 ========================================================= */
 
@@ -1316,8 +1376,8 @@ async function loadLevels(){
       "levelSelect"
     );
 
-
-  if(!select) return;
+  if(!select)
+    return;
 
 
   const {
@@ -1387,9 +1447,29 @@ async function loadCourses(){
       "courseGrid"
     );
 
+  if(!grid)
+    return;
 
-  if(!grid) return;
 
+  grid.innerHTML = `
+
+    <div class="empty">
+      Loading courses...
+    </div>
+
+  `;
+
+
+  /*
+    IMPORTANT:
+
+    We load courses normally first,
+    then filter by the resolved subject_id.
+
+    This prevents the page from accidentally
+    showing an empty result because the URL
+    did not contain the correct subject_id.
+  */
 
   let query =
     client
@@ -1447,8 +1527,12 @@ async function loadCourses(){
 
         <br><br>
 
-        Please make sure courses have
-        been added in Supabase.
+        <small>
+          ${escapeHTML(
+            error.message ||
+            "Supabase returned an error."
+          )}
+        </small>
 
       </div>
 
@@ -1461,6 +1545,12 @@ async function loadCourses(){
 
   courses =
     data || [];
+
+
+  console.log(
+    "Courses loaded:",
+    courses
+  );
 
 
   renderCourses(
@@ -1482,19 +1572,29 @@ function renderCourses(list){
     );
 
 
+  if(!grid)
+    return;
+
+
   if(!list.length){
 
     grid.innerHTML = `
 
       <div class="empty">
 
-        No courses have been created
-        for this subject yet.
+        <strong>
+          No courses found for
+          ${escapeHTML(
+            subjectName ||
+            "this subject"
+          )}.
+        </strong>
 
         <br><br>
 
-        Add courses from the
-        AGULIBRARY admin system.
+        Please check that the course
+        is connected to this subject
+        in Supabase.
 
       </div>
 
@@ -1510,13 +1610,12 @@ function renderCourses(list){
       course => {
 
         const subject =
-          course.subjects || {};
-
+          course.subjects ||
+          {};
 
         const icon =
           subject.icon ||
           "📚";
-
 
         const level =
           course.education_levels
@@ -1533,9 +1632,7 @@ function renderCourses(list){
             )}">
 
             <div class="course-icon">
-
-              ${icon}
-
+              ${escapeHTML(icon)}
             </div>
 
             <h3>
@@ -1586,12 +1683,8 @@ function renderCourses(list){
         "click",
         () => {
 
-          const id =
-            card.dataset.courseId;
-
-
           selectCourse(
-            id
+            card.dataset.courseId
           );
 
         }
@@ -1633,6 +1726,24 @@ async function selectCourse(id){
 
   document
     .getElementById(
+      "chaptersSection"
+    )
+    .classList.add(
+      "hidden"
+    );
+
+
+  document
+    .getElementById(
+      "lessonsSection"
+    )
+    .classList.add(
+      "hidden"
+    );
+
+
+  document
+    .getElementById(
       "termsSection"
     )
     .scrollIntoView({
@@ -1660,9 +1771,7 @@ async function loadTerms(){
   grid.innerHTML = `
 
     <div class="empty">
-
       Loading terms...
-
     </div>
 
   `;
@@ -1760,13 +1869,11 @@ function renderTerms(list){
 
           <strong>
 
-            ${
-              escapeHTML(
-                term.name ||
-                "Term " +
-                (index + 1)
-              )
-            }
+            ${escapeHTML(
+              term.name ||
+              "Term " +
+              (index + 1)
+            )}
 
           </strong>
 
@@ -1838,6 +1945,15 @@ async function selectTerm(id){
 
   document
     .getElementById(
+      "lessonsSection"
+    )
+    .classList.add(
+      "hidden"
+    );
+
+
+  document
+    .getElementById(
       "chaptersSection"
     )
     .scrollIntoView({
@@ -1865,9 +1981,7 @@ async function loadChapters(){
   list.innerHTML = `
 
     <div class="empty">
-
       Loading chapters...
-
     </div>
 
   `;
@@ -2092,9 +2206,7 @@ async function loadLessons(){
   list.innerHTML = `
 
     <div class="empty">
-
       Loading lessons...
-
     </div>
 
   `;
@@ -2260,7 +2372,6 @@ function renderLessons(list){
 
           event.stopPropagation();
 
-
           openLesson(
             button.dataset.lessonId
           );
@@ -2293,15 +2404,6 @@ function openLesson(id){
     return;
 
 
-  /*
-    Lesson page will be connected
-    in the next phase.
-
-    For now, save the lesson
-    information locally so the
-    next page can use it.
-  */
-
   try{
 
     localStorage.setItem(
@@ -2313,7 +2415,9 @@ function openLesson(id){
 
   }catch(error){
 
-    console.error(error);
+    console.error(
+      error
+    );
 
   }
 
@@ -2552,6 +2656,42 @@ async function start(){
   }
 
 
+  /*
+    NEW IMPORTANT STEP:
+
+    Resolve the subject before loading
+    courses.
+  */
+
+  const resolved =
+    await resolveSubject();
+
+
+  if(!resolved){
+
+    document.getElementById(
+      "courseGrid"
+    ).innerHTML = `
+
+      <div class="empty error">
+
+        We could not identify this subject.
+
+        <br><br>
+
+        Please return to
+        <strong>Subjects</strong>
+        and select the subject again.
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
   await loadLevels();
 
   await loadCourses();
@@ -2564,4 +2704,4 @@ start();
 </script>
 
 </body>
-</html>
+  </html>

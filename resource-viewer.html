@@ -1,0 +1,2115 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+
+<meta charset="utf-8">
+
+<meta
+  name="viewport"
+  content="width=device-width,initial-scale=1"
+>
+
+<title>AGULIBRARY — Resource Viewer</title>
+
+<style>
+
+*{
+  box-sizing:border-box;
+}
+
+html,
+body{
+  margin:0;
+  padding:0;
+  min-height:100%;
+
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
+  background:#f4fbf7;
+  color:#17352a;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.viewer-header{
+
+  position:sticky;
+  top:0;
+  z-index:1000;
+
+  min-height:76px;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  gap:15px;
+
+  padding:11px 5%;
+
+  background:rgba(255,255,255,.97);
+
+  border-bottom:1px solid #dceee6;
+
+  box-shadow:
+    0 5px 22px rgba(8,122,75,.07);
+
+  backdrop-filter:blur(14px);
+
+}
+
+
+.viewer-brand{
+
+  display:flex;
+  align-items:center;
+
+  gap:12px;
+
+}
+
+
+.brand-mark{
+
+  width:50px;
+  height:50px;
+
+  display:grid;
+  place-items:center;
+
+  border-radius:15px;
+
+  background:#087a4b;
+
+  color:#fff;
+
+  font-size:20px;
+  font-weight:900;
+
+}
+
+
+.brand-name{
+
+  font-size:19px;
+
+  font-weight:900;
+
+  color:#173b2d;
+
+}
+
+
+.brand-subtitle{
+
+  margin-top:2px;
+
+  color:#74877f;
+
+  font-size:9px;
+
+  letter-spacing:2px;
+
+}
+
+
+.viewer-actions{
+
+  display:flex;
+  align-items:center;
+
+  gap:9px;
+
+}
+
+
+.viewer-button{
+
+  border:1px solid #bcdccc;
+
+  background:#fff;
+
+  color:#087a4b;
+
+  padding:10px 14px;
+
+  border-radius:11px;
+
+  font-weight:800;
+
+  cursor:pointer;
+
+  text-decoration:none;
+
+}
+
+
+.viewer-button:hover{
+
+  background:#087a4b;
+
+  color:#fff;
+
+}
+
+
+.save-button.saved{
+
+  background:#087a4b;
+
+  color:#fff;
+
+}
+
+
+/* =========================================================
+   MAIN
+========================================================= */
+
+.viewer-main{
+
+  width:min(1200px,100%);
+
+  margin:auto;
+
+  padding:28px 5% 70px;
+
+}
+
+
+/* =========================================================
+   RESOURCE INFORMATION
+========================================================= */
+
+.resource-info{
+
+  background:#fff;
+
+  border:1px solid #dceee6;
+
+  border-radius:25px;
+
+  padding:30px;
+
+  margin-bottom:20px;
+
+  box-shadow:
+    0 12px 35px rgba(8,122,75,.06);
+
+}
+
+
+.resource-type{
+
+  display:inline-flex;
+
+  padding:6px 11px;
+
+  border-radius:20px;
+
+  background:#e8f8f0;
+
+  color:#087a4b;
+
+  font-size:11px;
+
+  font-weight:900;
+
+  letter-spacing:1px;
+
+}
+
+
+.resource-title{
+
+  margin:14px 0 8px;
+
+  color:#173b2d;
+
+  font-size:
+    clamp(30px,5vw,48px);
+
+  line-height:1.1;
+
+}
+
+
+.resource-subject{
+
+  color:#087a4b;
+
+  font-weight:900;
+
+  margin-bottom:10px;
+
+}
+
+
+.resource-description{
+
+  color:#70837b;
+
+  font-size:16px;
+
+  line-height:1.7;
+
+  max-width:850px;
+
+}
+
+
+.resource-meta{
+
+  display:flex;
+
+  flex-wrap:wrap;
+
+  gap:8px;
+
+  margin-top:18px;
+
+}
+
+
+.resource-meta span{
+
+  padding:7px 10px;
+
+  background:#f2f8f5;
+
+  border-radius:9px;
+
+  color:#647970;
+
+  font-size:12px;
+
+  font-weight:700;
+
+}
+
+
+/* =========================================================
+   VIEWER
+========================================================= */
+
+.viewer-container{
+
+  background:#fff;
+
+  border:1px solid #dceee6;
+
+  border-radius:25px;
+
+  overflow:hidden;
+
+  box-shadow:
+    0 12px 35px rgba(8,122,75,.06);
+
+}
+
+
+.viewer-toolbar{
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:space-between;
+
+  gap:12px;
+
+  padding:15px 18px;
+
+  background:#f8fcfa;
+
+  border-bottom:1px solid #dceee6;
+
+}
+
+
+.viewer-toolbar-title{
+
+  color:#456459;
+
+  font-weight:800;
+
+  font-size:14px;
+
+}
+
+
+.viewer-toolbar-actions{
+
+  display:flex;
+
+  gap:8px;
+
+}
+
+
+.content-area{
+
+  min-height:500px;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  padding:20px;
+
+  background:#eef7f2;
+
+}
+
+
+/* =========================================================
+   IMAGE
+========================================================= */
+
+.viewer-image{
+
+  display:block;
+
+  max-width:100%;
+
+  max-height:80vh;
+
+  object-fit:contain;
+
+  border-radius:12px;
+
+  box-shadow:
+    0 12px 35px rgba(0,0,0,.12);
+
+}
+
+
+/* =========================================================
+   VIDEO
+========================================================= */
+
+.viewer-video{
+
+  width:100%;
+
+  max-height:75vh;
+
+  border-radius:12px;
+
+  background:#000;
+
+}
+
+
+/* =========================================================
+   PDF
+========================================================= */
+
+.viewer-pdf{
+
+  width:100%;
+
+  height:75vh;
+
+  min-height:600px;
+
+  border:0;
+
+  border-radius:8px;
+
+  background:#fff;
+
+}
+
+
+/* =========================================================
+   FILE FALLBACK
+========================================================= */
+
+.file-fallback{
+
+  width:min(650px,100%);
+
+  text-align:center;
+
+  padding:45px 25px;
+
+  background:#fff;
+
+  border:1px solid #dceee6;
+
+  border-radius:20px;
+
+}
+
+
+.file-icon{
+
+  font-size:60px;
+
+  margin-bottom:15px;
+
+}
+
+
+.file-fallback h2{
+
+  margin:8px 0;
+
+  color:#173b2d;
+
+}
+
+
+.file-fallback p{
+
+  color:#74877f;
+
+  line-height:1.6;
+
+}
+
+
+.file-open{
+
+  display:inline-flex;
+
+  margin-top:15px;
+
+  padding:12px 20px;
+
+  border-radius:11px;
+
+  background:#087a4b;
+
+  color:#fff;
+
+  text-decoration:none;
+
+  font-weight:800;
+
+}
+
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+.loading{
+
+  min-height:500px;
+
+  display:grid;
+
+  place-items:center;
+
+  text-align:center;
+
+  color:#087a4b;
+
+  font-weight:800;
+
+  font-size:17px;
+
+}
+
+
+.spinner{
+
+  width:42px;
+  height:42px;
+
+  margin:0 auto 15px;
+
+  border:4px solid #d9eee4;
+
+  border-top-color:#087a4b;
+
+  border-radius:50%;
+
+  animation:spin .8s linear infinite;
+
+}
+
+
+@keyframes spin{
+
+  to{
+    transform:rotate(360deg);
+  }
+
+}
+
+
+/* =========================================================
+   ERROR
+========================================================= */
+
+.error-box{
+
+  max-width:650px;
+
+  margin:60px auto;
+
+  padding:30px;
+
+  text-align:center;
+
+  background:#fff;
+
+  border:1px solid #f0cccc;
+
+  border-radius:20px;
+
+  color:#a92727;
+
+}
+
+
+.error-box button{
+
+  margin-top:15px;
+
+  padding:11px 18px;
+
+  border:0;
+
+  border-radius:10px;
+
+  background:#087a4b;
+
+  color:#fff;
+
+  font-weight:800;
+
+  cursor:pointer;
+
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.viewer-footer{
+
+  padding:30px 5%;
+
+  text-align:center;
+
+  background:#fff;
+
+  border-top:1px solid #dceee6;
+
+  color:#70837b;
+
+  font-size:14px;
+
+}
+
+
+.viewer-footer b{
+
+  color:#087a4b;
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(max-width:700px){
+
+  .viewer-header{
+
+    padding:10px 4%;
+
+    flex-wrap:wrap;
+
+  }
+
+
+  .viewer-actions{
+
+    width:100%;
+
+    justify-content:space-between;
+
+  }
+
+
+  .viewer-main{
+
+    padding:
+      20px 4% 50px;
+
+  }
+
+
+  .resource-info{
+
+    padding:23px;
+
+    border-radius:21px;
+
+  }
+
+
+  .resource-title{
+
+    font-size:32px;
+
+  }
+
+
+  .content-area{
+
+    padding:10px;
+
+    min-height:400px;
+
+  }
+
+
+  .viewer-pdf{
+
+    height:65vh;
+
+    min-height:450px;
+
+  }
+
+
+  .viewer-toolbar{
+
+    flex-wrap:wrap;
+
+  }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     HEADER
+========================================================= -->
+
+<header class="viewer-header">
+
+  <div class="viewer-brand">
+
+    <div class="brand-mark">
+      AG
+    </div>
+
+    <div>
+
+      <div class="brand-name">
+        AGULIBRARY
+      </div>
+
+      <div class="brand-subtitle">
+        GLOBAL DIGITAL EDUCATION
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div class="viewer-actions">
+
+    <button
+      class="viewer-button"
+      onclick="goBack()">
+
+      ← Back
+
+    </button>
+
+
+    <button
+      id="saveButton"
+      class="viewer-button save-button">
+
+      ☆ Save
+
+    </button>
+
+  </div>
+
+</header>
+
+
+
+<!-- =========================================================
+     MAIN
+========================================================= -->
+
+<main class="viewer-main">
+
+
+  <!-- RESOURCE INFORMATION -->
+
+  <section
+    id="resourceInfo"
+    class="resource-info"
+    style="display:none;">
+
+    <span
+      id="resourceType"
+      class="resource-type">
+
+      RESOURCE
+
+    </span>
+
+
+    <h1
+      id="resourceTitle"
+      class="resource-title">
+
+      Resource
+
+    </h1>
+
+
+    <div
+      id="resourceSubject"
+      class="resource-subject">
+
+    </div>
+
+
+    <div
+      id="resourceDescription"
+      class="resource-description">
+
+    </div>
+
+
+    <div
+      id="resourceMeta"
+      class="resource-meta">
+
+    </div>
+
+  </section>
+
+
+
+  <!-- VIEWER -->
+
+  <section class="viewer-container">
+
+
+    <div class="viewer-toolbar">
+
+      <div
+        id="viewerToolbarTitle"
+        class="viewer-toolbar-title">
+
+        AGULIBRARY Resource Viewer
+
+      </div>
+
+
+      <div class="viewer-toolbar-actions">
+
+        <button
+          class="viewer-button"
+          onclick="openOriginal()">
+
+          ↗ Open Original
+
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <div
+      id="contentArea"
+      class="content-area">
+
+
+      <div class="loading">
+
+        <div class="spinner"></div>
+
+        Loading AGULIBRARY resource...
+
+      </div>
+
+
+    </div>
+
+
+  </section>
+
+
+</main>
+
+
+
+<!-- =========================================================
+     FOOTER
+========================================================= -->
+
+<footer class="viewer-footer">
+
+  <b>AGULIBRARY</b>
+
+  — Global Digital Education Library
+
+  <br><br>
+
+  Owner: Umar Mohammed
+
+  <br>
+
+  ©
+  <span id="year"></span>
+  AGULIBRARY. All rights reserved.
+
+</footer>
+
+
+
+<!-- =========================================================
+     SUPABASE
+========================================================= -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="config.js"></script>
+
+<script src="supabase.js"></script>
+
+
+<script>
+
+let client = null;
+
+let currentResource = null;
+
+let currentUser = null;
+
+let isSaved = false;
+
+
+/* =========================================================
+   START
+========================================================= */
+
+document.addEventListener(
+  "DOMContentLoaded",
+  async () => {
+
+    document.getElementById(
+      "year"
+    ).textContent =
+      new Date().getFullYear();
+
+
+    await startViewer();
+
+  }
+);
+
+
+/* =========================================================
+   START VIEWER
+========================================================= */
+
+async function startViewer(){
+
+  try{
+
+    if(
+      typeof getSupabase !== "function"
+    ){
+
+      showError(
+        "Supabase connection is unavailable."
+      );
+
+      return;
+
+    }
+
+
+    client =
+      getSupabase();
+
+
+    if(
+      !client ||
+      !client.auth
+    ){
+
+      showError(
+        "Supabase authentication is unavailable."
+      );
+
+      return;
+
+    }
+
+
+    const sessionResult =
+      await client.auth.getSession();
+
+
+    if(sessionResult.error){
+
+      console.error(
+        sessionResult.error
+      );
+
+      showError(
+        "Unable to verify your account."
+      );
+
+      return;
+
+    }
+
+
+    const session =
+      sessionResult.data?.session;
+
+
+    if(!session){
+
+      window.location.href =
+        "auth.html";
+
+      return;
+
+    }
+
+
+    currentUser =
+      session.user;
+
+
+    const params =
+      new URLSearchParams(
+        window.location.search
+      );
+
+
+    const id =
+      params.get("id");
+
+
+    if(!id){
+
+      showError(
+        "No resource was selected."
+      );
+
+      return;
+
+    }
+
+
+    await loadResource(id);
+
+
+  }catch(error){
+
+    console.error(
+      "Viewer error:",
+      error
+    );
+
+
+    showError(
+      "Something went wrong while opening this resource."
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   LOAD RESOURCE
+========================================================= */
+
+async function loadResource(id){
+
+  const {
+    data,
+    error
+  } =
+    await client
+      .from("resources")
+      .select("*")
+      .eq("id", id)
+      .maybeSingle();
+
+
+  if(error){
+
+    console.error(
+      "Resource loading error:",
+      error
+    );
+
+
+    showError(
+      "The resource could not be loaded."
+    );
+
+    return;
+
+  }
+
+
+  if(!data){
+
+    showError(
+      "This resource does not exist."
+    );
+
+    return;
+
+  }
+
+
+  currentResource =
+    data;
+
+
+  displayResource(
+    data
+  );
+
+
+  await checkIfSaved(
+    data.id
+  );
+
+
+  recordRecentResource(
+    data.id
+  );
+
+}
+
+
+/* =========================================================
+   DISPLAY RESOURCE
+========================================================= */
+
+function displayResource(resource){
+
+  document.title =
+    (
+      resource.title ||
+      "AGULIBRARY Resource"
+    ) +
+    " — AGULIBRARY";
+
+
+  document.getElementById(
+    "resourceInfo"
+  ).style.display =
+    "block";
+
+
+  setText(
+    "resourceTitle",
+    resource.title ||
+    "Untitled Resource"
+  );
+
+
+  setText(
+    "resourceSubject",
+    resource.subject ||
+    resource.subject_name ||
+    ""
+  );
+
+
+  setText(
+    "resourceDescription",
+    resource.description ||
+    "Educational resource from AGULIBRARY."
+  );
+
+
+  setText(
+    "resourceType",
+    String(
+      resource.type ||
+      "RESOURCE"
+    ).toUpperCase()
+  );
+
+
+  const meta =
+    document.getElementById(
+      "resourceMeta"
+    );
+
+
+  meta.innerHTML = "";
+
+
+  addMeta(
+    meta,
+    resource.level ||
+    resource.class_level
+  );
+
+
+  addMeta(
+    meta,
+    resource.term
+  );
+
+
+  addMeta(
+    meta,
+    resource.is_premium
+      ? "Premium"
+      : ""
+  );
+
+
+  setText(
+    "viewerToolbarTitle",
+    resource.title ||
+    "AGULIBRARY Resource Viewer"
+  );
+
+
+  renderResourceContent(
+    resource
+  );
+
+}
+
+
+/* =========================================================
+   META
+========================================================= */
+
+function addMeta(
+  container,
+  value
+){
+
+  if(!value){
+
+    return;
+
+  }
+
+
+  const span =
+    document.createElement(
+      "span"
+    );
+
+
+  span.textContent =
+    value;
+
+
+  container.appendChild(
+    span
+  );
+
+}
+
+
+/* =========================================================
+   RENDER RESOURCE
+========================================================= */
+
+function renderResourceContent(resource){
+
+  const area =
+    document.getElementById(
+      "contentArea"
+    );
+
+
+  const type =
+    String(
+      resource.type ||
+      ""
+    )
+    .toLowerCase()
+    .trim();
+
+
+  const url =
+    resource.file_url ||
+    resource.url ||
+    "";
+
+
+  if(!url){
+
+    area.innerHTML = `
+
+      <div class="file-fallback">
+
+        <div class="file-icon">
+          📁
+        </div>
+
+        <h2>
+          No file attached
+        </h2>
+
+        <p>
+          This resource has been published,
+          but a file has not been attached yet.
+        </p>
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  /*
+     IMAGE
+  */
+
+  if(
+    type === "image" ||
+    type === "photo"
+  ){
+
+    area.innerHTML = `
+
+      <img
+        class="viewer-image"
+        src="${escapeAttr(url)}"
+        alt="${escapeAttr(
+          resource.title ||
+          "AGULIBRARY image"
+        )}"
+        loading="eager"
+      >
+
+    `;
+
+    return;
+
+  }
+
+
+  /*
+     VIDEO
+  */
+
+  if(
+    type === "video"
+  ){
+
+    area.innerHTML = `
+
+      <video
+        class="viewer-video"
+        controls
+        playsinline
+        preload="metadata">
+
+        <source
+          src="${escapeAttr(url)}"
+        >
+
+        Your browser does not support
+        video playback.
+
+      </video>
+
+    `;
+
+    return;
+
+  }
+
+
+  /*
+     PDF
+  */
+
+  if(
+    type === "pdf"
+  ){
+
+    area.innerHTML = `
+
+      <iframe
+        class="viewer-pdf"
+        src="${escapeAttr(url)}"
+        title="${escapeAttr(
+          resource.title ||
+          "AGULIBRARY PDF"
+        )}">
+      </iframe>
+
+    `;
+
+    return;
+
+  }
+
+
+  /*
+     BOOK
+  */
+
+  if(
+    type === "book"
+  ){
+
+    if(
+      isPDFUrl(url)
+    ){
+
+      area.innerHTML = `
+
+        <iframe
+          class="viewer-pdf"
+          src="${escapeAttr(url)}"
+          title="${escapeAttr(
+            resource.title ||
+            "AGULIBRARY Book"
+          )}">
+        </iframe>
+
+      `;
+
+      return;
+
+    }
+
+
+    area.innerHTML =
+      createFileFallback(
+        "📚",
+        "Educational Book",
+        url
+      );
+
+    return;
+
+  }
+
+
+  /*
+     DOCUMENT
+  */
+
+  if(
+    type === "document"
+  ){
+
+    if(
+      isPDFUrl(url)
+    ){
+
+      area.innerHTML = `
+
+        <iframe
+          class="viewer-pdf"
+          src="${escapeAttr(url)}"
+          title="${escapeAttr(
+            resource.title ||
+            "AGULIBRARY Document"
+          )}">
+        </iframe>
+
+      `;
+
+      return;
+
+    }
+
+
+    area.innerHTML =
+      createFileFallback(
+        "📄",
+        "Educational Document",
+        url
+      );
+
+    return;
+
+  }
+
+
+  /*
+     AUDIO
+  */
+
+  if(
+    type === "audio"
+  ){
+
+    area.innerHTML = `
+
+      <div class="file-fallback">
+
+        <div class="file-icon">
+          🎧
+        </div>
+
+        <h2>
+          ${escapeHTML(
+            resource.title ||
+            "Audio Resource"
+          )}
+        </h2>
+
+        <p>
+          Listen to this educational audio resource.
+        </p>
+
+        <audio
+          controls
+          style="
+            width:100%;
+            margin-top:20px;
+          ">
+
+          <source
+            src="${escapeAttr(url)}"
+          >
+
+          Your browser does not support
+          audio playback.
+
+        </audio>
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  /*
+     DEFAULT
+  */
+
+  area.innerHTML =
+    createFileFallback(
+      "📘",
+      "Educational Resource",
+      url
+    );
+
+}
+
+
+/* =========================================================
+   FILE FALLBACK
+========================================================= */
+
+function createFileFallback(
+  icon,
+  title,
+  url
+){
+
+  return `
+
+    <div class="file-fallback">
+
+      <div class="file-icon">
+        ${icon}
+      </div>
+
+      <h2>
+        ${escapeHTML(title)}
+      </h2>
+
+      <p>
+        This resource is available
+        as an external file.
+      </p>
+
+      <a
+        class="file-open"
+        href="${escapeAttr(url)}"
+        target="_blank"
+        rel="noopener noreferrer">
+
+        Open Resource →
+
+      </a>
+
+    </div>
+
+  `;
+
+}
+
+
+/* =========================================================
+   OPEN ORIGINAL
+========================================================= */
+
+function openOriginal(){
+
+  if(!currentResource){
+
+    return;
+
+  }
+
+
+  const url =
+    currentResource.file_url ||
+    currentResource.url ||
+    "";
+
+
+  if(!url){
+
+    alert(
+      "This resource does not have a file attached."
+    );
+
+    return;
+
+  }
+
+
+  window.open(
+    url,
+    "_blank",
+    "noopener,noreferrer"
+  );
+
+}
+
+
+/* =========================================================
+   SAVE RESOURCE
+   USES EXISTING TABLE:
+   student_saved_resources
+========================================================= */
+
+async function checkIfSaved(resourceId){
+
+  if(
+    !currentUser ||
+    !resourceId
+  ){
+
+    return;
+
+  }
+
+
+  try{
+
+    const {
+      data,
+      error
+    } =
+      await client
+        .from(
+          "student_saved_resources"
+        )
+        .select("id")
+        .eq(
+          "user_id",
+          currentUser.id
+        )
+        .eq(
+          "resource_id",
+          resourceId
+        )
+        .maybeSingle();
+
+
+    if(error){
+
+      console.warn(
+        "Save check:",
+        error
+      );
+
+      return;
+
+    }
+
+
+    isSaved =
+      !!data;
+
+
+    updateSaveButton();
+
+  }catch(error){
+
+    console.warn(
+      "Save check error:",
+      error
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   TOGGLE SAVE
+========================================================= */
+
+async function toggleSave(){
+
+  if(
+    !currentUser ||
+    !currentResource
+  ){
+
+    return;
+
+  }
+
+
+  const button =
+    document.getElementById(
+      "saveButton"
+    );
+
+
+  if(button){
+
+    button.disabled =
+      true;
+
+  }
+
+
+  try{
+
+    if(isSaved){
+
+      const {
+        error
+      } =
+        await client
+          .from(
+            "student_saved_resources"
+          )
+          .delete()
+          .eq(
+            "user_id",
+            currentUser.id
+          )
+          .eq(
+            "resource_id",
+            currentResource.id
+          );
+
+
+      if(error){
+
+        throw error;
+
+      }
+
+
+      isSaved =
+        false;
+
+    }else{
+
+      const {
+        error
+      } =
+        await client
+          .from(
+            "student_saved_resources"
+          )
+          .insert({
+
+            user_id:
+              currentUser.id,
+
+            resource_id:
+              currentResource.id
+
+          });
+
+
+      if(error){
+
+        throw error;
+
+      }
+
+
+      isSaved =
+        true;
+
+    }
+
+
+    updateSaveButton();
+
+
+  }catch(error){
+
+    console.error(
+      "Save error:",
+      error
+    );
+
+
+    alert(
+      "Unable to update saved resource. Please try again."
+    );
+
+
+  }finally{
+
+    if(button){
+
+      button.disabled =
+        false;
+
+    }
+
+  }
+
+}
+
+
+/* =========================================================
+   SAVE BUTTON
+========================================================= */
+
+function updateSaveButton(){
+
+  const button =
+    document.getElementById(
+      "saveButton"
+    );
+
+
+  if(!button){
+
+    return;
+
+  }
+
+
+  if(isSaved){
+
+    button.textContent =
+      "★ Saved";
+
+
+    button.classList.add(
+      "saved"
+    );
+
+  }else{
+
+    button.textContent =
+      "☆ Save";
+
+
+    button.classList.remove(
+      "saved"
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   RECENT RESOURCE
+   USES EXISTING TABLE:
+   student_recent_resources
+========================================================= */
+
+async function recordRecentResource(
+  resourceId
+){
+
+  if(
+    !currentUser ||
+    !resourceId
+  ){
+
+    return;
+
+  }
+
+
+  try{
+
+    /*
+      Try to insert into the
+      existing recent-resource table.
+    */
+
+    const {
+      error
+    } =
+      await client
+        .from(
+          "student_recent_resources"
+        )
+        .insert({
+
+          user_id:
+            currentUser.id,
+
+          resource_id:
+            resourceId
+
+        });
+
+
+    if(error){
+
+      console.warn(
+        "Recent resource:",
+        error
+      );
+
+    }
+
+  }catch(error){
+
+    console.warn(
+      "Recent resource error:",
+      error
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   BACK
+========================================================= */
+
+function goBack(){
+
+  if(
+    document.referrer &&
+    document.referrer.includes(
+      window.location.hostname
+    )
+  ){
+
+    window.history.back();
+
+    return;
+
+  }
+
+
+  window.location.href =
+    "student-dashboard.html";
+
+}
+
+
+/* =========================================================
+   PDF DETECTION
+========================================================= */
+
+function isPDFUrl(url){
+
+  return String(
+    url || ""
+  )
+  .toLowerCase()
+  .split("?")[0]
+  .endsWith(".pdf");
+
+}
+
+
+/* =========================================================
+   TEXT
+========================================================= */
+
+function setText(
+  id,
+  value
+){
+
+  const element =
+    document.getElementById(
+      id
+    );
+
+
+  if(element){
+
+    element.textContent =
+      value || "";
+
+  }
+
+}
+
+
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
+
+function escapeHTML(value){
+
+  return String(
+    value ?? ""
+  ).replace(
+    /[&<>"']/g,
+    character => {
+
+      const entities = {
+
+        "&":"&amp;",
+
+        "<":"&lt;",
+
+        ">":"&gt;",
+
+        '"':"&quot;",
+
+        "'":"&#039;"
+
+      };
+
+
+      return entities[
+        character
+      ];
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   ESCAPE ATTRIBUTE
+========================================================= */
+
+function escapeAttr(value){
+
+  return escapeHTML(
+    value
+  ).replace(
+    /`/g,
+    "&#096;"
+  );
+
+}
+
+
+/* =========================================================
+   ERROR
+========================================================= */
+
+function showError(message){
+
+  const area =
+    document.getElementById(
+      "contentArea"
+    );
+
+
+  if(!area){
+
+    return;
+
+  }
+
+
+  area.innerHTML = `
+
+    <div class="error-box">
+
+      ⚠️
+
+      <h2>
+        AGULIBRARY
+      </h2>
+
+      <p>
+        ${escapeHTML(message)}
+      </p>
+
+      <button
+        onclick="goBack()">
+
+        ← Return to AGULIBRARY
+
+      </button>
+
+    </div>
+
+  `;
+
+}
+
+
+/* =========================================================
+   SAVE BUTTON EVENT
+========================================================= */
+
+document
+  .getElementById(
+    "saveButton"
+  )
+  ?.addEventListener(
+    "click",
+    toggleSave
+  );
+
+</script>
+
+
+</body>
+
+</html>

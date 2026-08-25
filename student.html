@@ -3304,7 +3304,379 @@ function escapeJS(value){
 }
 
 </script>
+/* =========================================================
+   AGU AI LEARNING AGENT
+========================================================= */
 
+let aiConversation = [];
+
+
+/* =========================================================
+   AI ELEMENTS
+========================================================= */
+
+function getAIElements(){
+
+  return {
+
+    messages:
+      document.getElementById(
+        "aiAgentMessages"
+      ),
+
+    input:
+      document.getElementById(
+        "aiAgentInput"
+      ),
+
+    send:
+      document.getElementById(
+        "aiAgentSend"
+      ),
+
+    status:
+      document.getElementById(
+        "aiAgentStatus"
+      )
+
+  };
+
+}
+
+
+/* =========================================================
+   ADD AI MESSAGE
+========================================================= */
+
+function addAIMessage(
+  message,
+  sender="ai"
+){
+
+  const elements =
+    getAIElements();
+
+  if(!elements.messages)
+    return;
+
+
+  const wrapper =
+    document.createElement(
+      "div"
+    );
+
+
+  wrapper.className =
+    "ai-message " +
+    (
+      sender === "user"
+      ? "user"
+      : ""
+    );
+
+
+  const avatar =
+    document.createElement(
+      "div"
+    );
+
+
+  avatar.className =
+    "ai-message-avatar";
+
+
+  avatar.textContent =
+    sender === "user"
+    ? "👤"
+    : "🤖";
+
+
+  const content =
+    document.createElement(
+      "div"
+    );
+
+
+  content.className =
+    "ai-message-content";
+
+
+  content.textContent =
+    message;
+
+
+  wrapper.appendChild(
+    avatar
+  );
+
+
+  wrapper.appendChild(
+    content
+  );
+
+
+  elements.messages.appendChild(
+    wrapper
+  );
+
+
+  elements.messages.scrollTop =
+    elements.messages.scrollHeight;
+
+}
+
+
+/* =========================================================
+   QUICK PROMPTS
+========================================================= */
+
+function aiQuickPrompt(
+  prompt
+){
+
+  const elements =
+    getAIElements();
+
+
+  if(!elements.input)
+    return;
+
+
+  elements.input.value =
+    prompt;
+
+
+  elements.input.focus();
+
+
+  sendAIMessage();
+
+}
+
+
+/* =========================================================
+   SEND AI MESSAGE
+========================================================= */
+
+async function sendAIMessage(){
+
+  const elements =
+    getAIElements();
+
+
+  if(
+    !elements.input ||
+    !elements.send
+  ){
+
+    return;
+
+  }
+
+
+  const message =
+    elements.input.value
+      .trim();
+
+
+  if(!message)
+    return;
+
+
+  addAIMessage(
+    message,
+    "user"
+  );
+
+
+  elements.input.value =
+    "";
+
+
+  elements.send.disabled =
+    true;
+
+
+  elements.status.classList.add(
+    "show"
+  );
+
+
+  aiConversation.push({
+
+    role:"user",
+
+    content:message
+
+  });
+
+
+  try{
+
+    /*
+      The AI request is intentionally
+      sent through a secure backend
+      instead of exposing an AI API
+      secret inside student.html.
+    */
+
+    const response =
+      await fetch(
+        "https://YOUR-SUPABASE-PROJECT.supabase.co/functions/v1/ai-learning-agent",
+        {
+
+          method:"POST",
+
+          headers:{
+
+            "Content-Type":
+              "application/json"
+
+          },
+
+          body:JSON.stringify({
+
+            message:message,
+
+            conversation:
+              aiConversation,
+
+            student_id:
+              studentUser?.id || null
+
+          })
+
+        }
+      );
+
+
+    if(!response.ok){
+
+      throw new Error(
+        "AI service returned an error."
+      );
+
+    }
+
+
+    const data =
+      await response.json();
+
+
+    const answer =
+      data.answer ||
+      data.message ||
+      data.response;
+
+
+    if(!answer){
+
+      throw new Error(
+        "The AI returned no answer."
+      );
+
+    }
+
+
+    addAIMessage(
+      answer,
+      "ai"
+    );
+
+
+    aiConversation.push({
+
+      role:"assistant",
+
+      content:answer
+
+    });
+
+
+  }catch(error){
+
+    console.error(
+      "AI Learning Agent:",
+      error
+    );
+
+
+    addAIMessage(
+
+      "I'm not connected to the AI service yet. " +
+      "The Learning Agent interface is ready, " +
+      "but the secure AI backend still needs to be connected.",
+
+      "ai"
+
+    );
+
+  }finally{
+
+    elements.send.disabled =
+      false;
+
+
+    elements.status.classList.remove(
+      "show"
+    );
+
+
+    elements.input.focus();
+
+  }
+
+}
+
+
+/* =========================================================
+   AI EVENTS
+========================================================= */
+
+document.addEventListener(
+  "DOMContentLoaded",
+  function(){
+
+    const elements =
+      getAIElements();
+
+
+    if(
+      !elements.input ||
+      !elements.send
+    ){
+
+      return;
+
+    }
+
+
+    elements.send.addEventListener(
+      "click",
+      sendAIMessage
+    );
+
+
+    elements.input.addEventListener(
+      "keydown",
+      function(event){
+
+        if(
+          event.key === "Enter" &&
+          !event.shiftKey
+        ){
+
+          event.preventDefault();
+
+          sendAIMessage();
+
+        }
+
+      }
+    );
+
+  }
+);
 
 </body>
 

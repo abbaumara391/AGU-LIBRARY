@@ -120,7 +120,7 @@ function escapeJS(value){return String(value??"").replace(/\\/g,"\\\\").replace(
 function getAIElements(){return{messages:document.getElementById("aiAgentMessages"),input:document.getElementById("aiAgentInput"),send:document.getElementById("aiAgentSend"),status:document.getElementById("aiAgentStatus")}}
 function addAIMessage(message,sender="ai"){const elements=getAIElements();if(!elements.messages)return;const wrapper=document.createElement("div");wrapper.className="ai-message "+(sender==="user"?"user":"");const avatar=document.createElement("div");avatar.className="ai-message-avatar";if(sender==="user"){avatar.textContent="👤"}else{const img=document.createElement("img");img.src="ai-teacher.jpg";img.alt="AI Teacher";avatar.appendChild(img)}const content=document.createElement("div");content.className="ai-message-content";content.textContent=message;wrapper.appendChild(avatar);wrapper.appendChild(content);elements.messages.appendChild(wrapper);elements.messages.scrollTop=elements.messages.scrollHeight}
 function aiQuickPrompt(prompt){const elements=getAIElements();if(!elements.input)return;elements.input.value=prompt;elements.input.focus();sendAIMessage()}
-asyncasync function sendAIMessage(){
+async function sendAIMessage(){
   const elements=getAIElements();
   if(!elements.input||!elements.send)return;
 

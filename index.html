@@ -1339,7 +1339,183 @@ async function studentSignOut() {
     "index.html";
 
 }
+/* =========================================================
+   AGULIBRARY INTERNATIONAL PAYMENT AREA
+   Front-end payment-area controller
+========================================================= */
 
+(function(){
+
+  function setupInternationalPayment(){
+
+    const paymentSection =
+      document.querySelector(".payment-section");
+
+    if(!paymentSection)return;
+
+    const currencySelect =
+      paymentSection.querySelector(
+        ".payment-checkout-card select"
+      );
+
+    const paymentButton =
+      paymentSection.querySelector(
+        ".payment-button"
+      );
+
+    const paymentAmount =
+      paymentSection.querySelector(
+        ".payment-amount strong"
+      );
+
+    const paymentMessage =
+      paymentSection.querySelector(
+        ".payment-message"
+      );
+
+    if(!currencySelect ||
+       !paymentButton ||
+       !paymentAmount ||
+       !paymentMessage){
+
+      console.warn(
+        "AGULIBRARY payment elements were not found."
+      );
+
+      return;
+    }
+
+    /*
+     * International currency display.
+     */
+
+    const currencySymbols = {
+      USD: "$",
+      EUR: "€",
+      GBP: "£",
+      NGN: "₦",
+      CAD: "C$",
+      AUD: "A$"
+    };
+
+    /*
+     * Keep the selected payment amount.
+     * The actual amount will later come from
+     * the selected product/resource or secure
+     * payment backend.
+     */
+
+    const baseAmount = 10;
+
+    function updatePaymentAmount(){
+
+      const currency =
+        String(
+          currencySelect.value || "USD"
+        ).toUpperCase();
+
+      const symbol =
+        currencySymbols[currency] || currency;
+
+      paymentAmount.textContent =
+        symbol +
+        baseAmount.toFixed(2);
+
+    }
+
+    currencySelect.addEventListener(
+      "change",
+      updatePaymentAmount
+    );
+
+    /*
+     * Payment button.
+     *
+     * This prepares the payment flow.
+     * No card information is collected
+     * directly by AGULIBRARY.
+     */
+
+    paymentButton.addEventListener(
+      "click",
+      function(){
+
+        const currency =
+          String(
+            currencySelect.value || "USD"
+          ).toUpperCase();
+
+        const symbol =
+          currencySymbols[currency] || currency;
+
+        paymentButton.disabled = true;
+
+        paymentButton.textContent =
+          "Preparing secure payment...";
+
+        paymentMessage.className =
+          "payment-message show";
+
+        paymentMessage.textContent =
+          "🌍 Preparing your secure international payment in " +
+          currency +
+          ". Please wait...";
+
+        /*
+         * Temporary secure-flow placeholder.
+         *
+         * The real payment gateway will be connected
+         * here when the payment provider/backend is
+         * activated.
+         */
+
+        setTimeout(function(){
+
+          paymentButton.disabled = false;
+
+          paymentButton.textContent =
+            "Continue to Secure Payment →";
+
+          paymentMessage.className =
+            "payment-message show";
+
+          paymentMessage.innerHTML =
+            "🔐 Your payment information will be handled " +
+            "through a secure payment gateway. " +
+            "<br><br>" +
+            "Selected currency: <strong>" +
+            currency +
+            "</strong> " +
+            symbol +
+            baseAmount.toFixed(2);
+
+        },900);
+
+      }
+    );
+
+    updatePaymentAmount();
+
+  }
+
+  /*
+   * Start after the page has loaded.
+   */
+
+  if(document.readyState==="loading"){
+
+    document.addEventListener(
+      "DOMContentLoaded",
+      setupInternationalPayment
+    );
+
+  }else{
+
+    setupInternationalPayment();
+
+  }
+
+})();
 </script>
 
 

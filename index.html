@@ -1008,7 +1008,220 @@
 
 </div>
 
+<!-- ==================================================
+     STUDENT DASHBOARD — SAME PAGE
+================================================== -->
 
+<section
+  id="studentDashboard"
+  class="student-dashboard-section"
+  aria-label="Student Dashboard">
+
+  <div class="student-dashboard-header">
+
+    <div>
+      <span class="eyebrow">
+        🎓 STUDENT LEARNING CENTER
+      </span>
+
+      <h2>
+        My Student Dashboard
+      </h2>
+
+      <p>
+        Welcome to your personal AGULIBRARY learning space.
+        Track your learning, access resources and continue your studies.
+      </p>
+    </div>
+
+    <div class="student-dashboard-status">
+      <span class="student-status-dot"></span>
+      <span>Learning Account</span>
+    </div>
+
+  </div>
+
+
+  <div class="student-dashboard-grid">
+
+    <!-- PROFILE -->
+
+    <div class="student-dashboard-card student-profile-card">
+
+      <div class="student-card-icon">
+        👤
+      </div>
+
+      <span class="student-card-label">
+        MY PROFILE
+      </span>
+
+      <h3 id="dashboardStudentName">
+        Student
+      </h3>
+
+      <p id="dashboardStudentEmail">
+        Sign in to view your account.
+      </p>
+
+      <button
+        type="button"
+        class="student-dashboard-action"
+        id="dashboardAccountButton">
+
+        ⚙️ Account Settings
+
+      </button>
+
+    </div>
+
+
+    <!-- LEARNING PROGRESS -->
+
+    <div class="student-dashboard-card">
+
+      <div class="student-card-icon">
+        📊
+      </div>
+
+      <span class="student-card-label">
+        LEARNING PROGRESS
+      </span>
+
+      <h3>
+        Your learning journey
+      </h3>
+
+      <div class="student-progress-box">
+
+        <div class="student-progress-top">
+
+          <span>
+            Overall Progress
+          </span>
+
+          <strong id="dashboardProgressPercent">
+            0%
+          </strong>
+
+        </div>
+
+        <div class="student-progress-track">
+
+          <div
+            id="dashboardProgressFill"
+            class="student-progress-fill"
+            style="width:0%;">
+          </div>
+
+        </div>
+
+      </div>
+
+      <p id="dashboardProgressText">
+        Start exploring resources to begin your learning journey.
+      </p>
+
+    </div>
+
+
+    <!-- RECENT RESOURCES -->
+
+    <div class="student-dashboard-card">
+
+      <div class="student-card-icon">
+        📚
+      </div>
+
+      <span class="student-card-label">
+        RECENT LEARNING
+      </span>
+
+      <h3>
+        Recently opened
+      </h3>
+
+      <div
+        id="studentRecentResources"
+        class="student-recent-list">
+
+        <div class="student-empty-state">
+          📖
+          <br>
+          <span>
+            No recently opened resources yet.
+          </span>
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- QUICK ACTIONS -->
+
+    <div class="student-dashboard-card">
+
+      <div class="student-card-icon">
+        ⚡
+      </div>
+
+      <span class="student-card-label">
+        QUICK ACTIONS
+      </span>
+
+      <h3>
+        Continue learning
+      </h3>
+
+      <div class="student-dashboard-actions">
+
+        <button
+          type="button"
+          class="student-dashboard-action"
+          id="dashboardResourcesButton">
+
+          📚 Explore Resources
+
+        </button>
+
+        <button
+          type="button"
+          class="student-dashboard-action"
+          id="dashboardSubjectsButton">
+
+          🌍 Explore Subjects
+
+        </button>
+
+        <button
+          type="button"
+          class="student-dashboard-action"
+          id="dashboardPaymentButton">
+
+          💳 Learning Payments
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- DASHBOARD MESSAGE -->
+
+  <div
+    id="studentDashboardMessage"
+    class="student-dashboard-message"
+    aria-live="polite">
+
+    🎓 Your AGULIBRARY student dashboard is ready.
+
+  </div>
+
+</section>
 
 <!-- ==================================================
      HERO

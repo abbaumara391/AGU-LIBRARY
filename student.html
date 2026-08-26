@@ -1492,21 +1492,202 @@ async function sendAIMessage(){
 
   const elements = getAIElements();
 
-  if(!elements.input || !elements.send) return;
+  if(!elements.input || !elements.send){
+    return;
+  }
 
   const message = elements.input.value.trim();
 
-  if(!message) return;
+  if(!message){
+    return;
+  }
 
+  // Show student's message
   addAIMessage(message, "user");
 
+  // Clear input
   elements.input.value = "";
+
+  // Disable button
   elements.send.disabled = true;
 
   if(elements.status){
     elements.status.classList.add("show");
-    elements.status.textContent = "🤖 AI Teacher is thinking...";
+    elements.status.textContent =
+      "🤖 AI Teacher is thinking...";
   }
+
+  // Save conversation
+  aiConversation.push({
+    role: "user",
+    content: message
+  });
+
+  try{
+
+    // Make sure Supabase client exists
+    if(!client){
+      client = getSupabase();
+    }
+
+    if(!client){
+      throw new Error(
+        "Supabase client is unavailable."
+      );
+    }
+
+    // Get current student session
+    const sessionResult =
+      await client.auth.getSession();
+
+    if(sessionResult.error){
+      throw sessionResult.error;
+    }
+
+    const session =
+      sessionResult.data?.session;
+
+    if(!session || !session.access_token){
+      throw new Error(
+        "Student session is not available."
+      );
+    }
+
+    // Call AGULIBRARY AI Edge Function
+    const response = await fetch(
+      "https://tdmdvkdaccjyvajvzttz.supabase.co/functions/v1/ai-learning-agent",
+      {
+        method: "POST",
+
+        headers: {
+          "Content-Type":
+            "application/json",
+
+          "Authorization":
+            "Bearer " +
+            session.access_token,
+
+          "apikey":
+            window.SUPABASE_ANON_KEY ||
+            ""
+        },
+
+        body: JSON.stringify({
+
+          message: message,
+
+          conversation:
+            aiConversation,
+
+          student_id:
+            studentUser?.id || null
+
+        })
+      }
+    );
+
+    // Read response
+    const responseText =
+      await response.text();
+
+    console.log(
+      "AI HTTP status:",
+      response.status
+    );
+
+    console.log(
+      "AI raw response:",
+      responseText
+    );
+
+    if(!response.ok){
+
+      throw new Error(
+        "AI service returned HTTP " +
+        response.status +
+        ": " +
+        responseText
+      );
+
+    }
+
+    let data;
+
+    try{
+
+      data =
+        JSON.parse(responseText);
+
+    }catch(parseError){
+
+      throw new Error(
+        "The AI returned an invalid response."
+      );
+
+    }
+
+    console.log(
+      "AI response data:",
+      data
+    );
+
+    const answer =
+      data.answer ||
+      data.response ||
+      data.message;
+
+    if(!answer){
+
+      throw new Error(
+        "The AI returned no answer."
+      );
+
+    }
+
+    // Display AI answer
+    addAIMessage(
+      answer,
+      "ai"
+    );
+
+    // Save AI response
+    aiConversation.push({
+      role: "assistant",
+      content: answer
+    });
+
+  }catch(error){
+
+    console.error(
+      "AGULIBRARY AI Learning Agent error:",
+      error
+    );
+
+    addAIMessage(
+      "Sorry, I could not connect to the AI Teacher right now. Please try again.",
+      "ai"
+    );
+
+  }finally{
+
+    elements.send.disabled = false;
+
+    if(elements.status){
+
+      elements.status.classList.remove(
+        "show"
+      );
+
+      elements.status.textContent =
+        "🤖 AI Teacher is thinking...";
+
+    }
+
+    elements.input.focus();
+
+  }
+
+}
 
 function setupAI(){
 

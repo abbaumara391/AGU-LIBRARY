@@ -1335,17 +1335,25 @@ document.addEventListener(
 
     if (dashboardButton) {
 
-      dashboardButton.addEventListener(
-        "click",
-        () => {
+  dashboardButton.addEventListener(
+    "click",
+    () => {
 
-          window.location.href =
-            "student.html";
+      const dashboard =
+        document.getElementById("studentDashboard");
 
-        }
-      );
+      if (dashboard) {
+
+        dashboard.scrollIntoView({
+          behavior: "smooth"
+        });
+
+      }
 
     }
+  );
+
+}
 
 
     /* STUDENT SIGN OUT */

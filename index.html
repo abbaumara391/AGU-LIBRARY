@@ -3,17 +3,18 @@
 
 <head>
 
-  <meta charset="utf-8">
+<meta charset="utf-8">
 
-  <meta
-    name="viewport"
-    content="width=device-width,initial-scale=1">
+<meta
+  name="viewport"
+  content="width=device-width,initial-scale=1">
 
-  <title>AGULIBRARY — Global Learning Library</title>
+<title>AGULIBRARY — Global Learning Library</title>
 
-  <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css">
 
-  <style>
+<style>
+
 /* =========================================================
    AGULIBRARY INTERNATIONAL PAYMENT AREA
 ========================================================= */
@@ -200,170 +201,92 @@
   display:block;
 }
 
-@media(max-width:760px){
 
-  .payment-section{
-    padding:22px;
-    border-radius:23px;
-  }
+/* =========================================================
+   STUDENT ACCOUNT BAR
+========================================================= */
 
-  .payment-grid{
-    grid-template-columns:1fr;
-  }
-
+.student-bar{
+  display:none;
+  align-items:center;
+  gap:10px;
+  padding:10px 16px;
+  margin:12px auto;
+  width:90%;
+  max-width:1200px;
+  background:#e8f7f0;
+  border:1px solid #c8eadb;
+  border-radius:14px;
+  color:#087f55;
+  font-weight:600;
+  box-shadow:0 8px 25px rgba(8,122,75,.06);
 }
 
-@media(max-width:520px){
-
-  .payment-features{
-    grid-template-columns:1fr;
-  }
-
-  .payment-header h2{
-    font-size:27px;
-  }
-
+.student-bar.show{
+  display:flex;
 }
-    /* ==========================================
-       STUDENT ACCOUNT BAR
-    ========================================== */
 
-    .student-bar {
-      display: none;
+.student-bar .student-name{
+  flex:1;
+}
 
-      align-items: center;
-      gap: 10px;
+.student-dashboard-btn{
+  background:#078653;
+  color:#fff;
+  border:none;
+  border-radius:10px;
+  padding:9px 14px;
+  font-weight:700;
+  cursor:pointer;
+}
 
-      padding: 10px 16px;
+.student-dashboard-btn:hover{
+  background:#066d44;
+}
 
-      margin: 12px auto;
+.signout-btn{
+  background:#fff;
+  color:#087f55;
+  border:1px solid #b9dccd;
+  border-radius:10px;
+  padding:9px 14px;
+  font-weight:700;
+  cursor:pointer;
+}
 
-      width: calc(100% - 10%);
+.signout-btn:hover{
+  background:#f4fbf7;
+}
 
-      max-width: 1200px;
-
-      background: #e8f7f0;
-
-      border: 1px solid #c8eadb;
-
-      border-radius: 14px;
-
-      color: #087f55;
-
-      font-weight: 600;
-
-      box-shadow:
-        0 8px 25px rgba(8,122,75,.06);
-    }
-
-    .student-bar.show {
-      display: flex;
-    }
-
-    .student-bar .student-name {
-      flex: 1;
-    }
-
-    .student-dashboard-btn {
-      background: #078653;
-
-      color: #ffffff;
-
-      border: none;
-
-      border-radius: 10px;
-
-      padding: 9px 14px;
-
-      font-weight: 700;
-
-      cursor: pointer;
-    }
-
-    .student-dashboard-btn:hover {
-      background: #066d44;
-    }
-
-    .signout-btn {
-      background: #ffffff;
-
-      color: #087f55;
-
-      border: 1px solid #b9dccd;
-
-      border-radius: 10px;
-
-      padding: 9px 14px;
-
-      font-weight: 700;
-
-      cursor: pointer;
-    }
-
-    .signout-btn:hover {
-      background: #f4fbf7;
-    }
-
-    .auth-btn {
-      text-decoration: none;
-
-      display: inline-flex;
-
-      align-items: center;
-
-      justify-content: center;
-    }
+.auth-btn{
+  text-decoration:none;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+}
 
 
-    /* ==========================================
-       SUBJECT CARDS
-    ========================================== */
+/* =========================================================
+   SUBJECT CARDS
+========================================================= */
 
-    .subjects > div {
-      cursor: pointer;
+.subjects > div{
+  cursor:pointer;
+  transition:
+    transform .2s ease,
+    box-shadow .2s ease,
+    border-color .2s ease;
+}
 
-      transition:
-        transform .2s ease,
-        box-shadow .2s ease,
-        border-color .2s ease;
-    }
-
-    .subjects > div:hover {
-      transform: translateY(-5px);
-
-      border-color: #9ad9bb;
-
-      box-shadow:
-        0 15px 35px rgba(8,122,75,.10);
-    }
+.subjects > div:hover{
+  transform:translateY(-5px);
+  border-color:#9ad9bb;
+  box-shadow:0 15px 35px rgba(8,122,75,.10);
+}
 
 
-    /* ==========================================
-       MOBILE STUDENT BAR
-    ========================================== */
-
-    @media (max-width: 600px) {
-
-      .student-bar {
-        width: 90%;
-
-        flex-wrap: wrap;
-
-        padding: 12px;
-      }
-
-      .student-bar .student-name {
-        min-width: 100%;
-        margin-bottom: 3px;
-      }
-
-      .student-dashboard-btn,
-      .signout-btn {
-        flex: 1;
-      }
-
-    /* =========================================================
-   AGULIBRARY 24/7 CUSTOMER SUPPORT
+/* =========================================================
+   SUPPORT
 ========================================================= */
 
 .support-section{
@@ -375,220 +298,9 @@
   box-shadow:0 15px 40px rgba(8,122,75,.07);
 }
 
-.support-header{
-  margin-bottom:24px;
-}
 
-.support-label{
-  display:inline-block;
-  margin-bottom:8px;
-  padding:6px 10px;
-  border-radius:20px;
-  background:#e8f8f0;
-  color:#087a4b;
-  font-size:10px;
-  font-weight:900;
-  letter-spacing:1px;
-}
-
-.support-header h2{
-  margin:5px 0 8px;
-  color:#173b2d;
-  font-size:32px;
-}
-
-.support-header p{
-  max-width:760px;
-  margin:0;
-  color:#71847b;
-  line-height:1.7;
-}
-
-.support-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:18px;
-}
-
-.support-card{
-  padding:25px;
-  background:#fff;
-  border:1px solid #dceee6;
-  border-radius:22px;
-  box-shadow:0 10px 30px rgba(8,122,75,.05);
-}
-
-.support-icon{
-  width:56px;
-  height:56px;
-  display:grid;
-  place-items:center;
-  margin-bottom:14px;
-  border-radius:16px;
-  background:#e8f8f0;
-  font-size:27px;
-}
-
-.support-card h3{
-  margin:0 0 9px;
-  color:#173b2d;
-  font-size:22px;
-}
-
-.support-card p{
-  margin:0 0 17px;
-  color:#71847b;
-  line-height:1.65;
-}
-
-.support-options{
-  display:grid;
-  gap:10px;
-}
-
-.support-option{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  width:100%;
-  padding:13px;
-  border:1px solid #dceee6;
-  border-radius:12px;
-  background:#f7fcfa;
-  color:#173b2d;
-  text-align:left;
-  font-weight:800;
-  cursor:pointer;
-  transition:.2s;
-}
-
-.support-option:hover{
-  transform:translateY(-2px);
-  border-color:#9ed9bb;
-  background:#e8f8f0;
-}
-
-.support-option-icon{
-  width:38px;
-  height:38px;
-  display:grid;
-  place-items:center;
-  flex-shrink:0;
-  border-radius:10px;
-  background:#fff;
-  font-size:19px;
-}
-
-.support-option small{
-  display:block;
-  margin-top:3px;
-  color:#7a8c84;
-  font-weight:500;
-}
-
-.support-form{
-  display:grid;
-  gap:12px;
-}
-
-.support-form label{
-  color:#38594c;
-  font-size:13px;
-  font-weight:800;
-}
-
-.support-form input,
-.support-form textarea{
-  width:100%;
-  padding:13px 14px;
-  border:1px solid #cfe5da;
-  border-radius:12px;
-  background:#fbfefd;
-  color:#17352a;
-  font:inherit;
-  outline:none;
-}
-
-.support-form input{
-  min-height:50px;
-}
-
-.support-form textarea{
-  min-height:120px;
-  resize:vertical;
-}
-
-.support-form input:focus,
-.support-form textarea:focus{
-  border-color:#087a4b;
-  box-shadow:0 0 0 3px rgba(8,122,75,.08);
-}
-
-.support-button{
-  width:100%;
-  min-height:52px;
-  border:0;
-  border-radius:13px;
-  background:#087a4b;
-  color:#fff;
-  font-size:14px;
-  font-weight:900;
-  cursor:pointer;
-}
-
-.support-button:hover{
-  background:#06683f;
-}
-
-.support-button:disabled{
-  opacity:.6;
-  cursor:not-allowed;
-}
-
-.support-message{
-  display:none;
-  margin-top:12px;
-  padding:13px;
-  border-radius:12px;
-  background:#e8f8f0;
-  border:1px solid #c5ead8;
-  color:#087a4b;
-  font-size:13px;
-  font-weight:800;
-  line-height:1.5;
-}
-
-.support-message.show{
-  display:block;
-}
-
-.support-hours{
-  margin-top:18px;
-  padding:14px;
-  border-radius:13px;
-  background:#f4faf7;
-  border:1px solid #dceee6;
-  color:#71847b;
-  font-size:12px;
-  line-height:1.6;
-}
-
-.support-online{
-  color:#087a4b;
-  font-weight:900;
-}
-
-.support-online::before{
-  content:"";
-  display:inline-block;
-  width:9px;
-  height:9px;
-  margin-right:7px;
-  border-radius:50%;
-  background:#20b36b;
-}
 /* =========================================================
-   AGULIBRARY ONE-PAGE STUDENT DASHBOARD
+   ONE-PAGE STUDENT DASHBOARD
 ========================================================= */
 
 .student-dashboard-section{
@@ -742,7 +454,7 @@
   transition:width .5s ease;
 }
 
-.student-progress-card>p{
+.student-progress-card > p{
   margin:14px 0 0;
   color:#71847b;
   line-height:1.6;
@@ -819,6 +531,11 @@
   border-radius:15px;
 }
 
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
 @media(max-width:900px){
 
   .student-dashboard-grid{
@@ -835,36 +552,43 @@
 
 }
 
-@media(max-width:600px){
+@media(max-width:760px){
 
-  .student-dashboard-section{
+  .payment-section,
+  .student-dashboard-section,
+  .support-section{
     padding:22px;
     border-radius:23px;
   }
+
+  .payment-grid{
+    grid-template-columns:1fr;
+  }
+
+  .student-bar{
+    flex-wrap:wrap;
+    width:90%;
+  }
+
+  .student-bar .student-name{
+    min-width:100%;
+    margin-bottom:3px;
+  }
+
+}
+
+@media(max-width:600px){
 
   .student-dashboard-card{
     flex-direction:column;
     align-items:flex-start;
   }
 
-  .student-dashboard-actions,
-  .student-recent-grid{
+  .student-dashboard-actions{
     grid-template-columns:1fr;
   }
 
-  .student-progress-header{
-    align-items:flex-start;
-  }
-
-}
-@media(max-width:760px){
-
-  .support-section{
-    padding:22px;
-    border-radius:23px;
-  }
-
-  .support-grid{
+  .student-recent-grid{
     grid-template-columns:1fr;
   }
 
@@ -872,13 +596,18 @@
 
 @media(max-width:520px){
 
+  .payment-features{
+    grid-template-columns:1fr;
+  }
+
+  .payment-header h2,
   .support-header h2{
     font-size:27px;
   }
 
 }
 
-  </style>
+</style>
 
 </head>
 
@@ -902,9 +631,7 @@
 
     <span>
 
-      <b>
-        AGULIBRARY
-      </b>
+      <b>AGULIBRARY</b>
 
       <small>
         Learn • Read • Watch • Grow
@@ -966,7 +693,6 @@
 </header>
 
 
-
 <!-- ==================================================
      SIGNED-IN STUDENT BAR
 ================================================== -->
@@ -979,7 +705,6 @@
     🎓
   </span>
 
-
   <span
     id="studentWelcome"
     class="student-name">
@@ -988,7 +713,6 @@
 
   </span>
 
-
   <button
     id="studentDashboardButton"
     class="student-dashboard-btn">
@@ -996,7 +720,6 @@
     📚 Student Dashboard
 
   </button>
-
 
   <button
     id="studentSignoutButton"
@@ -1008,220 +731,6 @@
 
 </div>
 
-<!-- ==================================================
-     STUDENT DASHBOARD — SAME PAGE
-================================================== -->
-
-<section
-  id="studentDashboard"
-  class="student-dashboard-section"
-  aria-label="Student Dashboard">
-
-  <div class="student-dashboard-header">
-
-    <div>
-      <span class="eyebrow">
-        🎓 STUDENT LEARNING CENTER
-      </span>
-
-      <h2>
-        My Student Dashboard
-      </h2>
-
-      <p>
-        Welcome to your personal AGULIBRARY learning space.
-        Track your learning, access resources and continue your studies.
-      </p>
-    </div>
-
-    <div class="student-dashboard-status">
-      <span class="student-status-dot"></span>
-      <span>Learning Account</span>
-    </div>
-
-  </div>
-
-
-  <div class="student-dashboard-grid">
-
-    <!-- PROFILE -->
-
-    <div class="student-dashboard-card student-profile-card">
-
-      <div class="student-card-icon">
-        👤
-      </div>
-
-      <span class="student-card-label">
-        MY PROFILE
-      </span>
-
-      <h3 id="dashboardStudentName">
-        Student
-      </h3>
-
-      <p id="dashboardStudentEmail">
-        Sign in to view your account.
-      </p>
-
-      <button
-        type="button"
-        class="student-dashboard-action"
-        id="dashboardAccountButton">
-
-        ⚙️ Account Settings
-
-      </button>
-
-    </div>
-
-
-    <!-- LEARNING PROGRESS -->
-
-    <div class="student-dashboard-card">
-
-      <div class="student-card-icon">
-        📊
-      </div>
-
-      <span class="student-card-label">
-        LEARNING PROGRESS
-      </span>
-
-      <h3>
-        Your learning journey
-      </h3>
-
-      <div class="student-progress-box">
-
-        <div class="student-progress-top">
-
-          <span>
-            Overall Progress
-          </span>
-
-          <strong id="dashboardProgressPercent">
-            0%
-          </strong>
-
-        </div>
-
-        <div class="student-progress-track">
-
-          <div
-            id="dashboardProgressFill"
-            class="student-progress-fill"
-            style="width:0%;">
-          </div>
-
-        </div>
-
-      </div>
-
-      <p id="dashboardProgressText">
-        Start exploring resources to begin your learning journey.
-      </p>
-
-    </div>
-
-
-    <!-- RECENT RESOURCES -->
-
-    <div class="student-dashboard-card">
-
-      <div class="student-card-icon">
-        📚
-      </div>
-
-      <span class="student-card-label">
-        RECENT LEARNING
-      </span>
-
-      <h3>
-        Recently opened
-      </h3>
-
-      <div
-        id="studentRecentResources"
-        class="student-recent-list">
-
-        <div class="student-empty-state">
-          📖
-          <br>
-          <span>
-            No recently opened resources yet.
-          </span>
-        </div>
-
-      </div>
-
-    </div>
-
-
-    <!-- QUICK ACTIONS -->
-
-    <div class="student-dashboard-card">
-
-      <div class="student-card-icon">
-        ⚡
-      </div>
-
-      <span class="student-card-label">
-        QUICK ACTIONS
-      </span>
-
-      <h3>
-        Continue learning
-      </h3>
-
-      <div class="student-dashboard-actions">
-
-        <button
-          type="button"
-          class="student-dashboard-action"
-          id="dashboardResourcesButton">
-
-          📚 Explore Resources
-
-        </button>
-
-        <button
-          type="button"
-          class="student-dashboard-action"
-          id="dashboardSubjectsButton">
-
-          🌍 Explore Subjects
-
-        </button>
-
-        <button
-          type="button"
-          class="student-dashboard-action"
-          id="dashboardPaymentButton">
-
-          💳 Learning Payments
-
-        </button>
-
-      </div>
-
-    </div>
-
-  </div>
-
-
-  <!-- DASHBOARD MESSAGE -->
-
-  <div
-    id="studentDashboardMessage"
-    class="student-dashboard-message"
-    aria-live="polite">
-
-    🎓 Your AGULIBRARY student dashboard is ready.
-
-  </div>
-
-</section>
 
 <!-- ==================================================
      HERO
@@ -1232,31 +741,21 @@
   <div>
 
     <span class="eyebrow">
-
       🌍 GLOBAL DIGITAL EDUCATION
-
     </span>
 
-
     <h1>
-
       Your global
-
       <em>
         learning library.
       </em>
-
     </h1>
 
-
     <p>
-
       Books, PDFs, videos, photos, lessons
       and courses in one comfortable
       learning space.
-
     </p>
-
 
     <div class="actions">
 
@@ -1267,7 +766,6 @@
         Explore Library
 
       </a>
-
 
       <a
         class="btn outline"
@@ -1282,7 +780,6 @@
   </div>
 
 
-
   <div class="hero-art">
 
     <div class="orb"></div>
@@ -1290,7 +787,6 @@
     <div class="book">
       📖
     </div>
-
 
     <span class="float a">
 
@@ -1304,7 +800,6 @@
 
     </span>
 
-
     <span class="float b">
 
       🎥 Videos
@@ -1317,17 +812,13 @@
 
     </span>
 
-
     <span class="float c">
-
       ☁️ Cloud Library
-
     </span>
 
   </div>
 
 </section>
-
 
 
 <!-- ==================================================
@@ -1342,7 +833,6 @@
     placeholder="Search resources..."
     autocomplete="off">
 
-
   <button
     id="searchButton">
 
@@ -1351,7 +841,6 @@
   </button>
 
 </div>
-
 
 
 <!-- ==================================================
@@ -1363,50 +852,47 @@
   class="section">
 
   <span class="eyebrow">
-
     DIGITAL RESOURCES
-
   </span>
 
-
   <h2>
-
     Latest learning resources
-
   </h2>
 
-
   <p class="muted">
-
     Published resources appear here.
-
   </p>
-
 
   <div
     id="resourceGrid"
     class="grid">
 
     <div class="empty">
-
       Loading resources...
-
     </div>
 
   </div>
 
 </section>
-<!-- =====================================================
-     AGULIBRARY INTERNATIONAL-READY PAYMENT AREA
-===================================================== -->
 
-<section class="payment-section" id="payment">
+
+<!-- ==================================================
+     PAYMENT
+================================================== -->
+
+<section
+  class="payment-section"
+  id="payment">
 
   <div class="payment-header">
 
-    <span class="eyebrow">💳 GLOBAL PAYMENT CENTER</span>
+    <span class="eyebrow">
+      💳 GLOBAL PAYMENT CENTER
+    </span>
 
-    <h2>Learn Globally. Pay Securely.</h2>
+    <h2>
+      Learn Globally. Pay Securely.
+    </h2>
 
     <p>
       Access premium books, courses, lessons and other educational
@@ -1415,13 +901,19 @@
 
   </div>
 
+
   <div class="payment-grid">
+
 
     <div class="payment-card">
 
-      <div class="payment-icon">🌍</div>
+      <div class="payment-icon">
+        🌍
+      </div>
 
-      <h3>International Payments</h3>
+      <h3>
+        International Payments
+      </h3>
 
       <p>
         AGULIBRARY is designed to support students and educators
@@ -1429,75 +921,127 @@
       </p>
 
       <div class="payment-features">
-        <span>🌍 Global Students</span>
-        <span>💳 International Cards</span>
-        <span>🔐 Secure Checkout</span>
-        <span>🧾 Payment Records</span>
+
+        <span>
+          🌍 Global Students
+        </span>
+
+        <span>
+          💳 International Cards
+        </span>
+
+        <span>
+          🔐 Secure Checkout
+        </span>
+
+        <span>
+          🧾 Payment Records
+        </span>
+
       </div>
 
     </div>
 
+
     <div class="payment-card payment-checkout-card">
 
-      <div class="payment-icon">💳</div>
+      <div class="payment-icon">
+        💳
+      </div>
 
       <span class="payment-label">
         PREMIUM LEARNING
       </span>
 
-      <h3>Choose a Payment</h3>
+      <h3>
+        Choose a Payment
+      </h3>
+
 
       <label for="paymentResource">
         Learning Resource
       </label>
 
       <select id="paymentResource">
+
         <option value="">
           Select a book, course or resource
         </option>
+
         <option value="premium-course">
           Premium Course
         </option>
+
         <option value="premium-book">
           Premium eBook
         </option>
+
         <option value="premium-lesson">
           Premium Lesson
         </option>
+
       </select>
+
 
       <label for="paymentCurrency">
         Currency
       </label>
 
       <select id="paymentCurrency">
-        <option value="NGN">🇳🇬 Nigerian Naira (NGN)</option>
-        <option value="USD">🇺🇸 US Dollar (USD)</option>
-        <option value="GBP">🇬🇧 British Pound (GBP)</option>
-        <option value="EUR">🇪🇺 Euro (EUR)</option>
+
+        <option value="NGN">
+          🇳🇬 Nigerian Naira (NGN)
+        </option>
+
+        <option value="USD">
+          🇺🇸 US Dollar (USD)
+        </option>
+
+        <option value="GBP">
+          🇬🇧 British Pound (GBP)
+        </option>
+
+        <option value="EUR">
+          🇪🇺 Euro (EUR)
+        </option>
+
       </select>
 
+
       <div class="payment-amount">
-        <span>Amount</span>
-        <strong id="paymentAmount">Select a resource</strong>
+
+        <span>
+          Amount
+        </span>
+
+        <strong id="paymentAmount">
+          Select a resource
+        </strong>
+
       </div>
+
 
       <button
         id="startPaymentButton"
         class="payment-button"
-        type="button"
-      >
+        type="button">
+
         🔐 Continue to Secure Payment
+
       </button>
 
+
       <small class="payment-note">
+
         You will be redirected to a secure payment checkout.
         AGULIBRARY does not store your card details.
+
       </small>
 
     </div>
 
   </div>
+
 
   <div
     id="paymentMessage"
@@ -1517,24 +1061,18 @@
   class="section white">
 
   <span class="eyebrow">
-
     GLOBAL SUBJECTS
-
   </span>
 
-
   <h2>
-
     Explore Subjects
-
   </h2>
 
 
   <div class="grid subjects">
 
 
-    <div
-      data-subject="Science">
+    <div data-subject="Science">
 
       🔬
 
@@ -1549,9 +1087,7 @@
     </div>
 
 
-
-    <div
-      data-subject="Mathematics">
+    <div data-subject="Mathematics">
 
       📐
 
@@ -1566,9 +1102,7 @@
     </div>
 
 
-
-    <div
-      data-subject="Technology">
+    <div data-subject="Technology">
 
       💻
 
@@ -1583,9 +1117,7 @@
     </div>
 
 
-
-    <div
-      data-subject="Languages & Literature">
+    <div data-subject="Languages & Literature">
 
       📚
 
@@ -1600,9 +1132,7 @@
     </div>
 
 
-
-    <div
-      data-subject="Social Sciences & Humanities">
+    <div data-subject="Social Sciences & Humanities">
 
       🌎
 
@@ -1617,9 +1147,7 @@
     </div>
 
 
-
-    <div
-      data-subject="Business & Finance">
+    <div data-subject="Business & Finance">
 
       💼
 
@@ -1634,9 +1162,7 @@
     </div>
 
 
-
-    <div
-      data-subject="Arts & Creative Studies">
+    <div data-subject="Arts & Creative Studies">
 
       🎨
 
@@ -1651,9 +1177,7 @@
     </div>
 
 
-
-    <div
-      data-subject="Professional & Career">
+    <div data-subject="Professional & Career">
 
       🧑‍⚕️
 
@@ -1667,15 +1191,13 @@
 
     </div>
 
-
   </div>
 
 </section>
 
 
-
 <!-- ==================================================
-     SUPPORT
+     EXISTING CONTACT SUPPORT
 ================================================== -->
 
 <section
@@ -1683,26 +1205,17 @@
   class="support">
 
   <span class="eyebrow">
-
     SUPPORT
-
   </span>
 
-
   <h2>
-
     We're here to help.
-
   </h2>
 
-
   <p>
-
     Account, library, technical and payment
     support will be available here.
-
   </p>
-
 
   <a
     class="btn primary"
@@ -1714,39 +1227,65 @@
 
 </section>
 
+
 <!-- ==================================================
      STUDENT DASHBOARD — ONE PAGE
+     
+     IMPORTANT:
+     This is the ONLY studentDashboard ID on this page.
 ================================================== -->
 
-<section id="studentDashboard" class="student-dashboard-section">
+<section
+  id="studentDashboard"
+  class="student-dashboard-section">
 
   <div class="student-dashboard-inner">
+
 
     <span class="eyebrow">
       🎓 STUDENT LEARNING CENTER
     </span>
 
+
     <h2>
+
       Welcome,
-      <span id="onePageStudentName">Student</span>
+
+      <span id="onePageStudentName">
+        Student
+      </span>
+
       👋
+
     </h2>
 
+
     <p class="student-dashboard-intro">
-      Your personal AGULIBRARY learning space. Continue learning,
-      explore resources, track your progress and manage your account
-      from this page.
+
+      Your personal AGULIBRARY learning space.
+      Continue learning, explore resources, track your
+      progress and manage your account from this page.
+
     </p>
 
-    <!-- STUDENT PROFILE -->
+
+    <!-- ==================================================
+         STUDENT PROFILE + ACCOUNT STATUS
+    ================================================== -->
 
     <div class="student-dashboard-grid">
 
+
       <div class="student-dashboard-card">
 
-        <div class="student-avatar" id="onePageStudentAvatar">
+        <div
+          class="student-avatar"
+          id="onePageStudentAvatar">
+
           AG
+
         </div>
+
 
         <div>
 
@@ -1771,33 +1310,40 @@
       </div>
 
 
-      <!-- ACCOUNT STATUS -->
-
       <div class="student-dashboard-card">
 
-        <span class="eyebrow">
-          ACCOUNT CENTER
-        </span>
+        <div>
 
-        <h3>
-          Account Status
-        </h3>
+          <span class="eyebrow">
+            ACCOUNT CENTER
+          </span>
 
-        <div class="student-status">
-          <span></span>
-          Account Active
+          <h3>
+            Account Status
+          </h3>
+
+          <div class="student-status">
+
+            <span></span>
+
+            Account Active
+
+          </div>
+
+          <p>
+            Your AGULIBRARY account is ready for global learning.
+          </p>
+
         </div>
-
-        <p>
-          Your AGULIBRARY account is ready for global learning.
-        </p>
 
       </div>
 
     </div>
 
 
-    <!-- LEARNING PROGRESS -->
+    <!-- ==================================================
+         LEARNING PROGRESS
+    ================================================== -->
 
     <div class="student-progress-card">
 
@@ -1815,11 +1361,13 @@
 
         </div>
 
+
         <strong id="onePageProgressPercent">
           0%
         </strong>
 
       </div>
+
 
       <div class="student-progress-bar">
 
@@ -1830,22 +1378,31 @@
 
       </div>
 
+
       <p id="onePageProgressText">
-        Explore AGULIBRARY resources to begin your learning activity.
+
+        Explore AGULIBRARY resources to begin
+        your learning activity.
+
       </p>
 
     </div>
 
 
-    <!-- DASHBOARD ACTIONS -->
+    <!-- ==================================================
+         DASHBOARD ACTIONS
+    ================================================== -->
 
     <div class="student-dashboard-actions">
+
 
       <a
         href="#resources"
         class="student-action-card">
 
-        <span>📚</span>
+        <span>
+          📚
+        </span>
 
         <strong>
           Browse Resources
@@ -1862,7 +1419,9 @@
         href="#subjects"
         class="student-action-card">
 
-        <span>🌎</span>
+        <span>
+          🌎
+        </span>
 
         <strong>
           Explore Subjects
@@ -1879,7 +1438,9 @@
         href="#payment"
         class="student-action-card">
 
-        <span>💳</span>
+        <span>
+          💳
+        </span>
 
         <strong>
           Premium Learning
@@ -1896,7 +1457,9 @@
         href="#support"
         class="student-action-card">
 
-        <span>💬</span>
+        <span>
+          💬
+        </span>
 
         <strong>
           Contact Support
@@ -1908,10 +1471,13 @@
 
       </a>
 
+
     </div>
 
 
-    <!-- RECENT ACTIVITY -->
+    <!-- ==================================================
+         RECENT ACTIVITY
+    ================================================== -->
 
     <div class="student-recent-card">
 
@@ -1923,23 +1489,30 @@
         Recently Viewed
       </h3>
 
+
       <div
         id="onePageRecentResources"
         class="student-recent-grid">
 
         <div class="student-empty">
+
           🕐
+
           <br><br>
+
           You haven't opened a resource yet.
+
         </div>
 
       </div>
 
     </div>
 
+
   </div>
 
 </section>
+
 
 <!-- ==================================================
      FOOTER
@@ -1951,11 +1524,9 @@
     AGULIBRARY
   </b>
 
-
   <span>
     Owner: Umar Mohammed
   </span>
-
 
   <span>
 
@@ -1966,7 +1537,6 @@
   </span>
 
 </footer>
-
 
 
 <!-- ==================================================
@@ -1986,9 +1556,8 @@
 </script>
 
 
-
 <!-- ==================================================
-     STUDENT SESSION
+     STUDENT SESSION + ONE-PAGE DASHBOARD
 ================================================== -->
 
 <script>
@@ -1997,12 +1566,15 @@ document.addEventListener(
   "DOMContentLoaded",
   () => {
 
-    /* YEAR */
+
+    /* ==================================================
+       YEAR
+    ================================================== */
 
     const year =
       document.getElementById("year");
 
-    if (year) {
+    if(year){
 
       year.textContent =
         new Date().getFullYear();
@@ -2010,14 +1582,14 @@ document.addEventListener(
     }
 
 
-    /* AI BUTTON */
+    /* ==================================================
+       AI BUTTON
+    ================================================== */
 
     const aiButton =
-      document.getElementById(
-        "aiAgentButton"
-      );
+      document.getElementById("aiAgentButton");
 
-    if (aiButton) {
+    if(aiButton){
 
       aiButton.addEventListener(
         "click",
@@ -2033,44 +1605,102 @@ document.addEventListener(
     }
 
 
-    /* STUDENT DASHBOARD */
+    /* ==================================================
+       STUDENT DASHBOARD
+       SAME PAGE — NO student.html REDIRECT
+    ================================================== */
 
     const dashboardButton =
       document.getElementById(
         "studentDashboardButton"
       );
 
-    if (dashboardButton) {
+    if(dashboardButton){
 
-  dashboardButton.addEventListener(
-    "click",
-    () => {
+      dashboardButton.addEventListener(
+        "click",
+        () => {
 
-      const dashboard =
-        document.getElementById("studentDashboard");
+          const dashboard =
+            document.getElementById(
+              "studentDashboard"
+            );
 
-      if (dashboard) {
+          if(dashboard){
 
-        dashboard.scrollIntoView({
-          behavior: "smooth"
-        });
+            dashboard.classList.add("show");
 
-      }
+            dashboard.scrollIntoView({
+              behavior:"smooth",
+              block:"start"
+            });
+
+          }
+
+        }
+      );
 
     }
-  );
-
-}
 
 
-    /* STUDENT SIGN OUT */
+    /* ==================================================
+       ACCOUNT BUTTON
+    ================================================== */
+
+    const accountButton =
+      document.getElementById(
+        "accountButton"
+      );
+
+    if(accountButton){
+
+      accountButton.addEventListener(
+        "click",
+        function(event){
+
+          const dashboard =
+            document.getElementById(
+              "studentDashboard"
+            );
+
+          const studentBar =
+            document.getElementById(
+              "studentBar"
+            );
+
+          if(
+            studentBar &&
+            studentBar.classList.contains("show") &&
+            dashboard
+          ){
+
+            event.preventDefault();
+
+            dashboard.classList.add("show");
+
+            dashboard.scrollIntoView({
+              behavior:"smooth",
+              block:"start"
+            });
+
+          }
+
+        }
+      );
+
+    }
+
+
+    /* ==================================================
+       STUDENT SIGN OUT
+    ================================================== */
 
     const signoutButton =
       document.getElementById(
         "studentSignoutButton"
       );
 
-    if (signoutButton) {
+    if(signoutButton){
 
       signoutButton.addEventListener(
         "click",
@@ -2080,12 +1710,12 @@ document.addEventListener(
     }
 
 
-    /* SUBJECT BUTTONS */
+    /* ==================================================
+       SUBJECT BUTTONS
+    ================================================== */
 
     document
-      .querySelectorAll(
-        ".subjects > div"
-      )
+      .querySelectorAll(".subjects > div")
       .forEach(card => {
 
         card.addEventListener(
@@ -2100,7 +1730,7 @@ document.addEventListener(
                 "search"
               );
 
-            if (search) {
+            if(search){
 
               search.value =
                 subject;
@@ -2112,7 +1742,7 @@ document.addEventListener(
                 "resources"
               );
 
-            if (resources) {
+            if(resources){
 
               resources.scrollIntoView({
                 behavior:"smooth"
@@ -2120,10 +1750,10 @@ document.addEventListener(
 
             }
 
-            if (
+            if(
               typeof filterResources ===
               "function"
-            ) {
+            ){
 
               filterResources();
 
@@ -2135,7 +1765,9 @@ document.addEventListener(
       });
 
 
-    /* CHECK STUDENT */
+    /* ==================================================
+       CHECK STUDENT SESSION
+    ================================================== */
 
     checkStudentSession();
 
@@ -2143,20 +1775,19 @@ document.addEventListener(
 );
 
 
-
-/* ==================================================
+/* =========================================================
    CHECK SUPABASE STUDENT SESSION
-================================================== */
+========================================================= */
 
-async function checkStudentSession() {
+async function checkStudentSession(){
 
-  try {
+  try{
 
-    if (
+    if(
       typeof supabase === "undefined" ||
       !supabase ||
       !supabase.auth
-    ) {
+    ){
 
       console.warn(
         "Supabase authentication is not available."
@@ -2171,7 +1802,7 @@ async function checkStudentSession() {
       await supabase.auth.getSession();
 
 
-    if (result.error) {
+    if(result.error){
 
       console.error(
         "Session error:",
@@ -2187,7 +1818,7 @@ async function checkStudentSession() {
       result.data?.session;
 
 
-    if (!session) {
+    if(!session){
 
       return;
 
@@ -2209,6 +1840,10 @@ async function checkStudentSession() {
       "Student";
 
 
+    /* ==================================================
+       STUDENT BAR
+    ================================================== */
+
     const studentBar =
       document.getElementById(
         "studentBar"
@@ -2221,13 +1856,7 @@ async function checkStudentSession() {
       );
 
 
-    const accountButton =
-      document.getElementById(
-        "accountButton"
-      );
-
-
-    if (studentWelcome) {
+    if(studentWelcome){
 
       studentWelcome.textContent =
         "Welcome, " + name;
@@ -2235,7 +1864,7 @@ async function checkStudentSession() {
     }
 
 
-    if (studentBar) {
+    if(studentBar){
 
       studentBar.classList.add(
         "show"
@@ -2244,17 +1873,112 @@ async function checkStudentSession() {
     }
 
 
-  if (accountButton) {
+    /* ==================================================
+       ACCOUNT BUTTON
+    ================================================== */
 
-  accountButton.textContent =
-    "🎓 My Account";
+    const accountButton =
+      document.getElementById(
+        "accountButton"
+      );
 
-  accountButton.href =
-    "#studentDashboard";
 
-}
+    if(accountButton){
 
-  } catch (error) {
+      accountButton.textContent =
+        "🎓 My Account";
+
+      accountButton.href =
+        "#studentDashboard";
+
+    }
+
+
+    /* ==================================================
+       ONE-PAGE DASHBOARD INFORMATION
+    ================================================== */
+
+    const onePageStudentName =
+      document.getElementById(
+        "onePageStudentName"
+      );
+
+
+    const onePageProfileName =
+      document.getElementById(
+        "onePageProfileName"
+      );
+
+
+    const onePageProfileEmail =
+      document.getElementById(
+        "onePageProfileEmail"
+      );
+
+
+    const onePageStudentAvatar =
+      document.getElementById(
+        "onePageStudentAvatar"
+      );
+
+
+    if(onePageStudentName){
+
+      onePageStudentName.textContent =
+        name;
+
+    }
+
+
+    if(onePageProfileName){
+
+      onePageProfileName.textContent =
+        name;
+
+    }
+
+
+    if(onePageProfileEmail){
+
+      onePageProfileEmail.textContent =
+        email;
+
+    }
+
+
+    if(onePageStudentAvatar){
+
+      const initials =
+        name
+          .split(" ")
+          .map(part => part.charAt(0))
+          .join("")
+          .substring(0,2)
+          .toUpperCase();
+
+      onePageStudentAvatar.textContent =
+        initials || "AG";
+
+    }
+
+
+    /* ==================================================
+       SHOW DASHBOARD AUTOMATICALLY FOR SIGNED-IN STUDENT
+    ================================================== */
+
+    const dashboard =
+      document.getElementById(
+        "studentDashboard"
+      );
+
+    if(dashboard){
+
+      dashboard.classList.add("show");
+
+    }
+
+
+  }catch(error){
 
     console.error(
       "Student session check:",
@@ -2266,26 +1990,25 @@ async function checkStudentSession() {
 }
 
 
-
-/* ==================================================
+/* =========================================================
    STUDENT SIGN OUT
-================================================== */
+========================================================= */
 
-async function studentSignOut() {
+async function studentSignOut(){
 
-  try {
+  try{
 
-    if (
+    if(
       typeof supabase !== "undefined" &&
       supabase &&
       supabase.auth
-    ) {
+    ){
 
       await supabase.auth.signOut();
 
     }
 
-  } catch (error) {
+  }catch(error){
 
     console.error(
       "Sign out error:",
@@ -2295,13 +2018,18 @@ async function studentSignOut() {
   }
 
 
+  /*
+   * Stay on the same website page.
+   */
+
   window.location.href =
     "index.html";
 
 }
+
+
 /* =========================================================
    AGULIBRARY INTERNATIONAL PAYMENT AREA
-   Front-end payment-area controller
 ========================================================= */
 
 (function(){
@@ -2309,73 +2037,117 @@ async function studentSignOut() {
   function setupInternationalPayment(){
 
     const paymentSection =
-      document.querySelector(".payment-section");
+      document.querySelector(
+        ".payment-section"
+      );
 
-    if(!paymentSection)return;
+
+    if(!paymentSection){
+
+      return;
+
+    }
+
+
+    const resourceSelect =
+      document.getElementById(
+        "paymentResource"
+      );
+
 
     const currencySelect =
-      paymentSection.querySelector(
-        ".payment-checkout-card select"
+      document.getElementById(
+        "paymentCurrency"
       );
+
 
     const paymentButton =
-      paymentSection.querySelector(
-        ".payment-button"
+      document.getElementById(
+        "startPaymentButton"
       );
+
 
     const paymentAmount =
-      paymentSection.querySelector(
-        ".payment-amount strong"
+      document.getElementById(
+        "paymentAmount"
       );
+
 
     const paymentMessage =
-      paymentSection.querySelector(
-        ".payment-message"
+      document.getElementById(
+        "paymentMessage"
       );
 
-    if(!currencySelect ||
-       !paymentButton ||
-       !paymentAmount ||
-       !paymentMessage){
+
+    if(
+      !resourceSelect ||
+      !currencySelect ||
+      !paymentButton ||
+      !paymentAmount ||
+      !paymentMessage
+    ){
 
       console.warn(
         "AGULIBRARY payment elements were not found."
       );
 
       return;
+
     }
 
-    /*
-     * International currency display.
-     */
 
     const currencySymbols = {
-      USD: "$",
-      EUR: "€",
-      GBP: "£",
-      NGN: "₦",
-      CAD: "C$",
-      AUD: "A$"
+
+      USD:"$",
+
+      EUR:"€",
+
+      GBP:"£",
+
+      NGN:"₦",
+
+      CAD:"C$",
+
+      AUD:"A$"
+
     };
 
+
     /*
-     * Keep the selected payment amount.
-     * The actual amount will later come from
-     * the selected product/resource or secure
-     * payment backend.
+     * Temporary display amount.
+     * Real payment pricing can be connected
+     * to the payment backend later.
      */
 
     const baseAmount = 10;
 
+
     function updatePaymentAmount(){
+
+      const resource =
+        resourceSelect.value;
+
 
       const currency =
         String(
-          currencySelect.value || "USD"
+          currencySelect.value || "NGN"
         ).toUpperCase();
 
+
       const symbol =
-        currencySymbols[currency] || currency;
+        currencySymbols[currency] ||
+        currency;
+
+
+      if(!resource){
+
+        paymentAmount.textContent =
+          "Select a resource";
+
+        return;
+
+      }
+
 
       paymentAmount.textContent =
         symbol +
@@ -2383,86 +2155,111 @@ async function studentSignOut() {
 
     }
 
+
+    resourceSelect.addEventListener(
+      "change",
+      updatePaymentAmount
+    );
+
+
     currencySelect.addEventListener(
       "change",
       updatePaymentAmount
     );
 
-    /*
-     * Payment button.
-     *
-     * This prepares the payment flow.
-     * No card information is collected
-     * directly by AGULIBRARY.
-     */
 
     paymentButton.addEventListener(
       "click",
       function(){
 
+        const resource =
+          resourceSelect.value;
+
+
         const currency =
           String(
-            currencySelect.value || "USD"
+            currencySelect.value || "NGN"
           ).toUpperCase();
 
-        const symbol =
-          currencySymbols[currency] || currency;
 
-        paymentButton.disabled = true;
+        const symbol =
+          currencySymbols[currency] ||
+          currency;
+
+
+        if(!resource){
+
+          paymentMessage.className =
+            "payment-message show";
+
+          paymentMessage.textContent =
+            "⚠️ Please select a learning resource first.";
+
+          return;
+
+        }
+
+
+        paymentButton.disabled =
+          true;
+
 
         paymentButton.textContent =
           "Preparing secure payment...";
 
+
         paymentMessage.className =
           "payment-message show";
+
 
         paymentMessage.textContent =
           "🌍 Preparing your secure international payment in " +
           currency +
           ". Please wait...";
 
-        /*
-         * Temporary secure-flow placeholder.
-         *
-         * The real payment gateway will be connected
-         * here when the payment provider/backend is
-         * activated.
-         */
 
-        setTimeout(function(){
+        setTimeout(
+          function(){
 
-          paymentButton.disabled = false;
+            paymentButton.disabled =
+              false;
 
-          paymentButton.textContent =
-            "Continue to Secure Payment →";
 
-          paymentMessage.className =
-            "payment-message show";
+            paymentButton.textContent =
+              "Continue to Secure Payment →";
 
-          paymentMessage.innerHTML =
-            "🔐 Your payment information will be handled " +
-            "through a secure payment gateway. " +
-            "<br><br>" +
-            "Selected currency: <strong>" +
-            currency +
-            "</strong> " +
-            symbol +
-            baseAmount.toFixed(2);
 
-        },900);
+            paymentMessage.className =
+              "payment-message show";
+
+
+            paymentMessage.innerHTML =
+              "🔐 Your payment information will be handled " +
+              "through a secure payment gateway." +
+              "<br><br>" +
+              "Selected currency: <strong>" +
+              currency +
+              "</strong> " +
+              symbol +
+              baseAmount.toFixed(2);
+
+          },
+          900
+        );
 
       }
     );
+
 
     updatePaymentAmount();
 
   }
 
-  /*
-   * Start after the page has loaded.
-   */
 
-  if(document.readyState==="loading"){
+  if(
+    document.readyState ===
+    "loading"
+  ){
 
     document.addEventListener(
       "DOMContentLoaded",
@@ -2476,8 +2273,9 @@ async function studentSignOut() {
   }
 
 })();
+
 </script>
 
 
 </body>
-</html>
+  </html>

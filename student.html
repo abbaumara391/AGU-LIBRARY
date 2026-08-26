@@ -118,7 +118,66 @@ function escapeJS(value){return String(value??"").replace(/\\/g,"\\\\").replace(
 
 /* ========================================================= AGU AI LEARNING AGENT ========================================================= */
 function getAIElements(){return{messages:document.getElementById("aiAgentMessages"),input:document.getElementById("aiAgentInput"),send:document.getElementById("aiAgentSend"),status:document.getElementById("aiAgentStatus")}}
-function addAIMessage(message,sender="ai"){const elements=getAIElements();if(!elements.messages)return;const wrapper=document.createElement("div");wrapper.className="ai-message "+(sender==="user"?"user":"");const avatar=document.createElement("div");avatar.className="ai-message-avatar";if(sender==="user"){avatar.textContent="👤"}else{const img=document.createElement("img");img.src="ai-teacher.jpg";img.alt="AI Teacher";avatar.appendChild(img)}const content=document.createElement("div");content.className="ai-message-content";content.textContent=message;wrapper.appendChild(avatar);wrapper.appendChild(content);elements.messages.appendChild(wrapper);elements.messages.scrollTop=elements.messages.scrollHeight}
+function renderAIMarkdown(text){
+  let html=escapeHTML(text);
+
+  // Headings
+  html=html.replace(/^### (.+)$/gm,"<h3>$1</h3>");
+  html=html.replace(/^## (.+)$/gm,"<h2>$1</h2>");
+  html=html.replace(/^# (.+)$/gm,"<h1>$1</h1>");
+
+  // Bold
+  html=html.replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>");
+
+  // Italic
+  html=html.replace(/(^|[^\*])\*([^*\n]+)\*(?!\*)/g,"$1<em>$2</em>");
+
+  // Bullet points
+  html=html.replace(/^\s*[-•]\s+(.+)$/gm,"<li>$1</li>");
+
+  // Numbered lists
+  html=html.replace(/^\s*(\d+)\.\s+(.+)$/gm,"<li>$1. $2</li>");
+
+  // Line breaks
+  html=html.replace(/\n/g,"<br>");
+
+  return html;
+}
+
+function addAIMessage(message,sender="ai"){
+  const elements=getAIElements();
+  if(!elements.messages)return;
+
+  const wrapper=document.createElement("div");
+  wrapper.className="ai-message "+(sender==="user"?"user":"");
+
+  const avatar=document.createElement("div");
+  avatar.className="ai-message-avatar";
+
+  if(sender==="user"){
+    avatar.textContent="👤";
+  }else{
+    const img=document.createElement("img");
+    img.src="ai-teacher.jpg";
+    img.alt="AI Teacher";
+    avatar.appendChild(img);
+  }
+
+  const content=document.createElement("div");
+  content.className="ai-message-content";
+
+  if(sender==="user"){
+    content.textContent=message;
+  }else{
+    content.innerHTML=renderAIMarkdown(message);
+  }
+
+  wrapper.appendChild(avatar);
+  wrapper.appendChild(content);
+
+  elements.messages.appendChild(wrapper);
+  elements.messages.scrollTop=elements.messages.scrollHeight;
+}
 function aiQuickPrompt(prompt){const elements=getAIElements();if(!elements.input)return;elements.input.value=prompt;elements.input.focus();sendAIMessage()}
 async function sendAIMessage(){
   const elements=getAIElements();

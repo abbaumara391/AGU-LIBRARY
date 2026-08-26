@@ -587,7 +587,276 @@
   border-radius:50%;
   background:#20b36b;
 }
+/* =========================================================
+   AGULIBRARY ONE-PAGE STUDENT DASHBOARD
+========================================================= */
 
+.student-dashboard-section{
+  display:none;
+  margin:30px 0;
+  padding:32px;
+  background:linear-gradient(135deg,#ffffff,#f1faf6);
+  border:1px solid #d5ebe0;
+  border-radius:28px;
+  box-shadow:0 15px 40px rgba(8,122,75,.07);
+}
+
+.student-dashboard-section.show{
+  display:block;
+}
+
+.student-dashboard-inner{
+  width:100%;
+}
+
+.student-dashboard-inner h2{
+  margin:8px 0;
+  color:#173b2d;
+  font-size:clamp(30px,5vw,42px);
+}
+
+.student-dashboard-inner h2 span{
+  color:#087a4b;
+}
+
+.student-dashboard-intro{
+  max-width:760px;
+  margin:0 0 25px;
+  color:#71847b;
+  line-height:1.7;
+}
+
+.student-dashboard-grid{
+  display:grid;
+  grid-template-columns:1.2fr .8fr;
+  gap:16px;
+  margin-bottom:18px;
+}
+
+.student-dashboard-card{
+  display:flex;
+  align-items:center;
+  gap:18px;
+  padding:25px;
+  background:#fff;
+  border:1px solid #dceee6;
+  border-radius:22px;
+  box-shadow:0 10px 30px rgba(8,122,75,.05);
+}
+
+.student-dashboard-card h3{
+  margin:7px 0;
+  color:#173b2d;
+  font-size:24px;
+}
+
+.student-dashboard-card p{
+  margin:0;
+  color:#71847b;
+  line-height:1.6;
+  word-break:break-word;
+}
+
+.student-avatar{
+  width:82px;
+  height:82px;
+  flex-shrink:0;
+  display:grid;
+  place-items:center;
+  border-radius:24px;
+  background:#e5f7ee;
+  border:1px solid #bfe6d3;
+  color:#087a4b;
+  font-size:25px;
+  font-weight:900;
+}
+
+.student-active{
+  display:inline-flex;
+  margin-top:10px;
+  padding:6px 11px;
+  border-radius:20px;
+  background:#e8f8f0;
+  color:#087a4b;
+  font-size:12px;
+  font-weight:800;
+}
+
+.student-status{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  margin:12px 0;
+  color:#087a4b;
+  font-weight:900;
+}
+
+.student-status span{
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  background:#20b36b;
+}
+
+.student-progress-card{
+  margin-bottom:18px;
+  padding:25px;
+  background:#fff;
+  border:1px solid #dceee6;
+  border-radius:22px;
+  box-shadow:0 10px 30px rgba(8,122,75,.05);
+}
+
+.student-progress-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+}
+
+.student-progress-header h3{
+  margin:7px 0 0;
+  color:#173b2d;
+  font-size:27px;
+}
+
+#onePageProgressPercent{
+  color:#087a4b;
+  font-size:38px;
+  font-weight:900;
+}
+
+.student-progress-bar{
+  height:14px;
+  margin-top:20px;
+  overflow:hidden;
+  background:#e7f3ed;
+  border-radius:50px;
+}
+
+.student-progress-fill{
+  width:0;
+  height:100%;
+  background:#087a4b;
+  border-radius:50px;
+  transition:width .5s ease;
+}
+
+.student-progress-card>p{
+  margin:14px 0 0;
+  color:#71847b;
+  line-height:1.6;
+}
+
+.student-dashboard-actions{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
+  margin-bottom:18px;
+}
+
+.student-action-card{
+  padding:20px;
+  background:#fff;
+  border:1px solid #dceee6;
+  border-radius:18px;
+  text-decoration:none;
+  color:#173b2d;
+  box-shadow:0 10px 28px rgba(8,122,75,.05);
+  transition:.2s;
+}
+
+.student-action-card:hover{
+  transform:translateY(-3px);
+  border-color:#9ed9bb;
+  box-shadow:0 15px 35px rgba(8,122,75,.09);
+}
+
+.student-action-card span{
+  display:block;
+  margin-bottom:10px;
+  font-size:27px;
+}
+
+.student-action-card strong{
+  display:block;
+  margin-bottom:6px;
+  color:#173b2d;
+}
+
+.student-action-card small{
+  color:#788a82;
+  line-height:1.5;
+}
+
+.student-recent-card{
+  padding:25px;
+  background:#fff;
+  border:1px solid #dceee6;
+  border-radius:22px;
+  box-shadow:0 10px 30px rgba(8,122,75,.05);
+}
+
+.student-recent-card h3{
+  margin:7px 0 18px;
+  color:#173b2d;
+  font-size:27px;
+}
+
+.student-recent-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+}
+
+.student-empty{
+  grid-column:1/-1;
+  padding:30px 20px;
+  text-align:center;
+  color:#73877e;
+  background:#f7fcfa;
+  border:1px dashed #bfded0;
+  border-radius:15px;
+}
+
+@media(max-width:900px){
+
+  .student-dashboard-grid{
+    grid-template-columns:1fr;
+  }
+
+  .student-dashboard-actions{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .student-recent-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+}
+
+@media(max-width:600px){
+
+  .student-dashboard-section{
+    padding:22px;
+    border-radius:23px;
+  }
+
+  .student-dashboard-card{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .student-dashboard-actions,
+  .student-recent-grid{
+    grid-template-columns:1fr;
+  }
+
+  .student-progress-header{
+    align-items:flex-start;
+  }
+
+}
 @media(max-width:760px){
 
   .support-section{

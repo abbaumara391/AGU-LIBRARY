@@ -1607,16 +1607,16 @@ function addAIMessage(
    */
 
   if(sender==="user"){
+  content.textContent=message;
+}else{
+  content.innerHTML=renderAIMarkdown(message);
 
-    content.textContent=
-      message;
-
-  }else{
-
-    content.innerHTML=
-      renderAIMarkdown(message);
-
+  if(window.MathJax){
+    MathJax.typesetPromise([content]).catch(function(error){
+      console.error("MathJax rendering error:",error);
+    });
   }
+}
 
   wrapper.appendChild(avatar);
 

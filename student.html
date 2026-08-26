@@ -1490,33 +1490,119 @@ sendAIMessage();
 
 async function sendAIMessage(){
 
-const elements=
- getAIElements();
+  const elements = getAIElements();
 
-if(
- !elements.input||
- !elements.send
- )return;
+  if(!elements.input || !elements.send) return;
 
-const message=
- elements.input.value.trim();
+  const message = elements.input.value.trim();
 
-if(!message)return;
+  if(!message) return;
 
-addAIMessage(
- message,
- "user"
- );
+  addAIMessage(message, "user");
 
-elements.input.value="";
+  elements.input.value = "";
+  elements.send.disabled = true;
 
-elements.send.disabled=true;
+  if(elements.status){
+    elements.status.classList.add("show");
+    elements.status.textContent = "🤖 AI Teacher is thinking...";
+  }
 
-if(elements.status){
+  aiConversation.push({
+    role: "user",
+    content: message
+  });
 
-elements.status.classList.add(
- "show"
- );
+  try{
+
+    if(!client){
+      throw new Error("Supabase client is not available.");
+    }
+
+    /*
+     * Use the Supabase client instead of manually calling
+     * the Edge Function URL.
+     *
+     * This automatically handles the Supabase project
+     * authentication headers.
+     */
+    const result = await client.functions.invoke(
+      "ai-learning-agent",
+      {
+        body: {
+          message: message,
+
+          conversation: aiConversation,
+
+          student_id: studentUser?.id || null
+        }
+      }
+    );
+
+    if(result.error){
+
+      console.error(
+        "AI Learning Agent error:",
+        result.error
+      );
+
+      throw result.error;
+    }
+
+    const data = result.data || {};
+
+    const answer =
+      data.answer ||
+      data.response ||
+      data.message;
+
+    if(!answer){
+
+      console.error(
+        "AI returned no answer:",
+        data
+      );
+
+      throw new Error(
+        "The AI returned no answer."
+      );
+    }
+
+    addAIMessage(
+      answer,
+      "ai"
+    );
+
+    aiConversation.push({
+      role: "assistant",
+      content: answer
+    });
+
+  }catch(error){
+
+    console.error(
+      "AGULIBRARY AI Learning Agent:",
+      error
+    );
+
+    addAIMessage(
+      "Sorry, I could not connect to the AI Teacher right now. Please try again.",
+      "ai"
+    );
+
+  }finally{
+
+    elements.send.disabled = false;
+
+    if(elements.status){
+      elements.status.classList.remove("show");
+      elements.status.textContent =
+        "🤖 AI Teacher is thinking...";
+    }
+
+    elements.input.focus();
+
+  }
 
 }
 

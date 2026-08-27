@@ -1509,27 +1509,6 @@ function setupStudentDashboard(){
 
   if(!button)return;
 
-  button.addEventListener(
-    "click",
-    function(){
-
-      const dashboard =
-        document.getElementById(
-          "studentDashboard"
-        );
-
-      if(!dashboard)return;
-
-      dashboard.classList.add("show");
-
-      dashboard.scrollIntoView({
-        behavior:"smooth",
-        block:"start"
-      });
-
-    }
-  );
-
 
   const accountButton =
     document.getElementById(

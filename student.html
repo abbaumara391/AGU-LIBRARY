@@ -2047,6 +2047,102 @@ sendAIMessage();
  );
 
 }
+/* =====================================================
+   STUDENT SIDE MENU
+===================================================== */
 
+function setupStudentSideMenu(){
+
+  const menuButton =
+    document.getElementById("menuButton");
+
+  const closeButton =
+    document.getElementById("closeMenuButton");
+
+  const menu =
+    document.getElementById("studentSideMenu");
+
+  const overlay =
+    document.getElementById("sideMenuOverlay");
+
+
+  function openMenu(){
+
+    menu?.classList.add("open");
+
+    overlay?.classList.add("show");
+
+  }
+
+
+  function closeMenu(){
+
+    menu?.classList.remove("open");
+
+    overlay?.classList.remove("show");
+
+  }
+
+
+  menuButton?.addEventListener(
+    "click",
+    openMenu
+  );
+
+
+  closeButton?.addEventListener(
+    "click",
+    closeMenu
+  );
+
+
+  overlay?.addEventListener(
+    "click",
+    closeMenu
+  );
+
+}
+
+
+/* =====================================================
+   AI TEACHER OPEN / CLOSE
+===================================================== */
+
+function setupAITeacherWindow(){
+
+  const agent =
+    document.getElementById("aiLearningAgent");
+
+  const avatar =
+    agent?.querySelector(".ai-agent-avatar");
+
+
+  if(!agent || !avatar){
+    return;
+  }
+
+
+  avatar.addEventListener(
+    "click",
+    function(){
+
+      agent.classList.toggle("ai-open");
+
+    }
+  );
+
+}
+
+
+document.addEventListener(
+  "DOMContentLoaded",
+  function(){
+
+    setupStudentSideMenu();
+
+    setupAITeacherWindow();
+
+  }
+);
 </script> </body>
  </html>

@@ -426,7 +426,7 @@ if (uploadForm) {
       if (adminMessage) {
 
         adminMessage.textContent =
-          "Preparing upload...";
+          "Preparing resource...";
 
       }
 
@@ -447,7 +447,9 @@ if (uploadForm) {
 
       try {
 
-        /* Check session */
+        /* =========================================
+           CHECK ADMIN SESSION
+        ========================================= */
 
         const {
           data: sessionData
@@ -468,7 +470,228 @@ if (uploadForm) {
         }
 
 
-        /* Get file */
+        /* =========================================
+           BASIC INFORMATION
+        ========================================= */
+
+        const title =
+          document
+            .getElementById("title")
+            .value
+            .trim();
+
+
+        const description =
+          document
+            .getElementById("description")
+            .value
+            .trim();
+
+
+        const content =
+          document
+            .getElementById("content")
+            .value
+            .trim();
+
+
+        const type =
+          document
+            .getElementById("type")
+            .value;
+
+
+        const subject =
+          document
+            .getElementById("subject")
+            .value
+            .trim();
+
+
+        const level =
+          document
+            .getElementById("level")
+            .value
+            .trim();
+
+
+        const classLevel =
+          document
+            .getElementById("classLevel")
+            .value
+            .trim();
+
+
+        const term =
+          document
+            .getElementById("term")
+            .value
+            .trim();
+
+
+        const premium =
+          document
+            .getElementById("premium")
+            .checked;
+
+
+        /* =========================================
+           DIGITAL BOOK
+        ========================================= */
+
+        if (type === "digital_book") {
+
+          let bookPath =
+            bookPathInput
+              ? bookPathInput.value.trim()
+              : "";
+
+
+          let bookEntry =
+            bookEntryInput
+              ? bookEntryInput.value.trim()
+              : "index.html";
+
+
+          if (!bookPath) {
+
+            adminMessage.textContent =
+              "Please enter the digital book folder path.";
+
+            return;
+
+          }
+
+
+          if (!bookEntry) {
+
+            bookEntry =
+              "index.html";
+
+          }
+
+
+          /* Remove accidental leading slash */
+
+          bookPath =
+            bookPath.replace(
+              /^\/+/,
+              ""
+            );
+
+
+          /* Make sure folder ends with slash */
+
+          if (
+            !bookPath.endsWith("/")
+          ) {
+
+            bookPath += "/";
+
+          }
+
+
+          /* Make sure entry is safe */
+
+          bookEntry =
+            bookEntry.replace(
+              /^\/+/,
+              ""
+            );
+
+
+          const digitalBookURL =
+            "/" +
+            bookPath +
+            bookEntry;
+
+
+          adminMessage.textContent =
+            "Saving digital book...";
+
+
+          const resource = {
+
+            title:
+              title,
+
+            description:
+              description,
+
+            content:
+              content,
+
+            type:
+              "digital_book",
+
+            subject:
+              subject,
+
+            level:
+              level,
+
+            class_level:
+              classLevel,
+
+            term:
+              term,
+
+            file_url:
+              digitalBookURL,
+
+            is_premium:
+              premium
+
+          };
+
+
+          const {
+            error
+          } =
+            await db
+              .from("resources")
+              .insert(
+                resource
+              );
+
+
+          if (error) {
+
+            adminMessage.textContent =
+              "Digital book could not be published: " +
+              error.message;
+
+            return;
+
+          }
+
+
+          adminMessage.textContent =
+            "✅ Digital book published successfully!";
+
+
+          uploadForm.reset();
+
+
+          if (bookEntryInput) {
+
+            bookEntryInput.value =
+              "index.html";
+
+          }
+
+
+          updateDigitalBookFields();
+
+
+          return;
+
+        }
+
+
+        /* =========================================
+           NORMAL FILE RESOURCE
+        ========================================= */
 
         const fileInput =
           document.getElementById("file");
@@ -516,8 +739,6 @@ if (uploadForm) {
           "Uploading file...";
 
 
-        /* Upload */
-
         const upload =
           await db
             .storage
@@ -543,8 +764,6 @@ if (uploadForm) {
         }
 
 
-        /* Public URL */
-
         const publicUrl =
           db
             .storage
@@ -557,78 +776,43 @@ if (uploadForm) {
 
 
         adminMessage.textContent =
-          "File uploaded. Saving resource information...";
+          "File uploaded. Publishing resource...";
 
-
-        /* Resource */
 
         const resource = {
 
           title:
-            document
-              .getElementById("title")
-              .value
-              .trim(),
-
+            title,
 
           description:
-            document
-              .getElementById("description")
-              .value
-              .trim(),
-      content:
-        document
-          .getElementById("content")
-          .value
-          .trim(),
+            description,
+
+          content:
+            content,
 
           type:
-            document
-              .getElementById("type")
-              .value,
-
+            type,
 
           subject:
-            document
-              .getElementById("subject")
-              .value
-              .trim(),
-
+            subject,
 
           level:
-            document
-              .getElementById("level")
-              .value
-              .trim(),
-
+            level,
 
           class_level:
-            document
-              .getElementById("classLevel")
-              .value
-              .trim(),
-
+            classLevel,
 
           term:
-            document
-              .getElementById("term")
-              .value
-              .trim(),
-
+            term,
 
           file_url:
             publicUrl,
 
-
           is_premium:
-            document
-              .getElementById("premium")
-              .checked
+            premium
 
         };
 
-
-        /* Database */
 
         const {
           error
@@ -656,6 +840,9 @@ if (uploadForm) {
 
 
         uploadForm.reset();
+
+
+        updateDigitalBookFields();
 
 
       } catch (error) {

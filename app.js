@@ -397,9 +397,13 @@ function renderResources(list) {
 
 
         const buttonText =
-          isLesson
-            ? "📖 Open Lesson →"
-            : "Tap to open →";
+  isLesson
+    ? (
+        typeValue === "digital_book"
+          ? "📚 Open Book →"
+          : "📖 Open Lesson →"
+      )
+    : "Tap to open →";
 
 
         return `

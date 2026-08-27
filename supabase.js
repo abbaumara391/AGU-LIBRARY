@@ -1,4 +1,9 @@
+/* =========================================================
+   AGULIBRARY — SUPABASE CLIENT
+========================================================= */
+
 let supabaseClient = null;
+
 
 /* =========================================================
    INITIALIZE SUPABASE
@@ -6,13 +11,52 @@ let supabaseClient = null;
 
 function initSupabase() {
 
-  const c = window.AGU_CONFIG || {};
+  /* -------------------------------------------------------
+     If already initialized, return the existing client.
+     This prevents the client from being created twice.
+  ------------------------------------------------------- */
+
+  if (supabaseClient) {
+    return supabaseClient;
+  }
+
+
+  const config =
+    window.AGU_CONFIG || {};
+
+
+  /* -------------------------------------------------------
+     IMPORTANT:
+     At this moment window.supabase is still the
+     Supabase JavaScript library loaded from the CDN.
+  ------------------------------------------------------- */
+
+  const supabaseLibrary =
+    window.supabase;
+
 
   if (
-    !window.supabase ||
-    !c.supabaseUrl ||
-    !c.supabaseAnonKey ||
-    c.supabaseAnonKey === "PASTE_YOUR_SUPABASE_PUBLISHABLE_KEY_HERE"
+    !supabaseLibrary ||
+    typeof supabaseLibrary.createClient !== "function"
+  ) {
+
+    console.error(
+      "AGULIBRARY: Supabase library was not loaded."
+    );
+
+    return null;
+  }
+
+
+  /* -------------------------------------------------------
+     Check configuration
+  ------------------------------------------------------- */
+
+  if (
+    !config.supabaseUrl ||
+    !config.supabaseAnonKey ||
+    config.supabaseAnonKey ===
+      "PASTE_YOUR_SUPABASE_PUBLISHABLE_KEY_HERE"
   ) {
 
     console.error(
@@ -23,26 +67,36 @@ function initSupabase() {
   }
 
 
+  /* -------------------------------------------------------
+     Create the actual Supabase client
+  ------------------------------------------------------- */
+
   try {
 
     supabaseClient =
-      window.supabase.createClient(
-        c.supabaseUrl,
-        c.supabaseAnonKey
+      supabaseLibrary.createClient(
+        config.supabaseUrl,
+        config.supabaseAnonKey
       );
 
 
     /* -----------------------------------------------------
-       IMPORTANT
-       Make the client available as "supabase"
-       because index.html uses supabase.auth
+       Make the client available to the rest of AGULIBRARY.
+
+       Your existing index.html uses:
+
+       supabase.auth.getSession()
+
+       Therefore we expose the client as window.supabase.
     ----------------------------------------------------- */
 
-    window.supabaseClient =
+    window.supabase =
       supabaseClient;
 
 
-    window.supabase =
+    /* Also expose a clearly named client. */
+
+    window.supabaseClient =
       supabaseClient;
 
 
@@ -74,16 +128,17 @@ function initSupabase() {
 
 function getSupabase() {
 
-  return (
-    supabaseClient ||
-    initSupabase()
-  );
+  if (supabaseClient) {
+    return supabaseClient;
+  }
+
+  return initSupabase();
 
 }
 
 
 /* =========================================================
-   INITIALIZE WHEN PAGE LOADS
+   INITIALIZE AFTER PAGE LOAD
 ========================================================= */
 
 if (
@@ -93,7 +148,9 @@ if (
   document.addEventListener(
     "DOMContentLoaded",
     function() {
+
       initSupabase();
+
     }
   );
 

@@ -408,7 +408,78 @@ if (logoutButton) {
 
 }
 
+/* =========================================================
+   DIGITAL BOOK CONTROLLER
+========================================================= */
 
+const resourceType =
+  document.getElementById("type");
+
+const normalFileField =
+  document.getElementById("normalFileField");
+
+const digitalBookFields =
+  document.getElementById("digitalBookFields");
+
+const fileInput =
+  document.getElementById("file");
+
+const bookPathInput =
+  document.getElementById("bookPath");
+
+const bookEntryInput =
+  document.getElementById("bookEntry");
+
+
+function updateDigitalBookFields() {
+
+  if (!resourceType) return;
+
+
+  const isDigitalBook =
+    resourceType.value === "digital_book";
+
+
+  if (digitalBookFields) {
+
+    digitalBookFields.classList.toggle(
+      "hidden",
+      !isDigitalBook
+    );
+
+  }
+
+
+  if (normalFileField) {
+
+    normalFileField.classList.toggle(
+      "hidden",
+      isDigitalBook
+    );
+
+  }
+
+
+  if (fileInput) {
+
+    fileInput.required =
+      !isDigitalBook;
+
+  }
+
+}
+
+
+if (resourceType) {
+
+  resourceType.addEventListener(
+    "change",
+    updateDigitalBookFields
+  );
+
+  updateDigitalBookFields();
+
+}
 
 /* =========================================================
    RESOURCE UPLOAD

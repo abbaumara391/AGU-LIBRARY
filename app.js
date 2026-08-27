@@ -688,9 +688,10 @@ function openResource(resource) {
 
 
   if (
-    type === "lesson" ||
-    type === "course"
-  ) {
+  type === "lesson" ||
+  type === "course" ||
+  type === "digital_book"
+) {
 
     window.location.href =
       "lesson.html?id=" +

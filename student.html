@@ -490,6 +490,120 @@
   }
 
 }
+/* =====================================================
+   AGULIBRARY — FINAL STUDENT DASHBOARD FIX
+   PREVENT AI TEACHER OVERLAPPING THE DASHBOARD
+===================================================== */
+
+.student-dashboard-section{
+  position:relative !important;
+  overflow:visible !important;
+}
+
+.student-dashboard-inner{
+  position:relative !important;
+}
+
+.ai-agent{
+  position:relative !important;
+  top:auto !important;
+  right:auto !important;
+  left:auto !important;
+  bottom:auto !important;
+
+  width:100% !important;
+  margin:0 0 22px !important;
+  padding:30px !important;
+
+  background:#fff !important;
+  border:1px solid #dceee6 !important;
+  border-radius:28px !important;
+
+  box-shadow:0 15px 40px rgba(8,122,75,.07) !important;
+
+  z-index:1 !important;
+}
+
+.ai-agent-header{
+  position:relative !important;
+  display:flex !important;
+  align-items:center !important;
+  gap:22px !important;
+  margin-bottom:25px !important;
+}
+
+.ai-agent-heading{
+  position:relative !important;
+  flex:1 !important;
+}
+
+.ai-agent-heading h3{
+  position:relative !important;
+  margin:0 0 7px !important;
+  font-size:clamp(28px,5vw,40px) !important;
+  line-height:1.2 !important;
+}
+
+.ai-agent-heading p{
+  position:relative !important;
+  margin:0 !important;
+  line-height:1.6 !important;
+}
+
+.ai-agent-status{
+  position:relative !important;
+  display:block !important;
+}
+
+.ai-chat-card{
+  position:relative !important;
+  display:block !important;
+  width:100% !important;
+  height:auto !important;
+  top:auto !important;
+  right:auto !important;
+  z-index:2 !important;
+}
+
+.ai-agent-messages{
+  position:relative !important;
+}
+
+@media(max-width:760px){
+
+  .ai-agent{
+    padding:20px !important;
+    border-radius:23px !important;
+  }
+
+  .ai-agent-header{
+    align-items:flex-start !important;
+    flex-wrap:wrap !important;
+  }
+
+  .ai-agent-avatar{
+    width:85px !important;
+    height:85px !important;
+  }
+
+  .ai-agent-status{
+    width:100% !important;
+    text-align:center !important;
+  }
+
+}
+
+@media(max-width:600px){
+
+  .ai-agent-heading{
+    width:100% !important;
+  }
+
+  .ai-agent-heading h3{
+    font-size:28px !important;
+  }
+
+}  
  </style> <script>
  window.MathJax = {
  tex: {

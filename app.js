@@ -390,9 +390,10 @@ function renderResources(list) {
           opening their normal files.
         */
 
-        const isLesson =
-          typeValue === "lesson" ||
-          typeValue === "course";
+      const isLesson =
+  typeValue === "lesson" ||
+  typeValue === "course" ||
+  typeValue === "digital_book";
 
 
         const buttonText =

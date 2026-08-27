@@ -2048,7 +2048,7 @@ sendAIMessage();
 
 }
 /* =====================================================
-   STUDENT SIDE MENU
+   AGULIBRARY — STUDENT SIDE MENU
 ===================================================== */
 
 function setupStudentSideMenu(){
@@ -2066,40 +2066,53 @@ function setupStudentSideMenu(){
     document.getElementById("sideMenuOverlay");
 
 
-  function openMenu(){
+  if(menuButton){
 
-    menu?.classList.add("open");
+    menuButton.onclick = function(){
 
-    overlay?.classList.add("show");
+      if(menu){
+        menu.classList.add("open");
+      }
+
+      if(overlay){
+        overlay.classList.add("show");
+      }
+
+    };
 
   }
 
 
-  function closeMenu(){
+  if(closeButton){
 
-    menu?.classList.remove("open");
+    closeButton.onclick = function(){
 
-    overlay?.classList.remove("show");
+      if(menu){
+        menu.classList.remove("open");
+      }
+
+      if(overlay){
+        overlay.classList.remove("show");
+      }
+
+    };
 
   }
 
 
-  menuButton?.addEventListener(
-    "click",
-    openMenu
-  );
+  if(overlay){
 
+    overlay.onclick = function(){
 
-  closeButton?.addEventListener(
-    "click",
-    closeMenu
-  );
+      if(menu){
+        menu.classList.remove("open");
+      }
 
+      overlay.classList.remove("show");
 
-  overlay?.addEventListener(
-    "click",
-    closeMenu
-  );
+    };
+
+  }
 
 }
 
@@ -2144,5 +2157,7 @@ document.addEventListener(
 
   }
 );
-</script> </body>
+</script>
+  
+ </body>
  </html>

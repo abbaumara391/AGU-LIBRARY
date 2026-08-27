@@ -2118,7 +2118,7 @@ function setupStudentSideMenu(){
 
 
 /* =====================================================
-   AI TEACHER OPEN / CLOSE
+   AGULIBRARY — AI TEACHER OPEN / CLOSE
 ===================================================== */
 
 function setupAITeacherWindow(){
@@ -2126,23 +2126,22 @@ function setupAITeacherWindow(){
   const agent =
     document.getElementById("aiLearningAgent");
 
-  const avatar =
-    agent?.querySelector(".ai-agent-avatar");
-
-
-  if(!agent || !avatar){
+  if(!agent){
     return;
   }
 
+  const avatar =
+    agent.querySelector(".ai-agent-avatar");
 
-  avatar.addEventListener(
-    "click",
-    function(){
+  if(!avatar){
+    return;
+  }
 
-      agent.classList.toggle("ai-open");
+  avatar.onclick = function(){
 
-    }
-  );
+    agent.classList.toggle("ai-open");
+
+  };
 
 }
 

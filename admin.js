@@ -1,6 +1,7 @@
 /* =========================================================
    AGULIBRARY — ADMIN.JS
-   ADMIN LOGIN + RESOURCE UPLOAD + INVITATIONS
+   ADMIN LOGIN + RESOURCE UPLOAD + FOLDER STRUCTURE
+   + INVITATIONS
 ========================================================= */
 
 
@@ -45,16 +46,15 @@ const generatedLink =
   document.getElementById("generatedLink");
 
 
-
 /* =========================================================
    SUPABASE CLIENT
 ========================================================= */
 
-function getDatabase() {
+function getDatabase(){
 
-  if (
+  if(
     typeof getSupabase === "function"
-  ) {
+  ){
 
     return getSupabase();
 
@@ -65,14 +65,13 @@ function getDatabase() {
 }
 
 
-
 /* =========================================================
    START ADMIN
 ========================================================= */
 
 document.addEventListener(
   "DOMContentLoaded",
-  async function () {
+  async function(){
 
     const db =
       typeof initSupabase === "function"
@@ -80,9 +79,9 @@ document.addEventListener(
         : getDatabase();
 
 
-    if (!db) {
+    if(!db){
 
-      if (loginMessage) {
+      if(loginMessage){
 
         loginMessage.textContent =
           "Supabase is not configured. Check config.js.";
@@ -94,7 +93,7 @@ document.addEventListener(
     }
 
 
-    try {
+    try{
 
       const {
         data,
@@ -103,7 +102,7 @@ document.addEventListener(
         await db.auth.getSession();
 
 
-      if (error) {
+      if(error){
 
         console.error(
           "Session error:",
@@ -115,7 +114,10 @@ document.addEventListener(
       }
 
 
-      if (data && data.session) {
+      if(
+        data &&
+        data.session
+      ){
 
         await checkAdmin(
           data.session.user
@@ -123,7 +125,7 @@ document.addEventListener(
 
       }
 
-    } catch (error) {
+    }catch(error){
 
       console.error(
         "Admin startup error:",
@@ -136,32 +138,39 @@ document.addEventListener(
 );
 
 
-
 /* =========================================================
    ADMIN LOGIN
 ========================================================= */
 
-if (loginForm) {
+if(loginForm){
 
   loginForm.addEventListener(
     "submit",
-    async function (event) {
+    async function(event){
 
       event.preventDefault();
 
 
-      loginMessage.textContent =
-        "Signing in...";
+      if(loginMessage){
+
+        loginMessage.textContent =
+          "Signing in...";
+
+      }
 
 
       const db =
         getDatabase();
 
 
-      if (!db) {
+      if(!db){
 
-        loginMessage.textContent =
-          "Supabase is not configured.";
+        if(loginMessage){
+
+          loginMessage.textContent =
+            "Supabase is not configured.";
+
+        }
 
         return;
 
@@ -181,7 +190,7 @@ if (loginForm) {
           .value;
 
 
-      try {
+      try{
 
         const {
           data,
@@ -189,18 +198,24 @@ if (loginForm) {
         } =
           await db.auth.signInWithPassword({
 
-            email: email,
+            email:
+              email,
 
-            password: password
+            password:
+              password
 
           });
 
 
-        if (error) {
+        if(error){
 
-          loginMessage.textContent =
-            "Login failed: " +
-            error.message;
+          if(loginMessage){
+
+            loginMessage.textContent =
+              "Login failed: " +
+              error.message;
+
+          }
 
           return;
 
@@ -212,7 +227,7 @@ if (loginForm) {
         );
 
 
-      } catch (error) {
+      }catch(error){
 
         console.error(
           "Login error:",
@@ -220,8 +235,12 @@ if (loginForm) {
         );
 
 
-        loginMessage.textContent =
-          "Login failed. Please try again.";
+        if(loginMessage){
+
+          loginMessage.textContent =
+            "Login failed. Please try again.";
+
+        }
 
       }
 
@@ -231,25 +250,24 @@ if (loginForm) {
 }
 
 
-
 /* =========================================================
    CHECK ADMIN
 ========================================================= */
 
-async function checkAdmin(user) {
+async function checkAdmin(user){
 
   const db =
     getDatabase();
 
 
-  if (!db || !user) {
+  if(!db || !user){
 
     return;
 
   }
 
 
-  try {
+  try{
 
     const {
       data,
@@ -265,7 +283,7 @@ async function checkAdmin(user) {
         .maybeSingle();
 
 
-    if (error) {
+    if(error){
 
       console.error(
         "Admin verification error:",
@@ -273,31 +291,41 @@ async function checkAdmin(user) {
       );
 
 
-      loginMessage.textContent =
-        "Unable to verify administrator account: " +
-        error.message;
+      if(loginMessage){
+
+        loginMessage.textContent =
+          "Unable to verify administrator account: " +
+          error.message;
+
+      }
 
       return;
 
     }
 
 
-    if (!data) {
+    if(!data){
 
       await db.auth.signOut();
 
 
-      loginMessage.textContent =
-        "Access denied. This account is not an AGULIBRARY administrator.";
+      if(loginMessage){
+
+        loginMessage.textContent =
+          "Access denied. This account is not an AGULIBRARY administrator.";
+
+      }
 
       return;
 
     }
 
 
-    /* Admin confirmed */
+    /* =====================================================
+       ADMIN CONFIRMED
+    ===================================================== */
 
-    if (loginPanel) {
+    if(loginPanel){
 
       loginPanel.classList.add(
         "hidden"
@@ -306,7 +334,7 @@ async function checkAdmin(user) {
     }
 
 
-    if (dashboardPanel) {
+    if(dashboardPanel){
 
       dashboardPanel.classList.remove(
         "hidden"
@@ -315,7 +343,7 @@ async function checkAdmin(user) {
     }
 
 
-    if (adminMessage) {
+    if(adminMessage){
 
       adminMessage.textContent =
         "Welcome to AGULIBRARY Admin.";
@@ -323,11 +351,9 @@ async function checkAdmin(user) {
     }
 
 
-    /* Load invitations */
-
     await loadInvitations();
 
-  } catch (error) {
+  }catch(error){
 
     console.error(
       "Admin check error:",
@@ -337,7 +363,6 @@ async function checkAdmin(user) {
   }
 
 }
-
 
 
 /* =========================================================
@@ -350,25 +375,25 @@ const logoutButton =
   );
 
 
-if (logoutButton) {
+if(logoutButton){
 
   logoutButton.addEventListener(
     "click",
-    async function () {
+    async function(){
 
       const db =
         getDatabase();
 
 
-      try {
+      try{
 
-        if (db) {
+        if(db){
 
           await db.auth.signOut();
 
         }
 
-      } catch (error) {
+      }catch(error){
 
         console.error(
           "Logout error:",
@@ -378,7 +403,7 @@ if (logoutButton) {
       }
 
 
-      if (dashboardPanel) {
+      if(dashboardPanel){
 
         dashboardPanel.classList.add(
           "hidden"
@@ -387,7 +412,7 @@ if (logoutButton) {
       }
 
 
-      if (loginPanel) {
+      if(loginPanel){
 
         loginPanel.classList.remove(
           "hidden"
@@ -396,7 +421,7 @@ if (logoutButton) {
       }
 
 
-      if (loginMessage) {
+      if(loginMessage){
 
         loginMessage.textContent =
           "You have signed out.";
@@ -408,6 +433,7 @@ if (logoutButton) {
 
 }
 
+
 /* =========================================================
    DIGITAL BOOK CONTROLLER
 ========================================================= */
@@ -416,10 +442,14 @@ const resourceType =
   document.getElementById("type");
 
 const normalFileField =
-  document.getElementById("normalFileField");
+  document.getElementById(
+    "normalFileField"
+  );
 
 const digitalBookFields =
-  document.getElementById("digitalBookFields");
+  document.getElementById(
+    "digitalBookFields"
+  );
 
 const fileInput =
   document.getElementById("file");
@@ -431,16 +461,21 @@ const bookEntryInput =
   document.getElementById("bookEntry");
 
 
-function updateDigitalBookFields() {
+function updateDigitalBookFields(){
 
-  if (!resourceType) return;
+  if(!resourceType){
+
+    return;
+
+  }
 
 
   const isDigitalBook =
-    resourceType.value === "digital_book";
+    resourceType.value ===
+    "digital_book";
 
 
-  if (digitalBookFields) {
+  if(digitalBookFields){
 
     digitalBookFields.classList.toggle(
       "hidden",
@@ -450,7 +485,7 @@ function updateDigitalBookFields() {
   }
 
 
-  if (normalFileField) {
+  if(normalFileField){
 
     normalFileField.classList.toggle(
       "hidden",
@@ -460,7 +495,7 @@ function updateDigitalBookFields() {
   }
 
 
-  if (fileInput) {
+  if(fileInput){
 
     fileInput.required =
       !isDigitalBook;
@@ -470,31 +505,206 @@ function updateDigitalBookFields() {
 }
 
 
-if (resourceType) {
+if(resourceType){
 
   resourceType.addEventListener(
     "change",
     updateDigitalBookFields
   );
 
+
   updateDigitalBookFields();
 
 }
+
+
+/* =========================================================
+   FOLDER ELEMENTS
+========================================================= */
+
+const parentSubjectInput =
+  document.getElementById(
+    "parentSubject"
+  );
+
+const educationStageInput =
+  document.getElementById(
+    "educationStage"
+  );
+
+const subjectAreaInput =
+  document.getElementById(
+    "subjectArea"
+  );
+
+const resourceCategoryInput =
+  document.getElementById(
+    "resourceCategory"
+  );
+
+const folderPathInput =
+  document.getElementById(
+    "folderPath"
+  );
+
+
+/* =========================================================
+   CLEAN FOLDER VALUE
+========================================================= */
+
+function cleanFolderPart(value){
+
+  return String(
+    value || ""
+  )
+  .trim()
+  .replace(
+    /[\/\\]+/g,
+    "-"
+  )
+  .replace(
+    /\s+/g,
+    "-"
+  )
+  .replace(
+    /[^a-zA-Z0-9&-]/g,
+    ""
+  )
+  .toLowerCase();
+
+}
+
+
+/* =========================================================
+   BUILD FOLDER PATH
+========================================================= */
+
+function buildFolderPath(){
+
+  const mainSubject =
+    parentSubjectInput
+      ? parentSubjectInput.value.trim()
+      : "";
+
+
+  const educationStage =
+    educationStageInput
+      ? educationStageInput.value.trim()
+      : "";
+
+
+  const subjectArea =
+    subjectAreaInput
+      ? subjectAreaInput.value.trim()
+      : "";
+
+
+  const resourceCategory =
+    resourceCategoryInput
+      ? resourceCategoryInput.value.trim()
+      : "";
+
+
+  if(
+    !mainSubject ||
+    !educationStage ||
+    !subjectArea ||
+    !resourceCategory
+  ){
+
+    return "";
+
+  }
+
+
+  return [
+    cleanFolderPart(mainSubject),
+    cleanFolderPart(educationStage),
+    cleanFolderPart(subjectArea),
+    cleanFolderPart(resourceCategory)
+  ].join("/");
+
+}
+
+
+/* =========================================================
+   UPDATE FOLDER PATH
+========================================================= */
+
+function updateFolderPath(){
+
+  const path =
+    buildFolderPath();
+
+
+  if(folderPathInput){
+
+    folderPathInput.value =
+      path;
+
+  }
+
+}
+
+
+/* =========================================================
+   FOLDER EVENTS
+========================================================= */
+
+if(parentSubjectInput){
+
+  parentSubjectInput.addEventListener(
+    "change",
+    updateFolderPath
+  );
+
+}
+
+
+if(educationStageInput){
+
+  educationStageInput.addEventListener(
+    "change",
+    updateFolderPath
+  );
+
+}
+
+
+if(subjectAreaInput){
+
+  subjectAreaInput.addEventListener(
+    "change",
+    updateFolderPath
+  );
+
+}
+
+
+if(resourceCategoryInput){
+
+  resourceCategoryInput.addEventListener(
+    "change",
+    updateFolderPath
+  );
+
+}
+
 
 /* =========================================================
    RESOURCE UPLOAD
 ========================================================= */
 
-if (uploadForm) {
+if(uploadForm){
 
   uploadForm.addEventListener(
     "submit",
-    async function (event) {
+    async function(event){
 
       event.preventDefault();
 
 
-      if (adminMessage) {
+      if(adminMessage){
 
         adminMessage.textContent =
           "Preparing resource...";
@@ -506,21 +716,25 @@ if (uploadForm) {
         getDatabase();
 
 
-      if (!db) {
+      if(!db){
 
-        adminMessage.textContent =
-          "Supabase is not configured.";
+        if(adminMessage){
+
+          adminMessage.textContent =
+            "Supabase is not configured.";
+
+        }
 
         return;
 
       }
 
 
-      try {
+      try{
 
-        /* =========================================
+        /* =================================================
            CHECK ADMIN SESSION
-        ========================================= */
+        ================================================= */
 
         const {
           data: sessionData
@@ -528,22 +742,26 @@ if (uploadForm) {
           await db.auth.getSession();
 
 
-        if (
+        if(
           !sessionData ||
           !sessionData.session
-        ) {
+        ){
 
-          adminMessage.textContent =
-            "Your session has expired. Please sign in again.";
+          if(adminMessage){
+
+            adminMessage.textContent =
+              "Your session has expired. Please sign in again.";
+
+          }
 
           return;
 
         }
 
 
-        /* =========================================
+        /* =================================================
            BASIC INFORMATION
-        ========================================= */
+        ================================================= */
 
         const title =
           document
@@ -606,11 +824,85 @@ if (uploadForm) {
             .checked;
 
 
-        /* =========================================
-           DIGITAL BOOK
-        ========================================= */
+        /* =================================================
+           NEW FOLDER INFORMATION
+        ================================================= */
 
-        if (type === "digital_book") {
+        const parentSubject =
+          parentSubjectInput
+            ? parentSubjectInput.value.trim()
+            : "";
+
+
+        const educationStage =
+          educationStageInput
+            ? educationStageInput.value.trim()
+            : "";
+
+
+        const subjectArea =
+          subjectAreaInput
+            ? subjectAreaInput.value.trim()
+            : "";
+
+
+        const resourceCategory =
+          resourceCategoryInput
+            ? resourceCategoryInput.value.trim()
+            : "";
+
+
+        let folderPath =
+          folderPathInput
+            ? folderPathInput.value.trim()
+            : "";
+
+
+        /*
+         * Rebuild the path here instead of trusting
+         * the visible field.
+         */
+
+        const generatedFolderPath =
+          buildFolderPath();
+
+
+        if(generatedFolderPath){
+
+          folderPath =
+            generatedFolderPath;
+
+        }
+
+
+        /* =================================================
+           REQUIRE FOLDER LOCATION
+        ================================================= */
+
+        if(
+          !parentSubject ||
+          !educationStage ||
+          !subjectArea ||
+          !resourceCategory
+        ){
+
+          if(adminMessage){
+
+            adminMessage.textContent =
+              "Please select the Main Subject Card, Education Stage, Subject Area and Resource Folder.";
+
+          }
+
+          return;
+
+        }
+
+
+        /* =================================================
+           DIGITAL BOOK
+        ================================================= */
+
+        if(type === "digital_book"){
 
           let bookPath =
             bookPathInput
@@ -624,17 +916,21 @@ if (uploadForm) {
               : "index.html";
 
 
-          if (!bookPath) {
+          if(!bookPath){
 
-            adminMessage.textContent =
-              "Please enter the digital book folder path.";
+            if(adminMessage){
+
+              adminMessage.textContent =
+                "Please enter the digital book folder path.";
+
+            }
 
             return;
 
           }
 
 
-          if (!bookEntry) {
+          if(!bookEntry){
 
             bookEntry =
               "index.html";
@@ -653,9 +949,9 @@ if (uploadForm) {
 
           /* Make sure folder ends with slash */
 
-          if (
+          if(
             !bookPath.endsWith("/")
-          ) {
+          ){
 
             bookPath += "/";
 
@@ -677,8 +973,12 @@ if (uploadForm) {
             bookEntry;
 
 
-          adminMessage.textContent =
-            "Saving digital book...";
+          if(adminMessage){
+
+            adminMessage.textContent =
+              "Saving digital book...";
+
+          }
 
 
           const resource = {
@@ -696,7 +996,7 @@ if (uploadForm) {
               "digital_book",
 
             subject:
-              subject,
+              subject || subjectArea,
 
             level:
               level,
@@ -711,7 +1011,22 @@ if (uploadForm) {
               digitalBookURL,
 
             is_premium:
-              premium
+              premium,
+
+            parent_subject:
+              parentSubject,
+
+            education_stage:
+              educationStage,
+
+            subject_area:
+              subjectArea,
+
+            resource_category:
+              resourceCategory,
+
+            folder_path:
+              folderPath
 
           };
 
@@ -726,25 +1041,33 @@ if (uploadForm) {
               );
 
 
-          if (error) {
+          if(error){
 
-            adminMessage.textContent =
-              "Digital book could not be published: " +
-              error.message;
+            if(adminMessage){
+
+              adminMessage.textContent =
+                "Digital book could not be published: " +
+                error.message;
+
+            }
 
             return;
 
           }
 
 
-          adminMessage.textContent =
-            "✅ Digital book published successfully!";
+          if(adminMessage){
+
+            adminMessage.textContent =
+              "✅ Digital book published successfully!";
+
+          }
 
 
           uploadForm.reset();
 
 
-          if (bookEntryInput) {
+          if(bookEntryInput){
 
             bookEntryInput.value =
               "index.html";
@@ -754,37 +1077,47 @@ if (uploadForm) {
 
           updateDigitalBookFields();
 
+          updateFolderPath();
+
 
           return;
 
         }
 
 
-        /* =========================================
+        /* =================================================
            NORMAL FILE RESOURCE
-        ========================================= */
+        ================================================= */
 
-        const fileInput =
-          document.getElementById("file");
+        const currentFileInput =
+          document.getElementById(
+            "file"
+          );
 
 
         const file =
-          fileInput
-            ? fileInput.files[0]
+          currentFileInput
+            ? currentFileInput.files[0]
             : null;
 
 
-        if (!file) {
+        if(!file){
 
-          adminMessage.textContent =
-            "Please select a file.";
+          if(adminMessage){
+
+            adminMessage.textContent =
+              "Please select a file.";
+
+          }
 
           return;
 
         }
 
 
-        /* Safe filename */
+        /* =================================================
+           SAFE FILE NAME
+        ================================================= */
 
         const safeName =
           file.name.replace(
@@ -792,6 +1125,14 @@ if (uploadForm) {
             "_"
           );
 
+
+        /*
+         * Keep the existing storage behavior.
+         *
+         * We do NOT change the existing storage
+         * bucket structure because doing so could
+         * break resources already uploaded.
+         */
 
         const filePath =
           Date.now() +
@@ -806,8 +1147,12 @@ if (uploadForm) {
             : "agu-library";
 
 
-        adminMessage.textContent =
-          "Uploading file...";
+        if(adminMessage){
+
+          adminMessage.textContent =
+            "Uploading file...";
+
+        }
 
 
         const upload =
@@ -818,17 +1163,25 @@ if (uploadForm) {
               filePath,
               file,
               {
-                cacheControl: "3600",
-                upsert: false
+                cacheControl:
+                  "3600",
+
+                upsert:
+                  false
+
               }
             );
 
 
-        if (upload.error) {
+        if(upload.error){
 
-          adminMessage.textContent =
-            "Upload failed: " +
-            upload.error.message;
+          if(adminMessage){
+
+            adminMessage.textContent =
+              "Upload failed: " +
+              upload.error.message;
+
+          }
 
           return;
 
@@ -846,9 +1199,17 @@ if (uploadForm) {
             .publicUrl;
 
 
-        adminMessage.textContent =
-          "File uploaded. Publishing resource...";
+        if(adminMessage){
 
+          adminMessage.textContent =
+            "File uploaded. Publishing resource...";
+
+        }
+
+
+        /* =================================================
+           RESOURCE DATABASE RECORD
+        ================================================= */
 
         const resource = {
 
@@ -865,7 +1226,7 @@ if (uploadForm) {
             type,
 
           subject:
-            subject,
+            subject || subjectArea,
 
           level:
             level,
@@ -880,7 +1241,22 @@ if (uploadForm) {
             publicUrl,
 
           is_premium:
-            premium
+            premium,
+
+          parent_subject:
+            parentSubject,
+
+          education_stage:
+            educationStage,
+
+          subject_area:
+            subjectArea,
+
+          resource_category:
+            resourceCategory,
+
+          folder_path:
+            folderPath
 
         };
 
@@ -895,19 +1271,27 @@ if (uploadForm) {
             );
 
 
-        if (error) {
+        if(error){
 
-          adminMessage.textContent =
-            "The file uploaded, but the resource information could not be saved: " +
-            error.message;
+          if(adminMessage){
+
+            adminMessage.textContent =
+              "The file uploaded, but the resource information could not be saved: " +
+              error.message;
+
+          }
 
           return;
 
         }
 
 
-        adminMessage.textContent =
-          "✅ Resource uploaded and published successfully!";
+        if(adminMessage){
+
+          adminMessage.textContent =
+            "✅ Resource uploaded and published successfully!";
+
+        }
 
 
         uploadForm.reset();
@@ -915,8 +1299,10 @@ if (uploadForm) {
 
         updateDigitalBookFields();
 
+        updateFolderPath();
 
-      } catch (error) {
+
+      }catch(error){
 
         console.error(
           "Upload error:",
@@ -924,9 +1310,13 @@ if (uploadForm) {
         );
 
 
-        adminMessage.textContent =
-          "Upload error: " +
-          error.message;
+        if(adminMessage){
+
+          adminMessage.textContent =
+            "Upload error: " +
+            error.message;
+
+        }
 
       }
 
@@ -936,12 +1326,11 @@ if (uploadForm) {
 }
 
 
-
 /* =========================================================
    GENERATE INVITATION CODE
 ========================================================= */
 
-function generateInvitationCode() {
+function generateInvitationCode(){
 
   const characters =
     "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
@@ -950,11 +1339,11 @@ function generateInvitationCode() {
   let code = "";
 
 
-  for (
+  for(
     let i = 0;
     i < 10;
     i++
-  ) {
+  ){
 
     code +=
       characters[
@@ -972,12 +1361,11 @@ function generateInvitationCode() {
 }
 
 
-
 /* =========================================================
    CREATE INVITATION LINK
 ========================================================= */
 
-function createInvitationLink(code) {
+function createInvitationLink(code){
 
   const base =
     window.location.origin;
@@ -994,16 +1382,15 @@ function createInvitationLink(code) {
 }
 
 
-
 /* =========================================================
    CREATE INVITATION
 ========================================================= */
 
-if (invitationForm) {
+if(invitationForm){
 
   invitationForm.addEventListener(
     "submit",
-    async function (event) {
+    async function(event){
 
       event.preventDefault();
 
@@ -1012,7 +1399,7 @@ if (invitationForm) {
         getDatabase();
 
 
-      if (!db) {
+      if(!db){
 
         showInvitationMessage(
           "Supabase is not configured.",
@@ -1029,9 +1416,11 @@ if (invitationForm) {
       );
 
 
-      try {
+      try{
 
-        /* Current admin */
+        /* =================================================
+           CURRENT ADMIN
+        ================================================= */
 
         const {
           data: sessionData,
@@ -1040,7 +1429,7 @@ if (invitationForm) {
           await db.auth.getSession();
 
 
-        if (sessionError) {
+        if(sessionError){
 
           throw sessionError;
 
@@ -1052,7 +1441,7 @@ if (invitationForm) {
           sessionData.session;
 
 
-        if (!session) {
+        if(!session){
 
           showInvitationMessage(
             "Your admin session has expired. Please sign in again.",
@@ -1064,7 +1453,9 @@ if (invitationForm) {
         }
 
 
-        /* Fields */
+        /* =================================================
+           INVITATION FIELDS
+        ================================================= */
 
         const nameInput =
           document.getElementById(
@@ -1102,20 +1493,21 @@ if (invitationForm) {
             : "";
 
 
-        /* Generate unique code */
+        /* =================================================
+           GENERATE UNIQUE CODE
+        ================================================= */
 
         let code = "";
-
 
         let unique =
           false;
 
 
-        for (
+        for(
           let attempt = 0;
           attempt < 10;
           attempt++
-        ) {
+        ){
 
           const newCode =
             generateInvitationCode();
@@ -1137,14 +1529,14 @@ if (invitationForm) {
               .maybeSingle();
 
 
-          if (checkError) {
+          if(checkError){
 
             throw checkError;
 
           }
 
 
-          if (!existing) {
+          if(!existing){
 
             code =
               newCode;
@@ -1159,7 +1551,7 @@ if (invitationForm) {
         }
 
 
-        if (!unique) {
+        if(!unique){
 
           throw new Error(
             "Could not create a unique invitation code."
@@ -1168,11 +1560,14 @@ if (invitationForm) {
         }
 
 
-        /* Insert invitation */
+        /* =================================================
+           INSERT INVITATION
+        ================================================= */
 
         const invitation = {
 
-          code: code,
+          code:
+            code,
 
           student_name:
             studentName || null,
@@ -1207,14 +1602,16 @@ if (invitationForm) {
             .single();
 
 
-        if (error) {
+        if(error){
 
           throw error;
 
         }
 
 
-        /* Create link */
+        /* =================================================
+           CREATE LINK
+        ================================================= */
 
         const link =
           createInvitationLink(
@@ -1222,7 +1619,7 @@ if (invitationForm) {
           );
 
 
-        if (generatedCode) {
+        if(generatedCode){
 
           generatedCode.textContent =
             data.code;
@@ -1230,7 +1627,7 @@ if (invitationForm) {
         }
 
 
-        if (generatedLink) {
+        if(generatedLink){
 
           generatedLink.value =
             link;
@@ -1238,7 +1635,7 @@ if (invitationForm) {
         }
 
 
-        if (invitationResult) {
+        if(invitationResult){
 
           invitationResult.classList.add(
             "show"
@@ -1255,18 +1652,16 @@ if (invitationForm) {
         );
 
 
-        if (invitationForm) {
+        if(invitationForm){
 
           invitationForm.reset();
 
         }
 
 
-        /* Reload list immediately */
-
         await loadInvitations();
 
-      } catch (error) {
+      }catch(error){
 
         console.error(
           "Invitation creation error:",
@@ -1288,7 +1683,6 @@ if (invitationForm) {
 }
 
 
-
 /* =========================================================
    INVITATION MESSAGE
 ========================================================= */
@@ -1296,9 +1690,9 @@ if (invitationForm) {
 function showInvitationMessage(
   message,
   isError = false
-) {
+){
 
-  if (!invitationMessage) {
+  if(!invitationMessage){
 
     return;
 
@@ -1317,7 +1711,6 @@ function showInvitationMessage(
 }
 
 
-
 /* =========================================================
    COPY INVITATION LINK
 ========================================================= */
@@ -1328,13 +1721,13 @@ const copyButton =
   );
 
 
-if (copyButton) {
+if(copyButton){
 
   copyButton.addEventListener(
     "click",
-    async function () {
+    async function(){
 
-      if (!generatedLink) {
+      if(!generatedLink){
 
         return;
 
@@ -1345,14 +1738,14 @@ if (copyButton) {
         generatedLink.value;
 
 
-      if (!link) {
+      if(!link){
 
         return;
 
       }
 
 
-      try {
+      try{
 
         await navigator.clipboard.writeText(
           link
@@ -1364,7 +1757,7 @@ if (copyButton) {
 
 
         setTimeout(
-          function () {
+          function(){
 
             copyButton.textContent =
               "📋 Copy Link";
@@ -1374,7 +1767,7 @@ if (copyButton) {
         );
 
 
-      } catch (error) {
+      }catch(error){
 
         generatedLink.select();
 
@@ -1395,7 +1788,6 @@ if (copyButton) {
 }
 
 
-
 /* =========================================================
    SHARE INVITATION
 ========================================================= */
@@ -1406,13 +1798,13 @@ const shareButton =
   );
 
 
-if (shareButton) {
+if(shareButton){
 
   shareButton.addEventListener(
     "click",
-    async function () {
+    async function(){
 
-      if (!generatedLink) {
+      if(!generatedLink){
 
         return;
 
@@ -1423,7 +1815,7 @@ if (shareButton) {
         generatedLink.value;
 
 
-      if (!link) {
+      if(!link){
 
         return;
 
@@ -1436,11 +1828,11 @@ if (shareButton) {
         link;
 
 
-      if (
+      if(
         navigator.share
-      ) {
+      ){
 
-        try {
+        try{
 
           await navigator.share({
 
@@ -1452,7 +1844,7 @@ if (shareButton) {
 
           });
 
-        } catch (error) {
+        }catch(error){
 
           console.log(
             "Share cancelled."
@@ -1460,9 +1852,9 @@ if (shareButton) {
 
         }
 
-      } else {
+      }else{
 
-        try {
+        try{
 
           await navigator.clipboard.writeText(
             message
@@ -1473,7 +1865,7 @@ if (shareButton) {
             "Invitation copied. You can paste it into WhatsApp, SMS or email."
           );
 
-        } catch (error) {
+        }catch(error){
 
           alert(
             message
@@ -1489,12 +1881,11 @@ if (shareButton) {
 }
 
 
-
 /* =========================================================
    LOAD EXISTING INVITATIONS
 ========================================================= */
 
-async function loadInvitations() {
+async function loadInvitations(){
 
   const list =
     document.getElementById(
@@ -1502,7 +1893,7 @@ async function loadInvitations() {
     );
 
 
-  if (!list) {
+  if(!list){
 
     return;
 
@@ -1513,7 +1904,7 @@ async function loadInvitations() {
     getDatabase();
 
 
-  if (!db) {
+  if(!db){
 
     list.innerHTML = `
       <div class="empty">
@@ -1533,9 +1924,11 @@ async function loadInvitations() {
   `;
 
 
-  try {
+  try{
 
-    /* Get admin session */
+    /* =================================================
+       GET ADMIN SESSION
+    ================================================= */
 
     const {
       data: sessionData,
@@ -1544,7 +1937,7 @@ async function loadInvitations() {
       await db.auth.getSession();
 
 
-    if (sessionError) {
+    if(sessionError){
 
       throw sessionError;
 
@@ -1556,7 +1949,7 @@ async function loadInvitations() {
       sessionData.session;
 
 
-    if (!session) {
+    if(!session){
 
       list.innerHTML = `
         <div class="empty">
@@ -1569,7 +1962,9 @@ async function loadInvitations() {
     }
 
 
-    /* Load invitations */
+    /* =================================================
+       LOAD INVITATIONS
+    ================================================= */
 
     const {
       data,
@@ -1589,24 +1984,27 @@ async function loadInvitations() {
         .order(
           "created_at",
           {
-            ascending: false
+            ascending:
+              false
           }
         );
 
 
-    if (error) {
+    if(error){
 
       throw error;
 
     }
 
 
-    /* Nothing found */
+    /* =================================================
+       NOTHING FOUND
+    ================================================= */
 
-    if (
+    if(
       !data ||
       data.length === 0
-    ) {
+    ){
 
       list.innerHTML = `
         <div class="empty">
@@ -1619,11 +2017,13 @@ async function loadInvitations() {
     }
 
 
-    /* Display invitations */
+    /* =================================================
+       DISPLAY INVITATIONS
+    ================================================= */
 
     list.innerHTML =
       data.map(
-        function (invitation) {
+        function(invitation){
 
           const name =
             escapeHTML(
@@ -1744,18 +2144,20 @@ async function loadInvitations() {
       ).join("");
 
 
-    /* Cancel buttons */
+    /* =================================================
+       CANCEL BUTTONS
+    ================================================= */
 
     list
       .querySelectorAll(
         ".cancel-invitation"
       )
       .forEach(
-        function (button) {
+        function(button){
 
           button.addEventListener(
             "click",
-            async function () {
+            async function(){
 
               await cancelInvitation(
                 button.dataset.invitationId
@@ -1768,7 +2170,7 @@ async function loadInvitations() {
       );
 
 
-  } catch (error) {
+  }catch(error){
 
     console.error(
       "LOAD INVITATIONS ERROR:",
@@ -1798,14 +2200,13 @@ async function loadInvitations() {
 }
 
 
-
 /* =========================================================
    CANCEL INVITATION
 ========================================================= */
 
-async function cancelInvitation(id) {
+async function cancelInvitation(id){
 
-  if (!id) {
+  if(!id){
 
     return;
 
@@ -1818,7 +2219,7 @@ async function cancelInvitation(id) {
     );
 
 
-  if (!confirmed) {
+  if(!confirmed){
 
     return;
 
@@ -1829,7 +2230,7 @@ async function cancelInvitation(id) {
     getDatabase();
 
 
-  if (!db) {
+  if(!db){
 
     alert(
       "Supabase is not configured."
@@ -1840,7 +2241,7 @@ async function cancelInvitation(id) {
   }
 
 
-  try {
+  try{
 
     const {
       data: sessionData
@@ -1853,7 +2254,7 @@ async function cancelInvitation(id) {
       sessionData.session;
 
 
-    if (!session) {
+    if(!session){
 
       alert(
         "Your admin session has expired."
@@ -1882,7 +2283,7 @@ async function cancelInvitation(id) {
         );
 
 
-    if (error) {
+    if(error){
 
       throw error;
 
@@ -1892,7 +2293,7 @@ async function cancelInvitation(id) {
     await loadInvitations();
 
 
-  } catch (error) {
+  }catch(error){
 
     console.error(
       "Cancel invitation error:",
@@ -1910,30 +2311,34 @@ async function cancelInvitation(id) {
 }
 
 
-
 /* =========================================================
    ESCAPE HTML
 ========================================================= */
 
-function escapeHTML(value) {
+function escapeHTML(value){
 
   return String(
     value ?? ""
   ).replace(
     /[&<>"']/g,
-    function (character) {
+    function(character){
 
       const entities = {
 
-        "&": "&amp;",
+        "&":
+          "&amp;",
 
-        "<": "&lt;",
+        "<":
+          "&lt;",
 
-        ">": "&gt;",
+        ">":
+          "&gt;",
 
-        '"': "&quot;",
+        '"':
+          "&quot;",
 
-        "'": "&#039;"
+        "'":
+          "&#039;"
 
       };
 
@@ -1948,12 +2353,11 @@ function escapeHTML(value) {
 }
 
 
-
 /* =========================================================
    ESCAPE ATTRIBUTE
 ========================================================= */
 
-function escapeAttr(value) {
+function escapeAttr(value){
 
   return escapeHTML(
     value
@@ -1963,7 +2367,6 @@ function escapeAttr(value) {
   );
 
 }
-
 
 
 /* =========================================================
@@ -1980,3 +2383,11 @@ window.cancelInvitation =
 
 window.generateInvitationCode =
   generateInvitationCode;
+
+
+window.buildFolderPath =
+  buildFolderPath;
+
+
+window.updateFolderPath =
+  updateFolderPath;

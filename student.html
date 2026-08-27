@@ -10,8 +10,8 @@
 <script>
 window.MathJax = {
   tex: {
-    inlineMath: [["\","\"]],
-    displayMath: [["\","\"]]
+    inlineMath: [["\\(","\\)"]],
+    displayMath: [["\\[","\\]"]]
   },
   options: {
     skipHtmlTags: [
@@ -724,3 +724,4044 @@ body{
 
 .ai-message-content{
   max-width:82%;
+
+  padding:14px 17px;
+
+  border-radius:17px;
+
+  background:#fff;
+
+  border:1px solid #dceee6;
+
+  color:#17352a;
+
+  line-height:1.6;
+
+  font-size:15px;
+
+  box-shadow:
+    0 5px 18px rgba(8,122,75,.04);
+
+  overflow-wrap:anywhere;
+}
+
+.ai-message.user .ai-message-content{
+  background:#087a4b;
+
+  color:#fff;
+
+  border-color:#087a4b;
+}
+
+
+/* =====================================================
+   AI MARKDOWN
+===================================================== */
+
+.ai-message-content h1,
+.ai-message-content h2,
+.ai-message-content h3{
+  color:#17352a;
+
+  line-height:1.3;
+
+  margin:8px 0 14px;
+}
+
+.ai-message.user .ai-message-content h1,
+.ai-message.user .ai-message-content h2,
+.ai-message.user .ai-message-content h3{
+  color:#fff;
+}
+
+.ai-message-content h1{
+  font-size:24px;
+}
+
+.ai-message-content h2{
+  font-size:20px;
+}
+
+.ai-message-content h3{
+  font-size:17px;
+}
+
+.ai-message-content strong{
+  font-weight:900;
+}
+
+.ai-message-content em{
+  font-style:italic;
+}
+
+.ai-message-content ul,
+.ai-message-content ol{
+  margin:10px 0;
+  padding-left:22px;
+}
+
+.ai-message-content li{
+  margin:6px 0;
+}
+
+
+/* =====================================================
+   QUICK ACTIONS
+===================================================== */
+
+.ai-quick-actions{
+  display:grid;
+
+  grid-template-columns:repeat(3,1fr);
+
+  gap:10px;
+
+  margin-bottom:18px;
+
+  flex-shrink:0 !important;
+}
+
+.ai-quick-button{
+  min-height:65px;
+
+  padding:12px;
+
+  background:#fff;
+
+  border:1px solid #cfe5da;
+
+  border-radius:15px;
+
+  cursor:pointer;
+
+  text-align:left;
+
+  color:#17352a;
+
+  font-weight:800;
+
+  transition:.2s;
+}
+
+.ai-quick-button:hover{
+  transform:translateY(-2px);
+
+  border-color:#73cfa9;
+
+  box-shadow:
+    0 8px 20px rgba(8,122,75,.08);
+}
+
+.ai-quick-button strong{
+  display:block;
+
+  margin-bottom:4px;
+
+  font-size:14px;
+}
+
+.ai-quick-button small{
+  color:#71847b;
+
+  font-size:11px;
+}
+
+
+/* =====================================================
+   AI INPUT
+===================================================== */
+
+.ai-input-row{
+  display:flex;
+
+  gap:10px;
+
+  flex-shrink:0 !important;
+}
+
+.ai-agent-input{
+  flex:1;
+
+  min-width:0;
+
+  min-height:55px;
+
+  padding:14px 17px;
+
+  border:1px solid #bcdccc;
+
+  border-radius:14px;
+
+  background:#fff;
+
+  color:#17352a;
+
+  font-size:15px;
+
+  outline:none;
+}
+
+.ai-agent-input:focus{
+  border-color:#087a4b;
+
+  box-shadow:
+    0 0 0 3px rgba(8,122,75,.08);
+}
+
+.ai-agent-send{
+  min-width:120px;
+
+  padding:0 20px;
+
+  border:0;
+
+  border-radius:14px;
+
+  background:#087a4b;
+
+  color:#fff;
+
+  font-weight:900;
+
+  cursor:pointer;
+
+  font-size:14px;
+}
+
+.ai-agent-send:hover{
+  background:#06683f;
+}
+
+.ai-agent-send:disabled{
+  opacity:.6;
+
+  cursor:not-allowed;
+}
+
+
+/* =====================================================
+   AI THINKING STATUS
+===================================================== */
+
+.ai-agent-status-text{
+  display:none;
+
+  margin-top:12px;
+
+  color:#087a4b;
+
+  font-size:13px;
+
+  font-weight:800;
+
+  flex-shrink:0 !important;
+}
+
+.ai-agent-status-text.show{
+  display:block;
+}
+
+
+/* =====================================================
+   STATS
+===================================================== */
+
+.stats{
+  display:grid;
+
+  grid-template-columns:repeat(4,1fr);
+
+  gap:14px;
+
+  margin-bottom:22px;
+}
+
+.stat{
+  padding:23px;
+
+  min-height:135px;
+
+  background:#fff;
+
+  border:1px solid #dceee6;
+
+  border-radius:21px;
+
+  box-shadow:0 10px 30px rgba(8,122,75,.05);
+}
+
+.stat strong{
+  display:block;
+
+  color:#087a4b;
+
+  font-size:36px;
+
+  margin-bottom:7px;
+}
+
+.stat span{
+  color:#70837b;
+
+  font-size:14px;
+}
+
+
+/* =====================================================
+   PROGRESS
+===================================================== */
+
+.progress-card{
+  background:#fff;
+
+  border:1px solid #dceee6;
+
+  border-radius:24px;
+
+  padding:28px;
+
+  margin-bottom:22px;
+
+  box-shadow:0 10px 30px rgba(8,122,75,.05);
+}
+
+.progress-header{
+  display:flex;
+
+  justify-content:space-between;
+
+  align-items:center;
+
+  gap:20px;
+}
+
+.progress-header h2{
+  margin:7px 0 0;
+
+  font-size:30px;
+
+  color:#173b2d;
+}
+
+#progressPercent{
+  color:#087a4b;
+
+  font-size:44px;
+
+  font-weight:900;
+}
+
+.progress-bar{
+  height:16px;
+
+  margin-top:22px;
+
+  overflow:hidden;
+
+  background:#e7f3ed;
+
+  border-radius:50px;
+}
+
+.progress-fill{
+  width:0;
+
+  height:100%;
+
+  background:#087a4b;
+
+  border-radius:50px;
+
+  transition:width .5s ease;
+}
+
+.progress-card>p{
+  color:#71847b;
+
+  line-height:1.6;
+}
+
+
+/* =====================================================
+   RESOURCES
+===================================================== */
+
+.resource-section,
+.subjects-card{
+  background:#fff;
+
+  border:1px solid #dceee6;
+
+  border-radius:24px;
+
+  padding:28px;
+
+  margin-bottom:22px;
+
+  box-shadow:0 10px 30px rgba(8,122,75,.05);
+}
+
+.resource-heading{
+  margin-bottom:18px;
+}
+
+.resource-heading h2,
+.subjects-card h2,
+.quick-section h2{
+  margin:7px 0 6px;
+
+  color:#173b2d;
+
+  font-size:30px;
+}
+
+.resource-heading p{
+  margin:0;
+
+  color:#74877f;
+}
+
+.resource-controls{
+  display:grid;
+
+  grid-template-columns:1fr 210px;
+
+  gap:10px;
+
+  margin-bottom:20px;
+}
+
+.resource-search,
+.resource-filter{
+  width:100%;
+
+  padding:14px 16px;
+
+  border:1px solid #cfe5da;
+
+  border-radius:13px;
+
+  outline:none;
+
+  background:#fbfefd;
+
+  color:#17352a;
+
+  font-size:15px;
+}
+
+.resource-filter{
+  font-weight:700;
+}
+
+.resource-search:focus,
+.resource-filter:focus{
+  border-color:#79c49e;
+
+  box-shadow:0 0 0 3px rgba(8,122,75,.08);
+}
+
+.resource-grid{
+  display:grid;
+
+  grid-template-columns:repeat(3,1fr);
+
+  gap:15px;
+}
+
+.resource-card{
+  display:flex;
+
+  flex-direction:column;
+
+  background:#fff;
+
+  border:1px solid #dceee6;
+
+  border-radius:21px;
+
+  padding:20px;
+
+  box-shadow:0 10px 28px rgba(8,122,75,.05);
+}
+
+.resource-icon{
+  width:52px;
+  height:52px;
+
+  display:grid;
+
+  place-items:center;
+
+  border-radius:15px;
+
+  background:#e8f8f0;
+
+  font-size:25px;
+
+  margin-bottom:13px;
+}
+
+.resource-type{
+  display:inline-flex;
+
+  align-self:flex-start;
+
+  padding:5px 9px;
+
+  border-radius:20px;
+
+  background:#f0f8f4;
+
+  color:#087a4b;
+
+  font-size:10px;
+
+  font-weight:900;
+
+  letter-spacing:1px;
+}
+
+.resource-card h3{
+  margin:11px 0 6px;
+
+  color:#214638;
+
+  font-size:18px;
+
+  line-height:1.35;
+}
+
+.resource-subject{
+  color:#087a4b;
+
+  font-size:12px;
+
+  font-weight:800;
+
+  margin-bottom:6px;
+}
+
+.resource-card p{
+  color:#75877f;
+
+  font-size:14px;
+
+  line-height:1.6;
+
+  margin:0 0 15px;
+
+  flex:1;
+}
+
+.resource-meta{
+  display:flex;
+
+  flex-wrap:wrap;
+
+  gap:7px;
+
+  margin-bottom:12px;
+}
+
+.resource-meta span{
+  padding:4px 7px;
+
+  background:#f4f9f6;
+
+  border-radius:7px;
+
+  color:#70847b;
+
+  font-size:11px;
+}
+
+.resource-buttons{
+  display:flex;
+
+  gap:8px;
+}
+
+.resource-open,
+.save-resource{
+  min-height:45px;
+
+  border-radius:10px;
+
+  font-weight:800;
+
+  font-size:13px;
+
+  cursor:pointer;
+}
+
+.resource-open{
+  flex:1;
+
+  background:#087a4b;
+
+  color:#fff;
+
+  border:none;
+}
+
+.resource-open:hover{
+  background:#06683f;
+}
+
+.save-resource{
+  min-width:115px;
+
+  padding:10px;
+
+  background:#e8f8f0;
+
+  color:#087a4b;
+
+  border:1px solid #bfe6d3;
+}
+
+.save-resource.saved{
+  background:#087a4b;
+
+  color:#fff;
+
+  border-color:#087a4b;
+}
+
+.empty-state,
+.loading{
+  grid-column:1/-1;
+
+  padding:40px 20px;
+
+  text-align:center;
+
+  border-radius:18px;
+}
+
+.empty-state{
+  background:#f7fcfa;
+
+  border:1px dashed #bfded0;
+
+  color:#73877e;
+}
+
+.loading{
+  color:#087a4b;
+
+  font-weight:800;
+}
+
+
+/* =====================================================
+   SUBJECTS
+===================================================== */
+
+.subjects-grid{
+  display:grid;
+
+  grid-template-columns:repeat(5,1fr);
+
+  gap:11px;
+}
+
+.subject-item{
+  min-height:105px;
+
+  padding:16px;
+
+  display:flex;
+
+  flex-direction:column;
+
+  justify-content:center;
+
+  align-items:flex-start;
+
+  background:#f7fcfa;
+
+  border:1px solid #dceee6;
+
+  border-radius:17px;
+
+  cursor:pointer;
+
+  transition:.2s;
+}
+
+.subject-item:hover{
+  transform:translateY(-3px);
+
+  border-color:#9ed9bb;
+}
+
+.subject-icon{
+  font-size:24px;
+
+  margin-bottom:8px;
+}
+
+.subject-item b{
+  color:#214638;
+
+  font-size:14px;
+}
+
+.subject-item small{
+  margin-top:4px;
+
+  color:#7b8d85;
+
+  line-height:1.4;
+}
+
+
+/* =====================================================
+   QUICK CARDS
+===================================================== */
+
+.quick-section{
+  margin-bottom:22px;
+}
+
+.quick-grid{
+  display:grid;
+
+  grid-template-columns:repeat(4,1fr);
+
+  gap:14px;
+}
+
+.quick-card{
+  padding:23px;
+
+  background:#fff;
+
+  border:1px solid #dceee6;
+
+  border-radius:21px;
+
+  text-decoration:none;
+
+  color:#173b2d;
+
+  box-shadow:0 10px 28px rgba(8,122,75,.05);
+}
+
+.quick-card .icon{
+  font-size:27px;
+
+  margin-bottom:12px;
+}
+
+.quick-card b{
+  display:block;
+
+  margin-bottom:5px;
+}
+
+.quick-card small{
+  color:#788a82;
+
+  line-height:1.5;
+}
+
+
+/* =====================================================
+   FOOTER
+===================================================== */
+
+.student-footer{
+  padding:30px 5%;
+
+  text-align:center;
+
+  background:#fff;
+
+  border-top:1px solid #dceee6;
+
+  color:#70837b;
+
+  font-size:14px;
+}
+
+.student-footer b{
+  color:#087a4b;
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media(max-width:1000px){
+
+  .stats{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .subjects-grid{
+    grid-template-columns:repeat(3,1fr);
+  }
+
+  .resource-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .quick-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+}
+
+@media(max-width:760px){
+
+  .student-header{
+    padding:10px 4%;
+
+    flex-wrap:wrap;
+  }
+
+  .student-brand{
+    flex:1;
+  }
+
+  .header-actions{
+    width:100%;
+
+    justify-content:space-between;
+  }
+
+  .dashboard{
+    padding:22px 4% 60px;
+  }
+
+  .welcome{
+    padding:27px;
+
+    border-radius:23px;
+  }
+
+  .resource-controls{
+    grid-template-columns:1fr;
+  }
+
+  .ai-agent{
+    top:88px !important;
+    right:12px !important;
+
+    width:62px !important;
+    height:62px !important;
+  }
+
+  .ai-agent-header{
+    width:62px !important;
+    height:62px !important;
+  }
+
+  .ai-agent-avatar{
+    width:62px !important;
+    height:62px !important;
+  }
+
+  /* =================================================
+     MOBILE AI WINDOW
+     FIT COMPLETELY INSIDE SCREEN
+  ================================================= */
+
+  .ai-chat-card{
+    top:75px !important;
+    right:10px !important;
+
+    width:calc(100vw - 20px) !important;
+
+    height:calc(100vh - 85px) !important;
+
+    max-height:calc(100dvh - 85px) !important;
+
+    min-height:0 !important;
+
+    border-radius:20px !important;
+
+    padding:15px !important;
+  }
+
+  .ai-agent.ai-open .ai-agent-avatar{
+    top:87px !important;
+    right:25px !important;
+
+    width:52px !important;
+    height:52px !important;
+  }
+
+  .ai-agent-messages{
+    flex:1 1 auto !important;
+
+    height:auto !important;
+
+    min-height:0 !important;
+
+    max-height:none !important;
+
+    margin-bottom:12px !important;
+  }
+
+}
+
+@media(max-width:700px){
+
+  .ai-quick-actions{
+    grid-template-columns:repeat(2,1fr);
+
+    flex-shrink:0 !important;
+  }
+
+}
+
+@media(max-width:520px){
+
+  .stats{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .stat{
+    padding:17px;
+
+    min-height:115px;
+  }
+
+  .stat strong{
+    font-size:29px;
+  }
+
+  .resource-grid,
+  .quick-grid{
+    grid-template-columns:1fr;
+  }
+
+  .subjects-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .profile-card{
+    flex-direction:column;
+
+    align-items:flex-start;
+  }
+
+  .resource-buttons{
+    flex-direction:column;
+  }
+
+  .save-resource{
+    width:100%;
+  }
+
+}
+
+@media(max-width:480px){
+
+  .student-brand small{
+    letter-spacing:1px;
+  }
+
+  .back{
+    font-size:13px;
+  }
+
+  .logout{
+    padding:9px 11px;
+  }
+
+  /* =================================================
+     SMALL PHONE AI TEACHER
+     KEEP EVERYTHING INSIDE VIEWPORT
+  ================================================= */
+
+  .ai-quick-actions{
+    grid-template-columns:1fr;
+
+    gap:7px;
+
+    margin-bottom:10px;
+  }
+
+  .ai-quick-button{
+    min-height:54px;
+
+    padding:9px 11px;
+
+    border-radius:13px;
+  }
+
+  .ai-quick-button strong{
+    font-size:13px;
+
+    margin-bottom:2px;
+  }
+
+  .ai-quick-button small{
+    font-size:10px;
+  }
+
+  .ai-input-row{
+    flex-direction:row;
+
+    gap:7px;
+
+    flex-shrink:0 !important;
+  }
+
+  .ai-agent-input{
+    min-height:50px;
+
+    padding:12px;
+
+    font-size:14px;
+  }
+
+  .ai-agent-send{
+    min-width:82px;
+
+    min-height:50px;
+
+    padding:0 10px;
+
+    font-size:13px;
+  }
+
+  .ai-agent-status-text{
+    margin-top:7px;
+
+    font-size:11px;
+  }
+
+  .ai-message{
+    gap:8px;
+
+    margin-bottom:12px;
+  }
+
+  .ai-message-avatar{
+    width:38px;
+    height:38px;
+  }
+
+  .ai-message-content{
+    max-width:calc(100% - 46px);
+
+    padding:11px 12px;
+
+    border-radius:14px;
+
+    line-height:1.5;
+
+    font-size:14px;
+  }
+
+  .ai-chat-card{
+    top:70px !important;
+
+    right:7px !important;
+
+    width:calc(100vw - 14px) !important;
+
+    height:calc(100vh - 78px) !important;
+
+    max-height:calc(100dvh - 78px) !important;
+
+    padding:10px !important;
+
+    border-radius:18px !important;
+  }
+
+  .ai-agent.ai-open .ai-agent-avatar{
+    top:79px !important;
+
+    right:18px !important;
+
+    width:48px !important;
+
+    height:48px !important;
+  }
+
+}
+
+
+/* =====================================================
+   AI TEACHER — EXTRA MOBILE OPEN STATE
+===================================================== */
+
+@media(max-width:600px){
+
+  .ai-agent.ai-open{
+    width:52px !important;
+    height:52px !important;
+  }
+
+  .ai-agent.ai-open .ai-agent-header{
+    width:52px !important;
+    height:52px !important;
+  }
+
+}
+
+
+/* =====================================================
+   ACCESSIBILITY
+===================================================== */
+
+.ai-agent-avatar:focus{
+  outline:3px solid rgba(8,122,75,.25);
+  outline-offset:3px;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible{
+  outline:3px solid rgba(8,122,75,.25);
+  outline-offset:2px;
+}
+
+</style>
+</head>
+
+<body>
+
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<header class="student-header">
+
+  <button
+    id="menuButton"
+    class="menu-button"
+    type="button"
+    aria-label="Open student menu">
+    ☰
+  </button>
+
+  <div class="student-brand">
+
+    <div class="mark">
+      AG
+    </div>
+
+    <div>
+
+      <b>AGULIBRARY</b>
+
+      <small>
+        GLOBAL DIGITAL EDUCATION
+      </small>
+
+    </div>
+
+  </div>
+
+  <div class="header-actions">
+
+    <a
+      class="back"
+      href="index.html">
+      🏠 AGULIBRARY
+    </a>
+
+    <button
+      id="logoutButton"
+      class="logout"
+      type="button">
+      🚪 Sign out
+    </button>
+
+  </div>
+
+</header>
+
+
+<!-- =====================================================
+     SIDE MENU
+===================================================== -->
+
+<div
+  id="sideMenuOverlay"
+  class="side-menu-overlay">
+</div>
+
+<aside
+  id="studentSideMenu"
+  class="student-side-menu">
+
+  <div class="side-menu-header">
+
+    <div>
+
+      <span class="eyebrow">
+        STUDENT CENTER
+      </span>
+
+      <h2>
+        My Account
+      </h2>
+
+    </div>
+
+    <button
+      id="closeMenuButton"
+      class="close-menu-button"
+      type="button">
+      ×
+    </button>
+
+  </div>
+
+
+  <!-- STUDENT PROFILE -->
+
+  <section class="side-profile">
+
+    <div
+      id="profileAvatar"
+      class="profile-avatar">
+      AG
+    </div>
+
+    <div class="profile-info">
+
+      <span class="eyebrow">
+        STUDENT PROFILE
+      </span>
+
+      <h2 id="profileName">
+        Student
+      </h2>
+
+      <p id="profileEmail">
+        Loading account...
+      </p>
+
+      <span class="profile-tag">
+        🎓 Active Student
+      </span>
+
+    </div>
+
+  </section>
+
+
+  <!-- ACCOUNT -->
+
+  <section class="side-account">
+
+    <span class="eyebrow">
+      ACCOUNT CENTER
+    </span>
+
+    <h2>
+      Account Status
+    </h2>
+
+    <div class="account-status">
+
+      <span class="status-dot"></span>
+
+      Account Active
+
+    </div>
+
+    <div class="account-info">
+
+      Your AGULIBRARY account is connected
+      and ready for global learning.
+
+    </div>
+
+  </section>
+
+
+  <!-- SUPPORT -->
+
+  <div class="side-menu-links">
+
+    <button
+      type="button"
+      onclick="closeStudentMenu()">
+      👤 Student Profile
+    </button>
+
+    <button
+      type="button"
+      onclick="closeStudentMenu()">
+      ⚙️ Account Settings
+    </button>
+
+    <button
+      type="button"
+      onclick="closeStudentMenu()">
+      🆘 Support
+    </button>
+
+  </div>
+
+</aside>
+
+
+<!-- =====================================================
+     MAIN DASHBOARD
+===================================================== -->
+
+<main class="dashboard">
+
+  <div
+    id="message"
+    class="message">
+  </div>
+
+
+  <!-- =====================================================
+       WELCOME
+  ===================================================== -->
+
+  <section class="welcome">
+
+    <span class="eyebrow">
+      STUDENT LEARNING CENTER
+    </span>
+
+    <h1>
+      Welcome,
+      <span id="welcomeName">
+        Student
+      </span>
+      👋
+    </h1>
+
+    <p>
+      Your personal AGULIBRARY learning space.
+      Explore global educational resources,
+      continue your studies, track your progress
+      and discover new subjects.
+    </p>
+
+  </section>
+
+
+  <!-- =====================================================
+       AI LEARNING AGENT
+       HIDDEN EXCEPT FOR TEACHER PICTURE
+  ===================================================== -->
+
+  <section
+    class="ai-agent"
+    id="aiLearningAgent">
+
+    <div class="ai-agent-header">
+
+      <!-- ONLY THIS PICTURE IS VISIBLE -->
+
+      <img
+        class="ai-agent-avatar"
+        src="ai-teacher.jpg"
+        alt="AGULIBRARY AI Learning Agent"
+        title="Open AI Teacher">
+
+      <!-- AI CONTENT IS KEPT HERE BUT HIDDEN BY CSS -->
+
+      <div class="ai-agent-heading">
+
+        <span class="ai-agent-label">
+          🤖 AI LEARNING AGENT
+        </span>
+
+        <h2>
+          Your Personal AI Teacher
+        </h2>
+
+        <p>
+          Ask questions, understand difficult topics,
+          get explanations and receive guidance
+          throughout your learning journey.
+        </p>
+
+      </div>
+
+      <div class="ai-agent-status">
+        AI Teacher Ready
+      </div>
+
+    </div>
+
+
+    <!-- =================================================
+         AI CHAT
+         HIDDEN UNTIL AI TEACHER PICTURE IS CLICKED
+    ================================================== -->
+
+    <div class="ai-chat-card">
+
+      <div
+        id="aiAgentMessages"
+        class="ai-agent-messages">
+
+        <div class="ai-message">
+
+          <div class="ai-message-avatar">
+
+            <img
+              src="ai-teacher.jpg"
+              alt="AI Teacher">
+
+          </div>
+
+          <div class="ai-message-content">
+
+            Hello! 👋 I am your AGULIBRARY AI Learning
+            Agent. Ask me about any subject or topic
+            you are studying, and I will help you learn
+            step by step.
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- QUICK ACTIONS -->
+
+      <div class="ai-quick-actions">
+
+        <button
+          class="ai-quick-button"
+          type="button"
+          onclick="aiQuickPrompt('Explain this topic to me step by step.')">
+
+          <strong>
+            📖 Explain a topic
+          </strong>
+
+          <small>
+            Learn something difficult
+          </small>
+
+        </button>
+
+
+        <button
+          class="ai-quick-button"
+          type="button"
+          onclick="aiQuickPrompt('Give me practice questions for my current subject.')">
+
+          <strong>
+            🧠 Practice questions
+          </strong>
+
+          <small>
+            Test your understanding
+          </small>
+
+        </button>
+
+
+        <button
+          class="ai-quick-button"
+          type="button"
+          onclick="aiQuickPrompt('Help me prepare for an examination.')">
+
+          <strong>
+            🎯 Exam preparation
+          </strong>
+
+          <small>
+            Study more effectively
+          </small>
+
+        </button>
+
+      </div>
+
+
+      <!-- INPUT -->
+
+      <div class="ai-input-row">
+
+        <input
+          id="aiAgentInput"
+          class="ai-agent-input"
+          type="text"
+          placeholder="Ask your AI Learning Agent anything..."
+          autocomplete="off">
+
+        <button
+          id="aiAgentSend"
+          class="ai-agent-send"
+          type="button">
+          Send ➤
+        </button>
+
+      </div>
+
+
+      <div
+        id="aiAgentStatus"
+        class="ai-agent-status-text">
+
+        🤖 AI Teacher is thinking...
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================
+       STATS
+===================================================== -->
+
+  <section class="stats">
+
+    <div class="stat">
+
+      <strong id="statCourses">
+        0
+      </strong>
+
+      <span>
+        Available Resources
+      </span>
+
+    </div>
+
+
+    <div class="stat">
+
+      <strong id="statLessons">
+        0
+      </strong>
+
+      <span>
+        Lessons & Courses
+      </span>
+
+    </div>
+
+
+    <div class="stat">
+
+      <strong id="statSubjects">
+        0
+      </strong>
+
+      <span>
+        Subjects Available
+      </span>
+
+    </div>
+
+
+    <div class="stat">
+
+      <strong id="statRecent">
+        0
+      </strong>
+
+      <span>
+        Recently Viewed
+      </span>
+
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================
+       PROGRESS
+  ===================================================== -->
+
+  <section class="progress-card">
+
+    <div class="progress-header">
+
+      <div>
+
+        <span class="eyebrow">
+          LEARNING PROGRESS
+        </span>
+
+        <h2>
+          Your learning journey
+        </h2>
+
+      </div>
+
+      <strong id="progressPercent">
+        0%
+      </strong>
+
+    </div>
+
+
+    <div class="progress-bar">
+
+      <div
+        id="progressFill"
+        class="progress-fill">
+      </div>
+
+    </div>
+
+
+    <p id="progressText">
+      Explore resources and open lessons
+      to begin building your learning activity.
+    </p>
+
+  </section>
+
+
+  <!-- =====================================================
+       RESOURCES
+  ===================================================== -->
+
+  <section
+    id="resources"
+    class="resource-section">
+
+    <div class="resource-heading">
+
+      <span class="eyebrow">
+        AGULIBRARY RESOURCES
+      </span>
+
+      <h2>
+        Latest learning resources
+      </h2>
+
+      <p>
+        Published educational resources from
+        the global library.
+      </p>
+
+    </div>
+
+
+    <div class="resource-controls">
+
+      <input
+        id="studentResourceSearch"
+        class="resource-search"
+        type="search"
+        placeholder="Search books, lessons, videos, subjects..."
+        autocomplete="off">
+
+
+      <select
+        id="resourceTypeFilter"
+        class="resource-filter">
+
+        <option value="">
+          All resource types
+        </option>
+
+        <option value="book">
+          📚 Books
+        </option>
+
+        <option value="pdf">
+          📄 PDFs
+        </option>
+
+        <option value="video">
+          🎥 Videos
+        </option>
+
+        <option value="image">
+          🖼️ Images
+        </option>
+
+        <option value="lesson">
+          📖 Lessons
+        </option>
+
+        <option value="course">
+          🎓 Courses
+        </option>
+
+        <option value="document">
+          📄 Documents
+        </option>
+
+        <option value="audio">
+          🎧 Audio
+        </option>
+
+      </select>
+
+    </div>
+
+
+    <div
+      id="studentResourceGrid"
+      class="resource-grid">
+
+      <div class="loading">
+        📚 Loading AGULIBRARY resources...
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================
+       SUBJECTS
+===================================================== -->
+
+  <section class="subjects-card">
+
+    <span class="eyebrow">
+      GLOBAL SUBJECTS
+    </span>
+
+    <h2>
+      Explore your subjects
+    </h2>
+
+
+    <div class="subjects-grid">
+
+      <div
+        class="subject-item"
+        data-subject="Science">
+
+        <span class="subject-icon">
+          🔬
+        </span>
+
+        <b>
+          Science
+        </b>
+
+        <small>
+          Physics • Chemistry • Biology
+        </small>
+
+      </div>
+
+
+      <div
+        class="subject-item"
+        data-subject="Mathematics">
+
+        <span class="subject-icon">
+          📐
+        </span>
+
+        <b>
+          Mathematics
+        </b>
+
+        <small>
+          Algebra • Statistics
+        </small>
+
+      </div>
+
+
+      <div
+        class="subject-item"
+        data-subject="Technology">
+
+        <span class="subject-icon">
+          💻
+        </span>
+
+        <b>
+          Technology
+        </b>
+
+        <small>
+          Programming • AI
+        </small>
+
+      </div>
+
+
+      <div
+        class="subject-item"
+        data-subject="Languages & Literature">
+
+        <span class="subject-icon">
+          📚
+        </span>
+
+        <b>
+          Languages & Literature
+        </b>
+
+        <small>
+          English • French • Spanish
+        </small>
+
+      </div>
+
+
+      <div
+        class="subject-item"
+        data-subject="Social Sciences">
+
+        <span class="subject-icon">
+          🌎
+        </span>
+
+        <b>
+          Social Sciences
+        </b>
+
+        <small>
+          History • Geography • Economics
+        </small>
+
+      </div>
+
+
+      <div
+        class="subject-item"
+        data-subject="Business & Finance">
+
+        <span class="subject-icon">
+          💼
+        </span>
+
+        <b>
+          Business & Finance
+        </b>
+
+        <small>
+          Accounting • Finance • Marketing
+        </small>
+
+      </div>
+
+
+      <div
+        class="subject-item"
+        data-subject="Arts & Creative Studies">
+
+        <span class="subject-icon">
+          🎨
+        </span>
+
+        <b>
+          Arts & Creative Studies
+        </b>
+
+        <small>
+          Art • Music • Film
+        </small>
+
+      </div>
+
+
+      <div
+        class="subject-item"
+        data-subject="Professional & Career">
+
+        <span class="subject-icon">
+          🧑‍⚕️
+        </span>
+
+        <b>
+          Professional & Career
+        </b>
+
+        <small>
+          Medicine • Law • Engineering
+        </small>
+
+      </div>
+
+
+      <div
+        class="subject-item"
+        data-subject="Exam Preparation">
+
+        <span class="subject-icon">
+          📝
+        </span>
+
+        <b>
+          Exam Preparation
+        </b>
+
+        <small>
+          WAEC • NECO • International Exams
+        </small>
+
+      </div>
+
+
+      <div
+        class="subject-item"
+        data-subject="Professional Development">
+
+        <span class="subject-icon">
+          🚀
+        </span>
+
+        <b>
+          Professional Development
+        </b>
+
+        <small>
+          Skills • Careers • Certifications
+        </small>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================
+       MY LEARNING
+  ===================================================== -->
+
+  <section class="quick-section">
+
+    <span class="eyebrow">
+      MY LEARNING
+    </span>
+
+    <h2>
+      Continue your learning journey
+    </h2>
+
+
+    <div class="quick-grid">
+
+      <a
+        href="#resources"
+        class="quick-card">
+
+        <div class="icon">
+          📚
+        </div>
+
+        <b>
+          Browse Resources
+        </b>
+
+        <small>
+          Explore books, PDFs, videos,
+          lessons and courses.
+        </small>
+
+      </a>
+
+
+      <a
+        href="#subjects"
+        class="quick-card">
+
+        <div class="icon">
+          🌍
+        </div>
+
+        <b>
+          Explore Subjects
+        </b>
+
+        <small>
+          Discover learning materials across
+          global subject areas.
+        </small>
+
+      </a>
+
+
+      <a
+        href="#resources"
+        class="quick-card">
+
+        <div class="icon">
+          🔎
+        </div>
+
+        <b>
+          Search Library
+        </b>
+
+        <small>
+          Find educational resources quickly.
+        </small>
+
+      </a>
+
+
+      <a
+        href="#recent"
+        class="quick-card">
+
+        <div class="icon">
+          🕐
+        </div>
+
+        <b>
+          Recently Viewed
+        </b>
+
+        <small>
+          Return to resources you opened recently.
+        </small>
+
+      </a>
+
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================
+       RECENT
+  ===================================================== -->
+
+  <section
+    id="recent"
+    class="resource-section">
+
+    <div class="resource-heading">
+
+      <span class="eyebrow">
+        LEARNING ACTIVITY
+      </span>
+
+      <h2>
+        Recently viewed
+      </h2>
+
+      <p>
+        Continue exploring resources you opened recently.
+      </p>
+
+    </div>
+
+
+    <div
+      id="recentGrid"
+      class="resource-grid">
+
+      <div class="empty-state">
+
+        🕐
+
+        <br><br>
+
+        You haven't opened a resource yet.
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================
+       PRACTICE
+  ===================================================== -->
+
+  <section class="quick-section">
+
+    <span class="eyebrow">
+      PRACTICE & QUIZZES
+    </span>
+
+    <h2>
+      Test your knowledge
+    </h2>
+
+
+    <div class="quick-grid">
+
+      <div class="quick-card">
+
+        <div class="icon">
+          🧠
+        </div>
+
+        <b>
+          Practice Questions
+        </b>
+
+        <small>
+          Topic-based practice questions
+          will be connected to resources.
+        </small>
+
+      </div>
+
+
+      <div class="quick-card">
+
+        <div class="icon">
+          🏆
+        </div>
+
+        <b>
+          Quiz Challenges
+        </b>
+
+        <small>
+          Test your understanding and
+          improve your performance.
+        </small>
+
+      </div>
+
+
+      <div class="quick-card">
+
+        <div class="icon">
+          📊
+        </div>
+
+        <b>
+          Results
+        </b>
+
+        <small>
+          Your quiz results will be
+          displayed here.
+        </small>
+
+      </div>
+
+
+      <div class="quick-card">
+
+        <div class="icon">
+          🎯
+        </div>
+
+        <b>
+          Learning Goals
+        </b>
+
+        <small>
+          Build consistent learning habits
+          as the platform grows.
+        </small>
+
+      </div>
+
+    </div>
+
+  </section>
+
+</main>
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer class="student-footer">
+
+  <b>
+    AGULIBRARY
+  </b>
+
+  — Global Digital Education Library
+
+  <br><br>
+
+  Owner: Umar Mohammed
+
+  <br>
+
+  ©
+  <span id="year"></span>
+  AGULIBRARY. All rights reserved.
+
+</footer>
+
+
+<!-- =====================================================
+     SUPABASE
+===================================================== -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="config.js"></script>
+
+<script src="supabase.js"></script>
+
+
+<script>
+
+let client = null;
+let studentUser = null;
+let studentResources = [];
+let aiConversation = [];
+
+const RECENT_KEY = "AGU_RECENT_RESOURCES";
+const SAVED_KEY = "AGU_SAVED_RESOURCES";
+
+
+/* =====================================================
+   PAGE START
+===================================================== */
+
+document.addEventListener(
+  "DOMContentLoaded",
+  async function(){
+
+    const year =
+      document.getElementById("year");
+
+    if(year){
+      year.textContent =
+        new Date().getFullYear();
+    }
+
+    setupSearch();
+    setupSubjects();
+    setupLogout();
+    setupAI();
+    setupStudentSideMenu();
+    setupAITeacherWindow();
+
+    await loadDashboard();
+
+  }
+);
+
+
+/* =====================================================
+   DASHBOARD
+===================================================== */
+
+async function loadDashboard(){
+
+  try{
+
+    if(typeof getSupabase !== "function"){
+
+      showMessage(
+        "Supabase connection is unavailable.",
+        "error"
+      );
+
+      return;
+
+    }
+
+    client = getSupabase();
+
+    if(!client){
+
+      showMessage(
+        "Supabase connection is unavailable.",
+        "error"
+      );
+
+      return;
+
+    }
+
+    const result =
+      await client.auth.getSession();
+
+    if(result.error){
+      throw result.error;
+    }
+
+    const session =
+      result.data?.session;
+
+    if(!session){
+
+      window.location.href =
+        "auth.html";
+
+      return;
+
+    }
+
+    studentUser =
+      session.user;
+
+    const email =
+      studentUser.email ||
+      "Student";
+
+    const name =
+      studentUser.user_metadata?.full_name ||
+      studentUser.user_metadata?.name ||
+      email.split("@")[0] ||
+      "Student";
+
+    setText(
+      "welcomeName",
+      name
+    );
+
+    setText(
+      "profileName",
+      name
+    );
+
+    setText(
+      "profileEmail",
+      email
+    );
+
+    setAvatar(name);
+
+    await loadResources();
+
+    renderRecent();
+
+    updateStats();
+
+  }catch(error){
+
+    console.error(
+      "Dashboard error:",
+      error
+    );
+
+    showMessage(
+      "Unable to load your dashboard.",
+      "error"
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   LOAD RESOURCES
+===================================================== */
+
+async function loadResources(){
+
+  const grid =
+    document.getElementById(
+      "studentResourceGrid"
+    );
+
+  if(!grid){
+    return;
+  }
+
+  grid.innerHTML =
+    '<div class="loading">📚 Loading AGULIBRARY resources...</div>';
+
+  try{
+
+    const result =
+      await client
+        .from("resources")
+        .select("*")
+        .order(
+          "created_at",
+          {ascending:false}
+        );
+
+    if(result.error){
+      throw result.error;
+    }
+
+    studentResources =
+      result.data || [];
+
+    renderResources(
+      studentResources
+    );
+
+    updateStats();
+
+  }catch(error){
+
+    console.error(
+      "Resource error:",
+      error
+    );
+
+    grid.innerHTML =
+      '<div class="empty-state">⚠️<br><br>AGULIBRARY resources could not be loaded.<br><br>Please refresh the page.</div>';
+
+  }
+
+}
+
+
+/* =====================================================
+   CREATE RESOURCE CARD
+===================================================== */
+
+function createResourceCard(resource){
+
+  const id =
+    String(resource.id || "");
+
+  const title =
+    escapeHTML(
+      resource.title ||
+      "Untitled Resource"
+    );
+
+  const description =
+    escapeHTML(
+      resource.description ||
+      "Educational resource"
+    );
+
+  const subject =
+    escapeHTML(
+      resource.subject ||
+      resource.subject_name ||
+      ""
+    );
+
+  const type =
+    String(
+      resource.type ||
+      "resource"
+    )
+    .toLowerCase()
+    .trim();
+
+  const icon =
+    getIcon(type);
+
+  const level =
+    resource.level ||
+    resource.class_level ||
+    "";
+
+  const term =
+    resource.term ||
+    "";
+
+  const saved =
+    isSaved(id);
+
+  let meta = "";
+
+  if(level){
+
+    meta +=
+      "<span>" +
+      escapeHTML(level) +
+      "</span>";
+
+  }
+
+  if(term){
+
+    meta +=
+      "<span>" +
+      escapeHTML(term) +
+      "</span>";
+
+  }
+
+  const openText =
+    type === "lesson" ||
+    type === "course"
+      ? "📖 Open Lesson →"
+      : "Open Resource →";
+
+
+  return `
+    <article class="resource-card">
+
+      <div class="resource-icon">
+        ${icon}
+      </div>
+
+      <span class="resource-type">
+        ${escapeHTML(type.toUpperCase())}
+      </span>
+
+      <h3>
+        ${title}
+      </h3>
+
+      ${
+        subject
+          ? `<div class="resource-subject">${subject}</div>`
+          : ""
+      }
+
+      ${
+        meta
+          ? `<div class="resource-meta">${meta}</div>`
+          : ""
+      }
+
+      <p>
+        ${description}
+      </p>
+
+      <div class="resource-buttons">
+
+        <button
+          class="resource-open"
+          type="button"
+          onclick="openResource('${escapeJS(id)}')">
+          ${openText}
+        </button>
+
+        <button
+          class="save-resource ${saved ? "saved" : ""}"
+          type="button"
+          onclick="toggleSaved('${escapeJS(id)}')">
+
+          ${saved ? "★ Saved" : "☆ Save"}
+
+        </button>
+
+      </div>
+
+    </article>
+  `;
+
+}
+
+
+/* =====================================================
+   RENDER RESOURCES
+===================================================== */
+
+function renderResources(list){
+
+  const grid =
+    document.getElementById(
+      "studentResourceGrid"
+    );
+
+  if(!grid){
+    return;
+  }
+
+  if(!list.length){
+
+    grid.innerHTML =
+      '<div class="empty-state">📚<br><br>No educational resources are available yet.</div>';
+
+    return;
+
+  }
+
+  grid.innerHTML =
+    list
+      .map(createResourceCard)
+      .join("");
+
+}
+
+
+/* =====================================================
+   OPEN RESOURCE
+===================================================== */
+
+function openResource(id){
+
+  const resource =
+    studentResources.find(
+      item =>
+        String(item.id) ===
+        String(id)
+    );
+
+  if(!resource){
+
+    alert(
+      "This resource could not be found."
+    );
+
+    return;
+
+  }
+
+  recordRecent(id);
+
+  window.location.href =
+    "resource-viewer.html?id=" +
+    encodeURIComponent(id);
+
+}
+
+
+/* =====================================================
+   SEARCH
+===================================================== */
+
+function setupSearch(){
+
+  const search =
+    document.getElementById(
+      "studentResourceSearch"
+    );
+
+  const filter =
+    document.getElementById(
+      "resourceTypeFilter"
+    );
+
+  if(search){
+
+    search.addEventListener(
+      "input",
+      applyFilters
+    );
+
+  }
+
+  if(filter){
+
+    filter.addEventListener(
+      "change",
+      applyFilters
+    );
+
+  }
+
+}
+
+
+function applyFilters(){
+
+  const search =
+    document.getElementById(
+      "studentResourceSearch"
+    );
+
+  const filter =
+    document.getElementById(
+      "resourceTypeFilter"
+    );
+
+  const query =
+    String(
+      search?.value || ""
+    )
+    .toLowerCase()
+    .trim();
+
+  const type =
+    String(
+      filter?.value || ""
+    )
+    .toLowerCase()
+    .trim();
+
+
+  const filtered =
+    studentResources.filter(
+      resource => {
+
+        const resourceType =
+          String(
+            resource.type || ""
+          )
+          .toLowerCase()
+          .trim();
+
+        const searchable = [
+          resource.title,
+          resource.description,
+          resource.subject,
+          resource.subject_name,
+          resource.type,
+          resource.class_level,
+          resource.level,
+          resource.term
+        ]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
+
+        return (
+          (!query ||
+            searchable.includes(query))
+          &&
+          (!type ||
+            resourceType === type)
+        );
+
+      }
+    );
+
+
+  renderResources(
+    filtered
+  );
+
+}
+
+
+/* =====================================================
+   SUBJECTS
+===================================================== */
+
+function setupSubjects(){
+
+  document
+    .querySelectorAll(
+      ".subject-item"
+    )
+    .forEach(
+      item => {
+
+        item.addEventListener(
+          "click",
+          function(){
+
+            const search =
+              document.getElementById(
+                "studentResourceSearch"
+              );
+
+            if(search){
+
+              search.value =
+                item.dataset.subject;
+
+            }
+
+            const resources =
+              document.getElementById(
+                "resources"
+              );
+
+            if(resources){
+
+              resources.scrollIntoView({
+                behavior:"smooth"
+              });
+
+            }
+
+            applyFilters();
+
+          }
+        );
+
+      }
+    );
+
+}
+
+
+/* =====================================================
+   SAVED RESOURCES
+===================================================== */
+
+function getSaved(){
+
+  if(!studentUser){
+    return [];
+  }
+
+  try{
+
+    const data =
+      JSON.parse(
+        localStorage.getItem(
+          SAVED_KEY +
+          "_" +
+          studentUser.id
+        ) || "[]"
+      );
+
+    return Array.isArray(data)
+      ? data
+      : [];
+
+  }catch(error){
+
+    return [];
+
+  }
+
+}
+
+
+function isSaved(id){
+
+  return getSaved().some(
+    savedId =>
+      String(savedId) ===
+      String(id)
+  );
+
+}
+
+
+function toggleSaved(id){
+
+  if(!studentUser){
+    return;
+  }
+
+  const key =
+    SAVED_KEY +
+    "_" +
+    studentUser.id;
+
+  let saved =
+    getSaved();
+
+  const exists =
+    saved.some(
+      savedId =>
+        String(savedId) ===
+        String(id)
+    );
+
+  if(exists){
+
+    saved =
+      saved.filter(
+        savedId =>
+          String(savedId) !==
+          String(id)
+      );
+
+  }else{
+
+    saved = [
+      String(id),
+      ...saved
+    ];
+
+  }
+
+  localStorage.setItem(
+    key,
+    JSON.stringify(
+      saved.slice(0,100)
+    )
+  );
+
+  applyFilters();
+
+  renderRecent();
+
+  updateStats();
+
+}
+
+
+/* =====================================================
+   RECENT RESOURCES
+===================================================== */
+
+function getRecent(){
+
+  if(!studentUser){
+    return [];
+  }
+
+  try{
+
+    const data =
+      JSON.parse(
+        localStorage.getItem(
+          RECENT_KEY +
+          "_" +
+          studentUser.id
+        ) || "[]"
+      );
+
+    return Array.isArray(data)
+      ? data
+      : [];
+
+  }catch(error){
+
+    return [];
+
+  }
+
+}
+
+
+function recordRecent(id){
+
+  if(!studentUser){
+    return;
+  }
+
+  const key =
+    RECENT_KEY +
+    "_" +
+    studentUser.id;
+
+  let recent =
+    getRecent().filter(
+      item =>
+        String(item) !==
+        String(id)
+    );
+
+  recent.unshift(
+    String(id)
+  );
+
+  localStorage.setItem(
+    key,
+    JSON.stringify(
+      recent.slice(0,12)
+    )
+  );
+
+  renderRecent();
+
+  updateStats();
+
+}
+
+
+function renderRecent(){
+
+  const grid =
+    document.getElementById(
+      "recentGrid"
+    );
+
+  if(!grid){
+    return;
+  }
+
+  const resources =
+    getRecent()
+      .map(
+        id =>
+          studentResources.find(
+            resource =>
+              String(resource.id) ===
+              String(id)
+          )
+      )
+      .filter(Boolean);
+
+  if(!resources.length){
+
+    grid.innerHTML =
+      '<div class="empty-state">🕐<br><br>You haven\'t opened a resource yet.</div>';
+
+    return;
+
+  }
+
+  grid.innerHTML =
+    resources
+      .map(createResourceCard)
+      .join("");
+
+}
+
+
+/* =====================================================
+   STATS
+===================================================== */
+
+function updateStats(){
+
+  const total =
+    studentResources.length;
+
+  const lessons =
+    studentResources.filter(
+      resource => {
+
+        const type =
+          String(
+            resource.type || ""
+          )
+          .toLowerCase()
+          .trim();
+
+        return (
+          type === "lesson" ||
+          type === "course"
+        );
+
+      }
+    ).length;
+
+
+  const subjects =
+    new Set(
+      studentResources
+        .map(
+          resource =>
+            resource.subject ||
+            resource.subject_name ||
+            ""
+        )
+        .filter(Boolean)
+    ).size;
+
+
+  const recent =
+    getRecent().length;
+
+
+  setText(
+    "statCourses",
+    total
+  );
+
+  setText(
+    "statLessons",
+    lessons
+  );
+
+  setText(
+    "statSubjects",
+    subjects
+  );
+
+  setText(
+    "statRecent",
+    recent
+  );
+
+
+  const progress =
+    total > 0
+      ? Math.min(
+          100,
+          Math.round(
+            recent /
+            total *
+            100
+          )
+        )
+      : 0;
+
+
+  setText(
+    "progressPercent",
+    progress + "%"
+  );
+
+
+  const fill =
+    document.getElementById(
+      "progressFill"
+    );
+
+  if(fill){
+
+    fill.style.width =
+      progress + "%";
+
+  }
+
+
+  const text =
+    document.getElementById(
+      "progressText"
+    );
+
+  if(!text){
+    return;
+  }
+
+
+  if(total === 0){
+
+    text.textContent =
+      "No resources are available yet.";
+
+  }else if(recent === 0){
+
+    text.textContent =
+      "Start exploring AGULIBRARY resources to begin your learning activity.";
+
+  }else{
+
+    text.textContent =
+      "You've explored " +
+      recent +
+      " resource" +
+      (recent === 1 ? "" : "s") +
+      " from AGULIBRARY.";
+
+  }
+
+}
+
+
+/* =====================================================
+   AVATAR
+===================================================== */
+
+function setAvatar(name){
+
+  const avatar =
+    document.getElementById(
+      "profileAvatar"
+    );
+
+  if(!avatar){
+    return;
+  }
+
+  const initials =
+    String(name)
+      .split(" ")
+      .filter(Boolean)
+      .map(
+        word =>
+          word.charAt(0)
+      )
+      .join("")
+      .substring(0,2)
+      .toUpperCase();
+
+  avatar.textContent =
+    initials || "AG";
+
+}
+
+
+/* =====================================================
+   ICONS
+===================================================== */
+
+function getIcon(type){
+
+  const icons = {
+
+    book:"📚",
+    pdf:"📄",
+    video:"🎥",
+    image:"🖼️",
+    photo:"🖼️",
+    lesson:"📖",
+    course:"🎓",
+    document:"📄",
+    audio:"🎧"
+
+  };
+
+  return (
+    icons[type] ||
+    "📘"
+  );
+
+}
+
+
+/* =====================================================
+   LOGOUT
+===================================================== */
+
+function setupLogout(){
+
+  const button =
+    document.getElementById(
+      "logoutButton"
+    );
+
+  if(button){
+
+    button.addEventListener(
+      "click",
+      signOut
+    );
+
+  }
+
+}
+
+
+async function signOut(){
+
+  try{
+
+    if(client){
+
+      await client.auth.signOut();
+
+    }
+
+  }catch(error){
+
+    console.error(
+      "Sign out error:",
+      error
+    );
+
+  }
+
+  window.location.href =
+    "index.html";
+
+}
+
+
+/* =====================================================
+   BASIC HELPERS
+===================================================== */
+
+function setText(
+  id,
+  value
+){
+
+  const element =
+    document.getElementById(id);
+
+  if(element){
+
+    element.textContent =
+      value;
+
+  }
+
+}
+
+
+function showMessage(
+  text,
+  type
+){
+
+  const message =
+    document.getElementById(
+      "message"
+    );
+
+  if(!message){
+    return;
+  }
+
+  message.textContent =
+    text;
+
+  message.className =
+    "message show " +
+    type;
+
+}
+
+
+/* =====================================================
+   SAFE HTML
+===================================================== */
+
+function escapeHTML(value){
+
+  return String(
+    value ?? ""
+  ).replace(
+    /[&<>"']/g,
+    function(character){
+
+      const map = {
+
+        "&":"&amp;",
+        "<":"&lt;",
+        ">":"&gt;",
+        '"':"&quot;",
+        "'":"&#039;"
+
+      };
+
+      return map[character];
+
+    }
+  );
+
+}
+
+
+/* =====================================================
+   SAFE JAVASCRIPT STRING
+===================================================== */
+
+function escapeJS(value){
+
+  return String(
+    value ?? ""
+  )
+  .replace(
+    /\\/g,
+    "\\\\"
+  )
+  .replace(
+    /'/g,
+    "\\'"
+  )
+  .replace(
+    /"/g,
+    '\\"'
+  )
+  .replace(
+    /\r/g,
+    "\\r"
+  )
+  .replace(
+    /\n/g,
+    "\\n"
+  );
+
+}
+
+
+/* =====================================================
+   AI ELEMENTS
+===================================================== */
+
+function getAIElements(){
+
+  return {
+
+    messages:
+      document.getElementById(
+        "aiAgentMessages"
+      ),
+
+    input:
+      document.getElementById(
+        "aiAgentInput"
+      ),
+
+    send:
+      document.getElementById(
+        "aiAgentSend"
+      ),
+
+    status:
+      document.getElementById(
+        "aiAgentStatus"
+      )
+
+  };
+
+}
+
+
+/* =====================================================
+   AI MARKDOWN
+===================================================== */
+
+function renderAIMarkdown(text){
+
+  let html =
+    escapeHTML(text);
+
+
+  /* headings */
+
+  html =
+    html.replace(
+      /^### (.+)$/gm,
+      "<h3>$1</h3>"
+    );
+
+  html =
+    html.replace(
+      /^## (.+)$/gm,
+      "<h2>$1</h2>"
+    );
+
+  html =
+    html.replace(
+      /^# (.+)$/gm,
+      "<h1>$1</h1>"
+    );
+
+
+  /* bold */
+
+  html =
+    html.replace(
+      /\*\*(.+?)\*\*/g,
+      "<strong>$1</strong>"
+    );
+
+
+  /* italic */
+
+  html =
+    html.replace(
+      /(^|[^*])\*([^*\n]+)\*(?!\*)/g,
+      "$1<em>$2</em>"
+    );
+
+
+  /* bullet lists */
+
+  html =
+    html.replace(
+      /^\s*[-•]\s+(.+)$/gm,
+      "<li>$1</li>"
+    );
+
+
+  /* numbered lists */
+
+  html =
+    html.replace(
+      /^\s*(\d+)\.\s+(.+)$/gm,
+      "<li>$1. $2</li>"
+    );
+
+
+  /* line breaks */
+
+  html =
+    html.replace(
+      /\n/g,
+      "<br>"
+    );
+
+
+  return html;
+
+}
+
+
+/* =====================================================
+   ADD AI MESSAGE
+===================================================== */
+
+function addAIMessage(
+  message,
+  sender = "ai"
+){
+
+  const elements =
+    getAIElements();
+
+  if(!elements.messages){
+    return;
+  }
+
+
+  const wrapper =
+    document.createElement(
+      "div"
+    );
+
+  wrapper.className =
+    "ai-message " +
+    (
+      sender === "user"
+        ? "user"
+        : ""
+    );
+
+
+  const avatar =
+    document.createElement(
+      "div"
+    );
+
+  avatar.className =
+    "ai-message-avatar";
+
+
+  if(sender === "user"){
+
+    avatar.textContent =
+      "👤";
+
+  }else{
+
+    const img =
+      document.createElement(
+        "img"
+      );
+
+    img.src =
+      "ai-teacher.jpg";
+
+    img.alt =
+      "AI Teacher";
+
+    img.onerror =
+      function(){
+
+        this.style.display =
+          "none";
+
+        avatar.textContent =
+          "🤖";
+
+      };
+
+    avatar.appendChild(
+      img
+    );
+
+  }
+
+
+  const content =
+    document.createElement(
+      "div"
+    );
+
+  content.className =
+    "ai-message-content";
+
+
+  if(sender === "user"){
+
+    content.textContent =
+      message;
+
+  }else{
+
+    content.innerHTML =
+      renderAIMarkdown(
+        message
+      );
+
+    if(
+      window.MathJax &&
+      typeof MathJax.typesetPromise ===
+      "function"
+    ){
+
+      MathJax
+        .typesetPromise([
+          content
+        ])
+        .catch(
+          error =>
+            console.error(
+              "MathJax error:",
+              error
+            )
+        );
+
+    }
+
+  }
+
+
+  wrapper.appendChild(
+    avatar
+  );
+
+  wrapper.appendChild(
+    content
+  );
+
+  elements.messages.appendChild(
+    wrapper
+  );
+
+
+  elements.messages.scrollTop =
+    elements.messages.scrollHeight;
+
+}
+
+
+/* =====================================================
+   AI QUICK PROMPT
+===================================================== */
+
+function aiQuickPrompt(prompt){
+
+  const elements =
+    getAIElements();
+
+  if(!elements.input){
+    return;
+  }
+
+  elements.input.value =
+    prompt;
+
+  elements.input.focus();
+
+  sendAIMessage();
+
+}
+
+
+/* =====================================================
+   SEND AI MESSAGE
+===================================================== */
+
+async function sendAIMessage(){
+
+  const elements =
+    getAIElements();
+
+
+  if(
+    !elements.input ||
+    !elements.send
+  ){
+
+    return;
+
+  }
+
+
+  const message =
+    elements.input.value
+      .trim();
+
+
+  if(!message){
+    return;
+  }
+
+
+  addAIMessage(
+    message,
+    "user"
+  );
+
+
+  elements.input.value =
+    "";
+
+
+  elements.send.disabled =
+    true;
+
+
+  if(elements.status){
+
+    elements.status.classList.add(
+      "show"
+    );
+
+    elements.status.textContent =
+      "🤖 AI Teacher is thinking...";
+
+  }
+
+
+  aiConversation.push({
+
+    role:"user",
+
+    content:message
+
+  });
+
+
+  try{
+
+    if(!client){
+
+      client =
+        getSupabase();
+
+    }
+
+
+    if(!client){
+
+      throw new Error(
+        "Supabase client is unavailable."
+      );
+
+    }
+
+
+    const sessionResult =
+      await client.auth.getSession();
+
+
+    if(sessionResult.error){
+
+      throw sessionResult.error;
+
+    }
+
+
+    const session =
+      sessionResult.data?.session;
+
+
+    if(
+      !session ||
+      !session.access_token
+    ){
+
+      throw new Error(
+        "Student session is not available."
+      );
+
+    }
+
+
+    const response =
+      await fetch(
+        "https://tdmdvkdaccjyvajvzttz.supabase.co/functions/v1/ai-learning-agent",
+        {
+
+          method:"POST",
+
+          headers:{
+
+            "Content-Type":
+              "application/json",
+
+            "Authorization":
+              "Bearer " +
+              session.access_token,
+
+            "apikey":
+              window.SUPABASE_ANON_KEY ||
+              ""
+
+          },
+
+          body:JSON.stringify({
+
+            message:
+
+              message,
+
+            conversation:
+
+              aiConversation,
+
+            student_id:
+
+              studentUser?.id ||
+              null
+
+          })
+
+        }
+      );
+
+
+    const responseText =
+      await response.text();
+
+
+    console.log(
+      "AI HTTP status:",
+      response.status
+    );
+
+
+    console.log(
+      "AI raw response:",
+      responseText
+    );
+
+
+    if(!response.ok){
+
+      throw new Error(
+        "AI service returned HTTP " +
+        response.status +
+        ": " +
+        responseText
+      );
+
+    }
+
+
+    let data;
+
+
+    try{
+
+      data =
+        JSON.parse(
+          responseText
+        );
+
+    }catch(error){
+
+      throw new Error(
+        "The AI returned an invalid response."
+      );
+
+    }
+
+
+    const answer =
+      data.answer ||
+      data.response ||
+      data.message;
+
+
+    if(!answer){
+
+      throw new Error(
+        "The AI returned no answer."
+      );
+
+    }
+
+
+    addAIMessage(
+      answer,
+      "ai"
+    );
+
+
+    aiConversation.push({
+
+      role:"assistant",
+
+      content:answer
+
+    });
+
+
+  }catch(error){
+
+    console.error(
+      "AGULIBRARY AI error:",
+      error
+    );
+
+
+    addAIMessage(
+      "Sorry, I could not connect to the AI Teacher right now. Please try again.",
+      "ai"
+    );
+
+
+  }finally{
+
+    elements.send.disabled =
+      false;
+
+
+    if(elements.status){
+
+      elements.status.classList.remove(
+        "show"
+      );
+
+    }
+
+
+    elements.input.focus();
+
+  }
+
+}
+
+
+/* =====================================================
+   SETUP AI
+===================================================== */
+
+function setupAI(){
+
+  const elements =
+    getAIElements();
+
+
+  if(
+    !elements.input ||
+    !elements.send
+  ){
+
+    return;
+
+  }
+
+
+  elements.send.addEventListener(
+    "click",
+    sendAIMessage
+  );
+
+
+  elements.input.addEventListener(
+    "keydown",
+    function(event){
+
+      if(
+        event.key === "Enter" &&
+        !event.shiftKey
+      ){
+
+        event.preventDefault();
+
+        sendAIMessage();
+
+      }
+
+    }
+  );
+
+}
+
+
+/* =====================================================
+   STUDENT SIDE MENU
+===================================================== */
+
+function setupStudentSideMenu(){
+
+  const menuButton =
+    document.getElementById(
+      "menuButton"
+    );
+
+  const closeButton =
+    document.getElementById(
+      "closeMenuButton"
+    );
+
+  const menu =
+    document.getElementById(
+      "studentSideMenu"
+    );
+
+  const overlay =
+    document.getElementById(
+      "sideMenuOverlay"
+    );
+
+
+  if(menuButton){
+
+    menuButton.addEventListener(
+      "click",
+      function(){
+
+        if(menu){
+          menu.classList.add(
+            "open"
+          );
+        }
+
+        if(overlay){
+          overlay.classList.add(
+            "show"
+          );
+        }
+
+      }
+    );
+
+  }
+
+
+  if(closeButton){
+
+    closeButton.addEventListener(
+      "click",
+      closeStudentMenu
+    );
+
+  }
+
+
+  if(overlay){
+
+    overlay.addEventListener(
+      "click",
+      closeStudentMenu
+    );
+
+  }
+
+}
+
+
+function closeStudentMenu(){
+
+  const menu =
+    document.getElementById(
+      "studentSideMenu"
+    );
+
+  const overlay =
+    document.getElementById(
+      "sideMenuOverlay"
+    );
+
+
+  if(menu){
+
+    menu.classList.remove(
+      "open"
+    );
+
+  }
+
+
+  if(overlay){
+
+    overlay.classList.remove(
+      "show"
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   AGULIBRARY — AI TEACHER OPEN / CLOSE
+===================================================== */
+
+function setupAITeacherWindow(){
+
+  const agent =
+    document.getElementById(
+      "aiLearningAgent"
+    );
+
+  if(!agent){
+    return;
+  }
+
+
+  const avatar =
+    agent.querySelector(
+      ".ai-agent-avatar"
+    );
+
+  if(!avatar){
+    return;
+  }
+
+
+  avatar.addEventListener(
+    "click",
+    function(){
+
+      agent.classList.toggle(
+        "ai-open"
+      );
+
+    }
+  );
+
+}
+
+</script>
+
+</body>
+  </html>

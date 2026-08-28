@@ -373,6 +373,29 @@
 
 
 /* =====================================================
+   MULTIPLE FILE NOTE
+===================================================== */
+
+.multiple-file-note{
+  margin-top:8px;
+
+  padding:10px 12px;
+
+  background:#e8f8f0;
+
+  border:1px solid #c5ead8;
+
+  border-radius:10px;
+
+  color:#087a4b;
+
+  font-size:13px;
+
+  line-height:1.5;
+}
+
+
+/* =====================================================
    RESPONSIVE
 ===================================================== */
 
@@ -1010,9 +1033,18 @@ Educational file
 <input
   id="file"
   type="file"
+  multiple
   required>
 
 </label>
+
+<div class="multiple-file-note">
+
+📁 You can select multiple files at once.
+Each selected file will be uploaded and
+published as its own resource.
+
+</div>
 
 </div>
 

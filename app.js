@@ -1,6 +1,7 @@
 /* =========================================================
    AGULIBRARY — APP.JS
    PHASE 2 — SUBJECT + RESOURCE + LESSON CONNECTION
+   DIGITAL BOOK OPENING FIX
 ========================================================= */
 
 let allResources = [];
@@ -365,7 +366,9 @@ function renderResources(list) {
           String(
             resource.type ||
             "resource"
-          ).toLowerCase();
+          )
+          .toLowerCase()
+          .trim();
 
 
         const type =
@@ -383,27 +386,30 @@ function renderResources(list) {
 
 
         /*
-          LESSONS AND COURSES ARE SENT
-          TO lesson.html.
+          LESSONS AND COURSES
+          CONTINUE TO OPEN THROUGH
+          lesson.html.
 
-          Other resources continue
-          opening their normal files.
+          DIGITAL BOOKS ARE DIFFERENT:
+          THEY OPEN THEIR ACTUAL
+          UPLOADED FILE URL.
         */
 
-      const isLesson =
-  typeValue === "lesson" ||
-  typeValue === "course" ||
-  typeValue === "digital_book";
+        const isLesson =
+          typeValue === "lesson" ||
+          typeValue === "course";
+
+
+        const isDigitalBook =
+          typeValue === "digital_book";
 
 
         const buttonText =
-  isLesson
-    ? (
-        typeValue === "digital_book"
-          ? "📚 Open Book →"
-          : "📖 Open Lesson →"
-      )
-    : "Tap to open →";
+          isDigitalBook
+            ? "📚 Open Book →"
+            : isLesson
+              ? "📖 Open Lesson →"
+              : "Tap to open →";
 
 
         return `
@@ -665,19 +671,6 @@ function openResourceById(id) {
 
 function openResource(resource) {
 
-  /*
-    IMPORTANT:
-
-    LESSON
-    COURSE
-
-    resources do NOT open their
-    file directly.
-
-    They open lesson.html with
-    the resource ID.
-  */
-
   const type =
     String(
       resource.type ||
@@ -687,11 +680,61 @@ function openResource(resource) {
     .trim();
 
 
+  /* =======================================================
+     DIGITAL BOOK
+     
+     THIS IS THE ONLY NEW BEHAVIOUR.
+     
+     DIGITAL BOOKS OPEN THE ACTUAL
+     FILE STORED IN SUPABASE.
+     
+     THEY DO NOT OPEN lesson.html.
+  ======================================================= */
+
+  if (type === "digital_book") {
+
+    const url =
+      resource.file_url ||
+      resource.url ||
+      "";
+
+
+    if (!url) {
+
+      alert(
+        "This digital book does not have a file attached yet."
+      );
+
+      return;
+
+    }
+
+
+    /*
+      Open the uploaded digital book.
+    */
+
+    window.open(
+      url,
+      "_blank",
+      "noopener,noreferrer"
+    );
+
+    return;
+
+  }
+
+
+  /* =======================================================
+     LESSON / COURSE
+     
+     EXISTING BEHAVIOUR PRESERVED.
+  ======================================================= */
+
   if (
-  type === "lesson" ||
-  type === "course" ||
-  type === "digital_book"
-) {
+    type === "lesson" ||
+    type === "course"
+  ) {
 
     window.location.href =
       "lesson.html?id=" +
@@ -704,9 +747,11 @@ function openResource(resource) {
   }
 
 
-  /*
-    NORMAL RESOURCE
-  */
+  /* =======================================================
+     NORMAL RESOURCE
+     
+     EXISTING BEHAVIOUR PRESERVED.
+  ======================================================= */
 
   const url =
     resource.file_url ||
@@ -738,7 +783,7 @@ function openResource(resource) {
    BACKWARD COMPATIBILITY
    Allows old calls such as:
 
-   openResource("https://...")
+   openResourceURL("https://...")
 ========================================================= */
 
 function openResourceURL(url) {
@@ -772,6 +817,8 @@ function getResourceIcon(type) {
   const icons = {
 
     book: "📚",
+
+    digital_book: "📚",
 
     pdf: "📄",
 
@@ -1007,4 +1054,4 @@ async function updateStudentAccountButton() {
 
   }
 
-       }
+}

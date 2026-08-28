@@ -1,6 +1,7 @@
 /* =========================================================
    AGULIBRARY — ADMIN.JS
    ADMIN LOGIN + RESOURCE UPLOAD + FOLDER STRUCTURE
+   + MULTIPLE FILE UPLOAD
    + INVITATIONS
 ========================================================= */
 
@@ -825,7 +826,7 @@ if(uploadForm){
 
 
         /* =================================================
-           NEW FOLDER INFORMATION
+           FOLDER INFORMATION
         ================================================= */
 
         const parentSubject =
@@ -857,11 +858,6 @@ if(uploadForm){
             ? folderPathInput.value.trim()
             : "";
 
-
-        /*
-         * Rebuild the path here instead of trusting
-         * the visible field.
-         */
 
         const generatedFolderPath =
           buildFolderPath();
@@ -900,6 +896,7 @@ if(uploadForm){
 
         /* =================================================
            DIGITAL BOOK
+           UNCHANGED
         ================================================= */
 
         if(type === "digital_book"){
@@ -938,16 +935,12 @@ if(uploadForm){
           }
 
 
-          /* Remove accidental leading slash */
-
           bookPath =
             bookPath.replace(
               /^\/+/,
               ""
             );
 
-
-          /* Make sure folder ends with slash */
 
           if(
             !bookPath.endsWith("/")
@@ -957,8 +950,6 @@ if(uploadForm){
 
           }
 
-
-          /* Make sure entry is safe */
 
           bookEntry =
             bookEntry.replace(
@@ -1079,14 +1070,13 @@ if(uploadForm){
 
           updateFolderPath();
 
-
           return;
 
         }
 
 
         /* =================================================
-           NORMAL FILE RESOURCE
+           MULTIPLE NORMAL FILE RESOURCE
         ================================================= */
 
         const currentFileInput =
@@ -1095,18 +1085,20 @@ if(uploadForm){
           );
 
 
-        const file =
+        const files =
           currentFileInput
-            ? currentFileInput.files[0]
-            : null;
+            ? Array.from(
+                currentFileInput.files || []
+              )
+            : [];
 
 
-        if(!file){
+        if(!files.length){
 
           if(adminMessage){
 
             adminMessage.textContent =
-              "Please select a file.";
+              "Please select at least one file.";
 
           }
 
@@ -1116,29 +1108,8 @@ if(uploadForm){
 
 
         /* =================================================
-           SAFE FILE NAME
+           STORAGE SETTINGS
         ================================================= */
-
-        const safeName =
-          file.name.replace(
-            /[^a-zA-Z0-9._-]/g,
-            "_"
-          );
-
-
-        /*
-         * Keep the existing storage behavior.
-         *
-         * We do NOT change the existing storage
-         * bucket structure because doing so could
-         * break resources already uploaded.
-         */
-
-        const filePath =
-          Date.now() +
-          "-" +
-          safeName;
-
 
         const bucket =
           window.AGU_CONFIG &&
@@ -1147,137 +1118,294 @@ if(uploadForm){
             : "agu-library";
 
 
-        if(adminMessage){
-
-          adminMessage.textContent =
-            "Uploading file...";
-
-        }
+        let uploadedCount =
+          0;
 
 
-        const upload =
-          await db
-            .storage
-            .from(bucket)
-            .upload(
-              filePath,
-              file,
-              {
-                cacheControl:
-                  "3600",
+        let failedCount =
+          0;
 
-                upsert:
-                  false
 
-              }
+        const failedFiles = [];
+
+
+        /* =================================================
+           UPLOAD FILES ONE BY ONE
+        ================================================= */
+
+        for(
+          let i = 0;
+          i < files.length;
+          i++
+        ){
+
+          const file =
+            files[i];
+
+
+          try{
+
+            if(adminMessage){
+
+              adminMessage.textContent =
+                "Uploading file " +
+                (i + 1) +
+                " of " +
+                files.length +
+                ": " +
+                file.name;
+
+            }
+
+
+            /* =================================================
+               SAFE FILE NAME
+            ================================================= */
+
+            const safeName =
+              file.name.replace(
+                /[^a-zA-Z0-9._-]/g,
+                "_"
+              );
+
+
+            /*
+             * Preserve the existing storage behavior.
+             * Timestamp + index keeps files unique.
+             */
+
+            const filePath =
+              Date.now() +
+              "-" +
+              i +
+              "-" +
+              safeName;
+
+
+            /* =================================================
+               UPLOAD TO STORAGE
+            ================================================= */
+
+            const upload =
+              await db
+                .storage
+                .from(bucket)
+                .upload(
+                  filePath,
+                  file,
+                  {
+                    cacheControl:
+                      "3600",
+
+                    upsert:
+                      false
+
+                  }
+                );
+
+
+            if(upload.error){
+
+              throw upload.error;
+
+            }
+
+
+            /* =================================================
+               PUBLIC URL
+            ================================================= */
+
+            const publicUrl =
+              db
+                .storage
+                .from(bucket)
+                .getPublicUrl(
+                  filePath
+                )
+                .data
+                .publicUrl;
+
+
+            if(adminMessage){
+
+              adminMessage.textContent =
+                "Saving resource " +
+                (i + 1) +
+                " of " +
+                files.length +
+                ": " +
+                file.name;
+
+            }
+
+
+            /* =================================================
+               DATABASE RESOURCE
+            ================================================= */
+
+            const resource = {
+
+              title:
+                title,
+
+              description:
+                description,
+
+              content:
+                content,
+
+              type:
+                type,
+
+              subject:
+                subject || subjectArea,
+
+              level:
+                level,
+
+              class_level:
+                classLevel,
+
+              term:
+                term,
+
+              file_url:
+                publicUrl,
+
+              is_premium:
+                premium,
+
+              parent_subject:
+                parentSubject,
+
+              education_stage:
+                educationStage,
+
+              subject_area:
+                subjectArea,
+
+              resource_category:
+                resourceCategory,
+
+              folder_path:
+                folderPath
+
+            };
+
+
+            const {
+              error
+            } =
+              await db
+                .from("resources")
+                .insert(
+                  resource
+                );
+
+
+            if(error){
+
+              throw new Error(
+                "File uploaded, but the resource information could not be saved: " +
+                error.message
+              );
+
+            }
+
+
+            uploadedCount++;
+
+
+          }catch(fileError){
+
+            failedCount++;
+
+
+            failedFiles.push({
+
+              name:
+                file.name,
+
+              error:
+                fileError.message ||
+                "Unknown error"
+
+            });
+
+
+            console.error(
+              "Upload failed for:",
+              file.name,
+              fileError
             );
 
-
-        if(upload.error){
-
-          if(adminMessage){
-
-            adminMessage.textContent =
-              "Upload failed: " +
-              upload.error.message;
-
           }
-
-          return;
-
-        }
-
-
-        const publicUrl =
-          db
-            .storage
-            .from(bucket)
-            .getPublicUrl(
-              filePath
-            )
-            .data
-            .publicUrl;
-
-
-        if(adminMessage){
-
-          adminMessage.textContent =
-            "File uploaded. Publishing resource...";
 
         }
 
 
         /* =================================================
-           RESOURCE DATABASE RECORD
+           FINAL UPLOAD RESULT
         ================================================= */
 
-        const resource = {
+        if(uploadedCount > 0){
 
-          title:
-            title,
+          if(failedCount === 0){
 
-          description:
-            description,
+            if(adminMessage){
 
-          content:
-            content,
+              adminMessage.textContent =
+                "✅ " +
+                uploadedCount +
+                " file" +
+                (
+                  uploadedCount === 1
+                    ? ""
+                    : "s"
+                ) +
+                " uploaded and published successfully!";
 
-          type:
-            type,
+            }
 
-          subject:
-            subject || subjectArea,
+          }else{
 
-          level:
-            level,
+            if(adminMessage){
 
-          class_level:
-            classLevel,
+              adminMessage.textContent =
+                "⚠️ " +
+                uploadedCount +
+                " file" +
+                (
+                  uploadedCount === 1
+                    ? ""
+                    : "s"
+                ) +
+                " uploaded successfully. " +
+                failedCount +
+                " file" +
+                (
+                  failedCount === 1
+                    ? ""
+                    : "s"
+                ) +
+                " failed.";
 
-          term:
-            term,
-
-          file_url:
-            publicUrl,
-
-          is_premium:
-            premium,
-
-          parent_subject:
-            parentSubject,
-
-          education_stage:
-            educationStage,
-
-          subject_area:
-            subjectArea,
-
-          resource_category:
-            resourceCategory,
-
-          folder_path:
-            folderPath
-
-        };
+            }
 
 
-        const {
-          error
-        } =
-          await db
-            .from("resources")
-            .insert(
-              resource
+            console.error(
+              "Failed files:",
+              failedFiles
             );
 
+          }
 
-        if(error){
+        }else{
 
           if(adminMessage){
 
             adminMessage.textContent =
-              "The file uploaded, but the resource information could not be saved: " +
-              error.message;
+              "❌ None of the selected files could be uploaded.";
 
           }
 
@@ -1286,13 +1414,9 @@ if(uploadForm){
         }
 
 
-        if(adminMessage){
-
-          adminMessage.textContent =
-            "✅ Resource uploaded and published successfully!";
-
-        }
-
+        /* =================================================
+           RESET FORM AFTER NORMAL UPLOAD
+        ================================================= */
 
         uploadForm.reset();
 
@@ -1418,10 +1542,6 @@ if(invitationForm){
 
       try{
 
-        /* =================================================
-           CURRENT ADMIN
-        ================================================= */
-
         const {
           data: sessionData,
           error: sessionError
@@ -1452,10 +1572,6 @@ if(invitationForm){
 
         }
 
-
-        /* =================================================
-           INVITATION FIELDS
-        ================================================= */
 
         const nameInput =
           document.getElementById(
@@ -1492,10 +1608,6 @@ if(invitationForm){
             ? noteInput.value.trim()
             : "";
 
-
-        /* =================================================
-           GENERATE UNIQUE CODE
-        ================================================= */
 
         let code = "";
 
@@ -1560,10 +1672,6 @@ if(invitationForm){
         }
 
 
-        /* =================================================
-           INSERT INVITATION
-        ================================================= */
-
         const invitation = {
 
           code:
@@ -1608,10 +1716,6 @@ if(invitationForm){
 
         }
 
-
-        /* =================================================
-           CREATE LINK
-        ================================================= */
 
         const link =
           createInvitationLink(
@@ -1926,10 +2030,6 @@ async function loadInvitations(){
 
   try{
 
-    /* =================================================
-       GET ADMIN SESSION
-    ================================================= */
-
     const {
       data: sessionData,
       error: sessionError
@@ -1962,10 +2062,6 @@ async function loadInvitations(){
     }
 
 
-    /* =================================================
-       LOAD INVITATIONS
-    ================================================= */
-
     const {
       data,
       error
@@ -1997,10 +2093,6 @@ async function loadInvitations(){
     }
 
 
-    /* =================================================
-       NOTHING FOUND
-    ================================================= */
-
     if(
       !data ||
       data.length === 0
@@ -2016,10 +2108,6 @@ async function loadInvitations(){
 
     }
 
-
-    /* =================================================
-       DISPLAY INVITATIONS
-    ================================================= */
 
     list.innerHTML =
       data.map(
@@ -2143,10 +2231,6 @@ async function loadInvitations(){
         }
       ).join("");
 
-
-    /* =================================================
-       CANCEL BUTTONS
-    ================================================= */
 
     list
       .querySelectorAll(

@@ -1,2646 +1,410 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-
 <head>
-
-<meta charset="utf-8">
-
-<meta
-  name="viewport"
-  content="width=device-width,initial-scale=1">
-
-<title>AGULIBRARY — Global Learning Library</title>
-
-<link rel="stylesheet" href="style.css">
-
-<!-- =========================================================
-     MATHJAX
-========================================================= -->
-
-<script>
-window.MathJax = {
-  tex: {
-    inlineMath: [["\\(","\\)"]],
-    displayMath: [["\\[","\\]"]]
-  },
-  options: {
-    skipHtmlTags: [
-      "script",
-      "noscript",
-      "style",
-      "textarea",
-      "pre",
-      "code"
-    ]
-  }
-};
-</script>
-
-<script
-  async
-  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
-</script>
-
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mastery Physics — SSS 1 WAEC & NECO Textbook</title>
 <style>
-
-/* =========================================================
-   PAYMENT
-========================================================= */
-
-.payment-section{
-  margin:30px 0;
-  padding:32px;
-  background:linear-gradient(135deg,#fff,#f1faf6);
-  border:1px solid #d5ebe0;
-  border-radius:28px;
-  box-shadow:0 15px 40px rgba(8,122,75,.07);
+:root{
+  --ink:#0B3D2E;
+  --ink-2:#12513c;
+  --blue:#1565C0;
+  --blue-2:#0d47a1;
+  --amber:#E8A400;
+  --paper:#FFFFFF;
+  --card:#F6FAF8;
+  --card-line:#DCEAE4;
+  --text:#152420;
+  --text-soft:#4b6058;
+  --radius:18px;
+  --shadow: 0 10px 30px rgba(11,61,46,0.10), 0 2px 8px rgba(11,61,46,0.06);
+  --font-display: 'Sora', 'Segoe UI', sans-serif;
+  --font-body: 'Source Sans 3','Segoe UI', sans-serif;
 }
-
-.payment-header{
-  margin-bottom:24px;
+[data-theme="dark"]{
+  --paper:#0A1613;
+  --card:#0F221C;
+  --card-line:#1c3a30;
+  --text:#e7f3ee;
+  --text-soft:#a9c4ba;
+  --ink:#7FE0B4;
+  --ink-2:#54c497;
+  --shadow: 0 10px 30px rgba(0,0,0,0.45), 0 2px 8px rgba(0,0,0,0.3);
 }
-
-.payment-header h2{
-  margin:8px 0;
-  color:#173b2d;
-  font-size:32px;
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Source+Sans+3:wght@400;500;600;700&display=swap');
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;height:100%;}
+body{
+  font-family:var(--font-body);
+  background:var(--paper);
+  color:var(--text);
+  overflow-x:hidden;
+  transition:background .4s ease, color .4s ease;
 }
+h1,h2,h3,h4{font-family:var(--font-display); margin:0 0 .4em 0;}
+.screen{position:fixed; inset:0; overflow-y:auto; }
+.hidden{display:none !important;}
 
-.payment-header p{
-  max-width:760px;
-  margin:0;
-  color:#71847b;
-  line-height:1.7;
-}
-
-.payment-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:18px;
-}
-
-.payment-card{
-  padding:26px;
-  background:#fff;
-  border:1px solid #dceee6;
-  border-radius:22px;
-  box-shadow:0 10px 30px rgba(8,122,75,.05);
-}
-
-.payment-icon{
-  width:56px;
-  height:56px;
-  display:grid;
-  place-items:center;
-  margin-bottom:15px;
-  border-radius:16px;
-  background:#e8f8f0;
-  font-size:27px;
-}
-
-.payment-card h3{
-  margin:0 0 9px;
-  color:#173b2d;
-  font-size:24px;
-}
-
-.payment-card p{
-  color:#71847b;
-  line-height:1.65;
-}
-
-.payment-features{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:9px;
-  margin-top:20px;
-}
-
-.payment-features span{
-  padding:11px;
-  background:#f4faf7;
-  border:1px solid #dceee6;
-  border-radius:10px;
-  color:#087a4b;
-  font-size:12px;
-  font-weight:800;
-}
-
-.payment-label{
-  display:inline-block;
-  margin-bottom:10px;
-  padding:5px 9px;
-  border-radius:20px;
-  background:#e8f8f0;
-  color:#087a4b;
-  font-size:10px;
-  font-weight:900;
-  letter-spacing:1px;
-}
-
-.payment-checkout-card label{
-  display:block;
-  margin:16px 0 7px;
-  color:#38594c;
-  font-size:13px;
-  font-weight:800;
-}
-
-.payment-checkout-card select{
-  width:100%;
-  min-height:50px;
-  padding:12px 14px;
-  border:1px solid #cfe5da;
-  border-radius:12px;
-  background:#fbfefd;
-  color:#17352a;
-  font-size:14px;
-  outline:none;
-}
-
-.payment-amount{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:15px;
-  margin:18px 0;
-  padding:16px;
-  background:#f4faf7;
-  border:1px solid #dceee6;
-  border-radius:13px;
-}
-
-.payment-amount span{
-  color:#71847b;
-  font-size:13px;
-}
-
-.payment-amount strong{
-  color:#087a4b;
-  font-size:18px;
-}
-
-.payment-button{
-  width:100%;
-  min-height:53px;
-  border:0;
-  border-radius:13px;
-  background:#087a4b;
-  color:#fff;
-  font-size:14px;
-  font-weight:900;
+/* ---------- COVER ---------- */
+#cover{
+  background:
+    radial-gradient(circle at 20% 15%, rgba(21,101,192,0.55), transparent 45%),
+    radial-gradient(circle at 80% 80%, rgba(11,61,46,0.65), transparent 50%),
+    linear-gradient(160deg, #05140f 0%, #0B3D2E 45%, #0d3a63 100%);
+  display:flex; align-items:center; justify-content:center;
   cursor:pointer;
+  perspective:1800px;
 }
-
-.payment-button:hover{
-  background:#06683f;
+.cover-book{
+  width:min(88vw, 460px);
+  aspect-ratio: 3/4.2;
+  position:relative;
+  transform-style:preserve-3d;
+  transition:transform 1.1s cubic-bezier(.2,.7,.2,1);
 }
-
-.payment-button:disabled{
-  opacity:.6;
-  cursor:not-allowed;
-}
-
-.payment-note{
-  display:block;
-  margin-top:12px;
-  color:#7a8c84;
-  font-size:11px;
-  line-height:1.5;
-}
-
-.payment-message{
-  display:none;
-  margin-top:18px;
-  padding:14px;
-  border-radius:12px;
-  background:#e8f8f0;
-  border:1px solid #c5ead8;
-  color:#087a4b;
-  font-weight:800;
-}
-
-.payment-message.show{
-  display:block;
-}
-
-
-/* =========================================================
-   STUDENT ACCOUNT BAR
-========================================================= */
-
-.student-bar{
-  display:none;
-  align-items:center;
-  gap:10px;
-  padding:10px 16px;
-  margin:12px auto;
-  width:90%;
-  max-width:1200px;
-  background:#e8f7f0;
-  border:1px solid #c8eadb;
+.cover-book.opening{transform: rotateY(-140deg) translateX(-30%);}
+.cover-face{
+  position:absolute; inset:0;
   border-radius:14px;
-  color:#087f55;
-  font-weight:600;
-  box-shadow:0 8px 25px rgba(8,122,75,.06);
-}
-
-.student-bar.show{
-  display:flex;
-}
-
-.student-bar .student-name{
-  flex:1;
-}
-
-.student-dashboard-btn{
-  background:#078653;
-  color:#fff;
-  border:none;
-  border-radius:10px;
-  padding:9px 14px;
-  font-weight:700;
-  cursor:pointer;
-}
-
-.signout-btn{
-  background:#fff;
-  color:#087f55;
-  border:1px solid #b9dccd;
-  border-radius:10px;
-  padding:9px 14px;
-  font-weight:700;
-  cursor:pointer;
-}
-
-.auth-btn{
-  text-decoration:none;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-}
-
-
-/* =========================================================
-   SUBJECTS
-========================================================= */
-
-.subjects > div{
-  cursor:pointer;
-  transition:
-    transform .2s ease,
-    box-shadow .2s ease,
-    border-color .2s ease;
-}
-
-.subjects > div:hover{
-  transform:translateY(-5px);
-  border-color:#9ad9bb;
-  box-shadow:0 15px 35px rgba(8,122,75,.10);
-}
-
-
-/* =========================================================
-   STUDENT DASHBOARD
-========================================================= */
-
-.student-dashboard-section{
-  display:none;
-  margin:30px 0;
-  padding:32px;
-  background:linear-gradient(135deg,#fff,#f1faf6);
-  border:1px solid #d5ebe0;
-  border-radius:28px;
-  box-shadow:0 15px 40px rgba(8,122,75,.07);
-}
-
-.student-dashboard-section.show{
-  display:block;
-}
-
-.student-dashboard-inner h2{
-  margin:8px 0;
-  color:#173b2d;
-  font-size:clamp(30px,5vw,42px);
-}
-
-.student-dashboard-inner h2 span{
-  color:#087a4b;
-}
-
-.student-dashboard-intro{
-  max-width:760px;
-  margin:0 0 25px;
-  color:#71847b;
-  line-height:1.7;
-}
-
-.student-dashboard-grid{
-  display:grid;
-  grid-template-columns:1.2fr .8fr;
-  gap:16px;
-  margin-bottom:18px;
-}
-
-.student-dashboard-card{
-  display:flex;
-  align-items:center;
-  gap:18px;
-  padding:25px;
-  background:#fff;
-  border:1px solid #dceee6;
-  border-radius:22px;
-  box-shadow:0 10px 30px rgba(8,122,75,.05);
-}
-
-.student-dashboard-card h3{
-  margin:7px 0;
-  color:#173b2d;
-  font-size:24px;
-}
-
-.student-dashboard-card p{
-  margin:0;
-  color:#71847b;
-  line-height:1.6;
-}
-
-.student-avatar{
-  width:82px;
-  height:82px;
-  flex-shrink:0;
-  display:grid;
-  place-items:center;
-  border-radius:24px;
-  background:#e5f7ee;
-  border:1px solid #bfe6d3;
-  color:#087a4b;
-  font-size:25px;
-  font-weight:900;
-}
-
-.student-active{
-  display:inline-flex;
-  margin-top:10px;
-  padding:6px 11px;
-  border-radius:20px;
-  background:#e8f8f0;
-  color:#087a4b;
-  font-size:12px;
-  font-weight:800;
-}
-
-.student-status{
-  display:flex;
-  align-items:center;
-  gap:9px;
-  margin:12px 0;
-  color:#087a4b;
-  font-weight:900;
-}
-
-.student-status span{
-  width:10px;
-  height:10px;
-  border-radius:50%;
-  background:#20b36b;
-}
-
-.student-progress-card{
-  margin-bottom:18px;
-  padding:25px;
-  background:#fff;
-  border:1px solid #dceee6;
-  border-radius:22px;
-  box-shadow:0 10px 30px rgba(8,122,75,.05);
-}
-
-.student-progress-header{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:20px;
-}
-
-.student-progress-header h3{
-  margin:7px 0 0;
-  color:#173b2d;
-  font-size:27px;
-}
-
-#onePageProgressPercent{
-  color:#087a4b;
-  font-size:38px;
-  font-weight:900;
-}
-
-.student-progress-bar{
-  height:14px;
-  margin-top:20px;
+  background:linear-gradient(150deg,#0f6b4a,#0a3d2c 55%, #0b3960);
+  box-shadow:0 30px 80px rgba(0,0,0,0.55), inset 0 0 0 2px rgba(255,255,255,0.08);
   overflow:hidden;
-  background:#e7f3ed;
-  border-radius:50px;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  color:#fff; text-align:center; padding:8%;
 }
-
-.student-progress-fill{
-  width:0;
-  height:100%;
-  background:#087a4b;
-  border-radius:50px;
-  transition:width .5s ease;
-}
-
-.student-progress-card > p{
-  margin:14px 0 0;
-  color:#71847b;
-  line-height:1.6;
-}
-
-.student-dashboard-actions{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:12px;
-  margin-bottom:18px;
-}
-
-.student-action-card{
-  padding:20px;
-  background:#fff;
-  border:1px solid #dceee6;
-  border-radius:18px;
-  text-decoration:none;
-  color:#173b2d;
-  box-shadow:0 10px 28px rgba(8,122,75,.05);
-}
-
-.student-action-card span{
-  display:block;
-  margin-bottom:10px;
-  font-size:27px;
-}
-
-.student-action-card strong{
-  display:block;
-  margin-bottom:6px;
-  color:#173b2d;
-}
-
-.student-action-card small{
-  color:#788a82;
-  line-height:1.5;
-}
-
-.student-recent-card{
-  padding:25px;
-  background:#fff;
-  border:1px solid #dceee6;
-  border-radius:22px;
-  box-shadow:0 10px 30px rgba(8,122,75,.05);
-}
-
-.student-recent-card h3{
-  margin:7px 0 18px;
-  color:#173b2d;
-  font-size:27px;
-}
-
-.student-recent-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:12px;
-}
-
-.student-empty{
-  grid-column:1/-1;
-  padding:30px 20px;
-  text-align:center;
-  color:#73877e;
-  background:#f7fcfa;
-  border:1px dashed #bfded0;
-  border-radius:15px;
-}
-
-
-/* =========================================================
-   🤖 AGULIBRARY AI LEARNING AGENT
-   NOW INSIDE STUDENT DASHBOARD
-========================================================= */
-
-.ai-agent{
-  margin:0 0 22px;
-  padding:30px;
-  background:#fff;
-  border:1px solid #dceee6;
-  border-radius:28px;
-  box-shadow:0 15px 40px rgba(8,122,75,.07);
-}
-
-.ai-agent-header{
-  display:flex;
-  align-items:center;
-  gap:22px;
-  margin-bottom:25px;
-}
-
-.ai-agent-avatar{
-  width:110px;
-  height:110px;
-  flex-shrink:0;
-  border-radius:50%;
-  object-fit:cover;
-  border:5px solid #fff;
-  box-shadow:0 5px 20px rgba(8,122,75,.16);
-  background:#e8f8f0;
-}
-
-.ai-agent-heading{
-  flex:1;
-}
-
-.ai-agent-label{
-  display:inline-block;
-  padding:7px 13px;
-  border-radius:20px;
-  background:#e8f8f0;
-  color:#087a4b;
-  font-size:12px;
-  font-weight:900;
-  letter-spacing:1px;
-  margin-bottom:10px;
-}
-
-.ai-agent-heading h3{
-  margin:0 0 7px;
-  color:#173b2d;
-  font-size:clamp(28px,5vw,40px);
-}
-
-.ai-agent-heading p{
-  margin:0;
-  color:#71847b;
-  line-height:1.6;
-  font-size:15px;
-}
-
-.ai-agent-status{
-  padding:10px 15px;
-  border-radius:14px;
-  background:#e8f8f0;
-  color:#087a4b;
-  font-weight:800;
-  white-space:nowrap;
-}
-
-.ai-agent-status::before{
+.cover-face::before{
   content:"";
-  display:inline-block;
-  width:10px;
-  height:10px;
-  margin-right:8px;
-  border-radius:50%;
-  background:#20b36b;
+  position:absolute; inset:0;
+  background:
+    repeating-linear-gradient(115deg, rgba(255,255,255,0.05) 0 2px, transparent 2px 26px),
+    radial-gradient(circle at 70% 25%, rgba(255,215,110,0.25), transparent 40%);
+}
+.cover-icons{position:absolute; inset:0; opacity:0.5;}
+.cover-icons svg{position:absolute;}
+.cover-eyebrow{
+  letter-spacing:.28em; font-size:.72rem; text-transform:uppercase;
+  color:#bfe9d6; z-index:2; margin-bottom:14px; font-weight:600;
+}
+.cover-title{
+  font-size:clamp(2rem, 7vw, 2.9rem); font-weight:800; z-index:2; line-height:1.05;
+  text-shadow:0 4px 24px rgba(0,0,0,0.4);
+  background:linear-gradient(90deg,#eafff4,#bfe3ff);
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+}
+.cover-subtitle{
+  z-index:2; margin-top:14px; font-size:.95rem; color:#d7ece3; max-width:32ch; font-weight:500;
+}
+.cover-owner{
+  z-index:2; margin-top:28px; font-size:.78rem; letter-spacing:.18em; text-transform:uppercase; color:#8fd6b6;
+}
+.cover-hint{
+  z-index:2; margin-top:34px; font-size:.8rem; color:#e7fff1; opacity:.85;
+  display:flex; align-items:center; gap:8px;
+}
+.pulse-dot{width:8px; height:8px; border-radius:50%; background:#ffd76a; box-shadow:0 0 0 rgba(255,215,106,.6); animation:pulse 1.8s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(255,215,106,.6);}70%{box-shadow:0 0 0 14px rgba(255,215,106,0);}100%{box-shadow:0 0 0 0 rgba(255,215,106,0);}}
+
+/* ---------- LIBRARY (chapter list) ---------- */
+#library{background:var(--paper); padding:0 0 80px 0;}
+.lib-topbar{
+  position:sticky; top:0; z-index:10;
+  background:var(--paper);
+  border-bottom:1px solid var(--card-line);
+  padding:18px 20px;
+  display:flex; align-items:center; gap:12px; flex-wrap:wrap;
+}
+.lib-title{font-size:1.15rem; font-weight:800; color:var(--ink); flex:1;}
+.icon-btn{
+  border:1px solid var(--card-line); background:var(--card); color:var(--text);
+  border-radius:12px; padding:9px 12px; cursor:pointer; font-size:1rem;
+  display:flex; align-items:center; gap:6px;
+  transition:transform .15s ease, background .2s ease;
+}
+.icon-btn:hover{transform:translateY(-1px);}
+.icon-btn:active{transform:translateY(0);}
+#searchBox{
+  border:1px solid var(--card-line); background:var(--card); color:var(--text);
+  border-radius:12px; padding:9px 12px; font-size:.9rem; width:180px; flex:1 1 160px; max-width:260px;
+  font-family:var(--font-body);
+}
+.term-tabs{display:flex; gap:8px; padding:16px 20px 4px 20px; overflow-x:auto;}
+.term-tab{
+  border:1px solid var(--card-line); background:var(--card); color:var(--text-soft);
+  padding:8px 16px; border-radius:999px; font-weight:600; font-size:.85rem; white-space:nowrap; cursor:pointer;
+  transition:all .2s ease;
+}
+.term-tab.active{background:linear-gradient(120deg,var(--ink),var(--blue)); color:#fff; border-color:transparent;}
+
+.chapters{padding:10px 16px 40px 16px; display:flex; flex-direction:column; gap:14px; max-width:760px; margin:0 auto;}
+.chapter-card{
+  background:var(--card); border:1px solid var(--card-line); border-radius:var(--radius);
+  padding:18px 18px; box-shadow:var(--shadow); cursor:pointer;
+  display:flex; align-items:center; gap:16px;
+  transition:transform .2s ease, box-shadow .2s ease;
+}
+.chapter-card:hover{transform:translateY(-3px);}
+.chapter-num{
+  width:46px; height:46px; border-radius:12px; flex-shrink:0;
+  background:linear-gradient(140deg,var(--ink),var(--blue));
+  color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-family:var(--font-display);
+  font-size:1.05rem;
+}
+.chapter-body{flex:1; min-width:0;}
+.chapter-title{font-weight:700; font-size:1.02rem; color:var(--text);}
+.chapter-sub{font-size:.82rem; color:var(--text-soft); margin-top:2px;}
+.chapter-progress-wrap{margin-top:8px; height:6px; background:var(--card-line); border-radius:99px; overflow:hidden;}
+.chapter-progress-bar{height:100%; background:linear-gradient(90deg,var(--ink),var(--blue)); width:0%; transition:width .4s ease;}
+.chapter-icon{font-size:1.6rem; flex-shrink:0;}
+.chapter-arrow{color:var(--text-soft); flex-shrink:0;}
+
+/* ---------- LESSON READER ---------- */
+#reader{background:var(--paper);}
+.reader-topbar{
+  position:sticky; top:0; z-index:10; background:var(--paper); border-bottom:1px solid var(--card-line);
+  display:flex; align-items:center; gap:10px; padding:14px 16px;
+}
+.reader-crumb{font-size:.78rem; color:var(--text-soft); flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.lesson-track{
+  display:flex; overflow-x:auto; scroll-snap-type:x mandatory; scroll-behavior:smooth;
+  height:calc(100vh - 58px); -webkit-overflow-scrolling:touch;
+}
+.lesson-page{
+  min-width:100%; scroll-snap-align:start; overflow-y:auto; padding:26px 18px 90px 18px;
+}
+.lesson-inner{max-width:720px; margin:0 auto;}
+.lesson-kicker{color:var(--blue); font-weight:700; font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;}
+.lesson-title{font-size:1.55rem; font-weight:800; color:var(--ink); margin-top:4px;}
+.section{margin-top:26px;}
+.section h4{
+  font-size:.98rem; color:var(--ink); display:flex; align-items:center; gap:8px;
+  padding-bottom:8px; border-bottom:2px solid var(--card-line);
+}
+.section p, .section li{color:var(--text); line-height:1.65; font-size:.96rem;}
+.section ul, .section ol{padding-left:1.2em; margin:.4em 0;}
+box{}
+.box{
+  border-radius:14px; padding:14px 16px; margin:10px 0; font-size:.92rem; line-height:1.55;
+}
+.box-formula{background:var(--card); border:1.5px dashed var(--blue); color:var(--text);}
+.box-note{background:rgba(21,101,192,0.07); border-left:4px solid var(--blue);}
+.box-waec{background:rgba(232,164,0,0.10); border-left:4px solid var(--amber);}
+.box-neco{background:rgba(11,61,46,0.08); border-left:4px solid var(--ink);}
+.box-mistake{background:rgba(200,50,50,0.07); border-left:4px solid #c83232;}
+.box-lab{background:rgba(21,101,192,0.06); border:1px solid var(--card-line);}
+.box-title{font-weight:700; margin-bottom:4px; display:block; font-size:.82rem; text-transform:uppercase; letter-spacing:.04em;}
+table.ptable{width:100%; border-collapse:collapse; font-size:.88rem; margin:10px 0;}
+table.ptable th, table.ptable td{border:1px solid var(--card-line); padding:8px 10px; text-align:left;}
+table.ptable th{background:var(--card); color:var(--ink); font-family:var(--font-display);}
+.diagram{
+  border:1px solid var(--card-line); border-radius:14px; background:var(--card);
+  padding:14px; margin:12px 0; display:flex; align-items:center; justify-content:center;
+}
+.diagram svg{max-width:100%; height:auto;}
+.mcq{background:var(--card); border:1px solid var(--card-line); border-radius:12px; padding:12px 14px; margin:10px 0;}
+.mcq-q{font-weight:600; margin-bottom:8px;}
+.mcq-opt{
+  display:block; padding:8px 10px; border-radius:8px; margin:4px 0; cursor:pointer;
+  border:1px solid var(--card-line); font-size:.9rem; transition:background .15s ease;
+}
+.mcq-opt:hover{background:rgba(21,101,192,0.08);}
+.mcq-opt.correct{background:rgba(30,160,90,0.22); border-color:#1ea05a; font-weight:600;}
+.mcq-opt.wrong{background:rgba(200,50,50,0.16); border-color:#c83232;}
+.lesson-nav{
+  display:flex; justify-content:space-between; align-items:center; margin-top:34px; gap:10px;
+}
+.nav-btn{
+  background:linear-gradient(120deg,var(--ink),var(--blue)); color:#fff; border:none; border-radius:12px;
+  padding:12px 18px; font-weight:700; cursor:pointer; font-size:.9rem; font-family:var(--font-body);
+}
+.nav-btn.ghost{background:var(--card); color:var(--text); border:1px solid var(--card-line);}
+.dots{display:flex; gap:6px; align-items:center; justify-content:center; padding:10px 0;}
+.dot{width:7px; height:7px; border-radius:50%; background:var(--card-line);}
+.dot.active{background:var(--ink); width:20px; border-radius:5px; transition:all .25s ease;}
+
+/* Search results overlay */
+#searchResults{
+  position:fixed; inset:0; background:var(--paper); z-index:50; padding:20px; overflow-y:auto;
+}
+.search-result{
+  background:var(--card); border:1px solid var(--card-line); border-radius:12px; padding:14px; margin-bottom:10px; cursor:pointer;
+}
+.search-result b{color:var(--ink);}
+
+::-webkit-scrollbar{width:8px; height:8px;}
+::-webkit-scrollbar-thumb{background:var(--card-line); border-radius:99px;}
+
+@media (min-width:820px){
+  .lesson-inner{font-size:1.02rem;}
 }
 
-.ai-chat-card{
-  background:#f7fcfa;
-  border:1px solid #d5ebe0;
-  border-radius:23px;
-  padding:22px;
+/* ---------- RESOURCES ---------- */
+#resources{background:var(--paper); padding:0 0 80px 0;}
+.res-intro{padding:14px 20px 4px 20px; color:var(--text-soft); font-size:.86rem; max-width:760px; margin:0 auto;}
+.resource-card{
+  background:var(--card); border:1px solid var(--card-line); border-radius:var(--radius);
+  padding:18px 18px; box-shadow:var(--shadow); cursor:pointer;
+  display:flex; align-items:center; gap:16px;
+  transition:transform .2s ease, box-shadow .2s ease;
+}
+.resource-card:hover{transform:translateY(-3px);}
+.resource-icon{
+  width:46px; height:46px; border-radius:12px; flex-shrink:0; font-size:1.35rem;
+  background:linear-gradient(140deg,var(--ink),var(--blue));
+  display:flex; align-items:center; justify-content:center;
+}
+.resource-body{flex:1; min-width:0;}
+.resource-title{font-weight:700; font-size:1.02rem; color:var(--text);}
+.resource-sub{font-size:.82rem; color:var(--text-soft); margin-top:2px;}
+.resource-arrow{color:var(--text-soft); flex-shrink:0;}
+
+/* ---------- RESOURCE READER (single scrolling page) ---------- */
+#resourceReader{background:var(--paper);}
+.res-page{max-width:720px; margin:0 auto; padding:26px 18px 90px 18px;}
+.res-kicker{color:var(--blue); font-weight:700; font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;}
+.res-title{font-size:1.5rem; font-weight:800; color:var(--ink); margin-top:4px; margin-bottom:18px;}
+
+.formula-group{margin:18px 0;}
+.formula-group h4{font-size:.95rem; color:var(--ink); display:flex; align-items:center; gap:8px; padding-bottom:6px; border-bottom:2px solid var(--card-line);}
+.formula-row{
+  display:flex; justify-content:space-between; align-items:center; gap:12px;
+  background:var(--card); border:1px dashed var(--blue); border-radius:12px;
+  padding:10px 14px; margin:8px 0; font-size:.92rem;
+}
+.formula-name{color:var(--text-soft); font-size:.82rem;}
+.formula-expr{font-family:var(--font-display); font-weight:700; color:var(--ink); font-size:1.02rem;}
+.formula-note{font-size:.78rem; color:var(--text-soft); margin-top:2px;}
+
+.safety-list{padding-left:0; list-style:none; margin:0;}
+.safety-list li{
+  background:rgba(232,164,0,0.09); border-left:4px solid var(--amber);
+  border-radius:10px; padding:10px 14px; margin:8px 0; font-size:.92rem; line-height:1.5;
 }
 
-.ai-agent-messages{
-  min-height:180px;
-  max-height:480px;
-  overflow-y:auto;
-  padding:5px;
-  margin-bottom:18px;
+.glossary-letter{
+  position:sticky; top:0; background:var(--paper); color:var(--ink); font-family:var(--font-display);
+  font-weight:800; font-size:1rem; padding:8px 0 4px 0; z-index:1;
 }
-
-.ai-message{
-  display:flex;
-  align-items:flex-start;
-  gap:12px;
-  margin-bottom:18px;
+.glossary-item{
+  background:var(--card); border:1px solid var(--card-line); border-radius:12px;
+  padding:10px 14px; margin:6px 0; cursor:pointer; font-size:.92rem;
 }
+.glossary-item b{color:var(--ink);}
+.glossary-item .glossary-def{color:var(--text-soft); font-size:.86rem; margin-top:3px;}
+.glossary-item .glossary-link{font-size:.76rem; color:var(--blue); margin-top:5px; font-weight:600;}
 
-.ai-message.user{
-  flex-direction:row-reverse;
+/* ---------- MOCK EXAMS ---------- */
+.exam-meta{font-size:.82rem; color:var(--text-soft); margin:2px 0 18px 0;}
+.mcq-opt.selected{background:rgba(21,101,192,0.16); border-color:var(--blue); font-weight:600;}
+.exam-submit-bar{
+  position:sticky; bottom:0; background:var(--paper); border-top:1px solid var(--card-line);
+  padding:12px 0; margin-top:20px; display:flex; justify-content:center;
 }
-
-.ai-message-avatar{
-  width:48px;
-  height:48px;
-  flex-shrink:0;
-  border-radius:50%;
-  overflow:hidden;
-  background:#e8f8f0;
-  display:grid;
-  place-items:center;
+.exam-score-banner{
+  border-radius:14px; padding:16px 18px; margin:0 0 20px 0; text-align:center;
+  background:linear-gradient(120deg,var(--ink),var(--blue)); color:#fff;
 }
-
-.ai-message-avatar img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
+.exam-score-banner .score-num{font-size:1.8rem; font-weight:800; font-family:var(--font-display);}
+.theory-item{background:var(--card); border:1px solid var(--card-line); border-radius:12px; padding:12px 14px; margin:10px 0;}
+.theory-q{font-weight:600; margin-bottom:8px; font-size:.94rem;}
+.reveal-btn{
+  background:var(--card); border:1px solid var(--blue); color:var(--blue); border-radius:10px;
+  padding:6px 12px; font-size:.82rem; font-weight:600; cursor:pointer; font-family:var(--font-body);
 }
-
-.ai-message.user .ai-message-avatar{
-  background:#087a4b;
-  color:#fff;
-  font-size:20px;
+.theory-guide{
+  margin-top:10px; padding:10px 12px; border-radius:10px; font-size:.88rem; line-height:1.5;
+  background:rgba(30,160,90,0.12); border-left:4px solid #1ea05a;
 }
-
-.ai-message-content{
-  max-width:78%;
-  padding:14px 17px;
-  border-radius:17px;
-  background:#fff;
-  border:1px solid #dceee6;
-  color:#17352a;
-  line-height:1.6;
-  font-size:15px;
-  box-shadow:0 5px 18px rgba(8,122,75,.04);
-  overflow-wrap:anywhere;
-}
-
-.ai-message.user .ai-message-content{
-  background:#087a4b;
-  color:#fff;
-  border-color:#087a4b;
-}
-
-.ai-message-content h1,
-.ai-message-content h2,
-.ai-message-content h3{
-  color:#17352a;
-  line-height:1.3;
-  margin:8px 0 14px;
-}
-
-.ai-message.user .ai-message-content h1,
-.ai-message.user .ai-message-content h2,
-.ai-message.user .ai-message-content h3{
-  color:#fff;
-}
-
-.ai-message-content h1{
-  font-size:24px;
-}
-
-.ai-message-content h2{
-  font-size:20px;
-}
-
-.ai-message-content h3{
-  font-size:17px;
-}
-
-.ai-message-content strong{
-  font-weight:900;
-}
-
-.ai-message-content em{
-  font-style:italic;
-}
-
-.ai-message-content li{
-  margin:6px 0;
-  line-height:1.6;
-}
-
-.ai-quick-actions{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:10px;
-  margin-bottom:18px;
-}
-
-.ai-quick-button{
-  min-height:72px;
-  padding:12px;
-  background:#fff;
-  border:1px solid #cfe5da;
-  border-radius:15px;
-  cursor:pointer;
-  text-align:left;
-  color:#17352a;
-  font-weight:800;
-  transition:.2s;
-}
-
-.ai-quick-button:hover{
-  transform:translateY(-2px);
-  border-color:#73cfa9;
-  box-shadow:0 8px 20px rgba(8,122,75,.08);
-}
-
-.ai-quick-button strong{
-  display:block;
-  margin-bottom:4px;
-  font-size:14px;
-}
-
-.ai-quick-button small{
-  color:#71847b;
-  font-size:11px;
-}
-
-.ai-input-row{
-  display:flex;
-  gap:10px;
-}
-
-.ai-agent-input{
-  flex:1;
-  min-width:0;
-  min-height:55px;
-  padding:14px 17px;
-  border:1px solid #bcdccc;
-  border-radius:14px;
-  background:#fff;
-  color:#17352a;
-  font-size:15px;
-  outline:none;
-}
-
-.ai-agent-input:focus{
-  border-color:#087a4b;
-  box-shadow:0 0 0 3px rgba(8,122,75,.08);
-}
-
-.ai-agent-send{
-  min-width:120px;
-  padding:0 20px;
-  border:0;
-  border-radius:14px;
-  background:#087a4b;
-  color:#fff;
-  font-weight:900;
-  cursor:pointer;
-}
-
-.ai-agent-send:hover{
-  background:#06683f;
-}
-
-.ai-agent-send:disabled{
-  opacity:.6;
-  cursor:not-allowed;
-}
-
-.ai-agent-status-text{
-  display:none;
-  margin-top:12px;
-  color:#087a4b;
-  font-size:13px;
-  font-weight:800;
-}
-
-.ai-agent-status-text.show{
-  display:block;
-}
-
-
-/* =========================================================
-   RESPONSIVE
-========================================================= */
-
-@media(max-width:900px){
-
-  .student-dashboard-grid{
-    grid-template-columns:1fr;
-  }
-
-  .student-dashboard-actions{
-    grid-template-columns:repeat(2,1fr);
-  }
-
-  .student-recent-grid{
-    grid-template-columns:repeat(2,1fr);
-  }
-
-}
-
-@media(max-width:760px){
-
-  .payment-section,
-  .student-dashboard-section{
-    padding:22px;
-    border-radius:23px;
-  }
-
-  .payment-grid{
-    grid-template-columns:1fr;
-  }
-
-  .student-bar{
-    flex-wrap:wrap;
-  }
-
-  .student-bar .student-name{
-    min-width:100%;
-  }
-
-  .ai-agent{
-    padding:20px;
-    border-radius:23px;
-  }
-
-  .ai-agent-header{
-    align-items:flex-start;
-    flex-wrap:wrap;
-  }
-
-  .ai-agent-avatar{
-    width:85px;
-    height:85px;
-  }
-
-  .ai-agent-status{
-    width:100%;
-    text-align:center;
-  }
-
-}
-
-@media(max-width:600px){
-
-  .student-dashboard-card{
-    flex-direction:column;
-    align-items:flex-start;
-  }
-
-  .student-dashboard-actions{
-    grid-template-columns:1fr;
-  }
-
-  .student-recent-grid{
-    grid-template-columns:1fr;
-  }
-
-  .ai-quick-actions{
-    grid-template-columns:1fr;
-  }
-
-}
-
-@media(max-width:520px){
-
-  .payment-features{
-    grid-template-columns:1fr;
-  }
-
-}
-
-@media(max-width:480px){
-
-  .ai-input-row{
-    flex-direction:column;
-  }
-
-  .ai-agent-send{
-    min-height:52px;
-  }
-
-  .ai-message-content{
-    max-width:82%;
-  }
-
-}
-
 </style>
-
 </head>
-
-
 <body>
 
-
-<!-- ==================================================
-     NAVIGATION
-================================================== -->
-
-<header class="nav">
-
-  <a
-    class="brand"
-    href="index.html">
-
-    <span class="mark">
-      AG
-    </span>
-
-    <span>
-
-      <b>AGULIBRARY</b>
-
-      <small>
-        Learn • Read • Watch • Grow
-      </small>
-
-    </span>
-
-  </a>
-
-
-  <nav>
-
-    <a href="#resources">
-      Resources
-    </a>
-
-    <a href="#subjects">
-      Subjects
-    </a>
-
-    <a href="#support">
-      Support
-    </a>
-
-    <a href="admin.html">
-      Admin
-    </a>
-
-  </nav>
-
-
-  <div
-    style="
-      display:flex;
-      gap:10px;
-      align-items:center;
-    ">
-
-    <a
-      id="accountButton"
-      class="btn outline auth-btn"
-      href="auth.html">
-
-      👤 Student Account
-
-    </a>
-
+<!-- ============ COVER ============ -->
+<div id="cover" class="screen">
+  <div class="cover-book" id="coverBook">
+    <div class="cover-face">
+      <svg class="cover-icons" viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="330" cy="80" r="34" fill="none" stroke="#ffd76a" stroke-width="2"/>
+        <circle cx="330" cy="80" r="3" fill="#ffd76a"/>
+        <ellipse cx="330" cy="80" rx="55" ry="18" fill="none" stroke="#ffd76a" stroke-width="1.5" transform="rotate(20 330 80)"/>
+        <circle cx="60" cy="120" r="10" fill="#7fe0b4" opacity=".6"/>
+        <circle cx="90" cy="150" r="6" fill="#7fe0b4" opacity=".5"/>
+        <path d="M40 420 L60 380 L80 420 L100 380 L120 420" stroke="#8fd6ff" stroke-width="2" fill="none" opacity=".5"/>
+        <rect x="250" y="380" width="26" height="14" rx="2" fill="none" stroke="#8fd6ff" stroke-width="1.5" opacity=".6"/>
+      </svg>
+      <div class="cover-eyebrow">WAEC &amp; NECO · SSS 1</div>
+      <div class="cover-title">MASTERY<br>PHYSICS</div>
+      <div class="cover-subtitle">A Complete WAEC &amp; NECO Physics Textbook — SSS 1</div>
+      <div class="cover-owner">Owner: AGU</div>
+      <div class="cover-hint"><span class="pulse-dot"></span> Tap to open the book</div>
+    </div>
   </div>
-
-</header>
-
-
-<!-- ==================================================
-     SIGNED-IN STUDENT BAR
-================================================== -->
-
-<div
-  id="studentBar"
-  class="student-bar">
-
-  <span>🎓</span>
-
-  <span
-    id="studentWelcome"
-    class="student-name">
-
-    Welcome, Student
-
-  </span>
-
- <a
-  id="studentDashboardButton"
-  class="student-dashboard-btn"
-  href="student.html">
-
-  📚 Student Dashboard
-
-</a> 
-
-  <button
-    id="studentSignoutButton"
-    class="signout-btn">
-
-    Sign out
-
-  </button>
-
 </div>
 
-
-<!-- ==================================================
-     HERO
-================================================== -->
-
-<section class="hero">
-
-  <div>
-
-    <span class="eyebrow">
-      🌍 GLOBAL DIGITAL EDUCATION
-    </span>
-
-    <h1>
-      Your global
-      <em>
-        learning library.
-      </em>
-    </h1>
-
-    <p>
-      Books, PDFs, videos, photos, lessons
-      and courses in one comfortable
-      learning space.
-    </p>
-
-    <div class="actions">
-
-      <a
-        class="btn primary"
-        href="#resources">
-
-        Explore Library
-
-      </a>
-
-      <a
-        class="btn outline"
-        href="#subjects">
-
-        Explore Subjects
-
-      </a>
-
-    </div>
-
+<!-- ============ LIBRARY ============ -->
+<div id="library" class="screen hidden">
+  <div class="lib-topbar">
+    <div class="lib-title">Mastery Physics</div>
+    <input id="searchBox" placeholder="Search topics…" />
+    <button class="icon-btn" id="resourcesBtn" title="Study Resources">🧰</button>
+    <button class="icon-btn" id="darkBtn" title="Toggle dark mode">🌓</button>
   </div>
-
-
-  <div class="hero-art">
-
-    <div class="orb"></div>
-
-    <div class="book">
-      📖
-    </div>
-
-    <span class="float a">
-      📚 Books
-      <br>
-      <small>Tap to open</small>
-    </span>
-
-    <span class="float b">
-      🎥 Videos
-      <br>
-      <small>Learn visually</small>
-    </span>
-
-    <span class="float c">
-      ☁️ Cloud Library
-    </span>
-
-  </div>
-
-</section>
-
-
-<!-- ==================================================
-     SEARCH
-================================================== -->
-
-<div class="search">
-
-  <input
-    id="search"
-    type="search"
-    placeholder="Search resources..."
-    autocomplete="off">
-
-  <button
-    id="searchButton">
-
-    Search
-
-  </button>
-
+  <div class="term-tabs" id="termTabs"></div>
+  <div class="chapters" id="chapterList"></div>
 </div>
 
-
-<!-- ==================================================
-     RESOURCES
-================================================== -->
-
-<section
-  id="resources"
-  class="section">
-
-  <span class="eyebrow">
-    DIGITAL RESOURCES
-  </span>
-
-  <h2>
-    Latest learning resources
-  </h2>
-
-  <p class="muted">
-    Published resources appear here.
-  </p>
-
-  <div
-    id="resourceGrid"
-    class="grid">
-
-    <div class="empty">
-      Loading resources...
-    </div>
-
+<!-- ============ SEARCH RESULTS ============ -->
+<div id="searchResults" class="screen hidden">
+  <div class="lib-topbar" style="position:static; border:none; padding:0 0 14px 0;">
+    <div class="lib-title">Search results</div>
+    <button class="icon-btn" id="closeSearch">✕ Close</button>
   </div>
+  <div id="searchResultsList"></div>
+</div>
 
-</section>
-
-
-<!-- ==================================================
-     PAYMENT
-================================================== -->
-
-<section
-  class="payment-section"
-  id="payment">
-
-  <div class="payment-header">
-
-    <span class="eyebrow">
-      💳 GLOBAL PAYMENT CENTER
-    </span>
-
-    <h2>
-      Learn Globally. Pay Securely.
-    </h2>
-
-    <p>
-      Access premium books, courses, lessons and other educational
-      resources through our international-ready payment system.
-    </p>
-
+<!-- ============ READER ============ -->
+<div id="reader" class="screen hidden">
+  <div class="reader-topbar">
+    <button class="icon-btn" id="backBtn">← Chapters</button>
+    <div class="reader-crumb" id="crumb"></div>
+    <button class="icon-btn" id="resourcesBtn2" title="Study Resources">🧰</button>
+    <button class="icon-btn" id="darkBtn2">🌓</button>
   </div>
+  <div class="dots" id="dots"></div>
+  <div class="lesson-track" id="lessonTrack"></div>
+</div>
 
-
-  <div class="payment-grid">
-
-    <div class="payment-card">
-
-      <div class="payment-icon">
-        🌍
-      </div>
-
-      <h3>
-        International Payments
-      </h3>
-
-      <p>
-        AGULIBRARY is designed to support students and educators
-        from different countries and payment environments.
-      </p>
-
-      <div class="payment-features">
-
-        <span>🌍 Global Students</span>
-        <span>💳 International Cards</span>
-        <span>🔐 Secure Checkout</span>
-        <span>🧾 Payment Records</span>
-
-      </div>
-
-    </div>
-
-
-    <div class="payment-card payment-checkout-card">
-
-      <div class="payment-icon">
-        💳
-      </div>
-
-      <span class="payment-label">
-        PREMIUM LEARNING
-      </span>
-
-      <h3>
-        Choose a Payment
-      </h3>
-
-      <label for="paymentResource">
-        Learning Resource
-      </label>
-
-      <select id="paymentResource">
-
-        <option value="">
-          Select a book, course or resource
-        </option>
-
-        <option value="premium-course">
-          Premium Course
-        </option>
-
-        <option value="premium-book">
-          Premium eBook
-        </option>
-
-        <option value="premium-lesson">
-          Premium Lesson
-        </option>
-
-      </select>
-
-      <label for="paymentCurrency">
-        Currency
-      </label>
-
-      <select id="paymentCurrency">
-
-        <option value="NGN">
-          🇳🇬 Nigerian Naira (NGN)
-        </option>
-
-        <option value="USD">
-          🇺🇸 US Dollar (USD)
-        </option>
-
-        <option value="GBP">
-          🇬🇧 British Pound (GBP)
-        </option>
-
-        <option value="EUR">
-          🇪🇺 Euro (EUR)
-        </option>
-
-      </select>
-
-      <div class="payment-amount">
-
-        <span>
-          Amount
-        </span>
-
-        <strong id="paymentAmount">
-          Select a resource
-        </strong>
-
-      </div>
-
-      <button
-        id="startPaymentButton"
-        class="payment-button"
-        type="button">
-
-        🔐 Continue to Secure Payment
-
-      </button>
-
-      <small class="payment-note">
-
-        You will be redirected to a secure payment checkout.
-        AGULIBRARY does not store your card details.
-
-      </small>
-
-    </div>
-
+<!-- ============ RESOURCES (Formula Sheet, Glossary, Mock Exams, etc.) ============ -->
+<div id="resources" class="screen hidden">
+  <div class="lib-topbar">
+    <button class="icon-btn" id="resourcesBackBtn">← Library</button>
+    <div class="lib-title">Study Resources</div>
+    <button class="icon-btn" id="darkBtn3">🌓</button>
   </div>
+  <div class="res-intro">Everything you need beyond the lessons — formulas, reference tables, revision guides and full mock exams with answer keys.</div>
+  <div class="chapters" id="resourceList"></div>
+</div>
 
-  <div
-    id="paymentMessage"
-    class="payment-message"
-    aria-live="polite">
+<!-- ============ RESOURCE READER (single-page reference content) ============ -->
+<div id="resourceReader" class="screen hidden">
+  <div class="reader-topbar">
+    <button class="icon-btn" id="resourceReaderBackBtn">← Resources</button>
+    <div class="reader-crumb" id="resourceCrumb"></div>
+    <button class="icon-btn" id="darkBtn4">🌓</button>
   </div>
+  <div class="res-page" id="resourceContent"></div>
+</div>
 
-</section>
-
-
-<!-- ==================================================
-     SUBJECTS
-================================================== -->
-
-<section
-  id="subjects"
-  class="section white">
-
-  <span class="eyebrow">
-    GLOBAL SUBJECTS
-  </span>
-
-  <h2>
-    Explore Subjects
-  </h2>
-
-  <div class="grid subjects">
-
-    <div data-subject="Science">
-      🔬
-      <b>Science</b>
-      <small>Physics • Chemistry • Biology</small>
-    </div>
-
-    <div data-subject="Mathematics">
-      📐
-      <b>Mathematics</b>
-      <small>Mathematics • Algebra • Statistics</small>
-    </div>
-
-    <div data-subject="Technology">
-      💻
-      <b>Technology</b>
-      <small>Computer Science • Programming • AI</small>
-    </div>
-
-    <div data-subject="Languages & Literature">
-      📚
-      <b>Languages & Literature</b>
-      <small>English • Literature • French • Spanish</small>
-    </div>
-
-    <div data-subject="Social Sciences & Humanities">
-      🌎
-      <b>Social Sciences & Humanities</b>
-      <small>Civic Education • History • Geography • Economics</small>
-    </div>
-
-    <div data-subject="Business & Finance">
-      💼
-      <b>Business & Finance</b>
-      <small>Accounting • Finance • Marketing</small>
-    </div>
-
-    <div data-subject="Arts & Creative Studies">
-      🎨
-      <b>Arts & Creative Studies</b>
-      <small>Art • Music • Photography • Film</small>
-    </div>
-
-    <div data-subject="Professional & Career">
-      🧑‍⚕️
-      <b>Professional & Career</b>
-      <small>Medicine • Engineering • Law • Education</small>
-    </div>
-
+<!-- ============ EXAM (mock exam taking screen) ============ -->
+<div id="examScreen" class="screen hidden">
+  <div class="reader-topbar">
+    <button class="icon-btn" id="examBackBtn">← Resources</button>
+    <div class="reader-crumb" id="examCrumb"></div>
+    <button class="icon-btn" id="darkBtn5">🌓</button>
   </div>
+  <div class="res-page" id="examContent"></div>
+</div>
 
-</section>
-
-
-<!-- ==================================================
-     SUPPORT
-================================================== -->
-
-<section
-  id="support"
-  class="support">
-
-  <span class="eyebrow">
-    SUPPORT
-  </span>
-
-  <h2>
-    We're here to help.
-  </h2>
-
-  <p>
-    Account, library, technical and payment
-    support will be available here.
-  </p>
-
-  <a
-    class="btn primary"
-    href="mailto:support@agulibrary.com">
-
-    Contact Support
-
-  </a>
-
-</section>
-
-
-<!-- ==================================================
-     FOOTER
-================================================== -->
-
-<footer>
-
-  <b>
-    AGULIBRARY
-  </b>
-
-  <span>
-    Owner: Umar Mohammed
-  </span>
-
-  <span>
-    ©
-    <span id="year"></span>
-  </span>
-
-</footer>
-
-
-<!-- ==================================================
-     SUPABASE
-================================================== -->
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script src="config.js"></script>
-
-<script src="supabase.js"></script>
-
+<script src="data.js"></script>
 <script src="app.js"></script>
-
-
-<!-- ==================================================
-     STUDENT SESSION + DASHBOARD + AI
-================================================== -->
-
-<script>
-
-let aiConversation = [];
-
-
-/* ==================================================
-   PAGE START
-================================================== */
-
-document.addEventListener(
-  "DOMContentLoaded",
-  function(){
-
-    const year =
-      document.getElementById("year");
-
-    if(year){
-
-      year.textContent =
-        new Date().getFullYear();
-
-    }
-
-
-    setupStudentDashboard();
-
-    setupStudentSignout();
-
-    setupSubjects();
-
-    setupInternationalPayment();
-
-    setupAI();
-
-    checkStudentSession();
-
-  }
-);
-
-
-/* ==================================================
-   STUDENT DASHBOARD
-================================================== */
-
-function setupStudentDashboard(){
-
-  const button =
-    document.getElementById(
-      "studentDashboardButton"
-    );
-
-  if(!button)return;
-
-
-  const accountButton =
-    document.getElementById(
-      "accountButton"
-    );
-
-  if(accountButton){
-
-    accountButton.addEventListener(
-      "click",
-      function(event){
-
-        const studentBar =
-          document.getElementById(
-            "studentBar"
-          );
-
-        const dashboard =
-          document.getElementById(
-            "studentDashboard"
-          );
-
-        if(
-          studentBar &&
-          studentBar.classList.contains("show") &&
-          dashboard
-        ){
-
-          event.preventDefault();
-
-          dashboard.classList.add("show");
-
-          dashboard.scrollIntoView({
-            behavior:"smooth",
-            block:"start"
-          });
-
-        }
-
-      }
-    );
-
-  }
-
-}
-
-
-/* ==================================================
-   SUBJECTS
-================================================== */
-
-function setupSubjects(){
-
-  document
-    .querySelectorAll(
-      ".subjects > div"
-    )
-    .forEach(
-      function(card){
-
-        card.addEventListener(
-          "click",
-          function(){
-
-            const subject =
-              card.dataset.subject;
-
-            const search =
-              document.getElementById(
-                "search"
-              );
-
-            if(search){
-
-              search.value =
-                subject;
-
-            }
-
-            const resources =
-              document.getElementById(
-                "resources"
-              );
-
-            if(resources){
-
-              resources.scrollIntoView({
-                behavior:"smooth"
-              });
-
-            }
-
-            if(
-              typeof filterResources ===
-              "function"
-            ){
-
-              filterResources();
-
-            }
-
-          }
-        );
-
-      }
-    );
-
-}
-
-
-/* ==================================================
-   STUDENT SESSION
-================================================== */
-
-async function checkStudentSession(){
-
-  try{
-
-    if(
-      typeof supabase === "undefined" ||
-      !supabase ||
-      !supabase.auth
-    ){
-
-      console.warn(
-        "Supabase authentication is not available."
-      );
-
-      return;
-
-    }
-
-
-    const result =
-      await supabase.auth.getSession();
-
-
-    if(result.error){
-
-      console.error(
-        "Session error:",
-        result.error
-      );
-
-      return;
-
-    }
-
-
-    const session =
-      result.data?.session;
-
-
-    if(!session){
-
-      return;
-
-    }
-
-
-    const user =
-      session.user;
-
-
-    const email =
-      user.email || "Student";
-
-
-    const name =
-      user.user_metadata?.full_name ||
-      user.user_metadata?.name ||
-      email.split("@")[0] ||
-      "Student";
-
-
-    const studentBar =
-      document.getElementById(
-        "studentBar"
-      );
-
-
-    const studentWelcome =
-      document.getElementById(
-        "studentWelcome"
-      );
-
-
-    if(studentWelcome){
-
-      studentWelcome.textContent =
-        "Welcome, " + name;
-
-    }
-
-
-    if(studentBar){
-
-      studentBar.classList.add(
-        "show"
-      );
-
-    }
-
-
-    const accountButton =
-      document.getElementById(
-        "accountButton"
-      );
-
-
-    if(accountButton){
-
-      accountButton.textContent =
-        "🎓 My Account";
-
-      accountButton.href =
-        "#studentDashboard";
-
-    }
-
-
-    const studentName =
-      document.getElementById(
-        "onePageStudentName"
-      );
-
-    const profileName =
-      document.getElementById(
-        "onePageProfileName"
-      );
-
-    const profileEmail =
-      document.getElementById(
-        "onePageProfileEmail"
-      );
-
-    const avatar =
-      document.getElementById(
-        "onePageStudentAvatar"
-      );
-
-
-    if(studentName){
-
-      studentName.textContent =
-        name;
-
-    }
-
-
-    if(profileName){
-
-      profileName.textContent =
-        name;
-
-    }
-
-
-    if(profileEmail){
-
-      profileEmail.textContent =
-        email;
-
-    }
-
-
-    if(avatar){
-
-      const initials =
-        name
-          .split(" ")
-          .filter(Boolean)
-          .map(
-            part =>
-              part.charAt(0)
-          )
-          .join("")
-          .substring(0,2)
-          .toUpperCase();
-
-      avatar.textContent =
-        initials || "AG";
-
-    }
-
-
-    const dashboard =
-      document.getElementById(
-        "studentDashboard"
-      );
-
-    if(dashboard){
-
-      dashboard.classList.add(
-        "show"
-      );
-
-    }
-
-  }catch(error){
-
-    console.error(
-      "Student session check:",
-      error
-    );
-
-  }
-
-}
-
-
-/* ==================================================
-   SIGN OUT
-================================================== */
-
-function setupStudentSignout(){
-
-  const button =
-    document.getElementById(
-      "studentSignoutButton"
-    );
-
-  if(!button)return;
-
-  button.addEventListener(
-    "click",
-    studentSignOut
-  );
-
-}
-
-
-async function studentSignOut(){
-
-  try{
-
-    if(
-      typeof supabase !== "undefined" &&
-      supabase &&
-      supabase.auth
-    ){
-
-      await supabase.auth.signOut();
-
-    }
-
-  }catch(error){
-
-    console.error(
-      "Sign out error:",
-      error
-    );
-
-  }
-
-  window.location.href =
-    "index.html";
-
-}
-
-
-/* =========================================================
-   AI ELEMENTS
-========================================================= */
-
-function getAIElements(){
-
-  return {
-
-    messages:
-      document.getElementById(
-        "aiAgentMessages"
-      ),
-
-    input:
-      document.getElementById(
-        "aiAgentInput"
-      ),
-
-    send:
-      document.getElementById(
-        "aiAgentSend"
-      ),
-
-    status:
-      document.getElementById(
-        "aiAgentStatus"
-      )
-
-  };
-
-}
-
-
-/* =========================================================
-   ESCAPE HTML
-========================================================= */
-
-function escapeHTML(value){
-
-  return String(
-    value ?? ""
-  ).replace(
-    /[&<>"']/g,
-    function(character){
-
-      return {
-
-        "&":"&amp;",
-        "<":"&lt;",
-        ">":"&gt;",
-        '"':"&quot;",
-        "'":"&#039;"
-
-      }[character];
-
-    }
-  );
-
-}
-
-
-/* =========================================================
-   AI MARKDOWN
-========================================================= */
-
-function renderAIMarkdown(text){
-
-  let html =
-    escapeHTML(text);
-
-
-  html =
-    html.replace(
-      /^### (.+)$/gm,
-      "<h3>$1</h3>"
-    );
-
-
-  html =
-    html.replace(
-      /^## (.+)$/gm,
-      "<h2>$1</h2>"
-    );
-
-
-  html =
-    html.replace(
-      /^# (.+)$/gm,
-      "<h1>$1</h1>"
-    );
-
-
-  html =
-    html.replace(
-      /\*\*(.+?)\*\*/g,
-      "<strong>$1</strong>"
-    );
-
-
-  html =
-    html.replace(
-      /(^|[^\*])\*([^*\n]+)\*(?!\*)/g,
-      "$1<em>$2</em>"
-    );
-
-
-  html =
-    html.replace(
-      /^\s*[-•]\s+(.+)$/gm,
-      "<li>$1</li>"
-    );
-
-
-  html =
-    html.replace(
-      /^\s*(\d+)\.\s+(.+)$/gm,
-      "<li>$1. $2</li>"
-    );
-
-
-  html =
-    html.replace(
-      /\n/g,
-      "<br>"
-    );
-
-
-  return html;
-
-}
-
-
-/* =========================================================
-   ADD AI MESSAGE
-========================================================= */
-
-function addAIMessage(
-  message,
-  sender="ai"
-){
-
-  const elements =
-    getAIElements();
-
-
-  if(!elements.messages)return;
-
-
-  const wrapper =
-    document.createElement(
-      "div"
-    );
-
-  wrapper.className =
-    "ai-message " +
-    (
-      sender==="user"
-      ? "user"
-      : ""
-    );
-
-
-  const avatar =
-    document.createElement(
-      "div"
-    );
-
-  avatar.className =
-    "ai-message-avatar";
-
-
-  if(sender==="user"){
-
-    avatar.textContent =
-      "👤";
-
-  }else{
-
-    const img =
-      document.createElement(
-        "img"
-      );
-
-    img.src =
-      "ai-teacher.jpg";
-
-    img.alt =
-      "AI Teacher";
-
-    img.onerror =
-      function(){
-
-        this.style.display =
-          "none";
-
-        avatar.textContent =
-          "🤖";
-
-      };
-
-    avatar.appendChild(
-      img
-    );
-
-  }
-
-
-  const content =
-    document.createElement(
-      "div"
-    );
-
-  content.className =
-    "ai-message-content";
-
-
-  if(sender==="user"){
-
-    content.textContent =
-      message;
-
-  }else{
-
-    content.innerHTML =
-      renderAIMarkdown(
-        message
-      );
-
-
-    if(
-      window.MathJax &&
-      typeof MathJax.typesetPromise ===
-      "function"
-    ){
-
-      MathJax
-        .typesetPromise([
-          content
-        ])
-        .catch(
-          function(error){
-
-            console.error(
-              "MathJax error:",
-              error
-            );
-
-          }
-        );
-
-    }
-
-  }
-
-
-  wrapper.appendChild(
-    avatar
-  );
-
-  wrapper.appendChild(
-    content
-  );
-
-  elements.messages.appendChild(
-    wrapper
-  );
-
-
-  elements.messages.scrollTop =
-    elements.messages.scrollHeight;
-
-}
-
-
-/* =========================================================
-   QUICK AI PROMPT
-========================================================= */
-
-function aiQuickPrompt(prompt){
-
-  const elements =
-    getAIElements();
-
-
-  if(!elements.input)return;
-
-
-  elements.input.value =
-    prompt;
-
-
-  elements.input.focus();
-
-
-  sendAIMessage();
-
-}
-
-
-/* =========================================================
-   SEND MESSAGE TO SUPABASE AI
-========================================================= */
-
-async function sendAIMessage(){
-
-  const elements =
-    getAIElements();
-
-
-  if(
-    !elements.input ||
-    !elements.send
-  ){
-
-    return;
-
-  }
-
-
-  const message =
-    elements.input.value.trim();
-
-
-  if(!message)return;
-
-
-  addAIMessage(
-    message,
-    "user"
-  );
-
-
-  elements.input.value =
-    "";
-
-
-  elements.send.disabled =
-    true;
-
-
-  if(elements.status){
-
-    elements.status.classList.add(
-      "show"
-    );
-
-  }
-
-
-  aiConversation.push({
-
-    role:"user",
-
-    content:message
-
-  });
-
-
-  try{
-
-    if(
-      typeof supabase === "undefined" ||
-      !supabase ||
-      !supabase.auth
-    ){
-
-      throw new Error(
-        "Supabase is not available."
-      );
-
-    }
-
-
-    const sessionResult =
-      await supabase.auth.getSession();
-
-
-    if(sessionResult.error){
-
-      throw sessionResult.error;
-
-    }
-
-
-    const session =
-      sessionResult.data?.session;
-
-
-    if(
-      !session ||
-      !session.access_token
-    ){
-
-      throw new Error(
-        "Student session is not available."
-      );
-
-    }
-
-
-    const response =
-      await fetch(
-        "https://tdmdvkdaccjyvajvzttz.supabase.co/functions/v1/ai-learning-agent",
-        {
-
-          method:"POST",
-
-          headers:{
-
-            "Content-Type":
-              "application/json",
-
-            "Authorization":
-              "Bearer " +
-              session.access_token
-
-          },
-
-          body:JSON.stringify({
-
-            message:message,
-
-            conversation:
-              aiConversation,
-
-            student_id:
-              session.user?.id ||
-              null
-
-          })
-
-        }
-      );
-
-
-    if(!response.ok){
-
-      const errorText =
-        await response.text();
-
-
-      console.error(
-        "AI service error:",
-        response.status,
-        errorText
-      );
-
-
-      throw new Error(
-        "AI service returned HTTP " +
-        response.status
-      );
-
-    }
-
-
-    const data =
-      await response.json();
-
-
-    const answer =
-      data.answer ||
-      data.message ||
-      data.response;
-
-
-    if(!answer){
-
-      throw new Error(
-        "The AI returned no answer."
-      );
-
-    }
-
-
-    addAIMessage(
-      answer,
-      "ai"
-    );
-
-
-    aiConversation.push({
-
-      role:"assistant",
-
-      content:answer
-
-    });
-
-
-  }catch(error){
-
-    console.error(
-      "AI Learning Agent:",
-      error
-    );
-
-
-    addAIMessage(
-      "Sorry, I could not connect to the AI Teacher right now. Please try again.",
-      "ai"
-    );
-
-
-  }finally{
-
-    elements.send.disabled =
-      false;
-
-
-    if(elements.status){
-
-      elements.status.classList.remove(
-        "show"
-      );
-
-    }
-
-
-    elements.input.focus();
-
-  }
-
-}
-
-
-/* =========================================================
-   SETUP AI
-========================================================= */
-
-function setupAI(){
-
-  const elements =
-    getAIElements();
-
-
-  if(
-    !elements.input ||
-    !elements.send
-  ){
-
-    return;
-
-  }
-
-
-  elements.send.addEventListener(
-    "click",
-    sendAIMessage
-  );
-
-
-  elements.input.addEventListener(
-    "keydown",
-    function(event){
-
-      if(
-        event.key === "Enter" &&
-        !event.shiftKey
-      ){
-
-        event.preventDefault();
-
-        sendAIMessage();
-
-      }
-
-    }
-  );
-
-}
-
-
-/* =========================================================
-   PAYMENT CONTROLLER
-========================================================= */
-
-function setupInternationalPayment(){
-
-  const resourceSelect =
-    document.getElementById(
-      "paymentResource"
-    );
-
-  const currencySelect =
-    document.getElementById(
-      "paymentCurrency"
-    );
-
-  const paymentButton =
-    document.getElementById(
-      "startPaymentButton"
-    );
-
-  const paymentAmount =
-    document.getElementById(
-      "paymentAmount"
-    );
-
-  const paymentMessage =
-    document.getElementById(
-      "paymentMessage"
-    );
-
-
-  if(
-    !resourceSelect ||
-    !currencySelect ||
-    !paymentButton ||
-    !paymentAmount ||
-    !paymentMessage
-  ){
-
-    return;
-
-  }
-
-
-  const currencySymbols = {
-
-    USD:"$",
-    EUR:"€",
-    GBP:"£",
-    NGN:"₦",
-    CAD:"C$",
-    AUD:"A$"
-
-  };
-
-
-  const baseAmount =
-    10;
-
-
-  function updatePaymentAmount(){
-
-    const resource =
-      resourceSelect.value;
-
-
-    const currency =
-      String(
-        currencySelect.value ||
-        "NGN"
-      ).toUpperCase();
-
-
-    const symbol =
-      currencySymbols[currency] ||
-      currency;
-
-
-    if(!resource){
-
-      paymentAmount.textContent =
-        "Select a resource";
-
-      return;
-
-    }
-
-
-    paymentAmount.textContent =
-      symbol +
-      baseAmount.toFixed(2);
-
-  }
-
-
-  resourceSelect.addEventListener(
-    "change",
-    updatePaymentAmount
-  );
-
-
-  currencySelect.addEventListener(
-    "change",
-    updatePaymentAmount
-  );
-
-
-  paymentButton.addEventListener(
-    "click",
-    function(){
-
-      const resource =
-        resourceSelect.value;
-
-
-      const currency =
-        String(
-          currencySelect.value ||
-          "NGN"
-        ).toUpperCase();
-
-
-      const symbol =
-        currencySymbols[currency] ||
-        currency;
-
-
-      if(!resource){
-
-        paymentMessage.className =
-          "payment-message show";
-
-        paymentMessage.textContent =
-          "⚠️ Please select a learning resource first.";
-
-        return;
-
-      }
-
-
-      paymentButton.disabled =
-        true;
-
-
-      paymentButton.textContent =
-        "Preparing secure payment...";
-
-
-      paymentMessage.className =
-        "payment-message show";
-
-
-      paymentMessage.textContent =
-        "🌍 Preparing your secure international payment in " +
-        currency +
-        ". Please wait...";
-
-
-      setTimeout(
-        function(){
-
-          paymentButton.disabled =
-            false;
-
-
-          paymentButton.textContent =
-            "Continue to Secure Payment →";
-
-
-          paymentMessage.className =
-            "payment-message show";
-
-
-          paymentMessage.innerHTML =
-            "🔐 Your payment information will be handled " +
-            "through a secure payment gateway." +
-            "<br><br>" +
-            "Selected currency: <strong>" +
-            currency +
-            "</strong> " +
-            symbol +
-            baseAmount.toFixed(2);
-
-        },
-        900
-      );
-
-    }
-  );
-
-
-  updatePaymentAmount();
-
-}
-
-</script>
-
-
 </body>
-  </html>
+</html>

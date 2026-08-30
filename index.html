@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#087a4b">
+<title>AGULIBRARY — Global Digital Education</title>
+<style>
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#f4fbf7;color:#17352a;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+button,input,select{font:inherit}button{cursor:pointer}a{text-decoration:none;color:inherit}
+header{position:sticky;top:0;z-index:100;background:#fffffff7;border-bottom:1px solid #dceee6;box-shadow:0 5px 22px #087a4b12;backdrop-filter:blur(14px)}
+nav{width:min(1250px,100%);margin:auto;min-height:72px;padding:10px 5%;display:flex;align-items:center;gap:14px}
+.brand{display:flex;align-items:center;gap:11px;flex:1}.mark{width:48px;height:48px;border-radius:15px;background:#087a4b;color:#fff;display:grid;place-items:center;font-weight:900;font-size:20px}
+.brand b{display:block;font-size:19px;color:#123d2d}.brand small{display:block;color:#6d8178;font-size:9px;letter-spacing:1px;margin-top:3px}
+.actions{display:flex;gap:8px;align-items:center}.btn{border:1px solid #b9dccd;background:#fff;color:#087a4b;padding:10px 14px;border-radius:11px;font-weight:800}.primary{background:#087a4b;color:#fff;border-color:#087a4b}
+.menu{position:relative}.panel{display:none;position:absolute;right:0;top:47px;width:210px;background:#fff;border:1px solid #cfe5da;border-radius:15px;padding:8px;box-shadow:0 15px 35px #087a4b24}.panel.show{display:block}.panel button{display:block;width:100%;border:0;background:#fff;text-align:left;padding:12px;border-radius:10px;color:#214638;font-weight:800}.panel button:hover{background:#e8f8f0}
+main{width:min(1250px,100%);margin:auto;padding:28px 5% 70px}.hero{display:grid;grid-template-columns:1.25fr .75fr;gap:24px;align-items:center;background:linear-gradient(135deg,#e8f8f0,#eaf3ff);border:1px solid #ccebdd;border-radius:28px;padding:42px}
+.eyebrow{color:#087a4b;font-size:11px;letter-spacing:.12em;font-weight:900}.hero h1{font-size:clamp(36px,6vw,68px);line-height:1.02;margin:8px 0}.hero p,.head p{color:#687d74;line-height:1.7}.hero-art{min-height:260px;border-radius:24px;background:linear-gradient(145deg,#087a4b,#1257a6);color:#fff;display:grid;place-items:center;text-align:center;padding:25px}.big{font-size:75px}
+.section{margin-top:38px}.head{margin-bottom:17px}.head h2{font-size:29px;margin:5px 0}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.card{background:#fff;border:1px solid #dceee6;border-radius:20px;padding:21px;box-shadow:0 8px 25px #087a4b0f}.feature{text-align:center}.icon{font-size:35px}.card h3{margin:9px 0 5px}.card p{color:#718079;font-size:14px;line-height:1.6}
+.toolbar{display:flex;gap:9px;margin-bottom:14px}.search,.payment select,.payment input{width:100%;padding:12px;border:1px solid #cfe5da;border-radius:10px;background:#fff}.status{padding:20px;background:#fff;border:1px dashed #cfe5da;border-radius:16px;color:#718079}.resource-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.resource{background:#fff;border:1px solid #dceee6;border-radius:20px;padding:20px}.resource h3{color:#1257a6}.open{background:#087a4b;color:#fff;border:0;border-radius:10px;padding:10px 13px;font-weight:800}
+.payment{background:linear-gradient(135deg,#075c46,#1257a6);color:#fff;border-radius:25px;padding:30px}.payment .eyebrow{color:#bff0da}.payment p{color:#d9eee6;line-height:1.6}.paygrid{display:grid;grid-template-columns:1fr 1fr;gap:20px}.payment-card{background:#fff;color:#17352a;border-radius:18px;padding:22px}.payment-card label{display:block;font-weight:800;font-size:13px;margin:12px 0 6px}.pay{width:100%;margin-top:15px;padding:12px;border:0;border-radius:11px;background:#087a4b;color:#fff;font-weight:900}
+.support{background:#fff;border:1px solid #dceee6;border-radius:22px;padding:25px;display:flex;justify-content:space-between;align-items:center;gap:20px}
+.learning{background:#fff;border:1px solid #ccebdd;border-radius:25px;padding:28px;margin-top:38px}.ai{background:#f4fbf7;border:1px solid #dceee6;border-radius:20px;overflow:hidden}.aihead{display:flex;gap:14px;align-items:center;padding:20px;background:#e8f8f0}.avatar{width:62px;height:62px;border-radius:50%;object-fit:cover;background:#087a4b}.ready{margin-left:auto;background:#fff;color:#087a4b;padding:7px 10px;border-radius:99px;font-size:12px;font-weight:900}.chat{padding:18px;max-height:440px;overflow:auto}.msg{display:flex;margin:10px 0}.bubble{max-width:850px;white-space:pre-line;line-height:1.6;background:#fff;border:1px solid #dceee6;border-radius:15px;padding:13px 15px}.user{justify-content:flex-end}.user .bubble{background:#087a4b;color:#fff;border-color:#087a4b}.quick{display:flex;gap:8px;flex-wrap:wrap;padding:0 18px 15px}.quick button{border:1px solid #b9dccd;background:#fff;color:#087a4b;border-radius:10px;padding:9px;font-weight:800;font-size:12px}.aiinput{display:flex;gap:8px;padding:15px;background:#fff;border-top:1px solid #dceee6}.aiinput input{flex:1;padding:12px;border:1px solid #cfe5da;border-radius:10px}
+footer{text-align:center;padding:30px 5%;background:#fff;border-top:1px solid #dceee6;color:#70837b}footer b{color:#087a4b}
+@media(max-width:850px){.hero{grid-template-columns:1fr}.grid,.resource-grid,.paygrid{grid-template-columns:repeat(2,1fr)}}@media(max-width:560px){.grid,.resource-grid,.paygrid{grid-template-columns:1fr}.toolbar,.support{display:block}.toolbar .btn,.support .btn{width:100%;margin-top:9px}.hero{padding:25px}.brand small{font-size:7px}}
+</style>
+</head>
+<body>
+<header><nav>
+<div class="brand"><div class="mark">AG</div><div><b>AGULIBRARY</b><small>Learn • Read • Watch • Grow</small></div></div>
+<div class="actions"><button class="btn" id="account">🎓 <span>My Account</span></button><div class="menu"><button class="btn" id="menu">☰</button><div class="panel" id="panel">
+<button onclick="go('resources')">📚 Library</button><button onclick="go('subjects')">🌍 Subjects</button><button onclick="go('payment')">💳 Payment</button><button onclick="go('support')">💬 Support</button><button onclick="go('learning')">🎓 Student Dashboard</button>
+</div></div></div>
+</nav></header>
+
+<main>
+<section class="hero"><div><span class="eyebrow">🌍 GLOBAL DIGITAL EDUCATION</span><h1>Your global learning library.</h1><p>Books, PDFs, videos, photos, lessons and courses in one comfortable learning space.</p><button class="btn primary" onclick="go('resources')">Explore Library</button> <button class="btn" onclick="go('subjects')">Explore Subjects</button></div><div class="hero-art"><div><div class="big">📚</div><h2>Learn • Read • Watch • Grow</h2><p>Comfortable learning for students everywhere.</p></div></div></section>
+
+<section class="section"><div class="grid">
+<div class="card feature"><div class="icon">📖</div><h3>Books</h3><p>Tap to open</p></div><div class="card feature"><div class="icon">🎥</div><h3>Videos</h3><p>Learn visually</p></div><div class="card feature"><div class="icon">☁️</div><h3>Cloud Library</h3><p>Published digital resources.</p></div>
+</div></section>
+
+<section class="section" id="resources"><div class="head"><span class="eyebrow">DIGITAL RESOURCES</span><h2>Latest learning resources</h2><p>Published resources appear here.</p></div>
+<div class="toolbar"><input class="search" id="search" placeholder="Search resources..."><button class="btn primary" id="searchBtn">Search</button></div>
+<div id="status" class="status">AGULIBRARY is waiting for the Supabase connection.<br><br>Please check config.js.</div><div id="resourcesGrid" class="resource-grid"></div></section>
+
+<section class="section" id="payment"><div class="payment"><span class="eyebrow">💳 GLOBAL PAYMENT CENTER</span><h2>Learn Globally. Pay Securely.</h2><p>Access premium books, courses, lessons and other educational resources through our international-ready payment system.</p>
+<div class="grid"><div><b>🌍 Global Students</b><p>Designed for students and educators from different countries.</p></div><div><b>💳 International Cards</b><p>International-ready payment environments.</p></div><div><b>🔐 Secure Checkout</b><p>Secure checkout when connected.</p></div></div>
+<div class="paygrid" style="margin-top:20px"><div class="payment-card"><span class="eyebrow">💳 PREMIUM LEARNING</span><h3>Choose a Payment</h3>
+<label>Learning Resource</label><select id="payResource"><option>Select a book, course or resource</option></select><label>Currency</label><select><option>🇳🇬 Nigerian Naira (NGN)</option><option>🇺🇸 US Dollar (USD)</option><option>🇬🇧 British Pound (GBP)</option></select><label>Amount</label><input id="amount" placeholder="Select a resource" readonly><button class="pay" id="pay">🔐 Continue to Secure Payment</button><p style="font-size:12px;color:#718079">You will be redirected to a secure payment checkout. AGULIBRARY does not store your card details.</p></div>
+<div class="payment-card"><h3>🧾 Payment Records</h3><p style="color:#718079">Payment records can be connected to your student account and payment provider.</p><h3>🌍 International Payments</h3><p style="color:#718079">AGULIBRARY is designed to support students and educators from different countries and payment environments.</p></div></div>
+</div></section>
+
+<section class="section" id="subjects"><div class="head"><span class="eyebrow">GLOBAL SUBJECTS</span><h2>Explore Subjects</h2></div><div class="grid">
+<div class="card"><div class="icon">🔬</div><h3>Science</h3><p>Physics • Chemistry • Biology</p></div><div class="card"><div class="icon">📐</div><h3>Mathematics</h3><p>Mathematics • Algebra • Statistics</p></div><div class="card"><div class="icon">💻</div><h3>Technology</h3><p>Computer Science • Programming • AI</p></div><div class="card"><div class="icon">📚</div><h3>Languages &amp; Literature</h3><p>English • Literature • French • Spanish</p></div><div class="card"><div class="icon">🌎</div><h3>Social Sciences &amp; Humanities</h3><p>Civic Education • History • Geography • Economics</p></div><div class="card"><div class="icon">💼</div><h3>Business &amp; Finance</h3><p>Accounting • Finance • Marketing</p></div><div class="card"><div class="icon">🎨</div><h3>Arts &amp; Creative Studies</h3><p>Art • Music • Photography • Film</p></div><div class="card"><div class="icon">🧑‍⚕️</div><h3>Professional &amp; Career</h3><p>Medicine • Engineering • Law • Education</p></div>
+</div></section>
+
+<section class="section" id="support"><div class="support"><div><span class="eyebrow">SUPPORT</span><h2>We're here to help.</h2><p>Account, library, technical and payment support will be available here.</p></div><button class="btn primary" onclick="location.href='mailto:support@agulibrary.com'">Contact Support</button></div></section>
+
+<section class="learning" id="learning"><span class="eyebrow">🎓 STUDENT LEARNING CENTER</span><h2>Welcome, <span id="welcomeName">Umar Mohammed</span> 👋</h2><p>Your personal AGULIBRARY learning space. Continue learning, explore resources, track your progress and manage your account from this page.</p>
+<div class="ai"><div class="aihead"><div style="font-size:42px">🤖</div><div><span class="eyebrow">AI LEARNING AGENT</span><h3>Your Personal AI Teacher</h3><p>Ask questions, understand difficult topics, get explanations and receive guidance throughout your learning journey.</p></div><span class="ready">AI Teacher Ready</span></div>
+<div class="chat" id="chat"><div class="msg"><div class="bubble">Hello! 👋 I am your AGULIBRARY AI Learning Agent.
+Ask me about any subject or topic you are studying, and I will help you learn step by step.</div></div>
+<div class="msg user"><div class="bubble">Help me prepare for an examination.</div></div><div class="msg"><div class="bubble">Absolutely! I can help you prepare effectively for your examination.
+
+Please tell me:
+
+1. Subject — for example, Mathematics, Biology, English, Physics
+
+2. Topics or syllabus you need to study
+
+3. Your class/grade or level
+
+4. Exam date
+
+5. What kind of help you want:
+• Study timetable
+• Topic explanations
+• Practice questions
+• Past-paper solutions
+• Revision notes
+• Mock examination
+• Memorization techniques
+
+You can begin by sending the subject and topics, and I’ll create a clear study plan for you.</div></div>
+<div class="msg user"><div class="bubble">Explain Newton's first law in simple terms and give me one example.</div></div><div class="msg"><div class="bubble"><b>Newton’s First Law</b>
+
+An object will stay still or keep moving in a straight line at the same speed unless a force makes it change.
+
+This is also called the law of inertia. Inertia means that objects resist changes to their motion.
+
+<b>Example:</b>
+A book on a table stays still until someone pushes it. The push is a force that changes its motion.</div></div></div>
+<div class="quick"><button onclick="quick('Explain this topic to me step by step.')">📖 Explain a topic</button><button onclick="quick('Give me practice questions for my current subject.')">🧠 Practice questions</button><button onclick="quick('Help me prepare for an examination.')">🎯 Exam preparation</button></div>
+<div class="aiinput"><input id="aiInput" placeholder="Ask your AI Learning Agent anything..."><button class="btn primary" id="aiSend">Send ➤</button></div></div>
+</section>
+</main>
+<footer><b>AGULIBRARY</b> — Global Digital Education Library<br><br>Owner: Umar Mohammed<br>© <span id="year"></span> AGULIBRARY. All rights reserved.</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script src="supabase.js"></script>
+<script>
+"use strict";
+const $=id=>document.getElementById(id);let client=null,resources=[];
+$("year").textContent=new Date().getFullYear();
+function go(id){$(id)?.scrollIntoView({behavior:"smooth"});$("panel").classList.remove("show")}
+$("menu").onclick=e=>{e.stopPropagation();$("panel").classList.toggle("show")};
+document.addEventListener("click",e=>{if(!e.target.closest(".menu"))$("panel").classList.remove("show")});
+function esc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]))}
+function icon(t){return ({book:"📚",pdf:"📄",video:"🎥",image:"🖼️",photo:"🖼️",lesson:"📖",course:"🎓",document:"📄",audio:"🎧"})[String(t||"").toLowerCase()]||"📘"}
+function render(list){$("resourcesGrid").innerHTML=list.map(r=>{let t=String(r.type||"resource").toLowerCase();return `<article class="resource"><div class="icon">${icon(t)}</div><h3>${esc(r.title||"Untitled Resource")}</h3><p>${esc(r.description||"Educational resource")}</p><button class="open" onclick="openResource('${esc(r.id)}')">${t==="lesson"||t==="course"?"📖 Open Lesson →":"Open Resource →"}</button></article>`}).join("");if(list.length)$("status").classList.add("hidden")}
+function openResource(id){location.href="resource-viewer.html?id="+encodeURIComponent(id)}
+async function load(){try{if(typeof getSupabase!=="function")return;client=getSupabase();let s=await client.auth.getSession();if(s.error)throw s.error;let r=await client.from("resources").select("*").order("created_at",{ascending:false});if(r.error)throw r.error;resources=r.data||[];render(resources);$("payResource").innerHTML='<option>Select a book, course or resource</option>'+resources.map(r=>`<option value="${esc(r.id)}">${esc(r.title||"Untitled Resource")}</option>`).join("")}catch(e){console.error(e)}}
+$("search").oninput=()=>{let q=$("search").value.toLowerCase().trim();render(resources.filter(r=>(r.title+" "+r.description+" "+r.subject+" "+r.type).toLowerCase().includes(q)))};
+$("searchBtn").onclick=()=>$("search").dispatchEvent(new Event("input"));
+$("payResource").onchange=()=>{$("amount").value=$("payResource").value?"Amount set by connected payment system":"Select a resource"};
+$("pay").onclick=()=>alert("Secure payment checkout is ready to be connected to your payment provider.");
+$("account").onclick=async()=>{try{if(typeof getSupabase==="function"){client=client||getSupabase();let s=await client.auth.getSession();if(s.data?.session){go("learning");return}}}catch(e){}location.href="auth.html"};
+function quick(t){$("aiInput").value=t;$("aiInput").focus()}
+function sendAI(){let v=$("aiInput").value.trim();if(!v)return;$("chat").insertAdjacentHTML("beforeend",`<div class="msg user"><div class="bubble">${esc(v)}</div></div><div class="msg"><div class="bubble">The AGULIBRARY AI Learning Agent interface is ready. Connect your secure AI backend to receive live answers.</div></div>`);$("aiInput").value="";$("chat").scrollTop=$("chat").scrollHeight}
+$("aiSend").onclick=sendAI;$("aiInput").onkeydown=e=>{if(e.key==="Enter")sendAI()};load();
+</script>
+</body></html>

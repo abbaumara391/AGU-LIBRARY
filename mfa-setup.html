@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AGULIBRARY — Admin MFA Setup</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:linear-gradient(135deg,#e8f8f0,#f4fbf7);color:#17352a;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.hidden{display:none!important}
+.wrap{min-height:100vh;display:grid;place-items:center;padding:24px}
+.card{width:min(520px,100%);background:#fff;border:1px solid #dce8e2;border-radius:26px;padding:28px;box-shadow:0 20px 60px rgba(8,122,75,.12)}
+.brand{display:flex;align-items:center;gap:12px;margin-bottom:24px}
+.mark{width:52px;height:52px;border-radius:15px;background:#087a4b;color:#fff;display:grid;place-items:center;font-weight:900;font-size:20px}
+.brand b{display:block;font-size:20px;color:#123d2d}
+.brand small{color:#70837b;font-size:9px;letter-spacing:2px}
+.eyebrow{color:#087a4b;font-size:11px;font-weight:900;letter-spacing:3px}
+h1{margin:8px 0;font-size:30px;color:#123d2d}
+h2{color:#123d2d}
+.muted{color:#70837b;line-height:1.6}
+label{display:block;font-weight:800;font-size:13px;margin:14px 0 7px}
+input{width:100%;padding:13px 14px;border:1px solid #cfe5da;border-radius:11px;background:#fff;color:#17352a;font:inherit;outline:none}
+input:focus{border-color:#087a4b;box-shadow:0 0 0 3px rgba(8,122,75,.08)}
+.btn{width:100%;border:0;border-radius:11px;padding:13px 16px;font-weight:900;cursor:pointer;margin-top:14px}
+.primary{background:#087a4b;color:#fff}
+.light{background:#edf7f2;color:#17352a;border:1px solid #cfe5da}
+.message{padding:13px 15px;border-radius:13px;margin:14px 0;font-weight:700;line-height:1.5}
+.success{background:#e9f8f0;color:#087a4b;border:1px solid #c6ead8}
+.error{background:#fff0f0;color:#b42323;border:1px solid #efcccc}
+.step{padding:16px;border:1px solid #dce8e2;border-radius:16px;background:#f8fcfa;margin-top:16px}
+.qr{display:grid;place-items:center;background:#fff;border:1px solid #dce8e2;border-radius:16px;padding:18px;margin:16px auto;max-width:290px}
+.qr img{width:240px;height:240px;max-width:100%}
+.secret{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;word-break:break-all;background:#f2f7f4;padding:12px;border-radius:10px;font-size:13px}
+.code{font-size:24px;letter-spacing:7px;text-align:center;font-weight:900}
+.small{font-size:12px;color:#70837b;line-height:1.5}
+.status{text-align:center;margin-top:15px;color:#70837b;font-size:13px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="card">
+  <div class="brand">
+    <div class="mark">AG</div>
+    <div><b>AGULIBRARY</b><small>ADMIN MFA SETUP</small></div>
+  </div>
+
+  <section id="loginStep">
+    <span class="eyebrow">SECURE ADMIN ACCESS</span>
+    <h1>Set Up Google Authenticator</h1>
+    <p class="muted">Sign in with the same administrator account that you use for the AGULIBRARY Admin Dashboard. This page is only for enrolling the administrator's TOTP authenticator.</p>
+
+    <label for="email">Administrator email</label>
+    <input id="email" type="email" autocomplete="username" required>
+
+    <label for="password">Administrator password</label>
+    <input id="password" type="password" autocomplete="current-password" required>
+
+    <button id="signIn" class="btn primary" type="button">Sign In & Start MFA Setup</button>
+    <div id="loginMessage"></div>
+  </section>
+
+  <section id="enrollStep" class="hidden">
+    <span class="eyebrow">STEP 1</span>
+    <h1>Scan the QR Code</h1>
+    <p class="muted">Open Google Authenticator on your phone, choose <b>+</b>, choose <b>Scan a QR code</b>, and scan the code below.</p>
+
+    <div class="qr"><img id="qrImage" alt="AGULIBRARY MFA QR code"></div>
+
+    <p class="small">If scanning does not work, add the secret manually:</p>
+    <div id="secret" class="secret">Loading secret...</div>
+
+    <div class="step">
+      <span class="eyebrow">STEP 2</span>
+      <h2>Verify Your Authenticator</h2>
+      <p class="muted">Enter the current 6-digit code shown by Google Authenticator.</p>
+      <label for="code">6-digit verification code</label>
+      <input id="code" class="code" inputmode="numeric" maxlength="6" autocomplete="one-time-code" placeholder="000000">
+      <button id="verify" class="btn primary" type="button">Verify & Enable MFA</button>
+      <button id="cancel" class="btn light" type="button">Cancel & Sign Out</button>
+    </div>
+
+    <div id="enrollMessage"></div>
+  </section>
+
+  <section id="doneStep" class="hidden">
+    <span class="eyebrow">MFA ENABLED</span>
+    <h1>✅ Administrator MFA is Ready</h1>
+    <p class="muted">Your administrator account now has a verified TOTP authenticator.</p>
+    <div class="message success">Your next AGULIBRARY Admin Dashboard login will require the 6-digit Google Authenticator code.</div>
+    <button id="goAdmin" class="btn primary" type="button">Go to Admin Dashboard</button>
+  </section>
+
+  <div id="status" class="status"></div>
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script src="supabase.js"></script>
+<script>
+(function(){
+"use strict";
+
+const $=id=>document.getElementById(id);
+let db=null, factorId=null;
+
+function getDB(){
+  if(db)return db;
+  const cfg=window.AGU_CONFIG||{};
+  if(typeof getSupabase==="function") return db=getSupabase();
+  if(window.supabase&&cfg.supabaseUrl&&cfg.supabaseAnonKey){
+    return db=window.supabase.createClient(cfg.supabaseUrl,cfg.supabaseAnonKey);
+  }
+  throw new Error("Supabase configuration is unavailable.");
+}
+
+function show(id,text,type){
+  const x=$(id);
+  x.className="message "+type;
+  x.textContent=text;
+}
+
+async function isAdmin(session){
+  const d=getDB();
+  const r=await d.from("admin_users").select("user_id").eq("user_id",session.user.id).maybeSingle();
+  if(r.error)throw r.error;
+  return !!r.data;
+}
+
+async function signIn(){
+  const button=$("signIn");
+  button.disabled=true;
+  $("loginMessage").className="";
+  $("loginMessage").textContent="";
+
+  try{
+    const d=getDB();
+    const r=await d.auth.signInWithPassword({
+      email:$("email").value.trim(),
+      password:$("password").value
+    });
+    if(r.error)throw r.error;
+
+    if(!(await isAdmin(r.data.session))){
+      await d.auth.signOut();
+      throw new Error("This account is not authorized as an AGULIBRARY administrator.");
+    }
+
+    const factors=await d.auth.mfa.listFactors();
+    if(factors.error)throw factors.error;
+
+    const verified=(factors.data?.totp||[]).filter(f=>f.status==="verified");
+    const unverified=(factors.data?.totp||[]).filter(f=>f.status==="unverified");
+
+    if(verified.length){
+      show("loginMessage","This administrator already has a verified TOTP authenticator. You do not need to enroll another one.","success");
+      button.disabled=false;
+      return;
+    }
+
+    if(unverified.length){
+      for(const f of unverified){
+        try{await d.auth.mfa.unenroll({factorId:f.id});}catch(e){console.warn(e);}
+      }
+    }
+
+    const enrolled=await d.auth.mfa.enroll({
+      factorType:"totp",
+      friendlyName:"AGULIBRARY Administrator"
+    });
+    if(enrolled.error)throw enrolled.error;
+
+    factorId=enrolled.data.id;
+    $("qrImage").src="data:image/svg+xml;charset=utf-8,"+encodeURIComponent(enrolled.data.totp.qr_code);
+    $("secret").textContent=enrolled.data.totp.secret||"Secret unavailable";
+    $("loginStep").classList.add("hidden");
+    $("enrollStep").classList.remove("hidden");
+    $("code").focus();
+
+  }catch(e){
+    console.error(e);
+    show("loginMessage",e.message||"Unable to start MFA setup.","error");
+  }finally{
+    button.disabled=false;
+  }
+}
+
+async function verify(){
+  const button=$("verify");
+  const code=($("code").value||"").replace(/\D/g,"");
+
+  if(code.length!==6){
+    show("enrollMessage","Enter the current 6-digit code from Google Authenticator.","error");
+    return;
+  }
+
+  button.disabled=true;
+  $("enrollMessage").className="";
+  $("enrollMessage").textContent="Verifying...";
+
+  try{
+    const d=getDB();
+    const r=await d.auth.mfa.challengeAndVerify({
+      factorId,
+      code
+    });
+    if(r.error)throw r.error;
+
+    const aal=await d.auth.mfa.getAuthenticatorAssuranceLevel();
+    if(aal.error)throw aal.error;
+
+    if(aal.data?.currentLevel!=="aal2"){
+      throw new Error("The authenticator was not promoted to AAL2. Please try again.");
+    }
+
+    $("enrollStep").classList.add("hidden");
+    $("doneStep").classList.remove("hidden");
+    $("status").textContent="MFA enrollment completed successfully.";
+
+  }catch(e){
+    console.error(e);
+    show("enrollMessage",e.message||"Verification failed. Check your authenticator code and try again.","error");
+    button.disabled=false;
+    $("code").focus();
+    $("code").select();
+  }
+}
+
+async function cancel(){
+  try{await getDB().auth.signOut();}catch(e){console.error(e);}
+  location.reload();
+}
+
+$("signIn").addEventListener("click",signIn);
+$("verify").addEventListener("click",verify);
+$("cancel").addEventListener("click",cancel);
+
+$("code").addEventListener("input",()=>{
+  $("code").value=$("code").value.replace(/\D/g,"").slice(0,6);
+});
+$("code").addEventListener("keydown",e=>{
+  if(e.key==="Enter")verify();
+});
+
+$("goAdmin").addEventListener("click",()=>{
+  location.href="admin.html";
+});
+
+})();
+</script>
+</body>
+</html>

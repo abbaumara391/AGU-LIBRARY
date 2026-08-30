@@ -1,0 +1,1892 @@
+<!doctype html>
+
+<html lang="en">
+ <head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width,initial-scale=1">
+ <title>AGULIBRARY — Student Dashboard</title> <style>
+ *{box-sizing:border-box}
+ html{scroll-behavior:smooth}
+ body{margin:0;background:#f4fbf7;color:#17352a;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+
+.student-header{position:sticky;top:0;z-index:1000;min-height:78px;display:flex;align-items:center;justify-content:space-between;gap:15px;padding:11px 5%;background:rgba(255,255,255,.97);border-bottom:1px solid #dceee6;box-shadow:0 5px 22px rgba(8,122,75,.07);backdrop-filter:blur(14px)}
+ .student-brand{display:flex;align-items:center;gap:12px}
+ .mark{width:52px;height:52px;display:grid;place-items:center;border-radius:16px;background:#087a4b;color:#fff;font-size:21px;font-weight:900;box-shadow:0 8px 18px rgba(8,122,75,.18)}
+ .student-brand b{display:block;color:#123d2d;font-size:20px}
+ .student-brand small{display:block;margin-top:3px;color:#6d8178;font-size:9px;letter-spacing:2px}
+ .header-actions{display:flex;align-items:center;gap:10px}
+ .back{color:#087a4b;text-decoration:none;font-weight:800}
+ .logout{border:1px solid #b9dccd;background:#fff;color:#087a4b;padding:10px 16px;border-radius:11px;font-weight:800;cursor:pointer}
+ .logout:hover{background:#087a4b;color:#fff}
+
+.dashboard{width:min(1250px,100%);margin:auto;padding:30px 5% 80px}
+ .message{display:none;padding:14px 18px;margin-bottom:20px;border-radius:14px;font-weight:800}
+ .message.show{display:block}
+ .message.success{background:#e8f8f0;border:1px solid #c5ead8;color:#087a4b}
+ .message.error{background:#fff0f0;border:1px solid #f1cccc;color:#b42323}
+
+.welcome{position:relative;overflow:hidden;background:linear-gradient(135deg,#e9f9f1,#fff);border:1px solid #ccebdd;border-radius:28px;padding:38px;margin-bottom:22px;box-shadow:0 15px 40px rgba(8,122,75,.07)}
+ .welcome:after{content:"";position:absolute;width:220px;height:220px;right:-70px;top:-90px;border-radius:50%;background:#d7f4e6;opacity:.7}
+ .eyebrow{color:#087a4b;font-size:11px;font-weight:900;letter-spacing:3px}
+ .welcome h1{position:relative;z-index:2;margin:13px 0;font-size:clamp(34px,6vw,58px);line-height:1.05;color:#123d2d}
+ .welcome h1 span{color:#087a4b}
+ .welcome p{position:relative;z-index:2;max-width:760px;color:#61766d;line-height:1.7;font-size:16px}
+
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px}
+ .stat{padding:23px;min-height:135px;background:#fff;border:1px solid #dceee6;border-radius:21px;box-shadow:0 10px 30px rgba(8,122,75,.05)}
+ .stat strong{display:block;color:#087a4b;font-size:36px;margin-bottom:7px}
+ .stat span{color:#70837b;font-size:14px}
+
+.profile-layout{display:grid;grid-template-columns:1.2fr .8fr;gap:16px;margin-bottom:22px}
+ .profile-card,.account-card{background:#fff;border:1px solid #dceee6;border-radius:24px;padding:28px;box-shadow:0 10px 30px rgba(8,122,75,.05)}
+ .profile-card{display:flex;align-items:center;gap:20px}
+ .profile-avatar{width:96px;height:96px;flex-shrink:0;display:grid;place-items:center;border-radius:28px;background:#e5f7ee;border:1px solid #bfe6d3;color:#087a4b;font-size:29px;font-weight:900}
+ .profile-info h2{margin:7px 0;font-size:29px;color:#173b2d}
+ .profile-info p{margin:0;color:#72847c;word-break:break-word}
+ .profile-tag{display:inline-flex;margin-top:10px;padding:6px 11px;border-radius:20px;background:#e8f8f0;color:#087a4b;font-size:12px;font-weight:800}
+ .account-card h2{margin:7px 0 18px;font-size:26px;color:#173b2d}
+ .account-status{display:flex;align-items:center;gap:9px;margin-bottom:13px;color:#087a4b;font-weight:800}
+ .status-dot{width:10px;height:10px;border-radius:50%;background:#22b573}
+ .account-info{color:#72847c;line-height:1.7;font-size:14px}
+
+.progress-card{background:#fff;border:1px solid #dceee6;border-radius:24px;padding:28px;margin-bottom:22px;box-shadow:0 10px 30px rgba(8,122,75,.05)}
+ .progress-header{display:flex;justify-content:space-between;align-items:center;gap:20px}
+ .progress-header h2{margin:7px 0 0;font-size:30px;color:#173b2d}
+ #progressPercent{color:#087a4b;font-size:44px;font-weight:900}
+ .progress-bar{height:16px;margin-top:22px;overflow:hidden;background:#e7f3ed;border-radius:50px}
+ .progress-fill{width:0;height:100%;background:#087a4b;border-radius:50px;transition:width .5s ease}
+ .progress-card>p{color:#71847b;line-height:1.6}
+
+.resource-section,.subjects-card{background:#fff;border:1px solid #dceee6;border-radius:24px;padding:28px;margin-bottom:22px;box-shadow:0 10px 30px rgba(8,122,75,.05)}
+ .resource-heading{margin-bottom:18px}
+ .resource-heading h2,.subjects-card h2,.quick-section h2{margin:7px 0 6px;color:#173b2d;font-size:30px}
+ .resource-heading p{margin:0;color:#74877f}
+ .resource-controls{display:grid;grid-template-columns:1fr 210px;gap:10px;margin-bottom:20px}
+ .resource-search,.resource-filter{width:100%;padding:14px 16px;border:1px solid #cfe5da;border-radius:13px;outline:none;background:#fbfefd;color:#17352a;font-size:15px}
+ .resource-filter{font-weight:700}
+ .resource-search:focus,.resource-filter:focus{border-color:#79c49e;box-shadow:0 0 0 3px rgba(8,122,75,.08)}
+
+.resource-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
+ .resource-card{display:flex;flex-direction:column;background:#fff;border:1px solid #dceee6;border-radius:21px;padding:20px;box-shadow:0 10px 28px rgba(8,122,75,.05)}
+ .resource-icon{width:52px;height:52px;display:grid;place-items:center;border-radius:15px;background:#e8f8f0;font-size:25px;margin-bottom:13px}
+ .resource-type{display:inline-flex;align-self:flex-start;padding:5px 9px;border-radius:20px;background:#f0f8f4;color:#087a4b;font-size:10px;font-weight:900;letter-spacing:1px}
+ .resource-card h3{margin:11px 0 6px;color:#214638;font-size:18px;line-height:1.35}
+ .resource-subject{color:#087a4b;font-size:12px;font-weight:800;margin-bottom:6px}
+ .resource-card p{color:#75877f;font-size:14px;line-height:1.6;margin:0 0 15px;flex:1}
+ .resource-meta{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:12px}
+ .resource-meta span{padding:4px 7px;background:#f4f9f6;border-radius:7px;color:#70847b;font-size:11px}
+ .resource-buttons{display:flex;gap:8px}
+ .resource-open,.save-resource{min-height:45px;border-radius:10px;font-weight:800;font-size:13px;cursor:pointer}
+ .resource-open{flex:1;background:#087a4b;color:#fff;border:none}
+ .resource-open:hover{background:#06683f}
+ .save-resource{min-width:115px;padding:10px;background:#e8f8f0;color:#087a4b;border:1px solid #bfe6d3}
+ .save-resource.saved{background:#087a4b;color:#fff;border-color:#087a4b}
+ .empty-state,.loading{grid-column:1/-1;padding:40px 20px;text-align:center;border-radius:18px}
+ .empty-state{background:#f7fcfa;border:1px dashed #bfded0;color:#73877e}
+ .loading{color:#087a4b;font-weight:800}
+
+.subjects-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:11px}
+ .subject-item{min-height:105px;padding:16px;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;background:#f7fcfa;border:1px solid #dceee6;border-radius:17px;cursor:pointer}
+ .subject-item:hover{transform:translateY(-3px);border-color:#9ed9bb}
+ .subject-icon{font-size:24px;margin-bottom:8px}
+ .subject-item b{color:#214638;font-size:14px}
+ .subject-item small{margin-top:4px;color:#7b8d85;line-height:1.4}
+
+.quick-section{margin-bottom:22px}
+ .quick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+ .quick-card{padding:23px;background:#fff;border:1px solid #dceee6;border-radius:21px;text-decoration:none;color:#173b2d;box-shadow:0 10px 28px rgba(8,122,75,.05)}
+ .quick-card .icon{font-size:27px;margin-bottom:12px}
+ .quick-card b{display:block;margin-bottom:5px}
+ .quick-card small{color:#788a82;line-height:1.5}
+
+/* =========================================================
+ AI LEARNING AGENT
+ ========================================================= */
+
+.ai-agent{background:#fff;border:1px solid #dceee6;border-radius:28px;padding:30px;margin-bottom:22px;box-shadow:0 15px 40px rgba(8,122,75,.07)}
+ .ai-agent-header{display:flex;align-items:center;gap:22px;margin-bottom:25px}
+ .ai-agent-avatar{width:120px;height:120px;flex-shrink:0;border-radius:50%;object-fit:cover;border:5px solid #fff;box-shadow:0 5px 20px rgba(8,122,75,.16);background:#e8f8f0}
+ .ai-agent-heading{flex:1}
+ .ai-agent-label{display:inline-block;padding:7px 13px;border-radius:20px;background:#e8f8f0;color:#087a4b;font-size:12px;font-weight:900;letter-spacing:1px;margin-bottom:10px}
+ .ai-agent-heading h2{margin:0 0 7px;color:#173b2d;font-size:clamp(28px,5vw,40px)}
+ .ai-agent-heading p{margin:0;color:#71847b;line-height:1.6;font-size:15px}
+ .ai-agent-status{padding:10px 15px;border-radius:14px;background:#e8f8f0;color:#087a4b;font-weight:800;white-space:nowrap}
+ .ai-agent-status::before{content:"";display:inline-block;width:10px;height:10px;margin-right:8px;border-radius:50%;background:#20b36b}
+
+.ai-chat-card{background:#f7fcfa;border:1px solid #d5ebe0;border-radius:23px;padding:22px}
+ .ai-agent-messages{min-height:180px;max-height:480px;overflow-y:auto;padding:5px;margin-bottom:18px}
+ .ai-message{display:flex;align-items:flex-start;gap:12px;margin-bottom:18px}
+ .ai-message.user{flex-direction:row-reverse}
+ .ai-message-avatar{width:48px;height:48px;flex-shrink:0;border-radius:50%;overflow:hidden;background:#e8f8f0;display:grid;place-items:center}
+ .ai-message-avatar img{width:100%;height:100%;object-fit:cover}
+ .ai-message.user .ai-message-avatar{background:#087a4b;color:#fff;font-size:20px}
+
+.ai-message-content{
+ max-width:78%;
+ padding:14px 17px;
+ border-radius:17px;
+ background:#fff;
+ border:1px solid #dceee6;
+ color:#17352a;
+ line-height:1.6;
+ font-size:15px;
+ box-shadow:0 5px 18px rgba(8,122,75,.04);
+ white-space:normal;
+ overflow-wrap:anywhere;
+ }
+
+.ai-message.user .ai-message-content{
+ background:#087a4b;
+ color:#fff;
+ border-color:#087a4b;
+ }
+
+/* =========================================================
+ AI MARKDOWN DISPLAY
+ Converts #, ##, ###, bold, italic and lists
+ into properly formatted content.
+ ========================================================= */
+
+.ai-message-content h1,
+ .ai-message-content h2,
+ .ai-message-content h3{
+ color:#17352a;
+ line-height:1.3;
+ margin:8px 0 14px;
+ }
+
+.ai-message.user .ai-message-content h1,
+ .ai-message.user .ai-message-content h2,
+ .ai-message.user .ai-message-content h3{
+ color:#fff;
+ }
+
+.ai-message-content h1{
+ font-size:24px;
+ }
+
+.ai-message-content h2{
+ font-size:20px;
+ }
+
+.ai-message-content h3{
+ font-size:17px;
+ }
+
+.ai-message-content strong{
+ font-weight:900;
+ }
+
+.ai-message-content em{
+ font-style:italic;
+ }
+
+.ai-message-content li{
+ margin:6px 0;
+ line-height:1.6;
+ }
+
+.ai-quick-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:15px;margin-bottom:18px}
+ .ai-quick-button{min-height:72px;padding:12px;background:#fff;border:1px solid #cfe5da;border-radius:15px;cursor:pointer;text-align:left;color:#17352a;font-weight:800;transition:.2s}
+ .ai-quick-button:hover{transform:translateY(-2px);border-color:#73cfa9;box-shadow:0 8px 20px rgba(8,122,75,.08)}
+ .ai-quick-button strong{display:block;margin-bottom:4px;font-size:14px}
+ .ai-quick-button small{color:#71847b;font-size:11px}
+
+.ai-input-row{display:flex;gap:10px}
+ .ai-agent-input{flex:1;min-width:0;min-height:55px;padding:14px 17px;border:1px solid #bcdccc;border-radius:14px;background:#fff;color:#17352a;font-size:15px;outline:none}
+ .ai-agent-input:focus{border-color:#087a4b;box-shadow:0 0 0 3px rgba(8,122,75,.08)}
+ .ai-agent-send{min-width:120px;padding:0 20px;border:0;border-radius:14px;background:#087a4b;color:#fff;font-weight:900;cursor:pointer;font-size:14px}
+ .ai-agent-send:hover{background:#06683f}
+ .ai-agent-send:disabled{opacity:.6;cursor:not-allowed}
+ .ai-agent-status-text{display:none;margin-top:12px;color:#087a4b;font-size:13px;font-weight:800}
+ .ai-agent-status-text.show{display:block}
+
+.student-footer{padding:30px 5%;text-align:center;background:#fff;border-top:1px solid #dceee6;color:#70837b;font-size:14px}
+ .student-footer b{color:#087a4b}
+
+@media(max-width:1000px){
+ .stats{grid-template-columns:repeat(2,1fr)}
+ .subjects-grid{grid-template-columns:repeat(3,1fr)}
+ .resource-grid{grid-template-columns:repeat(2,1fr)}
+ .quick-grid{grid-template-columns:repeat(2,1fr)}
+ }
+
+@media(max-width:760px){
+ .student-header{padding:10px 4%;flex-wrap:wrap}
+ .header-actions{width:100%;justify-content:space-between}
+ .dashboard{padding:22px 4% 60px}
+ .welcome{padding:27px;border-radius:23px}
+ .profile-layout{grid-template-columns:1fr}
+ .subjects-grid{grid-template-columns:repeat(2,1fr)}
+ .resource-controls{grid-template-columns:1fr}
+ }
+
+@media(max-width:700px){
+ .ai-agent{padding:20px;border-radius:23px}
+ .ai-agent-header{align-items:flex-start;flex-wrap:wrap;gap:15px}
+ .ai-agent-avatar{width:85px;height:85px}
+ .ai-agent-heading{min-width:200px}
+ .ai-agent-status{width:100%;text-align:center}
+ .ai-quick-actions{grid-template-columns:repeat(2,1fr)}
+ }
+
+@media(max-width:520px){
+ .stats{grid-template-columns:1fr 1fr}
+ .stat{padding:17px;min-height:115px}
+ .stat strong{font-size:29px}
+ .profile-card{flex-direction:column;align-items:flex-start}
+ .profile-avatar{width:80px;height:80px}
+ .resource-grid,.quick-grid{grid-template-columns:1fr}
+ .resource-buttons{flex-direction:column}
+ .save-resource{width:100%}
+ }
+
+@media(max-width:480px){
+ .ai-quick-actions{grid-template-columns:1fr}
+ .ai-input-row{flex-direction:column}
+ .ai-agent-send{min-height:52px}
+ .ai-message-content{max-width:82%}
+ }
+ 
+
+/* =========================================================
+   AGULIBRARY — AI TEACHER TOP LAYOUT
+   Only this presentation layer is changed.
+   Existing AI functionality remains untouched.
+========================================================= */
+
+.agu-top-header{
+  min-height:58px !important;
+  height:58px !important;
+  padding:6px 4% !important;
+  display:flex !important;
+  align-items:flex-start !important;
+  justify-content:flex-end !important;
+  background:#fff !important;
+  border-bottom:0 !important;
+  box-shadow:none !important;
+  position:relative !important;
+  z-index:1000 !important;
+}
+
+.agu-top-header .student-brand{
+  display:none !important;
+}
+
+.agu-top-actions{
+  width:auto !important;
+  display:flex !important;
+  justify-content:flex-end !important;
+  align-items:flex-start !important;
+  margin:0 !important;
+}
+
+.agu-top-header .logout{
+  margin:0 !important;
+  padding:9px 15px !important;
+  border-radius:11px !important;
+}
+
+.ai-teacher-top{
+  width:100%;
+  margin:0;
+  padding:0 4% 4px;
+  background:#fff;
+  position:relative;
+  z-index:900;
+}
+
+.ai-teacher-top .ai-agent{
+  margin:0 auto;
+  padding:0 0 8px !important;
+  background:transparent;
+  border:0;
+  box-shadow:none;
+  text-align:center;
+}
+
+.ai-teacher-top .ai-teacher-front{
+  position:relative;
+  z-index:5;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  margin:0 auto;
+  cursor:pointer;
+  user-select:none;
+}
+
+.ai-teacher-top .ai-teacher-main-picture{
+  width:150px !important;
+  height:150px !important;
+  display:block;
+  object-fit:cover;
+  border-radius:50%;
+  border:5px solid #fff;
+  box-shadow:0 8px 24px rgba(8,122,75,.18);
+}
+
+.ai-teacher-top .ai-teacher-prompt{
+  margin:4px auto 0 !important;
+  color:#718079;
+  font-size:7px !important;
+  line-height:1.05 !important;
+  letter-spacing:.15px !important;
+  font-weight:800;
+  text-transform:uppercase;
+}
+
+.ai-teacher-top .ai-agent-behind{
+  display:none;
+  position:relative;
+  z-index:1;
+  margin-top:8px;
+  text-align:left;
+}
+
+.ai-teacher-top .ai-agent.ai-teacher-open .ai-agent-behind{
+  display:block;
+}
+
+.ai-teacher-top .ai-agent.ai-teacher-open .ai-teacher-main-picture{
+  transform:scale(1.01);
+}
+
+.ai-teacher-top .ai-agent-header{
+  margin-bottom:18px;
+}
+
+.ai-teacher-top + .dashboard{
+  padding-top:14px;
+}
+
+@media(max-width:520px){
+  .agu-top-header{
+    min-height:54px !important;
+    height:54px !important;
+    padding:5px 4% !important;
+  }
+
+  .agu-top-header .logout{
+    padding:8px 13px !important;
+    font-size:14px !important;
+  }
+
+  .ai-teacher-top{
+    padding:0 4% 2px;
+  }
+
+  .ai-teacher-top .ai-agent{
+    padding-bottom:6px !important;
+  }
+
+  .ai-teacher-top .ai-teacher-main-picture{
+    width:125px !important;
+    height:125px !important;
+    border-width:5px;
+  }
+
+  .ai-teacher-top .ai-teacher-prompt{
+    font-size:6px !important;
+    line-height:1 !important;
+  }
+
+  .ai-teacher-top + .dashboard{
+    padding-top:10px;
+  }
+}
+
+</style> <script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [["\", "\"]],
+ displayMath: [["\", "\"]]
+ },
+ options: {
+ skipHtmlTags: ["script", "noscript", "style", "textarea", "pre", "code"]
+ }
+ };
+ </script> <script
+ async
+ src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+ </script> </head> <body> <header class="student-header agu-top-header">
+  <div class="header-actions agu-top-actions">
+    <button id="logoutButton" class="logout">🚪 Sign out</button>
+  </div>
+</header> 
+<div class="ai-teacher-top" id="aiTeacherTop">
+  <section class="ai-agent" id="aiLearningAgent" aria-label="AGULIBRARY AI Teacher">
+
+ <div class="ai-teacher-front">
+
+  <img
+   class="ai-agent-avatar ai-teacher-main-picture"
+   src="ai-teacher.jpg"
+   alt="AGULIBRARY AI Teacher"
+  >
+
+  <div class="ai-teacher-prompt">
+   ASK YOUR AI TEACHER FOR ANY EDUCATIONAL QUESTIONS
+  </div>
+
+ </div>
+
+ <div class="ai-agent-behind">
+
+  <div class="ai-agent-header">
+
+   <div class="ai-agent-heading">
+    <span class="ai-agent-label">🤖 AI TEACHER</span>
+    <h2>Your Personal AI Teacher</h2>
+    <p>
+     Ask questions, understand difficult topics, get explanations
+     and receive guidance throughout your learning journey.
+    </p>
+   </div>
+
+   <div class="ai-agent-status">
+    AI Teacher Ready
+   </div>
+
+  </div>
+
+  <div class="ai-chat-card">
+
+   <div id="aiAgentMessages" class="ai-agent-messages">
+
+    <div class="ai-message">
+
+     <div class="ai-message-avatar">
+      <img src="ai-teacher.jpg" alt="AI Teacher">
+     </div>
+
+     <div class="ai-message-content">
+      Hello! 👋 I am your AGULIBRARY AI Teacher. Ask me about any subject or topic you are studying, and I will help you learn step by step.
+     </div>
+
+    </div>
+
+   </div>
+
+   <div class="ai-quick-actions">
+
+    <button
+     class="ai-quick-button"
+     type="button"
+     onclick="aiQuickPrompt('Explain this topic to me step by step.')"
+    >
+     <strong>📖 Explain a topic</strong>
+     <small>Learn something difficult</small>
+    </button>
+
+    <button
+     class="ai-quick-button"
+     type="button"
+     onclick="aiQuickPrompt('Give me practice questions for my current subject.')"
+    >
+     <strong>🧠 Practice questions</strong>
+     <small>Test your understanding</small>
+    </button>
+
+    <button
+     class="ai-quick-button"
+     type="button"
+     onclick="aiQuickPrompt('Help me prepare for an examination.')"
+    >
+     <strong>🎯 Exam preparation</strong>
+     <small>Study more effectively</small>
+    </button>
+
+   </div>
+
+   <div class="ai-input-row">
+
+    <input
+     id="aiAgentInput"
+     class="ai-agent-input"
+     type="text"
+     placeholder="Ask your AI Teacher anything..."
+     autocomplete="off"
+    >
+
+    <button
+     id="aiAgentSend"
+     class="ai-agent-send"
+     type="button"
+    >
+     Send ➤
+    </button>
+
+   </div>
+
+   <div id="aiAgentStatus" class="ai-agent-status-text">
+    🤖 AI Teacher is thinking...
+   </div>
+
+  </div>
+
+ </div>
+
+</section>
+</div>
+
+<main class="dashboard"> <div id="message" class="message"></div> <section class="welcome">
+ <span class="eyebrow">STUDENT LEARNING CENTER</span>
+ <h1>Welcome, <span id="welcomeName">Student</span> 👋</h1>
+ <p>Your personal AGULIBRARY learning space. Explore global educational resources, continue your studies, track your progress and discover new subjects.</p>
+ </section> <section class="stats">
+ <div class="stat">
+ <strong id="statCourses">0</strong>
+ <span>Available Resources</span>
+ </div> <div class="stat">
+ <strong id="statLessons">0</strong>
+ <span>Lessons & Courses</span>
+ </div> <div class="stat">
+ <strong id="statSubjects">0</strong>
+ <span>Subjects Available</span>
+ </div> <div class="stat">
+ <strong id="statRecent">0</strong>
+ <span>Recently Viewed</span>
+ </div>
+ </section> <section class="profile-layout"> <div class="profile-card"> <div id="profileAvatar" class="profile-avatar">
+ AG
+ </div>
+
+<div class="profile-info">
+
+<span class="eyebrow">STUDENT PROFILE</span>
+
+<h2 id="profileName">
+ Student
+ </h2>
+
+<p id="profileEmail">
+ Loading account...
+ </p>
+
+<span class="profile-tag">
+ 🎓 Active Student
+ </span>
+
+</div>
+
+</div> <div class="account-card"> <span class="eyebrow">ACCOUNT CENTER</span>
+
+<h2>Account Status</h2>
+
+<div class="account-status">
+ <span class="status-dot"></span>
+ Account Active
+ </div>
+
+<div class="account-info">
+ Your AGULIBRARY account is connected and ready for global learning.
+ <br><br>
+ Explore books, PDFs, videos, lessons and other educational resources from around the world.
+ </div>
+
+</div> </section> <section class="progress-card"> <div class="progress-header"> <div>
+ <span class="eyebrow">LEARNING PROGRESS</span>
+ <h2>Your learning journey</h2>
+ </div>
+
+<strong id="progressPercent">0%</strong>
+
+</div> <div class="progress-bar">
+ <div id="progressFill" class="progress-fill"></div>
+ </div> <p id="progressText">
+ Explore resources and open lessons to begin building your learning activity.
+ </p> </section> <section id="resources" class="resource-section"> <div class="resource-heading"> <span class="eyebrow">AGULIBRARY RESOURCES</span>
+
+<h2>Latest learning resources</h2>
+
+<p>
+ Published educational resources from the global library.
+ </p>
+
+</div> <div class="resource-controls"> <input
+ id="studentResourceSearch"
+ class="resource-search"
+ type="search"
+ placeholder="Search books, lessons, videos, subjects..."
+ autocomplete="off"
+
+<select id="resourceTypeFilter" class="resource-filter">
+
+<option value="">All resource types</option>
+ <option value="book">📚 Books</option>
+ <option value="pdf">📄 PDFs</option>
+ <option value="video">🎥 Videos</option>
+ <option value="image">🖼️ Images</option>
+ <option value="lesson">📖 Lessons</option>
+ <option value="course">🎓 Courses</option>
+ <option value="document">📄 Documents</option>
+ <option value="audio">🎧 Audio</option>
+
+</select>
+
+</div> <div id="studentResourceGrid" class="resource-grid">
+ <div class="loading">
+ 📚 Loading AGULIBRARY resources...
+ </div>
+ </div> </section> <section class="subjects-card"> <span class="eyebrow">GLOBAL SUBJECTS</span>
+
+<h2>Explore your subjects</h2> <div class="subjects-grid"> <div class="subject-item" data-subject="Science">
+ <span class="subject-icon">🔬</span>
+ <b>Science</b>
+ <small>Physics • Chemistry • Biology</small>
+ </div>
+
+<div class="subject-item" data-subject="Mathematics">
+ <span class="subject-icon">📐</span>
+ <b>Mathematics</b>
+ <small>Algebra • Statistics</small>
+ </div>
+
+<div class="subject-item" data-subject="Technology">
+ <span class="subject-icon">💻</span>
+ <b>Technology</b>
+ <small>Programming • AI</small>
+ </div>
+
+<div class="subject-item" data-subject="Languages & Literature">
+ <span class="subject-icon">📚</span>
+ <b>Languages & Literature</b>
+ <small>English • French • Spanish</small>
+ </div>
+
+<div class="subject-item" data-subject="Social Sciences">
+ <span class="subject-icon">🌎</span>
+ <b>Social Sciences</b>
+ <small>History • Geography • Economics</small>
+ </div>
+
+<div class="subject-item" data-subject="Business & Finance">
+ <span class="subject-icon">💼</span>
+ <b>Business & Finance</b>
+ <small>Accounting • Finance • Marketing</small>
+ </div>
+
+<div class="subject-item" data-subject="Arts & Creative Studies">
+ <span class="subject-icon">🎨</span>
+ <b>Arts & Creative Studies</b>
+ <small>Art • Music • Film</small>
+ </div>
+
+<div class="subject-item" data-subject="Professional & Career">
+ <span class="subject-icon">🧑‍⚕️</span>
+ <b>Professional & Career</b>
+ <small>Medicine • Law • Engineering</small>
+ </div>
+
+<div class="subject-item" data-subject="Exam Preparation">
+ <span class="subject-icon">📝</span>
+ <b>Exam Preparation</b>
+ <small>WAEC • NECO • International Exams</small>
+ </div>
+
+<div class="subject-item" data-subject="Professional Development">
+ <span class="subject-icon">🚀</span>
+ <b>Professional Development</b>
+ <small>Skills • Careers • Certifications</small>
+ </div>
+
+</div> </section> <section class="quick-section"> <span class="eyebrow">MY LEARNING</span>
+
+<h2>Continue your learning journey</h2> <div class="quick-grid"> <a href="#resources" class="quick-card">
+ <div class="icon">📚</div>
+ <b>Browse Resources</b>
+ <small>Explore books, PDFs, videos, lessons and courses.</small>
+ </a>
+
+<a
+ href="#subjects"
+ class="quick-card"
+ onclick="document.querySelector('.subjects-card').scrollIntoView({behavior:'smooth'});return false;"
+<div class="icon">🌍</div>
+ <b>Explore Subjects</b>
+ <small>Discover learning materials across global subject areas.</small>
+ </a>
+
+<a href="#resources" class="quick-card">
+ <div class="icon">🔎</div>
+ <b>Search Library</b>
+ <small>Find educational resources quickly.</small>
+ </a>
+
+<a href="#recent" class="quick-card">
+ <div class="icon">🕐</div>
+ <b>Recently Viewed</b>
+ <small>Return to resources you opened recently.</small>
+ </a>
+
+</div> </section> <section id="recent" class="resource-section"> <div class="resource-heading"> <span class="eyebrow">LEARNING ACTIVITY</span>
+
+<h2>Recently viewed</h2>
+
+<p>
+ Continue exploring resources you opened recently.
+ </p>
+
+</div> <div id="recentGrid" class="resource-grid"> <div class="empty-state">
+ 🕐
+ <br><br>
+ You haven't opened a resource yet.
+ </div>
+
+</div> </section> <section class="quick-section"> <span class="eyebrow">PRACTICE & QUIZZES</span>
+
+<h2>Test your knowledge</h2> <div class="quick-grid"> <div class="quick-card">
+ <div class="icon">🧠</div>
+ <b>Practice Questions</b>
+ <small>Topic-based practice questions will be connected to resources.</small>
+ </div>
+
+<div class="quick-card">
+ <div class="icon">🏆</div>
+ <b>Quiz Challenges</b>
+ <small>Test your understanding and improve your performance.</small>
+ </div>
+
+<div class="quick-card">
+ <div class="icon">📊</div>
+ <b>Results</b>
+ <small>Your quiz results will be displayed here.</small>
+ </div>
+
+<div class="quick-card">
+ <div class="icon">🎯</div>
+ <b>Learning Goals</b>
+ <small>Build consistent learning habits as the platform grows.</small>
+ </div>
+
+</div> </section> </main> <footer class="student-footer"> <b>AGULIBRARY</b> — Global Digital Education Library
+
+<br><br>
+
+Owner: Umar Mohammed
+
+<br> © <span id="year"></span> AGULIBRARY. All rights reserved.
+
+</footer> <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script> <script src="config.js"></script> <script src="supabase.js"></script> <script>
+
+let client=null,
+ studentUser=null,
+ studentResources=[];
+
+let aiConversation=[];
+
+const RECENT_KEY="AGU_RECENT_RESOURCES",
+ SAVED_KEY="AGU_SAVED_RESOURCES";
+
+
+function setupAITeacherTop(){
+  const section=document.getElementById("aiLearningAgent");
+  const front=section?.querySelector(".ai-teacher-front");
+  if(!section||!front)return;
+
+  const toggle=()=>{
+    const open=section.classList.toggle("ai-teacher-open");
+    front.setAttribute("aria-expanded",String(open));
+  };
+
+  front.setAttribute("role","button");
+  front.setAttribute("tabindex","0");
+  front.setAttribute("aria-expanded","false");
+  front.addEventListener("click",toggle);
+  front.addEventListener("keydown",function(event){
+    if(event.key==="Enter"||event.key===" "){
+      event.preventDefault();
+      toggle();
+    }
+  });
+}
+
+
+document.addEventListener("DOMContentLoaded",async function(){
+
+document.getElementById("year").textContent=new Date().getFullYear();
+
+setupSearch();
+ setupSubjects();
+ setupLogout();
+ setupAI();
+ setupAITeacherTop();
+
+await loadDashboard();
+
+});
+
+async function loadDashboard(){
+
+try{
+
+if(typeof getSupabase!=="function"){
+ showMessage("Supabase connection is unavailable.","error");
+ return;
+ }
+
+client=getSupabase();
+
+const result=await client.auth.getSession();
+
+if(result.error)throw result.error;
+
+const session=result.data?.session;
+
+if(!session){
+ window.location.href="auth.html";
+ return;
+ }
+
+studentUser=session.user;
+
+const email=studentUser.email||"Student";
+
+const name=
+ studentUser.user_metadata?.full_name||
+ studentUser.user_metadata?.name||
+ email.split("@")[0]||
+ "Student";
+
+setText("welcomeName",name);
+ setText("profileName",name);
+ setText("profileEmail",email);
+
+setAvatar(name);
+
+await loadResources();
+
+renderRecent();
+
+updateStats();
+
+}catch(error){
+
+console.error(error);
+
+showMessage(
+ "Unable to load your dashboard.",
+ "error"
+ );
+
+}
+
+}
+
+async function loadResources(){
+
+const grid=document.getElementById("studentResourceGrid");
+
+grid.innerHTML=
+ '<div class="loading">📚 Loading AGULIBRARY resources...</div>';
+
+try{
+
+const result=await client
+ .from("resources")
+ .select("*")
+ .order("created_at",{ascending:false});
+
+if(result.error)throw result.error;
+
+studentResources=result.data||[];
+
+renderResources(studentResources);
+
+updateStats();
+
+}catch(error){
+
+console.error("Resource error:",error);
+
+grid.innerHTML=
+ '<div class="empty-state">⚠️<br><br>AGULIBRARY resources could not be loaded.<br><br>Please refresh the page.</div>';
+
+}
+
+}
+
+function createResourceCard(resource){
+
+const id=String(resource.id||"");
+
+const title=
+ escapeHTML(resource.title||"Untitled Resource");
+
+const description=
+ escapeHTML(resource.description||"Educational resource");
+
+const subject=
+ escapeHTML(
+ resource.subject||
+ resource.subject_name||
+ ""
+ );
+
+const type=
+ String(resource.type||"resource")
+ .toLowerCase()
+ .trim();
+
+const icon=getIcon(type);
+
+const level=
+ resource.level||
+ resource.class_level||
+ "";
+
+const term=resource.term||"";
+
+const saved=isSaved(id);
+
+let meta="";
+
+if(level){
+ meta+=<span&gt;${escapeHTML(level)}</span>`;
+ }
+
+if(term){
+ meta+=<span&gt;${escapeHTML(term)}</span>`;
+ }
+
+return `
+ <article class="resource-card">
+
+<div class="resource-icon">
+ $`{icon}
+ </div>
+
+<span class="resource-type">
+ `${escapeHTML(type.toUpperCase())}
+ </span>
+
+<h3>$`{title}</h3>
+
+${ subject ?<div class="resource-subject">${subject}&lt;/div>
+ : ""
+ }
+
+${ meta ?<div class="resource-meta">${meta}&lt;/div>
+ : ""
+ }
+
+<p>`${description}</p>
+
+<div class="resource-buttons">
+
+<button
+ class="resource-open"
+ type="button"
+ onclick="openResource('{
+ type==="lesson"||type==="course"
+ ? "📖 Open Lesson →"
+ : "Open Resource →"
+ }
+ </button>
+
+<button
+ class="save-resource {escapeJS(id)}')"
+ >
+ $`{saved?"★ Saved":"☆ Save"}
+ </button>
+
+</div>
+
+</article>
+ `;
+
+}
+
+function renderResources(list){
+
+const grid=
+ document.getElementById("studentResourceGrid");
+
+if(!list.length){
+
+grid.innerHTML=
+ '<div class="empty-state">📚<br><br>No educational resources are available yet.</div>';
+
+return;
+ }
+
+grid.innerHTML=
+ list.map(createResourceCard).join("");
+
+}
+
+function openResource(id){
+
+const resource=
+ studentResources.find(
+ item=>String(item.id)===String(id)
+ );
+
+if(!resource){
+
+alert("This resource could not be found.");
+
+return;
+ }
+
+recordRecent(id);
+
+window.location.href=
+ "resource-viewer.html?id="+
+ encodeURIComponent(id);
+
+}
+
+function setupSearch(){
+
+const search=
+ document.getElementById("studentResourceSearch");
+
+const filter=
+ document.getElementById("resourceTypeFilter");
+
+search?.addEventListener(
+ "input",
+ applyFilters
+ );
+
+filter?.addEventListener(
+ "change",
+ applyFilters
+ );
+
+}
+
+function applyFilters(){
+
+const search=
+ document.getElementById("studentResourceSearch");
+
+const filter=
+ document.getElementById("resourceTypeFilter");
+
+const query=
+ search.value.toLowerCase().trim();
+
+const type=
+ filter.value.toLowerCase().trim();
+
+const filtered=
+ studentResources.filter(resource=>{
+
+const resourceType=
+ String(resource.type||"")
+ .toLowerCase()
+ .trim();
+
+const searchable=${resource.title||""}
+{resource.subject||""}
+{resource.type||""}
+{resource.class_level||""}
+ ${resource.term||""}.toLowerCase();
+
+return
+ (!query||searchable.includes(query))&&
+ (!type||resourceType===type);
+
+});
+
+renderResources(filtered);
+
+}
+
+function setupSubjects(){
+
+document
+ .querySelectorAll(".subject-item")
+ .forEach(item=>{
+
+item.addEventListener(
+ "click",
+ function(){
+
+const search=
+ document.getElementById(
+ "studentResourceSearch"
+ );
+
+search.value=
+ item.dataset.subject;
+
+document
+ .getElementById("resources")
+ .scrollIntoView({
+ behavior:"smooth"
+ });
+
+applyFilters();
+
+}
+ );
+
+});
+
+}
+
+function getSaved(){
+
+if(!studentUser)return[];
+
+try{
+
+const data=
+ JSON.parse(
+ localStorage.getItem(
+ SAVED_KEY+"_"+studentUser.id
+ )||"[]"
+ );
+
+return Array.isArray(data)?data:[];
+
+}catch(e){
+
+return[];
+
+}
+
+}
+
+function isSaved(id){
+
+return getSaved().some(
+ savedId=>String(savedId)===String(id)
+ );
+
+}
+
+function toggleSaved(id){
+
+if(!studentUser)return;
+
+const key=
+ SAVED_KEY+"_"+studentUser.id;
+
+let saved=getSaved();
+
+const exists=
+ saved.some(
+ savedId=>String(savedId)===String(id)
+ );
+
+saved=
+ exists
+ ? saved.filter(
+ savedId=>String(savedId)!==String(id)
+ )
+ : [String(id),...saved];
+
+localStorage.setItem(
+ key,
+ JSON.stringify(saved.slice(0,100))
+ );
+
+applyFilters();
+ renderRecent();
+ updateStats();
+
+}
+
+function getRecent(){
+
+if(!studentUser)return[];
+
+try{
+
+const data=
+ JSON.parse(
+ localStorage.getItem(
+ RECENT_KEY+"_"+studentUser.id
+ )||"[]"
+ );
+
+return Array.isArray(data)?data:[];
+
+}catch(e){
+
+return[];
+
+}
+
+}
+
+function recordRecent(id){
+
+if(!studentUser)return;
+
+const key=
+ RECENT_KEY+"_"+studentUser.id;
+
+let recent=
+ getRecent().filter(
+ item=>String(item)!==String(id)
+ );
+
+recent.unshift(String(id));
+
+localStorage.setItem(
+ key,
+ JSON.stringify(recent.slice(0,12))
+ );
+
+updateStats();
+
+}
+
+function renderRecent(){
+
+const grid=
+ document.getElementById("recentGrid");
+
+if(!grid)return;
+
+const resources=
+ getRecent()
+ .map(
+ id=>
+ studentResources.find(
+ resource=>String(resource.id)===String(id)
+ )
+ )
+ .filter(Boolean);
+
+if(!resources.length){
+
+grid.innerHTML=
+ '<div class="empty-state">🕐<br><br>You haven't opened a resource yet.</div>';
+
+return;
+ }
+
+grid.innerHTML=
+ resources.map(createResourceCard).join("");
+
+}
+
+function updateStats(){
+
+const total=
+ studentResources.length;
+
+const lessons=
+ studentResources.filter(resource=>{
+
+const type=
+ String(resource.type||"")
+ .toLowerCase()
+ .trim();
+
+return type==="lesson"||type==="course";
+
+}).length;
+
+const subjects=
+ new Set(
+ studentResources
+ .map(
+ resource=>
+ resource.subject||
+ resource.subject_name||
+ ""
+ )
+ .filter(Boolean)
+ ).size;
+
+const recent=
+ getRecent().length;
+
+setText("statCourses",total);
+ setText("statLessons",lessons);
+ setText("statSubjects",subjects);
+ setText("statRecent",recent);
+
+const progress=
+ total>0
+ ? Math.min(
+ 100,
+ Math.round(recent/total*100)
+ )
+ : 0;
+
+setText(
+ "progressPercent",
+ progress+"%"
+ );
+
+const fill=
+ document.getElementById("progressFill");
+
+if(fill){
+ fill.style.width=
+ progress+"%";
+ }
+
+const text=
+ document.getElementById("progressText");
+
+if(total===0){
+
+text.textContent=
+ "No resources are available yet.";
+
+}else if(recent===0){
+
+text.textContent=
+ "Start exploring AGULIBRARY resources to begin your learning activity.";
+
+}else{
+
+text.textContent=
+ "You've explored "+
+ recent+
+ " resource"+
+ (recent===1?"":"s")+
+ " from AGULIBRARY.";
+
+}
+
+}
+
+function setAvatar(name){
+
+const avatar=
+ document.getElementById("profileAvatar");
+
+const initials=
+ String(name)
+ .split(" ")
+ .filter(Boolean)
+ .map(
+ word=>word.charAt(0)
+ )
+ .join("")
+ .substring(0,2)
+ .toUpperCase();
+
+avatar.textContent=
+ initials||"AG";
+
+}
+
+function getIcon(type){
+
+const icons={
+ book:"📚",
+ pdf:"📄",
+ video:"🎥",
+ image:"🖼️",
+ photo:"🖼️",
+ lesson:"📖",
+ course:"🎓",
+ document:"📄",
+ audio:"🎧"
+ };
+
+return icons[type]||"📘";
+
+}
+
+function setupLogout(){
+
+document
+ .getElementById("logoutButton")
+ ?.addEventListener(
+ "click",
+ signOut
+ );
+
+}
+
+async function signOut(){
+
+try{
+
+if(client){
+ await client.auth.signOut();
+ }
+
+}catch(error){
+
+console.error(error);
+
+}
+
+window.location.href="index.html";
+
+}
+
+function setText(id,value){
+
+const element=
+ document.getElementById(id);
+
+if(element){
+ element.textContent=value;
+ }
+
+}
+
+function showMessage(text,type){
+
+const message=
+ document.getElementById("message");
+
+message.textContent=text;
+
+message.className=
+ "message show "+type;
+
+}
+
+function escapeHTML(value){
+
+return String(value??"")
+ .replace(
+ /[&<>"']/g,
+ character=>({
+ "&":"&",
+ "<":"<",
+ ">":">",
+ '"':""",
+ "'":"'"
+ }[character])
+ );
+
+}
+
+function escapeJS(value){
+
+return String(value??"")
+ .replace(/\/g,"\\")
+ .replace(/'/g,"\'")
+ .replace(/"/g,'\"')
+ .replace(/\r/g,"\r")
+ .replace(/\n/g,"\n");
+
+}
+
+/* =========================================================
+ AGU AI LEARNING AGENT
+ ========================================================= */
+
+function getAIElements(){
+
+return{
+
+messages:
+ document.getElementById(
+ "aiAgentMessages"
+ ),
+
+input:
+ document.getElementById(
+ "aiAgentInput"
+ ),
+
+send:
+ document.getElementById(
+ "aiAgentSend"
+ ),
+
+status:
+ document.getElementById(
+ "aiAgentStatus"
+ )
+
+};
+
+}
+
+/* =========================================================
+ MARKDOWN RENDERER
+ ========================================================= */
+
+function renderAIMarkdown(text){
+
+let html=
+ escapeHTML(text);
+
+/*
+• Headings
+• Heading
+• Heading
+• Heading
+*/
+
+html=
+ html.replace(
+ /^### (.+)$/gm, "&lt;h3&gt;$1</h3>"
+ );
+
+html=
+ html.replace(
+ /^## (.+)$/gm, "&lt;h2&gt;$1</h2>"
+ );
+
+html=
+ html.replace(
+ /^# (.+)$/gm, "&lt;h1&gt;$1</h1>"
+ );
+
+/*
+• Bold
+• three laws
+ */
+
+html=
+ html.replace(
+ /**(.+?)**/g,
+ "<strong>`$1</strong>"
+ );
+
+/*
+• Italic
+• important
+ */
+
+html=
+ html.replace(
+ /(^|[^*])*([^*\n]+)*(?!*)/g,
+ "2</em>"
+ );
+
+/*
+• Bullet points
+◦ First law
+• • Second law
+ */
+
+html=
+ html.replace(
+ /^\s*[-•]\s+(.+)1</li>"
+ );
+
+/*
+• Numbered lists
+ */
+
+html=
+ html.replace(
+ /^\s*(\d+).\s+(.+)1. $2</li>"
+ );
+
+/*
+• Preserve line breaks
+ */
+
+html=
+ html.replace(
+ /\n/g,
+ "<br>"
+ );
+
+return html;
+
+}
+
+function addAIMessage(
+ message,
+ sender="ai"
+ ){
+
+const elements=
+ getAIElements();
+
+if(!elements.messages)return;
+
+const wrapper=
+ document.createElement("div");
+
+wrapper.className=
+ "ai-message "+
+ (sender==="user"?"user":"");
+
+const avatar=
+ document.createElement("div");
+
+avatar.className=
+ "ai-message-avatar";
+
+if(sender==="user"){
+
+avatar.textContent="👤";
+
+}else{
+
+const img=
+ document.createElement("img");
+
+img.src="ai-teacher.jpg";
+
+img.alt="AI Teacher";
+
+avatar.appendChild(img);
+
+}
+
+const content=
+ document.createElement("div");
+
+content.className=
+ "ai-message-content";
+
+/*
+• User messages remain normal text.
+• AI messages are rendered as Markdown.
+ */
+
+if(sender==="user"){
+ content.textContent=message;
+ }else{
+ content.innerHTML=renderAIMarkdown(message);
+
+if(window.MathJax){
+ MathJax.typesetPromise([content]).catch(function(error){
+ console.error("MathJax rendering error:",error);
+ });
+ }
+ }
+
+wrapper.appendChild(avatar);
+
+wrapper.appendChild(content);
+
+elements.messages.appendChild(wrapper);
+
+elements.messages.scrollTop=
+ elements.messages.scrollHeight;
+
+}
+
+function aiQuickPrompt(prompt){
+
+const elements=
+ getAIElements();
+
+if(!elements.input)return;
+
+elements.input.value=
+ prompt;
+
+elements.input.focus();
+
+sendAIMessage();
+
+}
+
+async function sendAIMessage(){
+
+const elements=
+ getAIElements();
+
+if(
+ !elements.input||
+ !elements.send
+ )return;
+
+const message=
+ elements.input.value.trim();
+
+if(!message)return;
+
+addAIMessage(
+ message,
+ "user"
+ );
+
+elements.input.value="";
+
+elements.send.disabled=true;
+
+if(elements.status){
+
+elements.status.classList.add(
+ "show"
+ );
+
+}
+
+aiConversation.push({
+
+role:"user",
+
+content:message
+
+});
+
+try{
+
+const sessionResult=
+ await client.auth.getSession();
+
+if(sessionResult.error){
+
+throw sessionResult.error;
+
+}
+
+const session=
+ sessionResult.data?.session;
+
+if(
+ !session||
+ !session.access_token
+ ){
+
+throw new Error(
+ "Student session is not available."
+ );
+
+}
+
+const response=
+ await fetch(
+ "https://tdmdvkdaccjyvajvzttz.supabase.co/functions/v1/ai-learning-agent",
+ {
+ method:"POST",
+
+headers:{
+ "Content-Type":
+ "application/json",
+
+"Authorization":
+ "Bearer "+
+ session.access_token
+ },
+
+body:JSON.stringify({
+
+message:message,
+
+conversation:
+ aiConversation,
+
+student_id:
+ studentUser?.id||
+ null
+
+})
+
+}
+ );
+
+if(!response.ok){
+
+const errorText=
+ await response.text();
+
+console.error(
+ "AI service error:",
+ response.status,
+ errorText
+ );
+
+throw new Error(
+ "AI service returned HTTP "+
+ response.status
+ );
+
+}
+
+const data=
+ await response.json();
+
+const answer=
+ data.answer||
+ data.message||
+ data.response;
+
+if(!answer){
+
+throw new Error(
+ "The AI returned no answer."
+ );
+
+}
+
+addAIMessage(
+ answer,
+ "ai"
+ );
+
+aiConversation.push({
+
+role:"assistant",
+
+content:answer
+
+});
+
+}catch(error){
+
+console.error(
+ "AI Learning Agent:",
+ error
+ );
+
+addAIMessage(
+ "Sorry, I could not connect to the AI Teacher right now. Please try again.",
+ "ai"
+ );
+
+}finally{
+
+elements.send.disabled=false;
+
+if(elements.status){
+
+elements.status.classList.remove(
+ "show"
+ );
+
+}
+
+elements.input.focus();
+
+}
+
+}
+
+function setupAI(){
+
+const elements=
+ getAIElements();
+
+if(
+ !elements.input||
+ !elements.send
+ )return;
+
+elements.send.addEventListener(
+ "click",
+ sendAIMessage
+ );
+
+elements.input.addEventListener(
+ "keydown",
+ function(event){
+
+if(
+ event.key==="Enter"&&
+ !event.shiftKey
+ ){
+
+event.preventDefault();
+
+sendAIMessage();
+
+}
+
+}
+ );
+
+}
+
+</script> </body>
+ </html>

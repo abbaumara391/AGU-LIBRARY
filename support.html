@@ -1,0 +1,449 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AGULIBRARY — Customer Support Agent</title>
+
+<style>
+*{
+  box-sizing:border-box;
+}
+
+html,
+body{
+  height:100%;
+  margin:0;
+}
+
+body{
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:#f4fbf7;
+  color:#17352a;
+}
+
+.page{
+  height:100%;
+  display:flex;
+  flex-direction:column;
+  max-width:1100px;
+  margin:auto;
+  background:#fff;
+}
+
+.head{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:16px 20px;
+  background:#e8f8f0;
+  border-bottom:1px solid #cfe5da;
+}
+
+.logo{
+  width:46px;
+  height:46px;
+  border-radius:14px;
+  background:#087a4b;
+  color:#fff;
+  display:grid;
+  place-items:center;
+  font-weight:900;
+}
+
+.head strong{
+  color:#173b2d;
+}
+
+.head small{
+  display:block;
+  color:#71847b;
+  margin-top:2px;
+}
+
+.back{
+  margin-left:auto;
+  text-decoration:none;
+  color:#087a4b;
+  font-weight:800;
+  border:1px solid #b9dccd;
+  background:#fff;
+  border-radius:10px;
+  padding:9px 12px;
+}
+
+.chat{
+  flex:1;
+  overflow:auto;
+  padding:20px;
+  background:#f7fcfa;
+}
+
+.msg{
+  max-width:85%;
+  padding:12px 14px;
+  border-radius:16px;
+  background:#fff;
+  border:1px solid #dceee6;
+  margin-bottom:12px;
+  line-height:1.55;
+  white-space:pre-wrap;
+}
+
+.msg.user{
+  margin-left:auto;
+  background:#087a4b;
+  color:#fff;
+  border-color:#087a4b;
+}
+
+.form{
+  display:flex;
+  gap:9px;
+  padding:13px;
+  border-top:1px solid #dceee6;
+  background:#fff;
+}
+
+.form input{
+  flex:1;
+  padding:13px;
+  border:1px solid #cfe5da;
+  border-radius:11px;
+  outline:none;
+}
+
+.form input:focus{
+  border-color:#087a4b;
+}
+
+.form button{
+  border:0;
+  border-radius:11px;
+  background:#087a4b;
+  color:#fff;
+  padding:0 18px;
+  font-weight:900;
+}
+
+.form button:disabled{
+  opacity:.6;
+}
+
+.mail{
+  padding:8px 20px 14px;
+  background:#fff;
+  text-align:center;
+  color:#71847b;
+  font-size:13px;
+}
+
+.mail a{
+  color:#087a4b;
+  font-weight:800;
+}
+
+@media(max-width:600px){
+
+  .head{
+    padding:12px;
+  }
+
+  .head strong{
+    font-size:14px;
+  }
+
+  .back{
+    padding:8px 9px;
+    font-size:12px;
+  }
+
+  .chat{
+    padding:13px;
+  }
+
+  .msg{
+    max-width:92%;
+  }
+
+}
+</style>
+</head>
+
+<body>
+
+<main class="page">
+
+<header class="head">
+
+  <div class="logo">
+    AG
+  </div>
+
+  <div>
+    <strong>
+      AGULIBRARY Customer Support Agent
+    </strong>
+
+    <small>
+      Account • Library • Technical • Payment Support
+    </small>
+  </div>
+
+  <a
+    class="back"
+    href="index.html"
+  >
+    ← AGULIBRARY
+  </a>
+
+</header>
+
+
+<section
+  id="chat"
+  class="chat"
+>
+
+  <div class="msg">
+
+Hello! 👋
+
+I am the AGULIBRARY Customer Support Agent.
+
+Ask your question and I will help you with AGULIBRARY account, library, technical, payment, and website-support matters.
+
+  </div>
+
+</section>
+
+
+<form
+  id="form"
+  class="form"
+>
+
+  <input
+    id="input"
+    type="text"
+    placeholder="Type your support question..."
+    autocomplete="off"
+    required
+  >
+
+  <button
+    id="send"
+    type="submit"
+  >
+    Send
+  </button>
+
+</form>
+
+
+<div class="mail">
+
+  Email support:
+
+  <a href="mailto:support@agulibrary.com">
+    support@agulibrary.com
+  </a>
+
+</div>
+
+</main>
+
+
+<script src="config.js"></script>
+
+<script>
+
+"use strict";
+
+
+const chat =
+document.getElementById("chat");
+
+const input =
+document.getElementById("input");
+
+const send =
+document.getElementById("send");
+
+
+let conversation = [];
+
+
+function add(
+  text,
+  user = false
+){
+
+  const d =
+  document.createElement("div");
+
+  d.className =
+  "msg" +
+  (
+    user
+    ? " user"
+    : ""
+  );
+
+  d.textContent =
+  text;
+
+  chat.appendChild(d);
+
+  chat.scrollTop =
+  chat.scrollHeight;
+
+}
+
+
+async function ask(
+  message
+){
+
+  const base =
+  (
+    window.AGU_CONFIG?.supabaseUrl ||
+    ""
+  ).replace(
+    /\/$/,
+    ""
+  );
+
+
+  if(!base){
+
+    throw new Error(
+      "Support service is not configured."
+    );
+
+  }
+
+
+  const response =
+  await fetch(
+    base +
+    "/functions/v1/customer-support-agent",
+    {
+      method:"POST",
+
+      headers:{
+        "Content-Type":
+        "application/json"
+      },
+
+      body:
+      JSON.stringify({
+        message,
+        conversation
+      })
+    }
+  );
+
+
+  if(!response.ok){
+
+    throw new Error(
+      "Support service unavailable."
+    );
+
+  }
+
+
+  const data =
+  await response.json();
+
+
+  return (
+    data.answer ||
+    data.message ||
+    data.response ||
+    "I could not get an answer from the support service."
+  );
+
+}
+
+
+document
+.getElementById("form")
+.addEventListener(
+  "submit",
+  async function(event){
+
+    event.preventDefault();
+
+
+    const message =
+    input.value.trim();
+
+
+    if(!message)
+      return;
+
+
+    add(
+      message,
+      true
+    );
+
+
+    input.value = "";
+
+
+    send.disabled = true;
+
+
+    conversation.push({
+      role:"user",
+      content:message
+    });
+
+
+    try{
+
+      const answer =
+      await ask(message);
+
+
+      add(
+        answer
+      );
+
+
+      conversation.push({
+        role:"assistant",
+        content:answer
+      });
+
+
+    }catch(error){
+
+      console.error(
+        "Customer Support Agent:",
+        error
+      );
+
+
+      add(
+        "The Customer Support Agent is ready, but its secure AI backend is not connected yet. You can email support@agulibrary.com for assistance."
+      );
+
+    }finally{
+
+      send.disabled = false;
+
+      input.focus();
+
+    }
+
+  }
+);
+
+</script>
+
+</body>
+  </html>

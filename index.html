@@ -5,759 +5,114 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>AGULIBRARY — Global Learning Library</title>
 <link rel="stylesheet" href="style.css">
-
 <style>
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{margin:0;background:#f4fbf7;color:#17352a;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
 button,input,select{font:inherit}
 button,a{cursor:pointer}
-
-.nav{
-position:sticky;
-top:0;
-z-index:1000;
-display:flex;
-align-items:center;
-gap:18px;
-padding:12px 5%;
-background:rgba(255,255,255,.97);
-border-bottom:1px solid #dceee6;
-box-shadow:0 5px 22px rgba(8,122,75,.07);
-backdrop-filter:blur(12px)
-}
-
-.brand{
-display:flex;
-align-items:center;
-gap:11px;
-text-decoration:none;
-color:#17352a;
-margin-right:auto
-}
-
-.mark{
-width:48px;
-height:48px;
-border-radius:15px;
-background:#087a4b;
-color:#fff;
-display:grid;
-place-items:center;
-font-weight:900
-}
-
-.brand b{
-display:block;
-color:#123d2d;
-font-size:20px
-}
-
-.brand small{
-display:block;
-color:#71847b;
-font-size:9px;
-letter-spacing:2px;
-margin-top:2px
-}
-
-.nav-links{
-display:flex;
-gap:16px;
-align-items:center
-}
-
-.nav-links a{
-color:#426056;
-text-decoration:none;
-font-weight:800;
-font-size:14px
-}
-
-.btn{
-border:0;
-border-radius:11px;
-padding:11px 16px;
-font-weight:800;
-text-decoration:none;
-display:inline-flex;
-align-items:center;
-justify-content:center
-}
-
-.primary{
-background:#087a4b;
-color:#fff
-}
-
-.outline{
-background:#fff;
-color:#087a4b;
-border:1px solid #b9dccd
-}
-
-.danger{
-background:#fff0f0;
-color:#b42323;
-border:1px solid #efcccc
-}
-
-.hero{
-width:min(1250px,92%);
-margin:25px auto 20px;
-display:grid;
-grid-template-columns:1.05fr .95fr;
-gap:25px;
-align-items:center;
-background:linear-gradient(135deg,#e7f8ef,#fff);
-border:1px solid #ccebdd;
-border-radius:30px;
-padding:clamp(28px,5vw,65px);
-box-shadow:0 15px 40px rgba(8,122,75,.07)
-}
-
-.eyebrow{
-color:#087a4b;
-font-size:11px;
-font-weight:900;
-letter-spacing:3px
-}
-
-.hero h1{
-margin:12px 0;
-color:#123d2d;
-font-size:clamp(38px,6vw,68px);
-line-height:1.02
-}
-
-.hero h1 em{
-color:#087a4b;
-font-style:normal
-}
-
-.hero p{
-color:#657970;
-line-height:1.7;
-font-size:16px;
-max-width:680px
-}
-
-.actions{
-display:flex;
-gap:10px;
-flex-wrap:wrap;
-margin-top:22px
-}
-
-.hero-art{
-min-height:300px;
-position:relative;
-display:grid;
-place-items:center
-}
-
-.orb{
-position:absolute;
-width:260px;
-height:260px;
-border-radius:50%;
-background:#d4f3e4
-}
-
-.book{
-position:relative;
-z-index:2;
-width:145px;
-height:180px;
-border-radius:10px 18px 18px 10px;
-background:#087a4b;
-color:#fff;
-display:grid;
-place-items:center;
-font-size:72px;
-box-shadow:18px 18px 0 #b9e7d0;
-transform:rotate(-5deg)
-}
-
-.float{
-position:absolute;
-background:#fff;
-border:1px solid #dceee6;
-border-radius:14px;
-padding:10px 13px;
-box-shadow:0 10px 25px rgba(8,122,75,.09);
-font-weight:900;
-font-size:13px
-}
-
-.float small{
-color:#71847b;
-font-weight:600
-}
-
-.float.a{
-left:4%;
-top:20%
-}
-
-.float.b{
-right:0;
-top:15%
-}
-
-.float.c{
-right:8%;
-bottom:14%
-}
-
-.section{
-width:min(1250px,92%);
-margin:25px auto
-}
-
-.section h2{
-margin:7px 0;
-color:#173b2d;
-font-size:32px
-}
-
-.muted{
-color:#71847b;
-line-height:1.6
-}
-
-.account-bar{
-width:min(1250px,92%);
-margin:0 auto 20px;
-display:none;
-align-items:center;
-justify-content:space-between;
-gap:12px;
-background:#fff;
-border:1px solid #dceee6;
-border-radius:18px;
-padding:13px 16px;
-box-shadow:0 8px 25px rgba(8,122,75,.05)
-}
-
-.account-bar.show{
-display:flex
-}
-
-.account-name{
-font-weight:900;
-color:#173b2d
-}
-
-.account-email{
-font-size:12px;
-color:#71847b
-}
-
-.subject-grid{
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:12px
-}
-
-.main-subject{
-min-height:125px;
-padding:22px;
-background:#fff;
-border:1px solid #dceee6;
-border-radius:21px;
-text-align:left;
-box-shadow:0 10px 28px rgba(8,122,75,.05);
-transition:.2s
-}
-
-.main-subject:hover{
-transform:translateY(-3px);
-border-color:#9ed9bb
-}
-
-.main-subject .icon{
-font-size:30px;
-margin-bottom:13px
-}
-
-.main-subject b{
-display:block;
-color:#214638;
-font-size:18px
-}
-
-.main-subject small{
-display:block;
-color:#788a82;
-line-height:1.5;
-margin-top:6px
-}
-
-.flow{
-display:none;
-background:#fff;
-border:1px solid #dceee6;
-border-radius:24px;
-padding:26px;
-margin:25px auto;
-width:min(1250px,92%);
-box-shadow:0 12px 35px rgba(8,122,75,.06)
-}
-
-.flow.show{
-display:block
-}
-
-.flow-top{
-display:flex;
-justify-content:space-between;
-gap:10px;
-align-items:center
-}
-
-.back{
-border:1px solid #b9dccd;
-background:#fff;
-color:#087a4b;
-border-radius:10px;
-padding:9px 13px;
-font-weight:800
-}
-
-.flow h2{
-margin:8px 0;
-color:#173b2d;
-font-size:32px
-}
-
-.flow p{
-color:#71847b;
-line-height:1.6
-}
-
-.flow-grid{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:14px;
-margin-top:20px
-}
-
-.flow-card{
-min-height:125px;
-border:1px solid #dceee6;
-background:#f7fcfa;
-border-radius:18px;
-padding:19px;
-text-align:left;
-transition:.2s
-}
-
-.flow-card:hover{
-transform:translateY(-2px);
-border-color:#91d2b1;
-background:#fff
-}
-
-.flow-card .icon{
-font-size:25px
-}
-
-.flow-card strong{
-display:block;
-color:#214638;
-font-size:18px;
-margin-top:9px
-}
-
-.flow-card small{
-display:block;
-color:#788a82;
-margin-top:6px;
-line-height:1.45
-}
-
-.resource-tools{
-display:grid;
-grid-template-columns:1fr 200px;
-gap:10px;
-margin-top:18px
-}
-
-.resource-tools input,
-.resource-tools select{
-width:100%;
-padding:13px;
-border:1px solid #cfe5da;
-border-radius:11px;
-background:#fff;
-color:#17352a
-}
-
-.resource-grid{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:14px;
-margin-top:16px
-}
-
-.resource-card{
-background:#fff;
-border:1px solid #dceee6;
-border-radius:18px;
-padding:18px;
-display:flex;
-flex-direction:column
-}
-
-.resource-icon{
-font-size:28px;
-width:52px;
-height:52px;
-border-radius:14px;
-background:#e8f8f0;
-display:grid;
-place-items:center
-}
-
-.resource-type{
-display:inline-block;
-margin-top:11px;
-padding:5px 8px;
-border-radius:20px;
-background:#f0f8f4;
-color:#087a4b;
-font-size:10px;
-font-weight:900;
-letter-spacing:1px;
-align-self:flex-start
-}
-
-.resource-card h3{
-color:#214638;
-margin:10px 0 5px
-}
-
-.resource-card p{
-color:#71847b;
-line-height:1.5;
-flex:1
-}
-
-.resource-card button{
-border:0;
-border-radius:10px;
-padding:11px;
-background:#087a4b;
-color:#fff;
-font-weight:800
-}
-
-.empty{
-padding:28px;
-text-align:center;
-color:#71847b;
-background:#f7fcfa;
-border:1px dashed #bfded0;
-border-radius:15px;
-grid-column:1/-1
-}
-
-.ai-launch{
-position:fixed;
-right:18px;
-top:82px;
-z-index:1200;
-display:flex;
-align-items:center;
-gap:8px;
-background:#fff;
-border:1px solid #cfe5da;
-border-radius:18px;
-padding:7px 10px 7px 7px;
-box-shadow:0 10px 30px rgba(8,122,75,.15)
-}
-
-.ai-launch img{
-width:54px;
-height:54px;
-border-radius:50%;
-object-fit:cover
-}
-
-.ai-launch span{
-font-size:11px;
-font-weight:900;
-color:#087a4b
-}
-
-.ai-panel{
-position:fixed;
-inset:0;
-width:100%;
-height:100dvh;
-max-height:100dvh;
-z-index:1300;
-background:#fff;
-border:0;
-border-radius:0;
-box-shadow:none;
-display:none;
-overflow:hidden
-}
-
-.ai-panel.show{
-display:flex;
-flex-direction:column
-}
-
-.ai-head{
-display:flex;
-align-items:center;
-gap:10px;
-padding:12px 14px;
-flex:0 0 auto;
-background:#e8f8f0
-}
-
-.ai-head img{
-width:48px;
-height:48px;
-border-radius:50%;
-object-fit:cover
-}
-
-.ai-head strong{
-color:#173b2d
-}
-
-.ai-head small{
-display:block;
-color:#71847b;
-margin-top:2px
-}
-
-.ai-close{
-margin-left:auto;
-border:0;
-background:transparent;
-font-size:28px;
-color:#087a4b;
-padding:6px 10px
-}
-
-.chat{
-flex:1;
-min-height:0;
-overflow-y:auto;
--webkit-overflow-scrolling:touch;
-padding:15px;
-background:#f7fcfa
-}
-
-.msg{
-max-width:84%;
-padding:11px 13px;
-border-radius:15px;
-background:#fff;
-border:1px solid #dceee6;
-margin-bottom:10px;
-white-space:pre-wrap;
-line-height:1.5
-}
-
-.msg.user{
-margin-left:auto;
-background:#087a4b;
-color:#fff;
-border-color:#087a4b
-}
-
-.chat-input{
-display:flex;
-gap:8px;
-padding:10px;
-flex:0 0 auto;
-border-top:1px solid #dceee6;
-background:#fff;
-padding-bottom:max(10px,env(safe-area-inset-bottom))
-}
-
-.chat-input input{
-min-width:0;
-flex:1;
-padding:12px;
-border:1px solid #cfe5da;
-border-radius:11px
-}
-
-.chat-input button{
-border:0;
-border-radius:11px;
-background:#087a4b;
-color:#fff;
-padding:0 15px;
-font-weight:900
-}
-
-.support{
-width:min(1250px,92%);
-margin:30px auto;
-background:linear-gradient(135deg,#e8f8f0,#fff);
-border:1px solid #ccebdd;
-border-radius:24px;
-padding:32px
-}
-
-.support h2{
-margin:8px 0;
-color:#173b2d
-}
-
-.support p{
-color:#71847b;
-line-height:1.6
-}
-
-.support-menu{
-margin-top:18px;
-position:relative
-}
-
-.support-menu summary{
-list-style:none;
-display:inline-flex
-}
-
-.support-menu summary::-webkit-details-marker{
-display:none
-}
-
-.support-menu-actions{
-display:flex;
-gap:10px;
-flex-wrap:wrap;
-margin-top:10px;
-padding:10px;
-background:#fff;
-border:1px solid #dceee6;
-border-radius:14px;
-width:max-content;
-max-width:100%;
-box-shadow:0 10px 25px rgba(8,122,75,.08)
-}
-
-.support-agent{
-display:none;
-margin-top:20px;
-background:#fff;
-border:1px solid #dceee6;
-border-radius:20px;
-overflow:hidden
-}
-
-.support-agent.show{
-display:block
-}
-
-.support-head{
-padding:18px;
-background:#edf8f3
-}
-
-.support-head strong{
-color:#173b2d
-}
-
-.support-chat{
-height:300px;
-overflow:auto;
-padding:15px;
-background:#f8fcfa
-}
-
-.support-input{
-display:flex;
-gap:8px;
-padding:12px;
-border-top:1px solid #dceee6
-}
-
-.support-input input{
-flex:1;
-padding:12px;
-border:1px solid #cfe5da;
-border-radius:11px
-}
-
-.support-input button{
-border:0;
-border-radius:11px;
-background:#087a4b;
-color:#fff;
-padding:0 15px;
-font-weight:900
-}
-
-.account-panel{
-display:none
-}
-
-.account-panel.show{
-display:block
-}
-
-.account-grid{
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:12px
-}
-
-.account-card{
-background:#fff;
-border:1px solid #dceee6;
-border-radius:18px;
-padding:18px
-}
-
-.account-card strong{
-display:block;
-color:#087a4b;
-font-size:28px
-}
-
-.account-card span{
-color:#71847b;
-font-size:13px
-}
-
-.saved-list{
-margin-top:15px
-}
-
-.saved-item{
-display:flex;
-justify-content:space-between;
-gap:10px;
-padding:12px;
-border-bottom:1px solid #edf3ef
-}
-
-footer{
-text-align:center;
-padding:30px;
-background:#fff;
-border-top:1px solid #dceee6;
-color:#71847b
-}
-
-footer b{
-color:#087a4b
-}
-
-.compatibility-hidden{
-display:none!important
-}
+.nav{position:sticky;top:0;z-index:1000;display:flex;align-items:center;gap:18px;padding:12px 5%;background:rgba(255,255,255,.97);border-bottom:1px solid #dceee6;box-shadow:0 5px 22px rgba(8,122,75,.07);backdrop-filter:blur(12px)}
+.brand{display:flex;align-items:center;gap:11px;text-decoration:none;color:#17352a;margin-right:auto}
+.mark{width:48px;height:48px;border-radius:15px;background:#087a4b;color:#fff;display:grid;place-items:center;font-weight:900}
+.brand b{display:block;color:#123d2d;font-size:20px}
+.brand small{display:block;color:#71847b;font-size:9px;letter-spacing:2px;margin-top:2px}
+.nav-links{display:flex;gap:16px;align-items:center}
+.nav-links a{color:#426056;text-decoration:none;font-weight:800;font-size:14px}
+.btn{border:0;border-radius:11px;padding:11px 16px;font-weight:800;text-decoration:none;display:inline-flex;align-items:center;justify-content:center}
+.primary{background:#087a4b;color:#fff}
+.outline{background:#fff;color:#087a4b;border:1px solid #b9dccd}
+.danger{background:#fff0f0;color:#b42323;border:1px solid #efcccc}
+.hero{width:min(1250px,92%);margin:25px auto 20px;display:grid;grid-template-columns:1.05fr .95fr;gap:25px;align-items:center;background:linear-gradient(135deg,#e7f8ef,#fff);border:1px solid #ccebdd;border-radius:30px;padding:clamp(28px,5vw,65px);box-shadow:0 15px 40px rgba(8,122,75,.07)}
+.eyebrow{color:#087a4b;font-size:11px;font-weight:900;letter-spacing:3px}
+.hero h1{margin:12px 0;color:#123d2d;font-size:clamp(38px,6vw,68px);line-height:1.02}
+.hero h1 em{color:#087a4b;font-style:normal}
+.hero p{color:#657970;line-height:1.7;font-size:16px;max-width:680px}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+.hero-art{min-height:300px;position:relative;display:grid;place-items:center}
+.orb{position:absolute;width:260px;height:260px;border-radius:50%;background:#d4f3e4}
+.book{position:relative;z-index:2;width:145px;height:180px;border-radius:10px 18px 18px 10px;background:#087a4b;color:#fff;display:grid;place-items:center;font-size:72px;box-shadow:18px 18px 0 #b9e7d0;transform:rotate(-5deg)}
+.float{position:absolute;background:#fff;border:1px solid #dceee6;border-radius:14px;padding:10px 13px;box-shadow:0 10px 25px rgba(8,122,75,.09);font-weight:900;font-size:13px}
+.float small{color:#71847b;font-weight:600}
+.float.a{left:4%;top:20%}
+.float.b{right:0;top:15%}
+.float.c{right:8%;bottom:14%}
+.section{width:min(1250px,92%);margin:25px auto}
+.section h2{margin:7px 0;color:#173b2d;font-size:32px}
+.muted{color:#71847b;line-height:1.6}
+.account-bar{width:min(1250px,92%);margin:0 auto 20px;display:none;align-items:center;justify-content:space-between;gap:12px;background:#fff;border:1px solid #dceee6;border-radius:18px;padding:13px 16px;box-shadow:0 8px 25px rgba(8,122,75,.05)}
+.account-bar.show{display:flex}
+.account-name{font-weight:900;color:#173b2d}
+.account-email{font-size:12px;color:#71847b}
+.subject-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.main-subject{min-height:125px;padding:22px;background:#fff;border:1px solid #dceee6;border-radius:21px;text-align:left;box-shadow:0 10px 28px rgba(8,122,75,.05);transition:.2s}
+.main-subject:hover{transform:translateY(-3px);border-color:#9ed9bb}
+.main-subject .icon{font-size:30px;margin-bottom:13px}
+.main-subject b{display:block;color:#214638;font-size:18px}
+.main-subject small{display:block;color:#788a82;line-height:1.5;margin-top:6px}
+.flow{display:none;background:#fff;border:1px solid #dceee6;border-radius:24px;padding:26px;margin:25px auto;width:min(1250px,92%);box-shadow:0 12px 35px rgba(8,122,75,.06)}
+.flow.show{display:block}
+.flow-top{display:flex;justify-content:space-between;gap:10px;align-items:center}
+.back{border:1px solid #b9dccd;background:#fff;color:#087a4b;border-radius:10px;padding:9px 13px;font-weight:800}
+.flow h2{margin:8px 0;color:#173b2d;font-size:32px}
+.flow p{color:#71847b;line-height:1.6}
+.flow-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:20px}
+.flow-card{min-height:125px;border:1px solid #dceee6;background:#f7fcfa;border-radius:18px;padding:19px;text-align:left;transition:.2s}
+.flow-card:hover{transform:translateY(-2px);border-color:#91d2b1;background:#fff}
+.flow-card .icon{font-size:25px}
+.flow-card strong{display:block;color:#214638;font-size:18px;margin-top:9px}
+.flow-card small{display:block;color:#788a82;margin-top:6px;line-height:1.45}
+.resource-tools{display:grid;grid-template-columns:1fr 200px;gap:10px;margin-top:18px}
+.resource-tools input,.resource-tools select{width:100%;padding:13px;border:1px solid #cfe5da;border-radius:11px;background:#fff;color:#17352a}
+.resource-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:16px}
+.resource-card{background:#fff;border:1px solid #dceee6;border-radius:18px;padding:18px;display:flex;flex-direction:column}
+.resource-icon{font-size:28px;width:52px;height:52px;border-radius:14px;background:#e8f8f0;display:grid;place-items:center}
+.resource-type{display:inline-block;margin-top:11px;padding:5px 8px;border-radius:20px;background:#f0f8f4;color:#087a4b;font-size:10px;font-weight:900;letter-spacing:1px;align-self:flex-start}
+.resource-card h3{color:#214638;margin:10px 0 5px}
+.resource-card p{color:#71847b;line-height:1.5;flex:1}
+.resource-card button{border:0;border-radius:10px;padding:11px;background:#087a4b;color:#fff;font-weight:800}
+.empty{padding:28px;text-align:center;color:#71847b;background:#f7fcfa;border:1px dashed #bfded0;border-radius:15px;grid-column:1/-1}
+.ai-launch{position:fixed;right:18px;top:82px;z-index:1200;display:flex;align-items:center;gap:8px;background:#fff;border:1px solid #cfe5da;border-radius:18px;padding:7px 10px 7px 7px;box-shadow:0 10px 30px rgba(8,122,75,.15)}
+.ai-launch img{width:54px;height:54px;border-radius:50%;object-fit:cover}
+.ai-launch span{font-size:11px;font-weight:900;color:#087a4b}
+.ai-panel{position:fixed;inset:0;width:100%;height:100dvh;max-height:100dvh;z-index:1300;background:#fff;border:0;border-radius:0;box-shadow:none;display:none;overflow:hidden}
+.ai-panel.show{display:flex;flex-direction:column}
+.ai-head{display:flex;align-items:center;gap:10px;padding:12px 14px;flex:0 0 auto;background:#e8f8f0}
+.ai-head img{width:48px;height:48px;border-radius:50%;object-fit:cover}
+.ai-head strong{color:#173b2d}
+.ai-head small{display:block;color:#71847b;margin-top:2px}
+.ai-close{margin-left:auto;border:0;background:transparent;font-size:28px;color:#087a4b;padding:6px 10px}
+.chat{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:15px;background:#f7fcfa}
+.msg{max-width:84%;padding:11px 13px;border-radius:15px;background:#fff;border:1px solid #dceee6;margin-bottom:10px;white-space:pre-wrap;line-height:1.5}
+.msg.user{margin-left:auto;background:#087a4b;color:#fff;border-color:#087a4b}
+.chat-input{display:flex;gap:8px;padding:10px;flex:0 0 auto;border-top:1px solid #dceee6;background:#fff;padding-bottom:max(10px,env(safe-area-inset-bottom))}
+.chat-input input{min-width:0;flex:1;padding:12px;border:1px solid #cfe5da;border-radius:11px}
+.chat-input button{border:0;border-radius:11px;background:#087a4b;color:#fff;padding:0 15px;font-weight:900}
+.support{width:min(1250px,92%);margin:30px auto;background:linear-gradient(135deg,#e8f8f0,#fff);border:1px solid #ccebdd;border-radius:24px;padding:32px}
+.support h2{margin:8px 0;color:#173b2d}
+.support p{color:#71847b;line-height:1.6}
+.support-menu{margin-top:18px;position:relative}
+.support-menu summary{list-style:none;display:inline-flex}
+.support-menu summary::-webkit-details-marker{display:none}
+.support-menu-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;padding:10px;background:#fff;border:1px solid #dceee6;border-radius:14px;width:max-content;max-width:100%;box-shadow:0 10px 25px rgba(8,122,75,.08)}
+.support-agent{display:none;margin-top:20px;background:#fff;border:1px solid #dceee6;border-radius:20px;overflow:hidden}
+.support-agent.show{display:block}
+.support-head{padding:18px;background:#edf8f3}
+.support-head strong{color:#173b2d}
+.support-chat{height:300px;overflow:auto;padding:15px;background:#f8fcfa}
+.support-input{display:flex;gap:8px;padding:12px;border-top:1px solid #dceee6}
+.support-input input{flex:1;padding:12px;border:1px solid #cfe5da;border-radius:11px}
+.support-input button{border:0;border-radius:11px;background:#087a4b;color:#fff;padding:0 15px;font-weight:900}
+.account-panel{display:none}
+.account-panel.show{display:block}
+.account-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.account-card{background:#fff;border:1px solid #dceee6;border-radius:18px;padding:18px}
+.account-card strong{display:block;color:#087a4b;font-size:28px}
+.account-card span{color:#71847b;font-size:13px}
+.saved-list{margin-top:15px}
+.saved-item{display:flex;justify-content:space-between;gap:10px;padding:12px;border-bottom:1px solid #edf3ef}
+footer{text-align:center;padding:30px;background:#fff;border-top:1px solid #dceee6;color:#71847b}
+footer b{color:#087a4b}
+.compatibility-hidden{display:none!important}
 
 @media(max-width:1000px){
 .subject-grid{grid-template-columns:repeat(2,1fr)}
@@ -776,6 +131,9 @@ display:none!important
 .resource-grid{grid-template-columns:1fr}
 .resource-tools{grid-template-columns:1fr}
 .account-bar{align-items:flex-start;flex-direction:column}
+.internal-grid{grid-template-columns:1fr}
+.menu-panel{right:14px}
+.ai-head{padding-top:max(10px,env(safe-area-inset-top))}
 }
 
 @media(max-width:520px){
@@ -1073,12 +431,6 @@ margin:10px 0
 .internal-page .actions{
 margin-top:12px
 }
-
-@media(max-width:760px){
-.internal-grid{grid-template-columns:1fr}
-.menu-panel{right:14px}
-.ai-head{padding-top:max(10px,env(safe-area-inset-top))}
-}
 </style>
 </head>
 
@@ -1088,7 +440,9 @@ margin-top:12px
 
 <div class="agu-auth-box">
 
-<div class="agu-auth-logo">AG</div>
+<div class="agu-auth-logo">
+AG
+</div>
 
 <h2 id="aguGateTitle">
 Sign in to AGULIBRARY
@@ -1163,6 +517,7 @@ Forgot password?
 </a>
 
 </div>
+
 </div>
 
 
@@ -1178,6 +533,7 @@ AG
 </span>
 
 <span>
+
 <b>
 AGULIBRARY
 </b>
@@ -1245,7 +601,6 @@ Account settings and sign out.
 </span>
 </button>
 
-
 <button
 class="menu-item"
 type="button"
@@ -1260,7 +615,6 @@ Email, phone, date of birth and student information.
 </span>
 </button>
 
-
 <button
 class="menu-item"
 type="button"
@@ -1274,7 +628,6 @@ Your permanent invitation details.
 </small>
 </span>
 </button>
-
 
 <button
 class="menu-item"
@@ -1306,7 +659,8 @@ alt="AI Learning Teacher"
 >
 
 <span>
-AI LEARNING<br>
+AI LEARNING
+<br>
 TEACHER
 </span>
 
@@ -1355,7 +709,9 @@ class="chat"
 >
 
 <div class="msg">
+
 Hello! 👋 I am your AGULIBRARY AI Learning Teacher. Ask me about a subject or topic and I will teach you step by step.
+
 </div>
 
 </div>
@@ -1390,10 +746,7 @@ Send
 </span>
 
 <h1>
-WELCOME TO
-<em>
-AGU LIBRARY
-</em>
+WELCOME TO <em>AGU LIBRARY</em>
 </h1>
 
 <p>
@@ -1437,7 +790,6 @@ id="accountEmail"
 
 </div>
 
-
 <button
 class="btn outline"
 id="accountDetailsButton"
@@ -1471,42 +823,23 @@ Useful student-dashboard functions are available here without opening a separate
 <div class="account-grid">
 
 <div class="account-card">
-<strong id="statResources">
-0
-</strong>
-<span>
-Available Resources
-</span>
+<strong id="statResources">0</strong>
+<span>Available Resources</span>
 </div>
 
-
 <div class="account-card">
-<strong id="statLessons">
-0
-</strong>
-<span>
-Lessons & Courses
-</span>
+<strong id="statLessons">0</strong>
+<span>Lessons &amp; Courses</span>
 </div>
 
-
 <div class="account-card">
-<strong id="statSubjects">
-0
-</strong>
-<span>
-Subjects Available
-</span>
+<strong id="statSubjects">0</strong>
+<span>Subjects Available</span>
 </div>
 
-
 <div class="account-card">
-<strong id="statRecent">
-0
-</strong>
-<span>
-Recently Viewed
-</span>
+<strong id="statRecent">0</strong>
+<span>Recently Viewed</span>
 </div>
 
 </div>
@@ -1623,13 +956,16 @@ class="internal-card menu-item"
 type="button"
 data-page="profile"
 >
+
 👤
+
 <span>
 Profile
 <small>
 View student information.
 </small>
 </span>
+
 </button>
 
 
@@ -1638,13 +974,16 @@ class="internal-card menu-item"
 type="button"
 data-page="invitation"
 >
+
 🔗
+
 <span>
 Invitation
 <small>
 View your permanent invitation.
 </small>
 </span>
+
 </button>
 
 
@@ -1653,13 +992,16 @@ class="internal-card menu-item"
 type="button"
 data-page="security"
 >
+
 🔐
+
 <span>
 Security
 <small>
 Password, email and phone security.
 </small>
 </span>
+
 </button>
 
 
@@ -1668,13 +1010,16 @@ id="settingsSignOut"
 class="internal-card danger-card"
 type="button"
 >
+
 🚪
+
 <span>
 Sign Out
 <small>
 Next entry requires email + password.
 </small>
 </span>
+
 </button>
 
 </div>
@@ -1704,57 +1049,40 @@ data-close-page
 </div>
 
 
-<div class="internal-card profile-card">
+<div
+class="internal-card profile-card"
+>
 
 <h3 id="menuProfileName">
 Student
 </h3>
 
 <p>
-<strong>
-Email:
-</strong>
-
+<strong>Email:</strong>
 <span id="menuProfileEmail">
 —
 </span>
-
 </p>
 
-
 <p>
-<strong>
-Phone:
-</strong>
-
+<strong>Phone:</strong>
 <span id="menuProfilePhone">
 —
 </span>
-
 </p>
 
-
 <p>
-<strong>
-Date of Birth:
-</strong>
-
+<strong>Date of Birth:</strong>
 <span id="menuProfileDob">
 —
 </span>
-
 </p>
 
-
 <p>
-<strong>
-Student ID:
-</strong>
-
+<strong>Student ID:</strong>
 <span id="menuProfileId">
 —
 </span>
-
 </p>
 
 </div>
@@ -1782,7 +1110,6 @@ data-close-page
 </button>
 
 </div>
-
 
 <p class="muted">
 Your permanent invitation code and link are shown here.
@@ -1968,6 +1295,7 @@ class="subject-grid"
 class="main-subject"
 data-main="Science"
 >
+
 <span class="icon">
 🔬
 </span>
@@ -1987,6 +1315,7 @@ Physics • Chemistry • Biology
 class="main-subject"
 data-main="Mathematics"
 >
+
 <span class="icon">
 📐
 </span>
@@ -2006,6 +1335,7 @@ Mathematics • Algebra • Statistics
 class="main-subject"
 data-main="Technology"
 >
+
 <span class="icon">
 💻
 </span>
@@ -2025,6 +1355,7 @@ Computer Science • Programming • AI
 class="main-subject"
 data-main="Languages & Literature"
 >
+
 <span class="icon">
 📚
 </span>
@@ -2044,6 +1375,7 @@ English • Literature • French • Spanish
 class="main-subject"
 data-main="Social Sciences & Humanities"
 >
+
 <span class="icon">
 🌎
 </span>
@@ -2063,6 +1395,7 @@ Civic Education • History • Geography • Economics
 class="main-subject"
 data-main="Business & Finance"
 >
+
 <span class="icon">
 💼
 </span>
@@ -2082,6 +1415,7 @@ Accounting • Finance • Marketing
 class="main-subject"
 data-main="Arts & Creative Studies"
 >
+
 <span class="icon">
 🎨
 </span>
@@ -2101,6 +1435,7 @@ Art • Music • Photography • Film
 class="main-subject"
 data-main="Professional & Career"
 >
+
 <span class="icon">
 🧑‍⚕️
 </span>
@@ -2146,12 +1481,15 @@ type="button"
 </div>
 
 
-<h2 id="flowTitle">
+<h2
+id="flowTitle"
+>
 Choose an education level
 </h2>
 
-
-<p id="flowSubtitle"></p>
+<p
+id="flowSubtitle"
+></p>
 
 
 <div
@@ -2173,7 +1511,9 @@ placeholder="Search this subject's resources..."
 >
 
 
-<select id="leafType">
+<select
+id="leafType"
+>
 
 <option value="">
 All resource types
@@ -2224,9 +1564,11 @@ All resource types
 id="resourceGrid"
 class="resource-grid compatibility-hidden"
 >
+
 <div class="empty">
 Loading resources...
 </div>
+
 </div>
 
 
@@ -2685,19 +2027,16 @@ subject:""
 const RECENT_KEY=
 "AGU_RECENT_RESOURCES";
 
-
 const SAVED_KEY=
 "AGU_SAVED_RESOURCES";
-
 
 let teacherConversation=[];
 
 
 function esc(v){
 
-return String(
-v??""
-).replace(
+return String(v??"")
+.replace(
 /[&<>"']/g,
 c=>({
 "&":"&amp;",
@@ -2714,10 +2053,7 @@ c=>({
 function escAttr(v){
 
 return esc(v)
-.replace(
-/`/g,
-"&#096;"
-);
+.replace(/`/g,"&#096;");
 
 }
 
@@ -2740,7 +2076,9 @@ audio:"🎧"
 })[
 String(type||"")
 .toLowerCase()
-]||"📘";
+]
+||
+"📘";
 
 }
 
@@ -2759,14 +2097,11 @@ e.textContent=v;
 const REMEMBERED_EMAIL_KEY=
 "AGU_REMEMBERED_LOGIN_EMAIL";
 
-
 const REQUIRE_FULL_LOGIN_KEY=
 "AGU_REQUIRE_FULL_LOGIN";
 
-
 const JUST_LOGGED_IN_KEY=
 "AGU_JUST_LOGGED_IN";
-
 
 const INVITE_KEY=
 "AGU_PERMANENT_INVITATION";
@@ -2839,35 +2174,14 @@ document.getElementById(
 "aguAuthGate"
 );
 
-
 gate.setAttribute(
 "aria-hidden",
 "false"
 );
 
 
-const remembered=
-(
-localStorage.getItem(
-REMEMBERED_EMAIL_KEY
-)||""
-)
-.trim()
-.toLowerCase();
-
-
-const forcedFull=
-localStorage.getItem(
-REQUIRE_FULL_LOGIN_KEY
-)==="1";
-
-
 const full=
-mode==="full"
-||
-forcedFull
-||
-!remembered;
+mode==="full";
 
 
 const emailWrap=
@@ -2898,12 +2212,32 @@ emailInput.required=
 full;
 
 
+/*
+ IMPORTANT:
+
+ If full login is required, the email
+ field is ALWAYS visible and editable.
+
+ We do not allow a stale state to
+ produce a password-only page with
+ an empty email.
+*/
+
+if(full){
+
+emailInput.value="";
+
+}else{
+
 emailInput.value=
-full
-?
-""
-:
-remembered;
+(
+localStorage.getItem(
+REMEMBERED_EMAIL_KEY
+)||""
+)
+.trim();
+
+}
 
 
 document.getElementById(
@@ -2969,7 +2303,6 @@ document.getElementById(
 "true"
 );
 
-
 document.body.classList.remove(
 "auth-pending"
 );
@@ -2987,10 +2320,7 @@ document.getElementById(
 "aguGateMessage"
 );
 
-
-e.textContent=
-text;
-
+e.textContent=text;
 
 e.className=
 "agu-auth-message show "+
@@ -3037,18 +2367,21 @@ REMEMBERED_EMAIL_KEY
 .toLowerCase();
 
 
-const mustUseFullLogin=
-localStorage.getItem(
-REQUIRE_FULL_LOGIN_KEY
-)==="1"
-||
-!remembered;
-
-
 /*
-A login that has just been completed
-on auth.html is admitted once.
+ Authentication state is determined by
+ the actual remembered email, not by
+ the Supabase session alone.
+
+ First login / after sign out:
+ Email + Password
+
+ Returning without sign out:
+ Password only
+
+ If a session exists but there is no
+ remembered email, force full login.
 */
+
 
 if(
 session?.user?.email_confirmed_at
@@ -3060,13 +2393,10 @@ sessionStorage.removeItem(
 JUST_LOGGED_IN_KEY
 );
 
-
 currentUser=
 session.user;
 
-
 hideAuthGate();
-
 
 return true;
 
@@ -3074,34 +2404,38 @@ return true;
 
 
 /*
-If a Supabase session exists but there is
-no remembered email, NEVER show the
-password-only gate.
+ This branch is only password-only when
+ a REAL remembered email exists.
 */
 
 if(
 session?.user?.email_confirmed_at
+&&
+remembered
 ){
 
 currentUser=
 session.user;
 
-
 showAuthGate(
-mustUseFullLogin
-?
-"full"
-:
 "password"
 );
-
 
 return false;
 
 }
 
 
-showAuthGate("full");
+/*
+ No remembered email.
+
+ This repairs the exact problem shown
+ in the screenshot.
+*/
+
+showAuthGate(
+"full"
+);
 
 return false;
 
@@ -3110,66 +2444,14 @@ return false;
 
 async function verifyHomepageLogin(){
 
-/*
-Re-evaluate the mode at click time so stale
-localStorage cannot trap the user on a
-password-only screen without an email.
-*/
-
-const remembered=
-(
-localStorage.getItem(
-REMEMBERED_EMAIL_KEY
-)||""
-)
-.trim()
-.toLowerCase();
-
-
-const forcedFull=
-localStorage.getItem(
-REQUIRE_FULL_LOGIN_KEY
-)==="1";
-
-
-let full=
+const emailWrap=
 document.getElementById(
 "aguGateEmailWrap"
-)
-.style.display!=="none";
+);
 
 
-if(
-!remembered
-||
-forcedFull
-){
-
-full=true;
-
-}
-
-
-if(full){
-
-document.getElementById(
-"aguGateEmailWrap"
-)
-.style.display="block";
-
-
-document.getElementById(
-"aguGateEmail"
-)
-.disabled=false;
-
-
-document.getElementById(
-"aguGateEmail"
-)
-.required=true;
-
-}
+const full=
+emailWrap.style.display!=="none";
 
 
 const email=
@@ -3180,7 +2462,11 @@ document.getElementById(
 "aguGateEmail"
 ).value
 :
-remembered
+(
+localStorage.getItem(
+REMEMBERED_EMAIL_KEY
+)||""
+)
 )
 .trim()
 .toLowerCase();
@@ -3195,27 +2481,39 @@ document.getElementById(
 if(!email){
 
 /*
-Extra protection:
-if the email is missing, make the field
-visible and clickable immediately.
+ Safety fallback:
+ restore the email field immediately
+ instead of showing a broken password-only
+ screen.
 */
 
-document.getElementById(
-"aguGateEmailWrap"
-)
-.style.display="block";
+emailWrap.style.display=
+"block";
 
 
-document.getElementById(
-"aguGateEmail"
-)
-.disabled=false;
-
-
+const input=
 document.getElementById(
 "aguGateEmail"
-)
-.required=true;
+);
+
+
+input.disabled=false;
+
+input.required=true;
+
+input.value="";
+
+
+document.getElementById(
+"aguGateTitle"
+).textContent=
+"Sign in to AGULIBRARY";
+
+
+document.getElementById(
+"aguGateText"
+).textContent=
+"Enter your email and password to access AGULIBRARY.";
 
 
 gateMessage(
@@ -3223,11 +2521,7 @@ gateMessage(
 );
 
 
-document.getElementById(
-"aguGateEmail"
-)
-.focus();
-
+input.focus();
 
 return;
 
@@ -3239,12 +2533,6 @@ if(!password){
 gateMessage(
 "Enter your password."
 );
-
-document.getElementById(
-"aguGatePassword"
-)
-.focus();
-
 
 return;
 
@@ -3286,9 +2574,7 @@ throw new Error(
 );
 
 
-if(
-!user.email_confirmed_at
-){
+if(!user.email_confirmed_at){
 
 await client.auth.signOut();
 
@@ -3300,8 +2586,9 @@ throw new Error(
 
 
 /*
-Remember email only.
-Never store password.
+ Remember email only.
+
+ Password is NEVER stored.
 */
 
 localStorage.setItem(
@@ -3326,7 +2613,6 @@ user;
 
 hideAuthGate();
 
-
 await loadSession();
 
 await loadResources();
@@ -3335,7 +2621,8 @@ await loadResources();
 }catch(e){
 
 gateMessage(
-e.message||
+e.message
+||
 "The email or password is incorrect."
 );
 
@@ -3389,10 +2676,7 @@ const p=
 await client
 .from("student_profiles")
 .select("*")
-.eq(
-"user_id",
-currentUser.id
-)
+.eq("user_id",currentUser.id)
 .maybeSingle();
 
 
@@ -3406,8 +2690,7 @@ const d=
 p.data;
 
 
-const n=
-[
+const n=[
 d.first_name,
 d.middle_name,
 d.last_name
@@ -3420,10 +2703,8 @@ d.last_name
 if(n)
 name=n;
 
-
 if(d.phone)
 phone=d.phone;
-
 
 if(d.date_of_birth)
 dob=d.date_of_birth;
@@ -3445,48 +2726,40 @@ setText(
 name
 );
 
-
 setText(
 "accountEmail",
 currentUser.email||""
 );
-
 
 setText(
 "profileName",
 name
 );
 
-
 setText(
 "profileEmail",
 currentUser.email||""
 );
-
 
 setText(
 "menuProfileName",
 name
 );
 
-
 setText(
 "menuProfileEmail",
 currentUser.email||"—"
 );
-
 
 setText(
 "menuProfilePhone",
 phone
 );
 
-
 setText(
 "menuProfileDob",
 dob
 );
-
 
 setText(
 "menuProfileId",
@@ -3509,12 +2782,9 @@ updateStudentStats();
 
 function setupMenu(){
 
-document
-.getElementById(
+document.getElementById(
 "menuButton"
-)
-.onclick=
-()=>{
+).onclick=()=>{
 
 const p=
 document.getElementById(
@@ -3528,8 +2798,7 @@ p.classList.toggle(
 );
 
 
-document
-.getElementById(
+document.getElementById(
 "menuButton"
 )
 .setAttribute(
@@ -3572,91 +2841,62 @@ closeInternalPages
 );
 
 
-document
-.getElementById(
+document.getElementById(
 "settingsSignOut"
-)
-.onclick=
+).onclick=
 signOut;
 
 
-document
-.getElementById(
+document.getElementById(
 "generateInvite"
-)
-.onclick=
+).onclick=
 generateInvitation;
 
 
-document
-.getElementById(
+document.getElementById(
 "copyInvite"
-)
-.onclick=
+).onclick=
 copyInvitation;
 
 
-document
-.getElementById(
+document.getElementById(
 "securityReset"
-)
-.onclick=
+).onclick=
 securityReset;
 
 
-document
-.getElementById(
+document.getElementById(
 "changeEmail"
-)
-.onclick=
+).onclick=
 changeEmail;
 
 
-document
-.getElementById(
+document.getElementById(
 "changePhone"
-)
-.onclick=
+).onclick=
 changePhone;
 
 
-document
-.getElementById(
+document.getElementById(
 "aguGateButton"
-)
-.onclick=
+).onclick=
 verifyHomepageLogin;
 
 
-document
-.getElementById(
-"aguGateEmail"
-)
-.addEventListener(
-"keydown",
-e=>{
-if(e.key==="Enter")
-verifyHomepageLogin();
-}
-);
-
-
-document
-.getElementById(
+document.getElementById(
 "aguGatePassword"
-)
-.onkeydown=
+).onkeydown=
 e=>{
+
 if(e.key==="Enter")
 verifyHomepageLogin();
+
 };
 
 
-document
-.getElementById(
+document.getElementById(
 "aguGatePasswordToggle"
-)
-.onclick=
+).onclick=
 ()=>{
 
 const i=
@@ -3685,9 +2925,7 @@ document
 )
 .forEach(
 x=>
-x.classList.remove(
-"show"
-)
+x.classList.remove("show")
 );
 
 }
@@ -3759,9 +2997,7 @@ x=
 JSON.parse(
 localStorage.getItem(
 invitationKey()
-)
-||
-"null"
+)||"null"
 );
 
 }catch(e){}
@@ -3774,22 +3010,19 @@ setText(
 x.code
 );
 
-
 setText(
 "inviteLink",
 x.link
 );
 
 
-document
-.getElementById(
+document.getElementById(
 "generateInvite"
 )
 .disabled=true;
 
 
-document
-.getElementById(
+document.getElementById(
 "generateInvite"
 )
 .textContent=
@@ -3802,22 +3035,19 @@ setText(
 "Not generated"
 );
 
-
 setText(
 "inviteLink",
 "Not generated"
 );
 
 
-document
-.getElementById(
+document.getElementById(
 "generateInvite"
 )
 .disabled=false;
 
 
-document
-.getElementById(
+document.getElementById(
 "generateInvite"
 )
 .textContent=
@@ -3843,9 +3073,7 @@ old=
 JSON.parse(
 localStorage.getItem(
 invitationKey()
-)
-||
-"null"
+)||"null"
 );
 
 }catch(e){}
@@ -3912,15 +3140,15 @@ loadInvitation();
 async function copyInvitation(){
 
 const link=
-document
-.getElementById(
+document.getElementById(
 "inviteLink"
 )
 .textContent;
 
 
 if(
-!link||
+!link
+||
 link==="Not generated"
 )
 return;
@@ -3933,8 +3161,7 @@ link
 );
 
 
-document
-.getElementById(
+document.getElementById(
 "copyInvite"
 )
 .textContent=
@@ -3942,16 +3169,11 @@ document
 
 
 setTimeout(
-()=>{
-
-document
-.getElementById(
+()=>
+document.getElementById(
 "copyInvite"
-)
-.textContent=
-"Copy Link";
-
-},
+).textContent=
+"Copy Link",
 1500
 );
 
@@ -3970,9 +3192,7 @@ async function securityReset(){
 try{
 
 const r=
-await client
-.auth
-.resetPasswordForEmail(
+await client.auth.resetPasswordForEmail(
 currentUser.email,
 {
 redirectTo:
@@ -3995,7 +3215,8 @@ showSecurityMessage(
 }catch(e){
 
 showSecurityMessage(
-e.message||
+e.message
+||
 "Unable to send password reset email.",
 "error"
 );
@@ -4008,8 +3229,7 @@ e.message||
 async function changeEmail(){
 
 const email=
-document
-.getElementById(
+document.getElementById(
 "newEmail"
 )
 .value
@@ -4017,14 +3237,11 @@ document
 .toLowerCase();
 
 
-if(!email){
-
+if(!email)
 return showSecurityMessage(
 "Enter the new email address.",
 "error"
 );
-
-}
 
 
 try{
@@ -4048,7 +3265,8 @@ showSecurityMessage(
 }catch(e){
 
 showSecurityMessage(
-e.message||
+e.message
+||
 "Unable to change email.",
 "error"
 );
@@ -4061,22 +3279,18 @@ e.message||
 async function changePhone(){
 
 const phone=
-document
-.getElementById(
+document.getElementById(
 "newPhone"
 )
 .value
 .trim();
 
 
-if(!phone){
-
+if(!phone)
 return showSecurityMessage(
 "Enter the new phone number.",
 "error"
 );
-
-}
 
 
 try{
@@ -4100,7 +3314,8 @@ showSecurityMessage(
 }catch(e){
 
 showSecurityMessage(
-e.message||
+e.message
+||
 "Unable to change phone number.",
 "error"
 );
@@ -4123,7 +3338,6 @@ document.getElementById(
 
 e.textContent=t;
 
-
 e.className=
 "agu-auth-message show "+
 type;
@@ -4134,9 +3348,10 @@ type;
 async function signOut(){
 
 /*
-IMPORTANT:
-After sign out the next website
-entry requires BOTH email and password.
+ IMPORTANT:
+ Signing out removes the remembered
+ email so the next visit requires
+ EMAIL + PASSWORD.
 */
 
 localStorage.setItem(
@@ -4380,9 +3595,7 @@ subject:""
 
 
 const subjects=
-HIERARCHY[main]?.[area]
-||
-[];
+HIERARCHY[main]?.[area]||[];
 
 
 setText(
@@ -4401,7 +3614,7 @@ area
 
 setText(
 "flowSubtitle",
-"Choose a related subject. Resources will be shown only after selecting a subject."
+`Choose a related subject. Resources will be shown only after selecting a subject.`
 );
 
 
@@ -4468,24 +3681,21 @@ setText(
 );
 
 
-document
-.getElementById(
+document.getElementById(
 "flowGrid"
 )
 .style.display=
 "none";
 
 
-document
-.getElementById(
+document.getElementById(
 "leafTools"
 )
 .style.display=
 "grid";
 
 
-document
-.getElementById(
+document.getElementById(
 "leafResourceGrid"
 )
 .style.display=
@@ -4539,8 +3749,7 @@ document
 function resourceMatches(r){
 
 const q=
-document
-.getElementById(
+document.getElementById(
 "leafSearch"
 )
 .value
@@ -4549,8 +3758,7 @@ document
 
 
 const type=
-document
-.getElementById(
+document.getElementById(
 "leafType"
 )
 .value
@@ -4658,7 +3866,7 @@ flow.level.startsWith("Primary")
 );
 
 
-return(
+return
 subjectOK
 &&
 parentOK
@@ -4667,8 +3875,7 @@ levelOK
 &&
 (!type||rType===type)
 &&
-(!q||searchable.includes(q))
-);
+(!q||searchable.includes(q));
 
 }
 
@@ -4707,8 +3914,7 @@ escAttr(r.id);
 
 const type=
 String(
-r.type||
-"resource"
+r.type||"resource"
 )
 .toLowerCase()
 .trim();
@@ -4728,41 +3934,8 @@ r.description||
 );
 
 
-return `
-<article class="resource-card">
-
-<div class="resource-icon">
-${icon(type)}
-</div>
-
-<span class="resource-type">
-${esc(type.toUpperCase())}
-</span>
-
-<h3>
-${title}
-</h3>
-
-<p>
-${desc}
-</p>
-
-<button
-type="button"
-data-resource="${id}"
->
-${
-type==="lesson"||
-type==="course"
-?
-"📖 Open Lesson →"
-:
-"Open Resource →"
-}
-</button>
-
-</article>
-`;
+return
+`<article class="resource-card"><div class="resource-icon">${icon(type)}</div><span class="resource-type">${esc(type.toUpperCase())}</span><h3>${title}</h3><p>${desc}</p><button type="button" data-resource="${id}">${type==="lesson"||type==="course"?"📖 Open Lesson →":"Open Resource →"}</button></article>`;
 
 }
 )
@@ -4777,8 +3950,7 @@ grid
 btn=>
 btn.addEventListener(
 "click",
-()=>
-openResource(
+()=>openResource(
 btn.dataset.resource
 )
 )
@@ -4807,8 +3979,7 @@ recordRecent(id);
 
 const type=
 String(
-r.type||
-""
+r.type||""
 )
 .toLowerCase()
 .trim();
@@ -4822,9 +3993,7 @@ type==="course"
 
 location.href=
 "lesson.html?id="+
-encodeURIComponent(
-r.id
-);
+encodeURIComponent(r.id);
 
 return;
 
@@ -4867,12 +4036,8 @@ try{
 
 return JSON.parse(
 localStorage.getItem(
-SAVED_KEY+
-"_"+
-currentUser.id
-)
-||
-"[]"
+SAVED_KEY+"_"+currentUser.id
+)||"[]"
 );
 
 }catch(e){
@@ -4894,12 +4059,8 @@ try{
 
 return JSON.parse(
 localStorage.getItem(
-RECENT_KEY+
-"_"+
-currentUser.id
-)
-||
-"[]"
+RECENT_KEY+"_"+currentUser.id
+)||"[]"
 );
 
 }catch(e){
@@ -4928,14 +4089,9 @@ String(id)
 
 
 localStorage.setItem(
-RECENT_KEY+
-"_"+
-currentUser.id,
+RECENT_KEY+"_"+currentUser.id,
 JSON.stringify(
-a.slice(
-0,
-12
-)
+a.slice(0,12)
 )
 );
 
@@ -4985,14 +4141,9 @@ String(id),
 
 
 localStorage.setItem(
-SAVED_KEY+
-"_"+
-currentUser.id,
+SAVED_KEY+"_"+currentUser.id,
 JSON.stringify(
-a.slice(
-0,
-100
-)
+a.slice(0,100)
 )
 );
 
@@ -5037,7 +4188,8 @@ r.type||""
 setText(
 "statSubjects",
 new Set(
-allResources.map(
+allResources
+.map(
 r=>
 r.subject||
 r.subject_name||
@@ -5084,7 +4236,10 @@ getRecent();
 
 
 const make=
-(ids,empty)=>{
+(
+ids,
+empty
+)=>{
 
 const rows=
 ids
@@ -5114,8 +4269,7 @@ r=>
 
 document.getElementById(
 "savedList"
-)
-.innerHTML=
+).innerHTML=
 make(
 saved,
 "No saved resources yet."
@@ -5124,8 +4278,7 @@ saved,
 
 document.getElementById(
 "recentList"
-)
-.innerHTML=
+).innerHTML=
 make(
 recent,
 "You haven't opened a resource yet."
@@ -5140,8 +4293,7 @@ document
 b=>
 b.addEventListener(
 "click",
-()=>
-openResource(
+()=>openResource(
 b.dataset.open
 )
 )
@@ -5223,26 +4375,20 @@ show
 
 
 tl.onclick=
-()=>
-toggle(
-!tp.classList.contains(
-"show"
-)
+()=>toggle(
+!tp.classList.contains("show")
 );
 
 
 document.getElementById(
 "closeTeacher"
-)
-.onclick=
-()=>
-toggle(false);
+).onclick=
+()=>toggle(false);
 
 
 document.getElementById(
 "teacherSend"
-)
-.onclick=
+).onclick=
 sendTeacher;
 
 
@@ -5253,9 +4399,7 @@ document.getElementById(
 "keydown",
 e=>{
 
-if(
-e.key==="Enter"
-){
+if(e.key==="Enter"){
 
 e.preventDefault();
 
@@ -5302,9 +4446,7 @@ d.textContent=
 text;
 
 
-box.appendChild(
-d
-);
+box.appendChild(d);
 
 
 box.scrollTop=
@@ -5323,19 +4465,27 @@ const r=
 await fetch(
 endpoint,
 {
+
 method:"POST",
+
 headers:{
 "Content-Type":
 "application/json"
 },
+
 body:
 JSON.stringify({
+
 message,
+
 conversation,
+
 student_id:
 currentUser?.id||
 null
+
 })
+
 }
 );
 
@@ -5350,12 +4500,11 @@ const d=
 await r.json();
 
 
-return(
+return
 d.answer||
 d.message||
 d.response||
-"The AI returned no answer."
-);
+"The AI returned no answer.";
 
 }
 
@@ -5391,12 +4540,17 @@ true
 
 input.value="";
 
-btn.disabled=true;
+
+btn.disabled=
+true;
 
 
 teacherConversation.push({
+
 role:"user",
+
 content:m
+
 });
 
 
@@ -5404,17 +4558,19 @@ try{
 
 const answer=
 await callAI(
+
 (
 window.AGU_CONFIG?.supabaseUrl||
 ""
 )
-.replace(
-/\/$/,
-""
-)+
+.replace(/\/$/,"")
++
 "/functions/v1/ai-learning-agent",
+
 m,
+
 teacherConversation
+
 );
 
 
@@ -5426,8 +4582,11 @@ false
 
 
 teacherConversation.push({
+
 role:"assistant",
+
 content:answer
+
 });
 
 
@@ -5435,19 +4594,185 @@ content:answer
 
 addChat(
 "teacherChat",
+
 "The AI Learning Teacher interface is ready, but its secure AI backend endpoint still needs to be connected.",
+
 false
 );
 
 }
 
 
-btn.disabled=false;
+btn.disabled=
+false;
+
 
 input.focus();
 
 }
 
+
+/* =====================================================
+   SUBJECT CARD EVENTS
+===================================================== */
+
+document
+.querySelectorAll(
+"[data-main]"
+)
+.forEach(
+button=>
+button.addEventListener(
+"click",
+()=>openLevelPage(
+button.dataset.main
+)
+)
+);
+
+
+/* =====================================================
+   FLOW BACK
+===================================================== */
+
+document.getElementById(
+"flowBack"
+).addEventListener(
+"click",
+backFlow
+);
+
+
+/* =====================================================
+   RESOURCE FILTERS
+===================================================== */
+
+document.getElementById(
+"leafSearch"
+).addEventListener(
+"input",
+()=>{
+
+if(flow.subject)
+renderLeafResources();
+
+}
+);
+
+
+document.getElementById(
+"leafType"
+).addEventListener(
+"change",
+()=>{
+
+if(flow.subject)
+renderLeafResources();
+
+}
+);
+
+
+/* =====================================================
+   MY LEARNING BUTTON
+===================================================== */
+
+document.getElementById(
+"accountDetailsButton"
+).addEventListener(
+"click",
+()=>{
+
+const account=
+document.getElementById(
+"account"
+);
+
+
+account.classList.toggle(
+"show"
+);
+
+
+account.setAttribute(
+"aria-hidden",
+account.classList.contains("show")
+?
+"false"
+:
+"true"
+);
+
+
+if(
+account.classList.contains("show")
+){
+
+account.scrollIntoView({
+behavior:"smooth",
+block:"start"
+});
+
+}
+
+}
+);
+
+
+/* =====================================================
+   LOAD RESOURCES
+===================================================== */
+
+async function loadResources(){
+
+if(!client)
+return;
+
+
+try{
+
+const r=
+await client
+.from("media")
+.select("*")
+.order(
+"created_at",
+{
+ascending:false
+}
+);
+
+
+if(r.error)
+throw r.error;
+
+
+allResources=
+r.data||
+[];
+
+
+updateStudentStats();
+
+
+}catch(e){
+
+console.warn(
+"Resources:",
+e
+);
+
+
+allResources=[];
+
+}
+
+}
+
+
+/* =====================================================
+   START APPLICATION
+===================================================== */
 
 document.addEventListener(
 "DOMContentLoaded",
@@ -5459,4 +4784,4 @@ init
 </script>
 
 </body>
-</html>
+  </html>

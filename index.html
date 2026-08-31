@@ -3,122 +3,2968 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#087a4b">
-<title>AGULIBRARY — Global Digital Education</title>
+<title>AGULIBRARY — Global Learning Library</title>
+<link rel="stylesheet" href="style.css">
 <style>
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#f4fbf7;color:#17352a;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-button,input,select{font:inherit}button{cursor:pointer}a{text-decoration:none;color:inherit}
-header{position:sticky;top:0;z-index:100;background:#fffffff7;border-bottom:1px solid #dceee6;box-shadow:0 5px 22px #087a4b12;backdrop-filter:blur(14px)}
-nav{width:min(1250px,100%);margin:auto;min-height:72px;padding:10px 5%;display:flex;align-items:center;gap:14px}
-.brand{display:flex;align-items:center;gap:11px;flex:1}.mark{width:48px;height:48px;border-radius:15px;background:#087a4b;color:#fff;display:grid;place-items:center;font-weight:900;font-size:20px}
-.brand b{display:block;font-size:19px;color:#123d2d}.brand small{display:block;color:#6d8178;font-size:9px;letter-spacing:1px;margin-top:3px}
-.actions{display:flex;gap:8px;align-items:center}.btn{border:1px solid #b9dccd;background:#fff;color:#087a4b;padding:10px 14px;border-radius:11px;font-weight:800}.primary{background:#087a4b;color:#fff;border-color:#087a4b}
-.menu{position:relative}.panel{display:none;position:absolute;right:0;top:47px;width:210px;background:#fff;border:1px solid #cfe5da;border-radius:15px;padding:8px;box-shadow:0 15px 35px #087a4b24}.panel.show{display:block}.panel button{display:block;width:100%;border:0;background:#fff;text-align:left;padding:12px;border-radius:10px;color:#214638;font-weight:800}.panel button:hover{background:#e8f8f0}
-main{width:min(1250px,100%);margin:auto;padding:28px 5% 70px}.hero{display:grid;grid-template-columns:1.25fr .75fr;gap:24px;align-items:center;background:linear-gradient(135deg,#e8f8f0,#eaf3ff);border:1px solid #ccebdd;border-radius:28px;padding:42px}
-.eyebrow{color:#087a4b;font-size:11px;letter-spacing:.12em;font-weight:900}.hero h1{font-size:clamp(36px,6vw,68px);line-height:1.02;margin:8px 0}.hero p,.head p{color:#687d74;line-height:1.7}.hero-art{min-height:260px;border-radius:24px;background:linear-gradient(145deg,#087a4b,#1257a6);color:#fff;display:grid;place-items:center;text-align:center;padding:25px}.big{font-size:75px}
-.section{margin-top:38px}.head{margin-bottom:17px}.head h2{font-size:29px;margin:5px 0}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.card{background:#fff;border:1px solid #dceee6;border-radius:20px;padding:21px;box-shadow:0 8px 25px #087a4b0f}.feature{text-align:center}.icon{font-size:35px}.card h3{margin:9px 0 5px}.card p{color:#718079;font-size:14px;line-height:1.6}
-.toolbar{display:flex;gap:9px;margin-bottom:14px}.search,.payment select,.payment input{width:100%;padding:12px;border:1px solid #cfe5da;border-radius:10px;background:#fff}.status{padding:20px;background:#fff;border:1px dashed #cfe5da;border-radius:16px;color:#718079}.resource-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.resource{background:#fff;border:1px solid #dceee6;border-radius:20px;padding:20px}.resource h3{color:#1257a6}.open{background:#087a4b;color:#fff;border:0;border-radius:10px;padding:10px 13px;font-weight:800}
-.payment{background:linear-gradient(135deg,#075c46,#1257a6);color:#fff;border-radius:25px;padding:30px}.payment .eyebrow{color:#bff0da}.payment p{color:#d9eee6;line-height:1.6}.paygrid{display:grid;grid-template-columns:1fr 1fr;gap:20px}.payment-card{background:#fff;color:#17352a;border-radius:18px;padding:22px}.payment-card label{display:block;font-weight:800;font-size:13px;margin:12px 0 6px}.pay{width:100%;margin-top:15px;padding:12px;border:0;border-radius:11px;background:#087a4b;color:#fff;font-weight:900}
-.support{background:#fff;border:1px solid #dceee6;border-radius:22px;padding:25px;display:flex;justify-content:space-between;align-items:center;gap:20px}
-.learning{background:#fff;border:1px solid #ccebdd;border-radius:25px;padding:28px;margin-top:38px}.ai{background:#f4fbf7;border:1px solid #dceee6;border-radius:20px;overflow:hidden}.aihead{display:flex;gap:14px;align-items:center;padding:20px;background:#e8f8f0}.avatar{width:62px;height:62px;border-radius:50%;object-fit:cover;background:#087a4b}.ready{margin-left:auto;background:#fff;color:#087a4b;padding:7px 10px;border-radius:99px;font-size:12px;font-weight:900}.chat{padding:18px;max-height:440px;overflow:auto}.msg{display:flex;margin:10px 0}.bubble{max-width:850px;white-space:pre-line;line-height:1.6;background:#fff;border:1px solid #dceee6;border-radius:15px;padding:13px 15px}.user{justify-content:flex-end}.user .bubble{background:#087a4b;color:#fff;border-color:#087a4b}.quick{display:flex;gap:8px;flex-wrap:wrap;padding:0 18px 15px}.quick button{border:1px solid #b9dccd;background:#fff;color:#087a4b;border-radius:10px;padding:9px;font-weight:800;font-size:12px}.aiinput{display:flex;gap:8px;padding:15px;background:#fff;border-top:1px solid #dceee6}.aiinput input{flex:1;padding:12px;border:1px solid #cfe5da;border-radius:10px}
-footer{text-align:center;padding:30px 5%;background:#fff;border-top:1px solid #dceee6;color:#70837b}footer b{color:#087a4b}
-@media(max-width:850px){.hero{grid-template-columns:1fr}.grid,.resource-grid,.paygrid{grid-template-columns:repeat(2,1fr)}}@media(max-width:560px){.grid,.resource-grid,.paygrid{grid-template-columns:1fr}.toolbar,.support{display:block}.toolbar .btn,.support .btn{width:100%;margin-top:9px}.hero{padding:25px}.brand small{font-size:7px}}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:#f4fbf7;color:#17352a;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+button,input,select{font:inherit}
+button,a{cursor:pointer}
+.nav{position:sticky;top:0;z-index:1000;display:flex;align-items:center;gap:18px;padding:12px 5%;background:rgba(255,255,255,.97);border-bottom:1px solid #dceee6;box-shadow:0 5px 22px rgba(8,122,75,.07);backdrop-filter:blur(12px)}
+.brand{display:flex;align-items:center;gap:11px;text-decoration:none;color:#17352a;margin-right:auto}
+.mark{width:48px;height:48px;border-radius:15px;background:#087a4b;color:#fff;display:grid;place-items:center;font-weight:900}
+.brand b{display:block;color:#123d2d;font-size:20px}.brand small{display:block;color:#71847b;font-size:9px;letter-spacing:2px;margin-top:2px}
+.nav-links{display:flex;gap:16px;align-items:center}.nav-links a{color:#426056;text-decoration:none;font-weight:800;font-size:14px}
+.btn{border:0;border-radius:11px;padding:11px 16px;font-weight:800;text-decoration:none;display:inline-flex;align-items:center;justify-content:center}
+.primary{background:#087a4b;color:#fff}.outline{background:#fff;color:#087a4b;border:1px solid #b9dccd}.danger{background:#fff0f0;color:#b42323;border:1px solid #efcccc}
+
+.hero{
+width:min(1250px,92%);
+margin:14px auto 12px;
+display:grid;
+grid-template-columns:1.05fr .95fr;
+gap:25px;
+align-items:center;
+background:linear-gradient(135deg,#e7f8ef,#fff);
+border:1px solid #ccebdd;
+border-radius:30px;
+padding:clamp(20px,3vw,34px);
+box-shadow:0 15px 40px rgba(8,122,75,.07)
+}
+
+.eyebrow{color:#087a4b;font-size:11px;font-weight:900;letter-spacing:3px}
+.hero h1{margin:12px 0;color:#123d2d;font-size:clamp(38px,6vw,68px);line-height:1.02}
+.hero h1 em{color:#087a4b;font-style:normal}
+.hero p{color:#657970;line-height:1.7;font-size:16px;max-width:680px}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+
+.hero-art{
+min-height:220px;
+position:relative;
+display:grid;
+place-items:center
+}
+
+.orb{
+position:absolute;
+width:260px;
+height:260px;
+border-radius:50%;
+background:#d4f3e4
+}
+
+.book{
+position:relative;
+z-index:2;
+width:145px;
+height:180px;
+border-radius:10px 18px 18px 10px;
+background:#087a4b;
+color:#fff;
+display:grid;
+place-items:center;
+font-size:72px;
+box-shadow:18px 18px 0 #b9e7d0;
+transform:rotate(-5deg)
+}
+
+.float{
+position:absolute;
+background:#fff;
+border:1px solid #dceee6;
+border-radius:14px;
+padding:10px 13px;
+box-shadow:0 10px 25px rgba(8,122,75,.09);
+font-weight:900;
+font-size:13px
+}
+
+.float small{color:#71847b;font-weight:600}
+.float.a{left:4%;top:20%}
+.float.b{right:0;top:15%}
+.float.c{right:8%;bottom:14%}
+
+.section{
+width:min(1250px,92%);
+margin:14px auto
+}
+
+.section h2{
+margin:7px 0;
+color:#173b2d;
+font-size:32px
+}
+
+.muted{
+color:#71847b;
+line-height:1.6
+}
+
+.account-bar{
+width:min(1250px,92%);
+margin:0 auto 20px;
+display:none;
+align-items:center;
+justify-content:space-between;
+gap:12px;
+background:#fff;
+border:1px solid #dceee6;
+border-radius:18px;
+padding:13px 16px;
+box-shadow:0 8px 25px rgba(8,122,75,.05)
+}
+
+.account-bar.show{display:flex}
+.account-name{font-weight:900;color:#173b2d}
+.account-email{font-size:12px;color:#71847b}
+
+.subject-grid{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:12px
+}
+
+.main-subject{
+min-height:125px;
+padding:22px;
+background:#fff;
+border:1px solid #dceee6;
+border-radius:21px;
+text-align:left;
+box-shadow:0 10px 28px rgba(8,122,75,.05);
+transition:.2s
+}
+
+.main-subject:hover{
+transform:translateY(-3px);
+border-color:#9ed9bb
+}
+
+.main-subject .icon{
+font-size:30px;
+margin-bottom:13px
+}
+
+.main-subject b{
+display:block;
+color:#214638;
+font-size:18px
+}
+
+.main-subject small{
+display:block;
+color:#788a82;
+line-height:1.5;
+margin-top:6px
+}
+
+.flow{
+display:none;
+background:#fff;
+border:1px solid #dceee6;
+border-radius:24px;
+padding:26px;
+margin:25px auto;
+width:min(1250px,92%);
+box-shadow:0 12px 35px rgba(8,122,75,.06)
+}
+
+.flow.show{display:block}
+
+.flow-top{
+display:flex;
+justify-content:space-between;
+gap:10px;
+align-items:center
+}
+
+.back{
+border:1px solid #b9dccd;
+background:#fff;
+color:#087a4b;
+border-radius:10px;
+padding:9px 13px;
+font-weight:800
+}
+
+.flow h2{
+margin:8px 0;
+color:#173b2d;
+font-size:32px
+}
+
+.flow p{
+color:#71847b;
+line-height:1.6
+}
+
+.flow-grid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:14px;
+margin-top:20px
+}
+
+.flow-card{
+min-height:125px;
+border:1px solid #dceee6;
+background:#f7fcfa;
+border-radius:18px;
+padding:19px;
+text-align:left;
+transition:.2s
+}
+
+.flow-card:hover{
+transform:translateY(-2px);
+border-color:#91d2b1;
+background:#fff
+}
+
+.flow-card .icon{font-size:25px}
+
+.flow-card strong{
+display:block;
+color:#214638;
+font-size:18px;
+margin-top:9px
+}
+
+.flow-card small{
+display:block;
+color:#788a82;
+margin-top:6px;
+line-height:1.45
+}
+
+.resource-tools{
+display:grid;
+grid-template-columns:1fr 200px;
+gap:10px;
+margin-top:18px
+}
+
+.resource-tools input,
+.resource-tools select{
+width:100%;
+padding:13px;
+border:1px solid #cfe5da;
+border-radius:11px;
+background:#fff;
+color:#17352a
+}
+
+.resource-grid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:14px;
+margin-top:16px
+}
+
+.resource-card{
+background:#fff;
+border:1px solid #dceee6;
+border-radius:18px;
+padding:18px;
+display:flex;
+flex-direction:column
+}
+
+.resource-icon{
+font-size:28px;
+width:52px;
+height:52px;
+border-radius:14px;
+background:#e8f8f0;
+display:grid;
+place-items:center
+}
+
+.resource-type{
+display:inline-block;
+margin-top:11px;
+padding:5px 8px;
+border-radius:20px;
+background:#f0f8f4;
+color:#087a4b;
+font-size:10px;
+font-weight:900;
+letter-spacing:1px;
+align-self:flex-start
+}
+
+.resource-card h3{
+color:#214638;
+margin:10px 0 5px
+}
+
+.resource-card p{
+color:#71847b;
+line-height:1.5;
+flex:1
+}
+
+.resource-card button{
+border:0;
+border-radius:10px;
+padding:11px;
+background:#087a4b;
+color:#fff;
+font-weight:800
+}
+
+.empty{
+padding:28px;
+text-align:center;
+color:#71847b;
+background:#f7fcfa;
+border:1px dashed #bfded0;
+border-radius:15px;
+grid-column:1/-1
+}
+
+.ai-launch{
+position:fixed;
+right:18px;
+top:82px;
+z-index:1200;
+display:flex;
+align-items:center;
+gap:8px;
+background:#fff;
+border:1px solid #cfe5da;
+border-radius:18px;
+padding:7px 10px 7px 7px;
+box-shadow:0 10px 30px rgba(8,122,75,.15)
+}
+
+.ai-launch img{
+width:54px;
+height:54px;
+border-radius:50%;
+object-fit:cover
+}
+
+.ai-launch span{
+font-size:11px;
+font-weight:900;
+color:#087a4b
+}
+
+.ai-panel{
+position:fixed;
+inset:0;
+width:100vw;
+height:100vh;
+z-index:1300;
+background:#fff;
+border:1px solid #cfe5da;
+border-radius:24px;
+box-shadow:0 25px 70px rgba(8,25,18,.22);
+display:none;
+overflow:hidden
+}
+
+.ai-panel.show{
+display:flex;
+flex-direction:column
+}
+
+.ai-head{
+display:flex;
+align-items:center;
+gap:10px;
+padding:14px;
+background:#e8f8f0
+}
+
+.ai-head img{
+width:48px;
+height:48px;
+border-radius:50%;
+object-fit:cover
+}
+
+.ai-head strong{color:#173b2d}
+
+.ai-head small{
+display:block;
+color:#71847b;
+margin-top:2px
+}
+
+.ai-close{
+margin-left:auto;
+border:0;
+background:transparent;
+font-size:22px;
+color:#087a4b
+}
+
+.chat{
+flex:1;
+overflow:auto;
+padding:15px;
+background:#f7fcfa
+}
+
+.msg{
+max-width:84%;
+padding:11px 13px;
+border-radius:15px;
+background:#fff;
+border:1px solid #dceee6;
+margin-bottom:10px;
+white-space:pre-wrap;
+line-height:1.5
+}
+
+.msg.user{
+margin-left:auto;
+background:#087a4b;
+color:#fff;
+border-color:#087a4b
+}
+
+.chat-input{
+display:flex;
+gap:8px;
+padding:12px;
+border-top:1px solid #dceee6
+}
+
+.chat-input input{
+flex:1;
+padding:12px;
+border:1px solid #cfe5da;
+border-radius:11px
+}
+
+.chat-input button{
+border:0;
+border-radius:11px;
+background:#087a4b;
+color:#fff;
+padding:0 15px;
+font-weight:900
+}
+
+.support{
+width:min(1250px,92%);
+margin:14px auto;
+background:linear-gradient(135deg,#e8f8f0,#fff);
+border:1px solid #ccebdd;
+border-radius:24px;
+padding:22px
+}
+
+.support h2{
+margin:8px 0;
+color:#173b2d
+}
+
+.support p{
+color:#71847b;
+line-height:1.6
+}
+
+.support-actions{
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+margin-top:12px
+}
+
+.support-agent{
+display:none;
+margin-top:20px;
+background:#fff;
+border:1px solid #dceee6;
+border-radius:20px;
+overflow:hidden
+}
+
+.support-agent.show{display:block}
+
+.support-head{
+padding:18px;
+background:#edf8f3
+}
+
+.support-head strong{color:#173b2d}
+
+.support-chat{
+height:300px;
+overflow:auto;
+padding:15px;
+background:#f8fcfa
+}
+
+.support-input{
+display:flex;
+gap:8px;
+padding:12px;
+border-top:1px solid #dceee6
+}
+
+.support-input input{
+flex:1;
+padding:12px;
+border:1px solid #cfe5da;
+border-radius:11px
+}
+
+.support-input button{
+border:0;
+border-radius:11px;
+background:#087a4b;
+color:#fff;
+padding:0 15px;
+font-weight:900
+}
+
+.account-panel{display:none}
+.account-panel.show{display:block}
+
+.account-grid{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:12px
+}
+
+.account-card{
+background:#fff;
+border:1px solid #dceee6;
+border-radius:18px;
+padding:18px
+}
+
+.account-card strong{
+display:block;
+color:#087a4b;
+font-size:28px
+}
+
+.account-card span{
+color:#71847b;
+font-size:13px
+}
+
+.saved-list{margin-top:15px}
+
+.saved-item{
+display:flex;
+justify-content:space-between;
+gap:10px;
+padding:12px;
+border-bottom:1px solid #edf3ef
+}
+
+footer{
+text-align:center;
+padding:30px;
+background:#fff;
+border-top:1px solid #dceee6;
+color:#71847b
+}
+
+footer b{color:#087a4b}
+
+.compatibility-hidden{
+display:none!important
+}
+
+@media(max-width:1000px){
+.subject-grid{grid-template-columns:repeat(2,1fr)}
+.resource-grid{grid-template-columns:repeat(2,1fr)}
+.account-grid{grid-template-columns:repeat(2,1fr)}
+}
+
+@media(max-width:760px){
+.nav{flex-wrap:wrap}
+.nav-links{
+order:3;
+width:100%;
+justify-content:center
+}
+.hero{grid-template-columns:1fr}
+.hero-art{min-height:240px}
+.ai-launch{
+top:auto;
+bottom:18px
+}
+.ai-panel{
+inset:0;
+width:100vw;
+height:100vh
+}
+.flow-grid{grid-template-columns:1fr 1fr}
+.resource-grid{grid-template-columns:1fr}
+.resource-tools{grid-template-columns:1fr}
+.account-bar{
+align-items:flex-start;
+flex-direction:column
+}
+}
+
+@media(max-width:520px){
+.subject-grid{grid-template-columns:1fr}
+.flow-grid{grid-template-columns:1fr}
+.account-grid{grid-template-columns:1fr}
+.hero{padding:20px}
+.float{font-size:11px}
+.float.a{left:0}
+.float.b{right:0}
+}
 </style>
 </head>
+
 <body>
-<header><nav>
-<div class="brand"><div class="mark">AG</div><div><b>AGULIBRARY</b><small>Learn • Read • Watch • Grow</small></div></div>
-<div class="actions"><button class="btn" id="account">🎓 <span>My Account</span></button><div class="menu"><button class="btn" id="menu">☰</button><div class="panel" id="panel">
-<button onclick="go('resources')">📚 Library</button><button onclick="go('subjects')">🌍 Subjects</button><button onclick="go('payment')">💳 Payment</button><button onclick="go('support')">💬 Support</button><button onclick="go('learning')">🎓 Student Dashboard</button>
-</div></div></div>
-</nav></header>
 
-<main>
-<section class="hero"><div><span class="eyebrow">🌍 GLOBAL DIGITAL EDUCATION</span><h1>Your global learning library.</h1><p>Books, PDFs, videos, photos, lessons and courses in one comfortable learning space.</p><button class="btn primary" onclick="go('resources')">Explore Library</button> <button class="btn" onclick="go('subjects')">Explore Subjects</button></div><div class="hero-art"><div><div class="big">📚</div><h2>Learn • Read • Watch • Grow</h2><p>Comfortable learning for students everywhere.</p></div></div></section>
+<header class="nav">
+  <a class="brand" href="index.html">
+    <span class="mark">AG</span>
+    <span>
+      <b>AGULIBRARY</b>
+      <small>LEARN • READ • WATCH • GROW</small>
+    </span>
+  </a>
 
-<section class="section"><div class="grid">
-<div class="card feature"><div class="icon">📖</div><h3>Books</h3><p>Tap to open</p></div><div class="card feature"><div class="icon">🎥</div><h3>Videos</h3><p>Learn visually</p></div><div class="card feature"><div class="icon">☁️</div><h3>Cloud Library</h3><p>Published digital resources.</p></div>
-</div></section>
+  <nav class="nav-links">
+    <a href="#subjects">Subjects</a>
+    <a href="#account">My Learning</a>
+    <a href="support.html">Support</a>
+  </nav>
+</header>
 
-<section class="section" id="resources"><div class="head"><span class="eyebrow">DIGITAL RESOURCES</span><h2>Latest learning resources</h2><p>Published resources appear here.</p></div>
-<div class="toolbar"><input class="search" id="search" placeholder="Search resources..."><button class="btn primary" id="searchBtn">Search</button></div>
-<div id="status" class="status">AGULIBRARY is waiting for the Supabase connection.<br><br>Please check config.js.</div><div id="resourcesGrid" class="resource-grid"></div></section>
+<button id="aiTeacherLauncher" class="ai-launch" type="button" aria-expanded="false">
+  <img src="./ai-teacher.jpg" alt="AI Learning Teacher">
+  <span>AI LEARNING<br>TEACHER</span>
+</button>
 
-<section class="section" id="payment"><div class="payment"><span class="eyebrow">💳 GLOBAL PAYMENT CENTER</span><h2>Learn Globally. Pay Securely.</h2><p>Access premium books, courses, lessons and other educational resources through our international-ready payment system.</p>
-<div class="grid"><div><b>🌍 Global Students</b><p>Designed for students and educators from different countries.</p></div><div><b>💳 International Cards</b><p>International-ready payment environments.</p></div><div><b>🔐 Secure Checkout</b><p>Secure checkout when connected.</p></div></div>
-<div class="paygrid" style="margin-top:20px"><div class="payment-card"><span class="eyebrow">💳 PREMIUM LEARNING</span><h3>Choose a Payment</h3>
-<label>Learning Resource</label><select id="payResource"><option>Select a book, course or resource</option></select><label>Currency</label><select><option>🇳🇬 Nigerian Naira (NGN)</option><option>🇺🇸 US Dollar (USD)</option><option>🇬🇧 British Pound (GBP)</option></select><label>Amount</label><input id="amount" placeholder="Select a resource" readonly><button class="pay" id="pay">🔐 Continue to Secure Payment</button><p style="font-size:12px;color:#718079">You will be redirected to a secure payment checkout. AGULIBRARY does not store your card details.</p></div>
-<div class="payment-card"><h3>🧾 Payment Records</h3><p style="color:#718079">Payment records can be connected to your student account and payment provider.</p><h3>🌍 International Payments</h3><p style="color:#718079">AGULIBRARY is designed to support students and educators from different countries and payment environments.</p></div></div>
-</div></section>
+<section id="aiTeacherPanel" class="ai-panel" aria-hidden="true">
 
-<section class="section" id="subjects"><div class="head"><span class="eyebrow">GLOBAL SUBJECTS</span><h2>Explore Subjects</h2></div><div class="grid">
-<div class="card"><div class="icon">🔬</div><h3>Science</h3><p>Physics • Chemistry • Biology</p></div><div class="card"><div class="icon">📐</div><h3>Mathematics</h3><p>Mathematics • Algebra • Statistics</p></div><div class="card"><div class="icon">💻</div><h3>Technology</h3><p>Computer Science • Programming • AI</p></div><div class="card"><div class="icon">📚</div><h3>Languages &amp; Literature</h3><p>English • Literature • French • Spanish</p></div><div class="card"><div class="icon">🌎</div><h3>Social Sciences &amp; Humanities</h3><p>Civic Education • History • Geography • Economics</p></div><div class="card"><div class="icon">💼</div><h3>Business &amp; Finance</h3><p>Accounting • Finance • Marketing</p></div><div class="card"><div class="icon">🎨</div><h3>Arts &amp; Creative Studies</h3><p>Art • Music • Photography • Film</p></div><div class="card"><div class="icon">🧑‍⚕️</div><h3>Professional &amp; Career</h3><p>Medicine • Engineering • Law • Education</p></div>
-</div></section>
+  <div class="ai-head">
+    <img src="./ai-teacher.jpg" alt="AI Learning Teacher">
 
-<section class="section" id="support"><div class="support"><div><span class="eyebrow">SUPPORT</span><h2>We're here to help.</h2><p>Account, library, technical and payment support will be available here.</p></div><button class="btn primary" onclick="location.href='mailto:support@agulibrary.com'">Contact Support</button></div></section>
+    <div>
+      <strong>AGULIBRARY AI Learning Teacher</strong>
+      <small>Teach • Explain • Practice • Guide</small>
+    </div>
 
-<section class="learning" id="learning"><span class="eyebrow">🎓 STUDENT LEARNING CENTER</span><h2>Welcome, <span id="welcomeName">Umar Mohammed</span> 👋</h2><p>Your personal AGULIBRARY learning space. Continue learning, explore resources, track your progress and manage your account from this page.</p>
-<div class="ai"><div class="aihead"><div style="font-size:42px">🤖</div><div><span class="eyebrow">AI LEARNING AGENT</span><h3>Your Personal AI Teacher</h3><p>Ask questions, understand difficult topics, get explanations and receive guidance throughout your learning journey.</p></div><span class="ready">AI Teacher Ready</span></div>
-<div class="chat" id="chat"><div class="msg"><div class="bubble">Hello! 👋 I am your AGULIBRARY AI Learning Agent.
-Ask me about any subject or topic you are studying, and I will help you learn step by step.</div></div>
-<div class="msg user"><div class="bubble">Help me prepare for an examination.</div></div><div class="msg"><div class="bubble">Absolutely! I can help you prepare effectively for your examination.
+    <button class="ai-close" id="closeTeacher" type="button">×</button>
+  </div>
 
-Please tell me:
+  <div id="teacherChat" class="chat">
+    <div class="msg">
+      Hello! 👋 I am your AGULIBRARY AI Learning Teacher.
+      Ask me about a subject or topic and I will teach you step by step.
+    </div>
+  </div>
 
-1. Subject — for example, Mathematics, Biology, English, Physics
+  <div class="chat-input">
+    <input
+      id="teacherInput"
+      placeholder="Ask your AI Learning Teacher..."
+      autocomplete="off"
+    >
+    <button id="teacherSend" type="button">Send</button>
+  </div>
 
-2. Topics or syllabus you need to study
-
-3. Your class/grade or level
-
-4. Exam date
-
-5. What kind of help you want:
-• Study timetable
-• Topic explanations
-• Practice questions
-• Past-paper solutions
-• Revision notes
-• Mock examination
-• Memorization techniques
-
-You can begin by sending the subject and topics, and I’ll create a clear study plan for you.</div></div>
-<div class="msg user"><div class="bubble">Explain Newton's first law in simple terms and give me one example.</div></div><div class="msg"><div class="bubble"><b>Newton’s First Law</b>
-
-An object will stay still or keep moving in a straight line at the same speed unless a force makes it change.
-
-This is also called the law of inertia. Inertia means that objects resist changes to their motion.
-
-<b>Example:</b>
-A book on a table stays still until someone pushes it. The push is a force that changes its motion.</div></div></div>
-<div class="quick"><button onclick="quick('Explain this topic to me step by step.')">📖 Explain a topic</button><button onclick="quick('Give me practice questions for my current subject.')">🧠 Practice questions</button><button onclick="quick('Help me prepare for an examination.')">🎯 Exam preparation</button></div>
-<div class="aiinput"><input id="aiInput" placeholder="Ask your AI Learning Agent anything..."><button class="btn primary" id="aiSend">Send ➤</button></div></div>
 </section>
-</main>
-<footer><b>AGULIBRARY</b> — Global Digital Education Library<br><br>Owner: Umar Mohammed<br>© <span id="year"></span> AGULIBRARY. All rights reserved.</footer>
+
+<section class="hero">
+
+  <div>
+
+    <span class="eyebrow">🌍 GLOBAL DIGITAL EDUCATION</span>
+
+    <h1>WELCOME TO <em>AGU LIBRARY</em></h1>
+
+  </div>
+
+  <div class="hero-art">
+    <div class="orb"></div>
+    <div class="book">📖</div>
+  </div>
+
+</section>
+
+<div id="accountBar" class="account-bar">
+
+  <div>
+    <div class="account-name" id="accountName">Student</div>
+    <div class="account-email" id="accountEmail"></div>
+  </div>
+
+  <div>
+    <button
+      class="btn outline"
+      id="accountDetailsButton"
+      type="button"
+    >
+      👤 My Learning
+    </button>
+
+    <button
+      class="btn danger"
+      id="signOutButton"
+      type="button"
+    >
+      🚪 Sign Out
+    </button>
+  </div>
+
+</div>
+
+<section id="account" class="section account-panel" aria-hidden="true">
+
+  <span class="eyebrow">STUDENT LEARNING CENTER</span>
+
+  <h2>My Learning</h2>
+
+  <p class="muted">
+    Useful student-dashboard functions are available here without opening a separate student dashboard.
+  </p>
+
+  <div class="account-grid">
+
+    <div class="account-card">
+      <strong id="statResources">0</strong>
+      <span>Available Resources</span>
+    </div>
+
+    <div class="account-card">
+      <strong id="statLessons">0</strong>
+      <span>Lessons & Courses</span>
+    </div>
+
+    <div class="account-card">
+      <strong id="statSubjects">0</strong>
+      <span>Subjects Available</span>
+    </div>
+
+    <div class="account-card">
+      <strong id="statRecent">0</strong>
+      <span>Recently Viewed</span>
+    </div>
+
+  </div>
+
+  <div class="account-card" style="margin-top:15px">
+
+    <span class="eyebrow">PROFILE</span>
+
+    <h3 id="profileName">Student</h3>
+
+    <p id="profileEmail" class="muted">
+      Not signed in.
+    </p>
+
+    <p id="progressText" class="muted">
+      Open resources to build your learning activity.
+    </p>
+
+  </div>
+
+  <div class="account-card" style="margin-top:15px">
+
+    <span class="eyebrow">SAVED RESOURCES</span>
+
+    <div id="savedList" class="saved-list">
+      <div class="empty">
+        No saved resources yet.
+      </div>
+    </div>
+
+  </div>
+
+  <div class="account-card" style="margin-top:15px">
+
+    <span class="eyebrow">RECENTLY VIEWED</span>
+
+    <div id="recentList" class="saved-list">
+      <div class="empty">
+        You haven't opened a resource yet.
+      </div>
+    </div>
+
+  </div>
+
+</section>
+
+<section id="subjects" class="section">
+
+  <span class="eyebrow">GLOBAL SUBJECT AREAS</span>
+
+  <div id="mainSubjectGrid" class="subject-grid">
+
+    <button
+      class="main-subject"
+      data-main="Science"
+    >
+      <span class="icon">🔬</span>
+      <b>Science</b>
+      <small>Physics • Chemistry • Biology</small>
+    </button>
+
+    <button
+      class="main-subject"
+      data-main="Mathematics"
+    >
+      <span class="icon">📐</span>
+      <b>Mathematics</b>
+      <small>Mathematics • Algebra • Statistics</small>
+    </button>
+
+    <button
+      class="main-subject"
+      data-main="Technology"
+    >
+      <span class="icon">💻</span>
+      <b>Technology</b>
+      <small>Computer Science • Programming • AI</small>
+    </button>
+
+    <button
+      class="main-subject"
+      data-main="Languages & Literature"
+    >
+      <span class="icon">📚</span>
+      <b>Languages &amp; Literature</b>
+      <small>English • Literature • French • Spanish</small>
+    </button>
+
+    <button
+      class="main-subject"
+      data-main="Social Sciences & Humanities"
+    >
+      <span class="icon">🌎</span>
+      <b>Social Sciences &amp; Humanities</b>
+      <small>Civic Education • History • Geography • Economics</small>
+    </button>
+
+    <button
+      class="main-subject"
+      data-main="Business & Finance"
+    >
+      <span class="icon">💼</span>
+      <b>Business &amp; Finance</b>
+      <small>Accounting • Finance • Marketing</small>
+    </button>
+
+    <button
+      class="main-subject"
+      data-main="Arts & Creative Studies"
+    >
+      <span class="icon">🎨</span>
+      <b>Arts &amp; Creative Studies</b>
+      <small>Art • Music • Photography • Film</small>
+    </button>
+
+    <button
+      class="main-subject"
+      data-main="Professional & Career"
+    >
+      <span class="icon">🧑‍⚕️</span>
+      <b>Professional &amp; Career</b>
+      <small>Medicine • Engineering • Law • Education</small>
+    </button>
+
+  </div>
+
+</section>
+
+<section id="subjectFlow" class="flow" aria-live="polite">
+
+  <div class="flow-top">
+
+    <span
+      class="eyebrow"
+      id="flowEyebrow"
+    >
+      LEARNING PATH
+    </span>
+
+    <button
+      id="flowBack"
+      class="back"
+      type="button"
+    >
+      ← Back
+    </button>
+
+  </div>
+
+  <h2 id="flowTitle">
+    Choose an education level
+  </h2>
+
+  <p id="flowSubtitle"></p>
+
+  <div
+    id="flowGrid"
+    class="flow-grid"
+  ></div>
+
+  <div
+    id="leafTools"
+    class="resource-tools"
+    style="display:none"
+  >
+
+    <input
+      id="leafSearch"
+      type="search"
+      placeholder="Search this subject's resources..."
+    >
+
+    <select id="leafType">
+
+      <option value="">
+        All resource types
+      </option>
+
+      <option value="book">
+        📚 Books
+      </option>
+
+      <option value="digital_book">
+        📘 Digital Books
+      </option>
+
+      <option value="pdf">
+        📄 PDFs
+      </option>
+
+      <option value="video">
+        🎥 Videos
+      </option>
+
+      <option value="image">
+        🖼️ Images
+      </option>
+
+      <option value="lesson">
+        📖 Lessons
+      </option>
+
+      <option value="course">
+        🎓 Courses
+      </option>
+
+      <option value="document">
+        📄 Documents
+      </option>
+
+      <option value="audio">
+        🎧 Audio
+      </option>
+
+    </select>
+
+  </div>
+
+  <div
+    id="resourceGrid"
+    class="resource-grid compatibility-hidden"
+  >
+    <div class="empty">
+      Loading resources...
+    </div>
+  </div>
+
+  <div
+    id="leafResourceGrid"
+    class="resource-grid"
+    style="display:none"
+  ></div>
+
+</section>
+
+<section id="services" class="section">
+
+  <span class="eyebrow">
+    STUDENT SERVICES
+  </span>
+
+  <h2>
+    Examination &amp; Certification
+  </h2>
+
+  <p class="muted">
+    Access AGULIBRARY examination activities and view academic results and certification records.
+  </p>
+
+  <div
+    class="subject-grid"
+    style="margin-top:16px"
+  >
+
+    <button
+      class="main-subject service-card"
+      type="button"
+      onclick="openService('examination')"
+    >
+
+      <span class="icon">📝</span>
+
+      <b>
+        Examination Room
+      </b>
+
+      <small>
+        Enter examinations, tests and practice assessments.
+      </small>
+
+    </button>
+
+    <button
+      class="main-subject service-card"
+      type="button"
+      onclick="openService('results')"
+    >
+
+      <span class="icon">🏆</span>
+
+      <b>
+        Result &amp; Certification
+      </b>
+
+      <small>
+        Check examination results and certification records.
+      </small>
+
+    </button>
+
+  </div>
+
+</section>
+
+<section id="support" class="support">
+
+  <span class="eyebrow">
+    CUSTOMER SUPPORT
+  </span>
+
+  <h2>
+    AGULIBRARY Customer Support Agent
+  </h2>
+
+  <p>
+    Get help with your AGULIBRARY account, resources, payments,
+    technical issues and website use. This AI branch is separate
+    from the Learning Teacher and has its own support conversation.
+  </p>
+
+  <button
+    id="supportToggle"
+    class="btn primary"
+    type="button"
+    aria-expanded="false"
+  >
+    💬 Open Customer Support
+  </button>
+
+  <div
+    id="supportChoices"
+    class="support-actions"
+    style="display:none"
+  >
+
+    <a
+      id="supportLaunch"
+      class="btn primary"
+      href="support.html"
+    >
+      💬 Chat with AI
+    </a>
+
+    <a
+      class="btn outline"
+      href="mailto:support@agulibrary.com"
+    >
+      ✉️ Mail to Support
+    </a>
+
+  </div>
+
+</section>
+
+<footer>
+
+  <b>AGULIBRARY</b>
+  — Global Digital Education Library
+
+  <br><br>
+
+  Owner: Umar Mohammed
+
+  <br>
+
+  © <span id="year"></span>
+  AGULIBRARY.
+  All rights reserved.
+
+</footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
 <script src="supabase.js"></script>
+<script src="app.js"></script>
+
 <script>
+(function(){
+
 "use strict";
-const $=id=>document.getElementById(id);let client=null,resources=[];
-$("year").textContent=new Date().getFullYear();
-function go(id){$(id)?.scrollIntoView({behavior:"smooth"});$("panel").classList.remove("show")}
-$("menu").onclick=e=>{e.stopPropagation();$("panel").classList.toggle("show")};
-document.addEventListener("click",e=>{if(!e.target.closest(".menu"))$("panel").classList.remove("show")});
-function esc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]))}
-function icon(t){return ({book:"📚",pdf:"📄",video:"🎥",image:"🖼️",photo:"🖼️",lesson:"📖",course:"🎓",document:"📄",audio:"🎧"})[String(t||"").toLowerCase()]||"📘"}
-function render(list){$("resourcesGrid").innerHTML=list.map(r=>{let t=String(r.type||"resource").toLowerCase();return `<article class="resource"><div class="icon">${icon(t)}</div><h3>${esc(r.title||"Untitled Resource")}</h3><p>${esc(r.description||"Educational resource")}</p><button class="open" onclick="openResource('${esc(r.id)}')">${t==="lesson"||t==="course"?"📖 Open Lesson →":"Open Resource →"}</button></article>`}).join("");if(list.length)$("status").classList.add("hidden")}
-function openResource(id){location.href="resource-viewer.html?id="+encodeURIComponent(id)}
-async function load(){try{if(typeof getSupabase!=="function")return;client=getSupabase();let s=await client.auth.getSession();if(s.error)throw s.error;let r=await client.from("resources").select("*").order("created_at",{ascending:false});if(r.error)throw r.error;resources=r.data||[];render(resources);$("payResource").innerHTML='<option>Select a book, course or resource</option>'+resources.map(r=>`<option value="${esc(r.id)}">${esc(r.title||"Untitled Resource")}</option>`).join("")}catch(e){console.error(e)}}
-$("search").oninput=()=>{let q=$("search").value.toLowerCase().trim();render(resources.filter(r=>(r.title+" "+r.description+" "+r.subject+" "+r.type).toLowerCase().includes(q)))};
-$("searchBtn").onclick=()=>$("search").dispatchEvent(new Event("input"));
-$("payResource").onchange=()=>{$("amount").value=$("payResource").value?"Amount set by connected payment system":"Select a resource"};
-$("pay").onclick=()=>alert("Secure payment checkout is ready to be connected to your payment provider.");
-$("account").onclick=async()=>{try{if(typeof getSupabase==="function"){client=client||getSupabase();let s=await client.auth.getSession();if(s.data?.session){go("learning");return}}}catch(e){}location.href="auth.html"};
-function quick(t){$("aiInput").value=t;$("aiInput").focus()}
-function sendAI(){let v=$("aiInput").value.trim();if(!v)return;$("chat").insertAdjacentHTML("beforeend",`<div class="msg user"><div class="bubble">${esc(v)}</div></div><div class="msg"><div class="bubble">The AGULIBRARY AI Learning Agent interface is ready. Connect your secure AI backend to receive live answers.</div></div>`);$("aiInput").value="";$("chat").scrollTop=$("chat").scrollHeight}
-$("aiSend").onclick=sendAI;$("aiInput").onkeydown=e=>{if(e.key==="Enter")sendAI()};load();
+
+const EDUCATION_LEVELS = [
+  "University Courses",
+  "Secondary School/High School",
+  "Primary School"
+];
+
+const HIERARCHY = {
+
+"Science": {
+
+"Life Sciences":[
+"Biology",
+"Ecology",
+"Human Anatomy & Physiology",
+"Agricultural Science",
+"Marine Science"
+],
+
+"Physical Sciences":[
+"Physics",
+"Chemistry",
+"General Science",
+"Integrated Science"
+],
+
+"Earth & Space Sciences":[
+"Earth Science",
+"Geology",
+"Environmental Science",
+"Astronomy"
+],
+
+"Technology & Applied Sciences":[
+"Computer Science",
+"Health Science",
+"Food & Nutrition Science"
+]
+
+},
+
+"Mathematics":{
+
+"Mathematical Foundations":[
+"Arithmetic",
+"Number Theory",
+"Algebra",
+"Geometry"
+],
+
+"Applied Mathematics":[
+"Calculus",
+"Applied Mathematics",
+"Mathematical Modelling",
+"Operations Research"
+],
+
+"Statistics & Data":[
+"Statistics",
+"Probability",
+"Data Analysis",
+"Data Science"
+],
+
+"Advanced Mathematics":[
+"Pure Mathematics",
+"Discrete Mathematics",
+"Linear Algebra",
+"Differential Equations"
+]
+
+},
+
+"Technology":{
+
+"Computing & Information":[
+"Computer Science",
+"Information Technology",
+"Web Development",
+"Information Systems"
+],
+
+"Programming & Software":[
+"Programming",
+"Software Engineering",
+"Artificial Intelligence",
+"Mobile Development"
+],
+
+"Data & Intelligent Systems":[
+"Data Science",
+"Machine Learning",
+"Database Systems",
+"Robotics"
+],
+
+"Cyber & Digital Systems":[
+"Cybersecurity",
+"Networking",
+"Cloud Computing",
+"Digital Systems"
+]
+
+},
+
+"Languages & Literature":{
+
+"Languages":[
+"English",
+"French",
+"Spanish",
+"Arabic"
+],
+
+"Literature":[
+"English Literature",
+"World Literature",
+"African Literature",
+"Comparative Literature"
+],
+
+"Linguistics":[
+"Linguistics",
+"Grammar",
+"Phonetics",
+"Language Studies"
+],
+
+"Communication & Writing":[
+"Creative Writing",
+"Academic Writing",
+"Communication Skills",
+"Public Speaking"
+]
+
+},
+
+"Social Sciences & Humanities":{
+
+"History & Culture":[
+"History",
+"African History",
+"World History",
+"Cultural Studies"
+],
+
+"Geography & Environment":[
+"Geography",
+"Human Geography",
+"Physical Geography",
+"Environmental Studies"
+],
+
+"Economics & Society":[
+"Economics",
+"Sociology",
+"Social Studies",
+"Development Studies"
+],
+
+"Government & Politics":[
+"Civic Education",
+"Political Science",
+"Government",
+"International Relations"
+]
+
+},
+
+"Business & Finance":{
+
+"Accounting & Finance":[
+"Accounting",
+"Finance",
+"Banking",
+"Investment"
+],
+
+"Business Management":[
+"Business Studies",
+"Management",
+"Human Resources",
+"Operations Management"
+],
+
+"Marketing & Commerce":[
+"Marketing",
+"Commerce",
+"Sales",
+"Consumer Studies"
+],
+
+"Entrepreneurship":[
+"Entrepreneurship",
+"Business Planning",
+"Innovation",
+"Small Business Management"
+]
+
+},
+
+"Arts & Creative Studies":{
+
+"Visual Arts":[
+"Art",
+"Drawing",
+"Painting",
+"Sculpture"
+],
+
+"Performing Arts":[
+"Music",
+"Drama",
+"Dance",
+"Theatre"
+],
+
+"Media & Design":[
+"Photography",
+"Film",
+"Graphic Design",
+"Animation"
+],
+
+"Creative Writing":[
+"Creative Writing",
+"Poetry",
+"Screenwriting",
+"Storytelling"
+]
+
+},
+
+"Professional & Career":{
+
+"Health & Medicine":[
+"Medicine",
+"Nursing",
+"Pharmacy",
+"Public Health"
+],
+
+"Engineering & Technology":[
+"Engineering",
+"Civil Engineering",
+"Electrical Engineering",
+"Mechanical Engineering"
+],
+
+"Law & Governance":[
+"Law",
+"Legal Studies",
+"Criminology",
+"Public Administration"
+],
+
+"Education & Human Services":[
+"Education",
+"Teaching",
+"Counselling",
+"Professional Studies"
+]
+
+}
+
+};
+
+let client = null;
+let currentUser = null;
+let allResources = [];
+
+let flow = {
+  main:"",
+  level:"",
+  area:"",
+  subject:""
+};
+
+const RECENT_KEY = "AGU_RECENT_RESOURCES";
+const SAVED_KEY = "AGU_SAVED_RESOURCES";
+
+let teacherConversation = [];
+let supportConversation = [];
+
+function esc(v){
+
+return String(v ?? "").replace(
+/[&<>"']/g,
+c => ({
+"&":"&amp;",
+"<":"&lt;",
+">":"&gt;",
+'"':"&quot;",
+"'":"&#039;"
+}[c])
+);
+
+}
+
+function escAttr(v){
+
+return esc(v).replace(
+/`/g,
+"&#096;"
+);
+
+}
+
+function icon(type){
+
+return ({
+book:"📚",
+digital_book:"📘",
+pdf:"📄",
+video:"🎥",
+image:"🖼️",
+photo:"🖼️",
+lesson:"📖",
+course:"🎓",
+document:"📄",
+audio:"🎧"
+})[
+String(type || "").toLowerCase()
+] || "📘";
+
+}
+
+function setText(id,v){
+
+const e = document.getElementById(id);
+
+if(e)
+e.textContent = v;
+
+}
+
+async function init(){
+
+setText(
+"year",
+new Date().getFullYear()
+);
+
+try{
+
+client =
+typeof getSupabase === "function"
+? getSupabase()
+: null;
+
+}catch(e){
+
+client = null;
+
+}
+
+if(client)
+await loadSession();
+
+await loadResources();
+
+setupHierarchy();
+
+setupAI();
+
+}
+
+async function loadSession(){
+
+try{
+
+const r =
+await client.auth.getSession();
+
+currentUser =
+r.data?.session?.user || null;
+
+if(currentUser){
+
+let name =
+currentUser.user_metadata?.full_name ||
+currentUser.user_metadata?.name ||
+currentUser.email?.split("@")[0] ||
+"Student";
+
+try{
+
+const p =
+await client
+.from("student_profiles")
+.select("first_name,last_name")
+.eq("id",currentUser.id)
+.maybeSingle();
+
+if(
+!p.error &&
+p.data
+){
+
+const n = [
+p.data.first_name,
+p.data.last_name
+]
+.filter(Boolean)
+.join(" ")
+.trim();
+
+if(n)
+name = n;
+
+}
+
+}catch(e){}
+
+setText(
+"accountName",
+name
+);
+
+setText(
+"accountEmail",
+currentUser.email || ""
+);
+
+setText(
+"profileName",
+name
+);
+
+setText(
+"profileEmail",
+currentUser.email || ""
+);
+
+document
+.getElementById("accountBar")
+.classList
+.add("show");
+
+updateStudentStats();
+
+}
+
+}catch(e){
+
+console.warn(
+"Session check:",
+e
+);
+
+}
+
+}
+
+async function loadResources(){
+
+if(!client)
+return;
+
+try{
+
+const r =
+await client
+.from("resources")
+.select("*")
+.order(
+"created_at",
+{ascending:false}
+);
+
+if(!r.error)
+allResources =
+r.data || [];
+
+}catch(e){
+
+console.warn(
+"Resources:",
+e
+);
+
+}
+
+updateStudentStats();
+
+}
+
+function setupHierarchy(){
+
+document
+.querySelectorAll(".main-subject")
+.forEach(card => {
+
+if(card.dataset.main){
+
+card.addEventListener(
+"click",
+() => openLevelPage(
+card.dataset.main
+)
+);
+
+}
+
+});
+
+document
+.getElementById("flowBack")
+.addEventListener(
+"click",
+backFlow
+);
+
+document
+.getElementById("leafSearch")
+.addEventListener(
+"input",
+renderLeafResources
+);
+
+document
+.getElementById("leafType")
+.addEventListener(
+"change",
+renderLeafResources
+);
+
+document
+.getElementById("accountDetailsButton")
+.addEventListener(
+"click",
+() =>
+document
+.getElementById("account")
+.classList
+.toggle("show")
+);
+
+document
+.getElementById("signOutButton")
+.addEventListener(
+"click",
+signOut
+);
+
+}
+
+function showFlow(){
+
+document
+.getElementById("subjectFlow")
+.classList
+.add("show");
+
+document
+.getElementById("subjectFlow")
+.scrollIntoView({
+behavior:"smooth",
+block:"start"
+});
+
+}
+
+function renderCards(cards){
+
+const grid =
+document.getElementById(
+"flowGrid"
+);
+
+const leaf =
+document.getElementById(
+"leafResourceGrid"
+);
+
+const tools =
+document.getElementById(
+"leafTools"
+);
+
+tools.style.display = "none";
+
+leaf.style.display = "none";
+
+grid.style.display = "grid";
+
+grid.innerHTML =
+cards
+.map(
+c => `
+<button
+type="button"
+class="flow-card"
+data-key="${escAttr(c.key)}"
+>
+<span class="icon">
+${c.icon || "📚"}
+</span>
+
+<strong>
+${esc(c.title)}
+</strong>
+
+<small>
+${esc(
+c.small ||
+"Open related content"
+)}
+</small>
+
+</button>
+`
+)
+.join("");
+
+cards.forEach(
+(c,i) =>
+grid.children[i]
+.addEventListener(
+"click",
+c.action
+)
+);
+
+showFlow();
+
+}
+
+function openLevelPage(main){
+
+flow = {
+main,
+level:"",
+area:"",
+subject:""
+};
+
+setText(
+"flowEyebrow",
+main.toUpperCase()
+);
+
+setText(
+"flowTitle",
+"Select education level"
+);
+
+setText(
+"flowSubtitle",
+`Choose the education level for ${main}.`
+);
+
+renderCards(
+EDUCATION_LEVELS.map(
+level => ({
+
+key:level,
+
+icon:"🎓",
+
+title:level,
+
+small:"Open learning areas",
+
+action:
+() =>
+openAreaPage(
+main,
+level
+)
+
+})
+)
+);
+
+}
+
+function openAreaPage(
+main,
+level
+){
+
+flow = {
+main,
+level,
+area:"",
+subject:""
+};
+
+const areas =
+Object.keys(
+HIERARCHY[main] || {}
+);
+
+setText(
+"flowEyebrow",
+main.toUpperCase() +
+" • " +
+level.toUpperCase()
+);
+
+setText(
+"flowTitle",
+"Related learning areas"
+);
+
+setText(
+"flowSubtitle",
+`Choose an area within ${main} for ${level}.`
+);
+
+renderCards(
+areas.map(
+area => ({
+
+key:area,
+
+icon:"🧩",
+
+title:area,
+
+small:
+level === "University Courses"
+? "Open related courses"
+: "Open related subjects",
+
+action:
+() =>
+openSubjectPage(
+main,
+level,
+area
+)
+
+})
+)
+);
+
+}
+
+function openSubjectPage(
+main,
+level,
+area
+){
+
+flow = {
+main,
+level,
+area,
+subject:""
+};
+
+const subjects =
+HIERARCHY[main]?.[area] || [];
+
+setText(
+"flowEyebrow",
+main.toUpperCase() +
+" • " +
+level.toUpperCase()
+);
+
+setText(
+"flowTitle",
+area
+);
+
+setText(
+"flowSubtitle",
+"Choose a related subject."
+);
+
+renderCards(
+subjects.map(
+subject => ({
+
+key:subject,
+
+icon:"📘",
+
+title:subject,
+
+small:
+"Open this subject's resources",
+
+action:
+() =>
+openResourcePage(
+main,
+level,
+area,
+subject
+)
+
+})
+)
+);
+
+}
+
+function openResourcePage(
+main,
+level,
+area,
+subject
+){
+
+flow = {
+main,
+level,
+area,
+subject
+};
+
+setText(
+"flowEyebrow",
+main.toUpperCase() +
+" • " +
+level.toUpperCase()
+);
+
+setText(
+"flowTitle",
+subject
+);
+
+setText(
+"flowSubtitle",
+`Resources for ${subject} • ${level}.`
+);
+
+document
+.getElementById("flowGrid")
+.style.display = "none";
+
+document
+.getElementById("leafTools")
+.style.display = "grid";
+
+document
+.getElementById("leafResourceGrid")
+.style.display = "grid";
+
+renderLeafResources();
+
+showFlow();
+
+}
+
+function backFlow(){
+
+if(flow.subject){
+
+openSubjectPage(
+flow.main,
+flow.level,
+flow.area
+);
+
+}
+
+else if(flow.area){
+
+openAreaPage(
+flow.main,
+flow.level
+);
+
+}
+
+else if(flow.level){
+
+openLevelPage(
+flow.main
+);
+
+}
+
+else{
+
+document
+.getElementById("subjectFlow")
+.classList
+.remove("show");
+
+}
+
+}
+
+function resourceMatches(r){
+
+const q =
+document
+.getElementById("leafSearch")
+.value
+.toLowerCase()
+.trim();
+
+const type =
+document
+.getElementById("leafType")
+.value
+.toLowerCase()
+.trim();
+
+const rType =
+String(
+r.type || ""
+)
+.toLowerCase()
+.trim();
+
+const subject =
+String(
+r.subject ||
+r.subject_name ||
+""
+)
+.trim()
+.toLowerCase();
+
+const area =
+String(
+r.subject_area ||
+""
+)
+.trim()
+.toLowerCase();
+
+const parent =
+String(
+r.parent_subject ||
+""
+)
+.trim()
+.toLowerCase();
+
+const level =
+String(
+r.education_stage ||
+r.level ||
+r.class_level ||
+""
+)
+.trim()
+.toLowerCase();
+
+const searchable =
+`${r.title || ""}
+${r.description || ""}
+${r.subject || ""}
+${r.subject_name || ""}
+${r.type || ""}
+${r.level || ""}
+${r.class_level || ""}
+${r.term || ""}`
+.toLowerCase();
+
+const subjectOK =
+subject === flow.subject.toLowerCase() ||
+subject.includes(
+flow.subject.toLowerCase()
+) ||
+area ===
+flow.subject.toLowerCase();
+
+const parentOK =
+!parent ||
+parent ===
+flow.main.toLowerCase();
+
+const levelOK =
+!level ||
+level ===
+flow.level.toLowerCase() ||
+level.includes(
+flow.level.toLowerCase()
+) ||
+(
+flow.level.startsWith(
+"Secondary"
+) &&
+/secondary|high school|sss|senior secondary/i
+.test(level)
+) ||
+(
+flow.level.startsWith(
+"University"
+) &&
+/university|tertiary|college/i
+.test(level)
+) ||
+(
+flow.level.startsWith(
+"Primary"
+) &&
+/primary|elementary/i
+.test(level)
+);
+
+return (
+subjectOK &&
+parentOK &&
+levelOK &&
+(!type || rType === type) &&
+(!q || searchable.includes(q))
+);
+
+}
+
+function renderLeafResources(){
+
+const grid =
+document.getElementById(
+"leafResourceGrid"
+);
+
+const list =
+allResources.filter(
+resourceMatches
+);
+
+if(!list.length){
+
+grid.innerHTML =
+`
+<div class="empty">
+
+📚
+
+<br><br>
+
+No resources are currently available for
+
+<strong>
+${esc(flow.subject)}
+</strong>
+
+at
+
+<strong>
+${esc(flow.level)}
+</strong>.
+
+<br><br>
+
+When the administrator uploads a matching resource,
+it will appear here.
+
+</div>
+`;
+
+return;
+
+}
+
+grid.innerHTML =
+list
+.map(r => {
+
+const id =
+escAttr(r.id);
+
+const type =
+String(
+r.type || "resource"
+)
+.toLowerCase()
+.trim();
+
+const title =
+esc(
+r.title ||
+"Untitled Resource"
+);
+
+const desc =
+esc(
+r.description ||
+"Educational resource"
+);
+
+return `
+<article class="resource-card">
+
+<div class="resource-icon">
+${icon(type)}
+</div>
+
+<span class="resource-type">
+${esc(type.toUpperCase())}
+</span>
+
+<h3>
+${title}
+</h3>
+
+<p>
+${desc}
+</p>
+
+<button
+type="button"
+data-resource="${id}"
+>
+${
+type === "lesson" ||
+type === "course"
+? "📖 Open Lesson →"
+: "Open Resource →"
+}
+</button>
+
+</article>
+`;
+
+})
+.join("");
+
+grid
+.querySelectorAll(
+"[data-resource]"
+)
+.forEach(
+btn =>
+btn.addEventListener(
+"click",
+() =>
+openResource(
+btn.dataset.resource
+)
+)
+);
+
+}
+
+function openResource(id){
+
+const r =
+allResources.find(
+x =>
+String(x.id) ===
+String(id)
+);
+
+if(!r)
+return;
+
+if(currentUser)
+recordRecent(id);
+
+const type =
+String(
+r.type || ""
+)
+.toLowerCase()
+.trim();
+
+if(
+type === "lesson" ||
+type === "course"
+){
+
+location.href =
+"lesson.html?id=" +
+encodeURIComponent(r.id);
+
+return;
+
+}
+
+const url =
+r.file_url ||
+r.url ||
+"";
+
+if(!url){
+
+alert(
+"This resource does not have a file attached yet."
+);
+
+return;
+
+}
+
+window.open(
+url,
+"_blank",
+"noopener,noreferrer"
+);
+
+}
+
+function getSaved(){
+
+if(!currentUser)
+return [];
+
+try{
+
+return JSON.parse(
+localStorage.getItem(
+SAVED_KEY +
+"_" +
+currentUser.id
+) ||
+"[]"
+);
+
+}catch(e){
+
+return [];
+
+}
+
+}
+
+function getRecent(){
+
+if(!currentUser)
+return [];
+
+try{
+
+return JSON.parse(
+localStorage.getItem(
+RECENT_KEY +
+"_" +
+currentUser.id
+) ||
+"[]"
+);
+
+}catch(e){
+
+return [];
+
+}
+
+}
+
+function recordRecent(id){
+
+const a =
+getRecent()
+.filter(
+x =>
+String(x) !==
+String(id)
+);
+
+a.unshift(
+String(id)
+);
+
+localStorage.setItem(
+RECENT_KEY +
+"_" +
+currentUser.id,
+JSON.stringify(
+a.slice(0,12)
+)
+);
+
+updateStudentStats();
+
+}
+
+function toggleSaved(id){
+
+if(!currentUser){
+
+location.href =
+"auth.html";
+
+return;
+
+}
+
+let a =
+getSaved();
+
+const exists =
+a.some(
+x =>
+String(x) ===
+String(id)
+);
+
+a =
+exists
+? a.filter(
+x =>
+String(x) !==
+String(id)
+)
+: [
+String(id),
+...a
+];
+
+localStorage.setItem(
+SAVED_KEY +
+"_" +
+currentUser.id,
+JSON.stringify(
+a.slice(0,100)
+)
+);
+
+renderStudentLists();
+
+updateStudentStats();
+
+}
+
+function updateStudentStats(){
+
+if(!currentUser)
+return;
+
+setText(
+"statResources",
+allResources.length
+);
+
+setText(
+"statLessons",
+allResources.filter(
+r =>
+[
+"lesson",
+"course"
+].includes(
+String(
+r.type || ""
+).toLowerCase()
+)
+).length
+);
+
+setText(
+"statSubjects",
+new Set(
+allResources
+.map(
+r =>
+r.subject ||
+r.subject_name ||
+""
+)
+.filter(Boolean)
+).size
+);
+
+setText(
+"statRecent",
+getRecent().length
+);
+
+setText(
+"progressText",
+getRecent().length
+? `You have explored ${getRecent().length} resource${getRecent().length === 1 ? "" : "s"} from AGULIBRARY.`
+: "Open resources to begin building your learning activity."
+);
+
+renderStudentLists();
+
+}
+
+function renderStudentLists(){
+
+if(!currentUser)
+return;
+
+const saved =
+getSaved();
+
+const recent =
+getRecent();
+
+const make =
+(ids,empty) => {
+
+const rows =
+ids
+.map(
+id =>
+allResources.find(
+r =>
+String(r.id) ===
+String(id)
+)
+)
+.filter(Boolean);
+
+return rows.length
+
+? rows
+.map(
+r => `
+<div class="saved-item">
+
+<span>
+${esc(
+r.title ||
+"Untitled Resource"
+)}
+</span>
+
+<button
+class="btn outline"
+type="button"
+data-open="${escAttr(r.id)}"
+>
+Open
+</button>
+
+</div>
+`
+)
+.join("")
+
+: `
+<div class="empty">
+${empty}
+</div>
+`;
+
+};
+
+document
+.getElementById("savedList")
+.innerHTML =
+make(
+saved,
+"No saved resources yet."
+);
+
+document
+.getElementById("recentList")
+.innerHTML =
+make(
+recent,
+"You haven't opened a resource yet."
+);
+
+document
+.querySelectorAll(
+"[data-open]"
+)
+.forEach(
+b =>
+b.addEventListener(
+"click",
+() =>
+openResource(
+b.dataset.open
+)
+)
+);
+
+}
+
+function openService(kind){
+
+const title =
+kind === "examination"
+? "Examination Room"
+: "Result & Certification";
+
+const message =
+kind === "examination"
+? "The AGULIBRARY Examination Room is ready to be connected to the examination system."
+: "The AGULIBRARY Result & Certification area is ready to be connected to the results and certification system.";
+
+alert(
+title +
+"\n\n" +
+message
+);
+
+}
+
+async function signOut(){
+
+try{
+
+localStorage.setItem(
+"AGU_REQUIRE_FULL_LOGIN",
+"1"
+);
+
+if(client)
+await client.auth.signOut();
+
+}catch(e){}
+
+location.href =
+"index.html";
+
+}
+
+function setupAI(){
+
+const tp =
+document.getElementById(
+"aiTeacherPanel"
+);
+
+const tl =
+document.getElementById(
+"aiTeacherLauncher"
+);
+
+const toggle =
+show => {
+
+tp.classList.toggle(
+"show",
+show
+);
+
+tp.setAttribute(
+"aria-hidden",
+show
+? "false"
+: "true"
+);
+
+tl.setAttribute(
+"aria-expanded",
+show
+? "true"
+: "false"
+);
+
+};
+
+tl.onclick =
+() =>
+toggle(
+!tp.classList.contains(
+"show"
+)
+);
+
+document
+.getElementById(
+"closeTeacher"
+)
+.onclick =
+() =>
+toggle(false);
+
+document
+.getElementById(
+"teacherSend"
+)
+.onclick =
+sendTeacher;
+
+document
+.getElementById(
+"teacherInput"
+)
+.addEventListener(
+"keydown",
+e => {
+
+if(e.key === "Enter"){
+
+e.preventDefault();
+
+sendTeacher();
+
+}
+
+});
+
+const supportToggle =
+document.getElementById(
+"supportToggle"
+);
+
+const supportChoices =
+document.getElementById(
+"supportChoices"
+);
+
+if(
+supportToggle &&
+supportChoices
+){
+
+supportToggle.addEventListener(
+"click",
+() => {
+
+const open =
+supportChoices.style.display !== "none";
+
+supportChoices.style.display =
+open
+? "none"
+: "flex";
+
+supportToggle.setAttribute(
+"aria-expanded",
+open
+? "false"
+: "true"
+);
+
+}
+);
+
+}
+
+}
+
+function addChat(
+id,
+text,
+user
+){
+
+const box =
+document.getElementById(id);
+
+const d =
+document.createElement(
+"div"
+);
+
+d.className =
+"msg" +
+(
+user
+? " user"
+: ""
+);
+
+d.textContent =
+text;
+
+box.appendChild(d);
+
+box.scrollTop =
+box.scrollHeight;
+
+}
+
+async function callAI(
+endpoint,
+message,
+conversation
+){
+
+const r =
+await fetch(
+endpoint,
+{
+method:"POST",
+
+headers:{
+"Content-Type":
+"application/json"
+},
+
+body:
+JSON.stringify({
+message,
+conversation,
+student_id:
+currentUser?.id ||
+null
+})
+
+}
+);
+
+if(!r.ok)
+throw new Error(
+"AI service error"
+);
+
+const d =
+await r.json();
+
+return (
+d.answer ||
+d.message ||
+d.response ||
+"The AI returned no answer."
+);
+
+}
+
+async function sendTeacher(){
+
+const input =
+document.getElementById(
+"teacherInput"
+);
+
+const btn =
+document.getElementById(
+"teacherSend"
+);
+
+const m =
+input.value.trim();
+
+if(!m)
+return;
+
+addChat(
+"teacherChat",
+m,
+true
+);
+
+input.value = "";
+
+btn.disabled = true;
+
+teacherConversation.push({
+role:"user",
+content:m
+});
+
+try{
+
+const answer =
+await callAI(
+"(window.AGU_CONFIG?.supabaseUrl||"").replace(/\/$/,"")+"/functions/v1/ai-learning-agent",
+m,
+teacherConversation
+);
+
+addChat(
+"teacherChat",
+answer,
+false
+);
+
+teacherConversation.push({
+role:"assistant",
+content:answer
+});
+
+}catch(e){
+
+addChat(
+"teacherChat",
+"The AI Learning Teacher interface is ready, but its secure AI backend endpoint still needs to be connected.",
+false
+);
+
+}
+
+btn.disabled = false;
+
+input.focus();
+
+}
+
+async function sendSupport(){
+
+const input =
+document.getElementById(
+"supportInput"
+);
+
+const btn =
+document.getElementById(
+"supportSend"
+);
+
+const m =
+input.value.trim();
+
+if(!m)
+return;
+
+addChat(
+"supportChat",
+m,
+true
+);
+
+input.value = "";
+
+btn.disabled = true;
+
+supportConversation.push({
+role:"user",
+content:m
+});
+
+try{
+
+const answer =
+await callAI(
+"(window.AGU_CONFIG?.supabaseUrl||"").replace(/\/$/,"")+"/functions/v1/customer-support-agent",
+m,
+supportConversation
+);
+
+addChat(
+"supportChat",
+answer,
+false
+);
+
+supportConversation.push({
+role:"assistant",
+content:answer
+});
+
+}catch(e){
+
+addChat(
+"supportChat",
+"The Customer Support Agent interface is ready, but its secure support AI backend endpoint still needs to be connected.",
+false
+);
+
+}
+
+btn.disabled = false;
+
+input.focus();
+
+}
+
+document.addEventListener(
+"DOMContentLoaded",
+init
+);
+
+})();
 </script>
-</body></html>
+
+</body>
+  </html>

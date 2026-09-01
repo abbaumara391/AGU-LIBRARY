@@ -8,6 +8,7 @@
 <style>
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
+body.auth-checking> *{visibility:hidden}
 body{margin:0;background:#f4fbf7;color:#17352a;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
 button,input,select{font:inherit}
 button,a{cursor:pointer}
@@ -28,7 +29,7 @@ button,a{cursor:pointer}
 .flow{display:none;background:#fff;border:1px solid #dceee6;border-radius:24px;padding:26px;margin:25px auto;width:min(1250px,92%);box-shadow:0 12px 35px rgba(8,122,75,.06)}.flow.show{display:block}.flow-top{display:flex;justify-content:space-between;gap:10px;align-items:center}.back{border:1px solid #b9dccd;background:#fff;color:#087a4b;border-radius:10px;padding:9px 13px;font-weight:800}.flow h2{margin:8px 0;color:#173b2d;font-size:32px}.flow p{color:#71847b;line-height:1.6}.flow-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:20px}.flow-card{min-height:125px;border:1px solid #dceee6;background:#f7fcfa;border-radius:18px;padding:19px;text-align:left;transition:.2s}.flow-card:hover{transform:translateY(-2px);border-color:#91d2b1;background:#fff}.flow-card .icon{font-size:25px}.flow-card strong{display:block;color:#214638;font-size:18px;margin-top:9px}.flow-card small{display:block;color:#788a82;margin-top:6px;line-height:1.45}
 .resource-tools{display:grid;grid-template-columns:1fr 200px;gap:10px;margin-top:18px}.resource-tools input,.resource-tools select{width:100%;padding:13px;border:1px solid #cfe5da;border-radius:11px;background:#fff;color:#17352a}.resource-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:16px}.resource-card{background:#fff;border:1px solid #dceee6;border-radius:18px;padding:18px;display:flex;flex-direction:column}.resource-icon{font-size:28px;width:52px;height:52px;border-radius:14px;background:#e8f8f0;display:grid;place-items:center}.resource-type{display:inline-block;margin-top:11px;padding:5px 8px;border-radius:20px;background:#f0f8f4;color:#087a4b;font-size:10px;font-weight:900;letter-spacing:1px;align-self:flex-start}.resource-card h3{color:#214638;margin:10px 0 5px}.resource-card p{color:#71847b;line-height:1.5;flex:1}.resource-card button{border:0;border-radius:10px;padding:11px;background:#087a4b;color:#fff;font-weight:800}.empty{padding:28px;text-align:center;color:#71847b;background:#f7fcfa;border:1px dashed #bfded0;border-radius:15px;grid-column:1/-1}
 .ai-launch{position:fixed;right:18px;top:82px;z-index:1200;display:flex;align-items:center;gap:8px;background:#fff;border:1px solid #cfe5da;border-radius:18px;padding:7px 10px 7px 7px;box-shadow:0 10px 30px rgba(8,122,75,.15)}.ai-launch img{width:54px;height:54px;border-radius:50%;object-fit:cover}.ai-launch span{font-size:11px;font-weight:900;color:#087a4b}
-.ai-panel{position:fixed;inset:0;width:100vw;height:100vh;z-index:1300;background:#fff;border:1px solid #cfe5da;border-radius:24px;box-shadow:0 25px 70px rgba(8,25,18,.22);display:none;overflow:hidden}.ai-panel.show{display:flex;flex-direction:column}.ai-head{display:flex;align-items:center;gap:10px;padding:14px;background:#e8f8f0}.ai-head img{width:48px;height:48px;border-radius:50%;object-fit:cover}.ai-head strong{color:#173b2d}.ai-head small{display:block;color:#71847b;margin-top:2px}.ai-close{margin-left:auto;border:0;background:transparent;font-size:22px;color:#087a4b}.chat{flex:1;overflow:auto;padding:15px;background:#f7fcfa}.msg{max-width:84%;padding:11px 13px;border-radius:15px;background:#fff;border:1px solid #dceee6;margin-bottom:10px;white-space:pre-wrap;line-height:1.5}.msg.user{margin-left:auto;background:#087a4b;color:#fff;border-color:#087a4b}.chat-input{display:flex;gap:8px;padding:12px;border-top:1px solid #dceee6}.chat-input input{flex:1;padding:12px;border:1px solid #cfe5da;border-radius:11px}.chat-input button{border:0;border-radius:11px;background:#087a4b;color:#fff;padding:0 15px;font-weight:900}
+.ai-panel{position:fixed;top:1vh;left:1vw;width:98vw;height:98vh;z-index:1300;background:#fff;border:1px solid #cfe5da;border-radius:24px;box-shadow:0 25px 70px rgba(8,25,18,.22);display:none;overflow:hidden}.ai-panel.show{display:flex;flex-direction:column}.ai-head{display:flex;align-items:center;gap:10px;padding:14px;background:#e8f8f0}.ai-head img{width:48px;height:48px;border-radius:50%;object-fit:cover}.ai-head strong{color:#173b2d}.ai-head small{display:block;color:#71847b;margin-top:2px}.ai-close{margin-left:auto;border:0;background:transparent;font-size:22px;color:#087a4b}.chat{flex:1;overflow:auto;padding:15px;background:#f7fcfa}.msg{max-width:84%;padding:11px 13px;border-radius:15px;background:#fff;border:1px solid #dceee6;margin-bottom:10px;white-space:pre-wrap;line-height:1.5}.msg.user{margin-left:auto;background:#087a4b;color:#fff;border-color:#087a4b}.chat-input{display:flex;gap:8px;padding:12px;border-top:1px solid #dceee6}.chat-input input{flex:1;padding:12px;border:1px solid #cfe5da;border-radius:11px}.chat-input button{border:0;border-radius:11px;background:#087a4b;color:#fff;padding:0 15px;font-weight:900}
 .support{width:min(1250px,92%);margin:14px auto;background:linear-gradient(135deg,#e8f8f0,#fff);border:1px solid #ccebdd;border-radius:24px;padding:22px}.support h2{margin:8px 0;color:#173b2d}.support p{color:#71847b;line-height:1.6}.support-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
 .support-agent{display:none;margin-top:20px;background:#fff;border:1px solid #dceee6;border-radius:20px;overflow:hidden}.support-agent.show{display:block}.support-head{padding:18px;background:#edf8f3}.support-head strong{color:#173b2d}.support-chat{height:300px;overflow:auto;padding:15px;background:#f8fcfa}.support-input{display:flex;gap:8px;padding:12px;border-top:1px solid #dceee6}.support-input input{flex:1;padding:12px;border:1px solid #cfe5da;border-radius:11px}.support-input button{border:0;border-radius:11px;background:#087a4b;color:#fff;padding:0 15px;font-weight:900}
 .account-panel{display:none}.account-panel.show{display:block}.account-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.account-card{background:#fff;border:1px solid #dceee6;border-radius:18px;padding:18px}.account-card strong{display:block;color:#087a4b;font-size:28px}.account-card span{color:#71847b;font-size:13px}.saved-list{margin-top:15px}.saved-item{display:flex;justify-content:space-between;gap:10px;padding:12px;border-bottom:1px solid #edf3ef}
@@ -133,11 +134,11 @@ footer{text-align:center;padding:30px;background:#fff;border-top:1px solid #dcee
 .security-card b{display:block;margin-top:12px}.security-card small{display:block;color:#71847b;margin-top:7px;line-height:1.5}
 
 @media(max-width:1000px){.subject-grid{grid-template-columns:repeat(2,1fr)}.resource-grid{grid-template-columns:repeat(2,1fr)}.account-grid{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:760px){.profile-info-grid{grid-template-columns:1fr}.security-grid{grid-template-columns:1fr}.hero{grid-template-columns:1fr;gap:8px;padding:14px 16px;margin:8px auto 10px;min-height:0}.hero-title-row{gap:9px;white-space:normal;flex-wrap:wrap}.hero h1{font-size:clamp(28px,8vw,46px)}.hero-art{height:80px;min-height:80px}.orb{width:80px;height:80px}.book{width:56px;height:70px;font-size:28px}.menu-button{top:10px;right:10px}.nav{flex-wrap:wrap}.nav-links{order:3;width:100%;justify-content:center}.ai-launch{top:auto;bottom:18px}.ai-panel{inset:0;width:100vw;height:100vh}.flow-grid{grid-template-columns:1fr 1fr}.resource-grid{grid-template-columns:1fr}.resource-tools{grid-template-columns:1fr}.account-bar{align-items:flex-start;flex-direction:column}}
+@media(max-width:760px){.profile-info-grid{grid-template-columns:1fr}.security-grid{grid-template-columns:1fr}.hero{grid-template-columns:1fr;gap:8px;padding:14px 16px;margin:8px auto 10px;min-height:0}.hero-title-row{gap:9px;white-space:normal;flex-wrap:wrap}.hero h1{font-size:clamp(28px,8vw,46px)}.hero-art{height:80px;min-height:80px}.orb{width:80px;height:80px}.book{width:56px;height:70px;font-size:28px}.menu-button{top:10px;right:10px}.nav{flex-wrap:wrap}.nav-links{order:3;width:100%;justify-content:center}.ai-launch{top:auto;bottom:18px}.ai-panel{top:1%;left:1%;width:98vw;height:98vh}.flow-grid{grid-template-columns:1fr 1fr}.resource-grid{grid-template-columns:1fr}.resource-tools{grid-template-columns:1fr}.account-bar{align-items:flex-start;flex-direction:column}}
 @media(max-width:520px){.subject-grid{grid-template-columns:1fr}.flow-grid{grid-template-columns:1fr}.account-grid{grid-template-columns:1fr}.hero{padding:20px}.float{font-size:11px}.float.a{left:0}.float.b{right:0}}
 </style>
 </head>
-<body>
+<body class="auth-checking">
 
 <header class="nav">
   <a class="brand" href="index.html"><span class="mark">AG</span><span><b>AGULIBRARY</b><small>LEARN • READ • WATCH • GROW</small></span></a>
@@ -457,6 +458,14 @@ function setText(id,v){const e=document.getElementById(id);if(e)e.textContent=v;
 async function init(){
  setText("year",new Date().getFullYear());
  try{client=typeof getSupabase==="function"?getSupabase():null}catch(e){client=null}
+
+ /* Do not reveal the student homepage until authentication is verified. */
+ if(!client){
+   window.location.replace("auth.html");
+   return;
+ }
+
+ if(!(await enforceWebsiteLogin())) return;
  if(client) await loadSession();
  await loadResources();
  setupHierarchy();
@@ -891,17 +900,27 @@ function setupAccountMenu(){
    The auth page controls whether the next login asks for email + password
    or password only. */
 async function enforceWebsiteLogin(){
-  if(!client) return true;
+  if(!client){
+    window.location.replace("auth.html");
+    return false;
+  }
 
   try{
-    const result = await client.auth.getSession();
+    const result = await Promise.race([
+      client.auth.getSession(),
+      new Promise((_,reject)=>setTimeout(()=>reject(new Error("Authentication check timed out")),8000))
+    ]);
+
     if(result.data?.session?.user){
       currentUser = result.data.session.user;
+      document.body.classList.remove("auth-checking");
       return true;
     }
-  }catch(e){}
+  }catch(e){
+    console.warn("Authentication check:",e);
+  }
 
-  window.location.href = "auth.html";
+  window.location.replace("auth.html");
   return false;
 }
 

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#087f55">
+<title>AGULIBRARY Customer Support Agent</title>
+<link rel="stylesheet" href="style.css">
+<style>
+:root{--g:#087f55;--gd:#056a47;--bg:#f5faf8;--line:#d8e8e1;--text:#203b32}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:Arial,Helvetica,sans-serif;color:var(--text);background:var(--bg)}
+button,input,textarea{font:inherit}button{cursor:pointer}.page{min-height:100vh;display:flex;flex-direction:column}
+header{background:#eefaf5;border-bottom:1px solid var(--line);padding:16px}.head{max-width:1000px;width:100%;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;align-items:center;gap:12px;min-width:0}.mark{width:56px;height:56px;border-radius:17px;background:var(--g);color:#fff;display:grid;place-items:center;font-weight:800;font-size:22px;flex:none}
+.title{font-size:19px;font-weight:800;line-height:1.25}.sub{color:#71827c;font-size:13px;margin-top:3px}.home{background:#fff;border:1px solid #c7ddd4;border-radius:12px;padding:11px 15px;color:var(--gd);font-weight:800;text-decoration:none;white-space:nowrap}
+main{width:min(980px,100%);margin:auto;padding:22px 14px;flex:1}.intro{text-align:center;max-width:720px;margin:0 auto 16px}.intro h1{margin:0 0 7px;font-size:30px}.intro p{margin:0;color:#71827c;line-height:1.55}
+.chat{height:min(72vh,760px);min-height:560px;background:#fff;border:1px solid var(--line);border-radius:22px;overflow:hidden;box-shadow:0 12px 35px rgba(20,70,55,.1);display:flex;flex-direction:column}
+.chathead{background:var(--g);color:#fff;padding:14px 16px;display:flex;align-items:center;gap:11px}.agenticon{width:43px;height:43px;border-radius:13px;background:#ffffff22;display:grid;place-items:center;font-size:21px;flex:none}
+.agentname{font-weight:800}.status{font-size:12px;opacity:.88;margin-top:3px}.clear{margin-left:auto;background:transparent;color:#fff;border:1px solid #ffffff70;border-radius:9px;padding:7px 10px;font-weight:700}
+.messages{flex:1;overflow-y:auto;padding:18px;background:#fbfefd;display:flex;flex-direction:column;gap:12px}.row{display:flex}.row.user{justify-content:flex-end}
+.msg{max-width:80%;padding:12px 14px;border-radius:17px;line-height:1.55;white-space:pre-wrap;overflow-wrap:anywhere;font-size:15px}.msg.agent{background:#fff;border:1px solid var(--line);border-top-left-radius:6px}.msg.user{background:var(--g);color:#fff;border-top-right-radius:6px}.msg.error{background:#fff5f5;color:#8d2d2d;border-color:#efcaca}
+.typing{display:none;width:max-content;background:#fff;border:1px solid var(--line);border-radius:16px;padding:10px 13px}.typing.show{display:flex;gap:5px}.dot{width:7px;height:7px;border-radius:50%;background:#76968a;animation:b 1s infinite}.dot:nth-child(2){animation-delay:.15s}.dot:nth-child(3){animation-delay:.3s}@keyframes b{50%{transform:translateY(-4px);opacity:.4}}
+.compose{border-top:1px solid var(--line);padding:12px;background:#fff}.form{display:flex;gap:8px;align-items:flex-end}.input{flex:1;min-height:50px;max-height:140px;resize:none;border:1px solid #cbded7;border-radius:14px;padding:13px;outline:0}.input:focus{border-color:var(--g);box-shadow:0 0 0 3px #087f5518}.send{min-height:50px;border:0;border-radius:14px;background:var(--g);color:#fff;padding:0 19px;font-weight:800}.send:disabled{opacity:.55}.email{text-align:center;margin:11px 0 0;color:#71827c;font-size:14px}.email a{color:var(--gd);font-weight:800}.note{text-align:center;color:#899891;font-size:11px;margin-top:8px}
+footer{text-align:center;color:#82918b;font-size:12px;padding:14px}.pageerror{max-width:600px;margin:50px auto;background:#fff;border:1px solid var(--line);border-radius:20px;padding:28px;text-align:center}.pageerror a{display:inline-block;background:var(--g);color:#fff;padding:11px 16px;border-radius:11px;text-decoration:none;font-weight:800}
+@media(max-width:650px){header{padding:12px 10px}.mark{width:48px;height:48px;border-radius:14px;font-size:19px}.title{font-size:15px}.sub{font-size:11px}.home{padding:9px 10px;font-size:12px}main{padding:14px 9px}.intro h1{font-size:25px}.intro p{font-size:13px}.chat{height:calc(100vh - 245px);min-height:520px;border-radius:17px}.messages{padding:12px 10px}.msg{max-width:88%;font-size:14px}.compose{padding:9px}.send{padding:0 14px}.input{padding:11px}}
+</style>
+</head>
+<body>
+<div class="page">
+<header><div class="head">
+<div class="brand"><div class="mark">AG</div><div><div class="title">AGULIBRARY Customer Support Agent</div><div class="sub">Account • Library • Technical • Payment Support</div></div></div>
+<a class="home" href="index.html">← AGULIBRARY</a>
+</div></header>
+<main id="main">
+<section class="intro"><h1>How can we help you?</h1><p>Ask the AGULIBRARY Customer Support Agent about your account, resources, payments, technical problems, examinations, results, certification, or website support.</p></section>
+<section class="chat">
+<div class="chathead"><div class="agenticon">💬</div><div><div class="agentname">AGULIBRARY Customer Support Agent</div><div class="status">AI support • Separate from the AI Learning Teacher</div></div><button id="clear" class="clear" type="button">Clear</button></div>
+<div id="messages" class="messages">
+<div class="row"><div class="msg agent">Hello! 👋
+
+I am the AGULIBRARY Customer Support Agent. How can I help you today?</div></div>
+<div id="typing" class="typing"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+</div>
+<div class="compose"><form id="form" class="form"><textarea id="input" class="input" rows="1" maxlength="4000" placeholder="Type your support question..." autocomplete="off"></textarea><button id="send" class="send" type="submit">Send</button></form>
+<div class="email">Email support: <a href="mailto:support@agulibrary.com">support@agulibrary.com</a></div>
+<div class="note">Do not send passwords, API keys, or other private credentials.</div></div>
+</section>
+</main>
+<footer><b>AGULIBRARY</b> — Global Digital Education Library<br>© <span id="year"></span> AGULIBRARY. All rights reserved.</footer>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script src="supabase.js"></script>
+<script>
+(function(){
+"use strict";
+const FUNCTION_NAME="customer-support-agent";
+let client=null,conversation=[],sending=false;
+const main=document.getElementById("main"),box=document.getElementById("messages"),input=document.getElementById("input"),send=document.getElementById("send"),form=document.getElementById("form"),typing=document.getElementById("typing"),clear=document.getElementById("clear");
+document.getElementById("year").textContent=new Date().getFullYear();
+
+document.addEventListener("DOMContentLoaded",start);
+async function start(){
+ try{
+  /* Use the shared client when available; otherwise initialize directly from config.js. */
+  const cfg=window.AGU_CONFIG||{};
+  if(typeof getSupabase==="function"){
+   client=getSupabase();
+  }else if(window.supabase&&typeof window.supabase.createClient==="function"&&cfg.supabaseUrl&&cfg.supabaseAnonKey){
+   client=window.supabase.createClient(cfg.supabaseUrl,cfg.supabaseAnonKey);
+  }else{
+   pageError("Supabase connection is unavailable.","Please make sure config.js is uploaded and contains the AGULIBRARY Supabase configuration.");return
+  }
+  if(!client||!client.auth){pageError("Supabase authentication is unavailable.","Please check your existing Supabase configuration.");return}
+  const r=await client.auth.getSession();
+  if(r.error){console.error(r.error);pageError("Unable to verify your account.","Please sign in again.");return}
+  if(!r.data||!r.data.session){window.location.href="auth.html";return}
+  restore();input.focus();
+ }catch(e){console.error(e);pageError("Customer Support could not start.","Please refresh the page and try again.")}
+}
+function restore(){
+ try{
+  const saved=sessionStorage.getItem("AGULIBRARY_SUPPORT_CONVERSATION");if(!saved)return;
+  const arr=JSON.parse(saved);if(!Array.isArray(arr))return;
+  conversation=arr.filter(x=>x&&(x.role==="user"||x.role==="assistant")&&typeof x.content==="string").slice(-20);
+  conversation.forEach(x=>addMessage(x.content,x.role==="user"?"user":"agent"));
+ }catch(e){console.warn(e)}
+}
+function save(){try{sessionStorage.setItem("AGULIBRARY_SUPPORT_CONVERSATION",JSON.stringify(conversation.slice(-20)))}catch(e){}}
+
+form.addEventListener("submit",async e=>{
+ e.preventDefault();if(sending)return;
+ const text=input.value.trim();if(!text)return;
+ sending=true;send.disabled=true;send.textContent="Sending...";
+ addMessage(text,"user");conversation.push({role:"user",content:text});save();
+ input.value="";resize();typing.classList.add("show");scroll();
+ try{
+  const sessionResult=await client.auth.getSession();
+  const accessToken=sessionResult.data?.session?.access_token||"";
+  if(!accessToken)throw new Error("Your AGULIBRARY session has expired. Please sign in again.");
+
+  const base=String(window.AGU_CONFIG?.supabaseUrl||"").replace(/\/$/,"");
+  const anonKey=String(window.AGU_CONFIG?.supabaseAnonKey||"");
+  if(!base)throw new Error("Supabase URL is not configured.");
+
+  // Send the authenticated request explicitly so mobile browsers receive
+  // the same authorization headers as the AGULIBRARY Supabase client.
+  const response=await fetch(base+"/functions/v1/"+FUNCTION_NAME,{
+   method:"POST",
+   headers:{
+    "Content-Type":"application/json",
+    "Authorization":"Bearer "+accessToken,
+    "apikey":anonKey
+   },
+   body:JSON.stringify({message:text,conversation:conversation.slice(-20),student_id:sessionResult.data.session.user.id})
+  });
+
+  let d={};
+  try{d=await response.json();}catch(e){}
+  if(!response.ok){
+   const serverMessage=typeof d.error==="string"?d.error:typeof d.message==="string"?d.message:typeof d.error_description==="string"?d.error_description:"";
+   throw new Error(serverMessage||("Customer Support Edge Function returned HTTP "+response.status+"."));
+  }
+  const answer=typeof d.answer==="string"?d.answer.trim():typeof d.response==="string"?d.response.trim():typeof d.message==="string"?d.message.trim():"";
+  if(!answer)throw new Error("The Customer Support Agent returned an empty response.");
+  addMessage(answer,"agent");conversation.push({role:"assistant",content:answer});save();
+ }catch(err){
+  console.error("Customer Support error:",err);
+  let msg=err&&err.message?err.message:"The Customer Support Agent could not connect right now.";
+  if(/unauthorized|jwt/i.test(msg))msg="Your AGULIBRARY session has expired. Please sign in again.";
+  addMessage(msg+"\n\nIf the problem continues, please email support@agulibrary.com.","error");
+ }finally{
+  typing.classList.remove("show");sending=false;send.disabled=false;send.textContent="Send";input.focus();
+ }
+});
+function addMessage(text,type){
+ const row=document.createElement("div");row.className="row"+(type==="user"?" user":"");
+ const bubble=document.createElement("div");bubble.className="msg "+(type==="user"?"user":type==="error"?"agent error":"agent");bubble.textContent=text;
+ row.appendChild(bubble);box.insertBefore(row,typing);scroll();
+}
+clear.addEventListener("click",()=>{
+ if(sending)return;conversation=[];
+ try{sessionStorage.removeItem("AGULIBRARY_SUPPORT_CONVERSATION")}catch(e){}
+ box.innerHTML="";
+ const row=document.createElement("div"),bubble=document.createElement("div");
+ row.className="row";bubble.className="msg agent";bubble.textContent="Hello! 👋\n\nI am the AGULIBRARY Customer Support Agent. How can I help you today?";
+ row.appendChild(bubble);box.appendChild(row);box.appendChild(typing);input.focus();
+});
+input.addEventListener("input",resize);
+input.addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();if(!sending)form.requestSubmit()}});
+function resize(){input.style.height="auto";input.style.height=Math.min(input.scrollHeight,140)+"px"}
+function scroll(){requestAnimationFrame(()=>box.scrollTop=box.scrollHeight)}
+function pageError(title,detail){main.innerHTML='<div class="pageerror"><h2>'+esc(title)+'</h2><p>'+esc(detail)+'</p><a href="auth.html">Go to Sign In</a></div>'}
+function esc(s){return String(s).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
+})();
+</script>
+</body>
+</html>

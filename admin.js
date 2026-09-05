@@ -1,16 +1,25 @@
 /* =========================================================
    AGULIBRARY — COMPLETE ADMIN.JS
-   Fixed for current Supabase database structure.
+   Compatible with the current Supabase resources table.
 
-   Includes:
-   - Supabase admin authentication
-   - Admin-user authorization
-   - Admin MFA verification
-   - Resource upload
-   - Student management/search
-   - Student notifications
-   - Resource management/search
-   - Resource deletion
+   Resources table uses:
+   - id
+   - title
+   - description
+   - subject
+   - level
+   - class_level
+   - resource_category
+   - parent_subject
+   - subject_area
+   - folder_path
+   - term
+   - thumbnail_url
+   - file_url
+   - type
+
+   IMPORTANT:
+   folder_path is used instead of storage_path.
    ========================================================= */
 
 (function () {
@@ -46,6 +55,7 @@
     );
   }
 
+
   function showLoginMessage(text, type = "error") {
     const x = $("loginMessage");
     if (!x) return;
@@ -53,6 +63,7 @@
     x.textContent = text;
     x.className = "message show " + type;
   }
+
 
   function showMessage(text, type = "success") {
     const x = $("message");
@@ -62,10 +73,12 @@
     x.className = "message show " + type;
   }
 
+
   function hideMessage() {
     const x = $("message");
     if (x) x.className = "message";
   }
+
 
   function getDB() {
     if (db) return db;
@@ -85,7 +98,9 @@
       );
     }
 
-    throw new Error("Supabase configuration is unavailable.");
+    throw new Error(
+      "Supabase configuration is unavailable."
+    );
   }
 
 
@@ -109,6 +124,7 @@
     );
   }
 
+
   function profileEmail(p) {
     return (
       p.email ||
@@ -117,6 +133,7 @@
       ""
     );
   }
+
 
   function profilePhone(p) {
     return (
@@ -127,13 +144,12 @@
     );
   }
 
-  /*
-     IMPORTANT:
-     Your student_profiles table uses "id" as the
-     student's Supabase Auth user ID.
 
-     It does NOT use "user_id".
+  /*
+     The current student_profiles table uses "id"
+     as the student's Supabase Auth user ID.
   */
+
   function getId(p) {
     return (
       p.id ||
@@ -149,6 +165,7 @@
      ========================================================= */
 
   async function isAdmin(session) {
+
     const d = getDB();
 
     const {
@@ -157,7 +174,10 @@
     } = await d
       .from("admin_users")
       .select("user_id")
-      .eq("user_id", session.user.id)
+      .eq(
+        "user_id",
+        session.user.id
+      )
       .maybeSingle();
 
     if (error) throw error;
@@ -181,7 +201,8 @@
     try {
 
       const r =
-        await d.auth.mfa.getAuthenticatorAssuranceLevel();
+        await d.auth.mfa
+          .getAuthenticatorAssuranceLevel();
 
       if (r.error) throw r.error;
 
@@ -199,11 +220,6 @@
       return false;
     }
 
-
-    /*
-       AAL2 is the Supabase server-issued proof
-       that MFA has been completed.
-    */
 
     if (aal.currentLevel === "aal2") {
 
@@ -249,7 +265,9 @@
 
     const totp =
       (factors.data?.totp || [])
-        .find(f => f.status === "verified");
+        .find(
+          f => f.status === "verified"
+        );
 
 
     if (!totp) {
@@ -264,7 +282,8 @@
     }
 
 
-    const overlay = document.createElement("div");
+    const overlay =
+      document.createElement("div");
 
     overlay.id = "aguMfaOverlay";
 
@@ -369,143 +388,168 @@
     document.body.appendChild(overlay);
 
 
-    const codeInput = $("aguMfaCode");
-    const verifyButton = $("aguMfaVerify");
-    const cancelButton = $("aguMfaCancel");
-    const errorBox = $("aguMfaError");
+    const codeInput =
+      $("aguMfaCode");
+
+    const verifyButton =
+      $("aguMfaVerify");
+
+    const cancelButton =
+      $("aguMfaCancel");
+
+    const errorBox =
+      $("aguMfaError");
 
 
-    cancelButton.onclick = async () => {
-
-      overlay.remove();
-
-      mfaOpen = false;
-
-      try {
-        await d.auth.signOut();
-      } catch (e) {
-        console.error(e);
-      }
-
-      currentSession = null;
-
-      $("dashboardPanel")?.classList.add("hidden");
-      $("loginPanel")?.classList.remove("hidden");
-
-      showLoginMessage(
-        "Administrator MFA verification was cancelled. Please sign in again.",
-        "error"
-      );
-    };
-
-
-    verifyButton.onclick = async () => {
-
-      const code =
-        (codeInput.value || "")
-          .replace(/\D/g, "");
-
-
-      if (code.length !== 6) {
-
-        errorBox.textContent =
-          "Enter the 6-digit authenticator code.";
-
-        return;
-      }
-
-
-      verifyButton.disabled = true;
-      cancelButton.disabled = true;
-
-      errorBox.textContent = "Verifying...";
-
-
-      try {
-
-        const r =
-          await d.auth.mfa.challengeAndVerify({
-            factorId: totp.id,
-            code
-          });
-
-
-        if (r.error) throw r.error;
-
-
-        const after =
-          await d.auth.mfa.getAuthenticatorAssuranceLevel();
-
-
-        if (after.error) throw after.error;
-
-
-        if (
-          after.data?.currentLevel !== "aal2"
-        ) {
-          throw new Error(
-            "MFA verification completed, but this session " +
-            "is not at AAL2. Please try again."
-          );
-        }
-
-
-        const sessionResult =
-          await d.auth.getSession();
-
-
-        if (sessionResult.error)
-          throw sessionResult.error;
-
-
-        currentSession =
-          sessionResult.data?.session ||
-          currentSession;
-
-
-        mfaOpen = true;
+    cancelButton.onclick =
+      async () => {
 
         overlay.remove();
 
-        await finishAdmin();
+        mfaOpen = false;
+
+        try {
+          await d.auth.signOut();
+        } catch (e) {
+          console.error(e);
+        }
+
+        currentSession = null;
+
+        $("dashboardPanel")
+          ?.classList.add("hidden");
+
+        $("loginPanel")
+          ?.classList.remove("hidden");
+
+        showLoginMessage(
+          "Administrator MFA verification was cancelled. Please sign in again.",
+          "error"
+        );
+      };
 
 
-      } catch (e) {
+    verifyButton.onclick =
+      async () => {
 
-        console.error(e);
+        const code =
+          (codeInput.value || "")
+            .replace(/\D/g, "");
+
+
+        if (code.length !== 6) {
+
+          errorBox.textContent =
+            "Enter the 6-digit authenticator code.";
+
+          return;
+        }
+
+
+        verifyButton.disabled = true;
+        cancelButton.disabled = true;
 
         errorBox.textContent =
-          e.message ||
-          "MFA verification failed. Check the code and try again.";
+          "Verifying...";
 
-        verifyButton.disabled = false;
-        cancelButton.disabled = false;
 
-        codeInput.focus();
-        codeInput.select();
+        try {
+
+          const r =
+            await d.auth.mfa
+              .challengeAndVerify({
+                factorId: totp.id,
+                code
+              });
+
+
+          if (r.error) throw r.error;
+
+
+          const after =
+            await d.auth.mfa
+              .getAuthenticatorAssuranceLevel();
+
+
+          if (after.error)
+            throw after.error;
+
+
+          if (
+            after.data?.currentLevel !== "aal2"
+          ) {
+
+            throw new Error(
+              "MFA verification completed, but this session " +
+              "is not at AAL2. Please try again."
+            );
+          }
+
+
+          const sessionResult =
+            await d.auth.getSession();
+
+
+          if (sessionResult.error)
+            throw sessionResult.error;
+
+
+          currentSession =
+            sessionResult.data?.session ||
+            currentSession;
+
+
+          mfaOpen = true;
+
+          overlay.remove();
+
+          await finishAdmin();
+
+
+        } catch (e) {
+
+          console.error(e);
+
+          errorBox.textContent =
+            e.message ||
+            "MFA verification failed. Check the code and try again.";
+
+          verifyButton.disabled = false;
+          cancelButton.disabled = false;
+
+          codeInput.focus();
+          codeInput.select();
+        }
+      };
+
+
+    codeInput.addEventListener(
+      "input",
+      () => {
+
+        codeInput.value =
+          codeInput.value
+            .replace(/\D/g, "")
+            .slice(0, 6);
+
+        if (
+          codeInput.value.length === 6
+        ) {
+          errorBox.textContent = "";
+        }
       }
-    };
+    );
 
 
-    codeInput.addEventListener("input", () => {
+    codeInput.addEventListener(
+      "keydown",
+      e => {
 
-      codeInput.value =
-        codeInput.value
-          .replace(/\D/g, "")
-          .slice(0, 6);
-
-      if (codeInput.value.length === 6) {
-        errorBox.textContent = "";
+        if (e.key === "Enter") {
+          verifyButton.click();
+        }
       }
-    });
-
-
-    codeInput.addEventListener("keydown", e => {
-
-      if (e.key === "Enter") {
-        verifyButton.click();
-      }
-    });
+    );
 
 
     codeInput.focus();
@@ -521,9 +565,12 @@
   async function loadStudents() {
 
     const d = getDB();
-    const list = $("aguStudentList");
+
+    const list =
+      $("aguStudentList");
 
     if (!list) return;
+
 
     list.innerHTML =
       '<div class="empty">Loading students...</div>';
@@ -531,34 +578,14 @@
 
     try {
 
-      /*
-         Your real table is:
-
-         student_profiles
-         id
-         first_name
-         last_name
-         middle_name
-         full_name
-         phone
-         country_code
-         email
-         profile_photo_url
-         education_level
-         class_level
-         bio
-         invitation_code
-         created_at
-         updated_at
-      */
-
       const r =
         await d
           .from("student_profiles")
           .select("*");
 
 
-      if (r.error) throw r.error;
+      if (r.error)
+        throw r.error;
 
 
       students =
@@ -567,33 +594,38 @@
           : [];
 
 
-      students.sort((a, b) => {
+      students.sort(
+        (a, b) => {
 
-        const ad =
-          String(
-            a.created_at ||
-            a.updated_at ||
-            ""
-          );
+          const ad =
+            String(
+              a.created_at ||
+              a.updated_at ||
+              ""
+            );
 
-        const bd =
-          String(
-            b.created_at ||
-            b.updated_at ||
-            ""
-          );
+          const bd =
+            String(
+              b.created_at ||
+              b.updated_at ||
+              ""
+            );
 
-        return bd.localeCompare(ad);
-      });
+          return bd.localeCompare(ad);
+        }
+      );
 
 
       if ($("aguStudentCount")) {
-        $("aguStudentCount").textContent =
+
+        $("aguStudentCount")
+          .textContent =
           students.length;
       }
 
 
       renderStudents();
+
       updateTargets();
 
 
@@ -606,7 +638,8 @@
 
 
       if ($("aguStudentCount")) {
-        $("aguStudentCount").textContent = "0";
+        $("aguStudentCount")
+          .textContent = "0";
       }
 
 
@@ -614,7 +647,10 @@
         '<div class="empty">' +
         '❌ Unable to load students.<br>' +
         '<small>' +
-        esc(e.message || "Unknown database error") +
+        esc(
+          e.message ||
+          "Unknown database error"
+        ) +
         '</small>' +
         '</div>';
     }
@@ -623,7 +659,9 @@
 
   function renderStudents() {
 
-    const list = $("aguStudentList");
+    const list =
+      $("aguStudentList");
+
 
     const q =
       ($("aguStudentSearch")?.value || "")
@@ -638,11 +676,17 @@
       students.filter(p => {
 
         const text = [
+
           profileName(p),
+
           profileEmail(p),
+
           profilePhone(p),
+
           p.education_level,
+
           p.class_level
+
         ]
           .filter(Boolean)
           .join(" ")
@@ -663,91 +707,111 @@
 
 
     list.innerHTML =
-      rows.map(p => {
+      rows
+        .map(p => {
 
-        const n = profileName(p);
-        const id = getId(p);
+          const n =
+            profileName(p);
 
-        const initials =
-          n
-            .split(/\s+/)
-            .filter(Boolean)
-            .slice(0, 2)
-            .map(x => x[0])
-            .join("")
-            .toUpperCase();
+          const id =
+            getId(p);
 
 
-        return `
-          <div class="item">
+          const initials =
+            n
+              .split(/\s+/)
+              .filter(Boolean)
+              .slice(0, 2)
+              .map(x => x[0])
+              .join("")
+              .toUpperCase();
 
-            <div class="item-main">
 
-              <div class="avatar">
-                ${esc(initials || "ST")}
-              </div>
+          return `
+            <div class="item">
 
-              <div class="item-text">
+              <div class="item-main">
 
-                <strong>
-                  ${esc(n)}
-                </strong>
-
-                <div class="small">
-                  ${esc(profileEmail(p))}
+                <div class="avatar">
+                  ${esc(initials || "ST")}
                 </div>
 
-                <div class="small">
-                  ${esc(profilePhone(p))}
+                <div class="item-text">
+
+                  <strong>
+                    ${esc(n)}
+                  </strong>
+
+                  <div class="small">
+                    ${esc(profileEmail(p))}
+                  </div>
+
+                  <div class="small">
+                    ${esc(profilePhone(p))}
+                  </div>
+
+                  ${
+                    p.education_level
+                      ? `
+                        <div class="small">
+                          Education:
+                          ${esc(p.education_level)}
+                        </div>
+                      `
+                      : ""
+                  }
+
+                  ${
+                    p.class_level
+                      ? `
+                        <div class="small">
+                          Class:
+                          ${esc(p.class_level)}
+                        </div>
+                      `
+                      : ""
+                  }
+
                 </div>
 
-                ${
-                  p.education_level
-                    ? `<div class="small">
-                         Education: ${esc(p.education_level)}
-                       </div>`
-                    : ""
-                }
-
-                ${
-                  p.class_level
-                    ? `<div class="small">
-                         Class: ${esc(p.class_level)}
-                       </div>`
-                    : ""
-                }
-
               </div>
+
+              <button
+                class="btn blue agu-message-student"
+                data-id="${esc(id)}"
+                type="button"
+              >
+                Message
+              </button>
 
             </div>
-
-            <button
-              class="btn blue agu-message-student"
-              data-id="${esc(id)}"
-              type="button"
-            >
-              Message
-            </button>
-
-          </div>
-        `;
-      }).join("");
+          `;
+        })
+        .join("");
 
 
     list
-      .querySelectorAll(".agu-message-student")
+      .querySelectorAll(
+        ".agu-message-student"
+      )
       .forEach(button => {
 
         button.onclick = () => {
 
-          const target = $("aguNotifyTarget");
+          const target =
+            $("aguNotifyTarget");
+
 
           if (target) {
+
             target.value =
-              "student:" + button.dataset.id;
+              "student:" +
+              button.dataset.id;
           }
 
-          $("aguNotifyTitle")?.focus();
+
+          $("aguNotifyTitle")
+            ?.focus();
         };
       });
   }
@@ -755,7 +819,8 @@
 
   function updateTargets() {
 
-    const s = $("aguNotifyTarget");
+    const s =
+      $("aguNotifyTarget");
 
     if (!s) return;
 
@@ -763,20 +828,31 @@
     s.innerHTML =
       '<option value="all">👥 All students</option>' +
 
-      students.map(p => {
+      students
+        .map(p => {
 
-        const id = getId(p);
-        const name = profileName(p);
-        const email = profileEmail(p);
+          const id =
+            getId(p);
+
+          const name =
+            profileName(p);
+
+          const email =
+            profileEmail(p);
 
 
-        return `
-          <option value="student:${esc(id)}">
-            ${esc(name)}
-            ${email ? " — " + esc(email) : ""}
-          </option>
-        `;
-      }).join("");
+          return `
+            <option value="student:${esc(id)}">
+              ${esc(name)}
+              ${
+                email
+                  ? " — " + esc(email)
+                  : ""
+              }
+            </option>
+          `;
+        })
+        .join("");
   }
 
 
@@ -786,10 +862,17 @@
 
   function updateDigitalBookFields() {
 
-    const type = $("resourceType");
-    const normal = $("normalFileField");
-    const digital = $("digitalBookFields");
-    const file = $("file");
+    const type =
+      $("resourceType");
+
+    const normal =
+      $("normalFileField");
+
+    const digital =
+      $("digitalBookFields");
+
+    const file =
+      $("file");
 
 
     if (!type) return;
@@ -812,7 +895,8 @@
 
 
     if (file) {
-      file.required = !isDigital;
+      file.required =
+        !isDigital;
     }
 
 
@@ -821,6 +905,7 @@
       $("bookEntry") &&
       !$("bookEntry").value
     ) {
+
       $("bookEntry").value =
         "index.html";
     }
@@ -833,8 +918,12 @@
 
   async function loadResources() {
 
-    const d = getDB();
-    const list = $("aguResourceList");
+    const d =
+      getDB();
+
+    const list =
+      $("aguResourceList");
+
 
     if (!list) return;
 
@@ -851,19 +940,26 @@
           .select("*")
           .order(
             "created_at",
-            { ascending: false }
+            {
+              ascending: false
+            }
           );
 
 
-      if (r.error) throw r.error;
+      if (r.error)
+        throw r.error;
 
 
       resources =
-        r.data || [];
+        Array.isArray(r.data)
+          ? r.data
+          : [];
 
 
       if ($("aguResourceCount")) {
-        $("aguResourceCount").textContent =
+
+        $("aguResourceCount")
+          .textContent =
           resources.length;
       }
 
@@ -883,7 +979,10 @@
         '<div class="empty">' +
         '❌ Unable to load resources.<br>' +
         '<small>' +
-        esc(e.message || "Unknown database error") +
+        esc(
+          e.message ||
+          "Unknown database error"
+        ) +
         '</small>' +
         '</div>';
     }
@@ -894,6 +993,7 @@
 
     const list =
       $("aguResourceList");
+
 
     const q =
       ($("aguResourceSearch")?.value || "")
@@ -908,12 +1008,19 @@
       resources.filter(r => {
 
         const text = [
+
           r.title,
+
           r.subject,
+
           r.resource_category,
+
           r.class_level,
+
           r.type,
-          r.storage_path
+
+          r.folder_path
+
         ]
           .filter(Boolean)
           .join(" ")
@@ -943,9 +1050,9 @@
 
 
           const key =
-            r.id ||
-            r.storage_path ||
-            r.file_url ||
+            r.id ??
+            r.folder_path ??
+            r.file_url ??
             `${r.title || "resource"}-${i}`;
 
 
@@ -955,10 +1062,14 @@
               <div class="item-text">
 
                 <strong>
-                  ${esc(r.title || "Untitled Resource")}
+                  ${esc(
+                    r.title ||
+                    "Untitled Resource"
+                  )}
                 </strong>
 
                 <div class="small">
+
                   ${esc(
                     r.subject ||
                     r.resource_category ||
@@ -967,22 +1078,28 @@
 
                   ${
                     r.class_level
-                      ? " • " + esc(r.class_level)
+                      ? " • " +
+                        esc(r.class_level)
                       : ""
                   }
 
                   ${
                     r.type
-                      ? " • " + esc(r.type)
+                      ? " • " +
+                        esc(r.type)
                       : ""
                   }
+
                 </div>
 
                 <div class="small">
-                  ${esc(r.storage_path || "")}
+                  ${esc(
+                    r.folder_path || ""
+                  )}
                 </div>
 
               </div>
+
 
               <div style="
                 display:flex;
@@ -1005,6 +1122,7 @@
                     : ""
                 }
 
+
                 <button
                   class="btn delete-resource agu-delete-resource"
                   data-resource-key="${esc(key)}"
@@ -1017,17 +1135,21 @@
 
             </div>
           `;
-        }).join("");
+        })
+        .join("");
 
 
     list
-      .querySelectorAll(".agu-delete-resource")
+      .querySelectorAll(
+        ".agu-delete-resource"
+      )
       .forEach(button => {
 
-        button.onclick = () =>
-          deleteResource(
-            button.dataset.resourceKey
-          );
+        button.onclick =
+          () =>
+            deleteResource(
+              button.dataset.resourceKey
+            );
       });
   }
 
@@ -1036,19 +1158,25 @@
      RESOURCE DELETE
      ========================================================= */
 
-  async function deleteResource(resourceKey) {
+  async function deleteResource(
+    resourceKey
+  ) {
 
-    const d = getDB();
+    const d =
+      getDB();
 
 
     const resource =
       resources.find(r =>
+
         String(
           r.id ??
-          r.storage_path ??
+          r.folder_path ??
           r.file_url ??
           ""
-        ) === String(resourceKey)
+        ) ===
+        String(resourceKey)
+
       );
 
 
@@ -1100,11 +1228,17 @@
       );
 
 
-      let storageError = null;
+      let storageError =
+        null;
 
+
+      /*
+         IMPORTANT:
+         The actual database field is folder_path.
+      */
 
       const storagePath =
-        resource.storage_path ||
+        resource.folder_path ||
         resource.path ||
         "";
 
@@ -1115,11 +1249,14 @@
           await d
             .storage
             .from(BUCKET)
-            .remove([storagePath]);
+            .remove([
+              storagePath
+            ]);
 
 
         if (sr.error) {
-          storageError = sr.error;
+          storageError =
+            sr.error;
         }
       }
 
@@ -1128,7 +1265,8 @@
 
 
       if (
-        resource.id !== undefined &&
+        resource.id !==
+        undefined &&
         resource.id !== null
       ) {
 
@@ -1136,7 +1274,10 @@
           await d
             .from(TABLE)
             .delete()
-            .eq("id", resource.id);
+            .eq(
+              "id",
+              resource.id
+            );
 
       } else if (storagePath) {
 
@@ -1145,7 +1286,7 @@
             .from(TABLE)
             .delete()
             .eq(
-              "storage_path",
+              "folder_path",
               storagePath
             );
 
@@ -1215,19 +1356,23 @@
     e.preventDefault();
 
 
-    const d = getDB();
+    const d =
+      getDB();
 
 
     const title =
-      $("title")?.value.trim() || "";
+      $("title")?.value.trim() ||
+      "";
 
 
     const category =
-      $("category")?.value.trim() || "";
+      $("category")?.value.trim() ||
+      "";
 
 
     const type =
-      $("resourceType")?.value || "";
+      $("resourceType")?.value ||
+      "";
 
 
     const status =
@@ -1241,6 +1386,7 @@
     if (!title) {
 
       if (status) {
+
         status.textContent =
           "Please enter a resource title.";
       }
@@ -1249,10 +1395,13 @@
     }
 
 
-    button.disabled = true;
+    if (button) {
+      button.disabled = true;
+    }
 
 
     if (status) {
+
       status.textContent =
         "Preparing...";
     }
@@ -1264,20 +1413,28 @@
          DIGITAL BOOK
          ===================================================== */
 
-      if (type === "digital_book") {
+      if (
+        type === "digital_book"
+      ) {
 
         let bookPath =
-          $("bookPath")?.value.trim() || "";
+          $("bookPath")
+            ?.value
+            .trim() ||
+          "";
 
 
         let bookEntry =
-          $("bookEntry")?.value.trim() ||
+          $("bookEntry")
+            ?.value
+            .trim() ||
           "index.html";
 
 
         if (!bookPath) {
 
           if (status) {
+
             status.textContent =
               "Please enter the digital book folder path.";
           }
@@ -1296,6 +1453,7 @@
         if (!bookPath) {
 
           if (status) {
+
             status.textContent =
               "Please enter the digital book folder path.";
           }
@@ -1312,7 +1470,8 @@
 
 
         if (!bookEntry) {
-          bookEntry = "index.html";
+          bookEntry =
+            "index.html";
         }
 
 
@@ -1327,17 +1486,22 @@
 
 
         /*
-           IMPORTANT:
-           Only columns that actually exist in
-           your resources table are sent.
+           Only real resources columns.
         */
 
         const payload = {
+
           title: title,
+
           subject: category,
+
           type: "digital_book",
-          file_url: digitalBookURL,
-          resource_category: category
+
+          file_url:
+            digitalBookURL,
+
+          resource_category:
+            category
         };
 
 
@@ -1347,12 +1511,12 @@
             .insert(payload);
 
 
-        if (result.error) {
+        if (result.error)
           throw result.error;
-        }
 
 
         if (status) {
+
           status.textContent =
             "✅ Digital book published successfully.";
         }
@@ -1364,7 +1528,9 @@
         );
 
 
-        $("uploadForm")?.reset();
+        $("uploadForm")
+          ?.reset();
+
 
         updateDigitalBookFields();
 
@@ -1379,12 +1545,14 @@
          ===================================================== */
 
       const file =
-        $("file")?.files?.[0];
+        $("file")
+          ?.files?.[0];
 
 
       if (!file) {
 
         if (status) {
+
           status.textContent =
             "Please select a file.";
         }
@@ -1394,13 +1562,14 @@
 
 
       if (status) {
+
         status.textContent =
           "Uploading...";
       }
 
 
       /*
-         Make a safe storage filename.
+         Create safe storage filename.
       */
 
       const safe =
@@ -1415,8 +1584,8 @@
 
 
       /*
-         Upload to:
-         agu-library/resources/...
+         Upload file to the AGULIBRARY
+         storage bucket.
       */
 
       const up =
@@ -1432,9 +1601,8 @@
           );
 
 
-      if (up.error) {
+      if (up.error)
         throw up.error;
-      }
 
 
       /*
@@ -1445,7 +1613,9 @@
         d
           .storage
           .from(BUCKET)
-          .getPublicUrl(filename);
+          .getPublicUrl(
+            filename
+          );
 
 
       const url =
@@ -1453,31 +1623,40 @@
 
 
       /*
-         IMPORTANT FIX:
-         Do NOT send:
+         IMPORTANT DATABASE FIX
+         ----------------------
+         Your actual resources table
+         uses folder_path.
+
+         DO NOT send:
          - name
          - category
          - url
+         - storage_path
 
-         because those columns do not exist
-         in the current resources table.
-
-         We use the actual fields:
+         Use:
          - title
          - subject
          - type
          - file_url
-         - storage_path
+         - folder_path
          - resource_category
       */
 
       const payload = {
+
         title: title,
+
         subject: category,
+
         type: type,
+
         file_url: url,
-        storage_path: filename,
-        resource_category: category
+
+        folder_path: filename,
+
+        resource_category:
+          category
       };
 
 
@@ -1490,9 +1669,9 @@
       if (result.error) {
 
         /*
-           If database insertion fails after the
-           file uploaded, attempt to remove the
-           uploaded file so we don't leave an orphan.
+           Database insertion failed.
+           Remove uploaded file so
+           no orphan file remains.
         */
 
         try {
@@ -1500,7 +1679,9 @@
           await d
             .storage
             .from(BUCKET)
-            .remove([filename]);
+            .remove([
+              filename
+            ]);
 
         } catch (_) {}
 
@@ -1509,6 +1690,7 @@
 
 
       if (status) {
+
         status.textContent =
           "✅ Upload successful.";
       }
@@ -1520,9 +1702,12 @@
       );
 
 
-      $("uploadForm")?.reset();
+      $("uploadForm")
+        ?.reset();
+
 
       updateDigitalBookFields();
+
 
       await loadResources();
 
@@ -1552,9 +1737,12 @@
         "error"
       );
 
+
     } finally {
 
-      button.disabled = false;
+      if (button) {
+        button.disabled = false;
+      }
     }
   }
 
@@ -1573,48 +1761,58 @@
     const variants = [
 
       {
-        student_id: recipientId,
+        student_id:
+          recipientId,
         title,
         message,
         is_read: false
       },
 
       {
-        user_id: recipientId,
+        user_id:
+          recipientId,
         title,
         message,
         is_read: false
       },
 
       {
-        recipient_id: recipientId,
+        recipient_id:
+          recipientId,
         title,
         message,
         is_read: false
       },
 
       {
-        student_id: recipientId,
+        student_id:
+          recipientId,
         message,
         is_read: false
       },
 
       {
-        user_id: recipientId,
+        user_id:
+          recipientId,
         message,
         is_read: false
       }
+
     ];
 
 
     let last = null;
 
 
-    for (const payload of variants) {
+    for (
+      const payload of variants
+    ) {
 
       const r =
         await d
-          .from("student_notifications")
+          .from(
+            "student_notifications"
+          )
           .insert(payload);
 
 
@@ -1623,19 +1821,16 @@
       }
 
 
-      last = r.error;
+      last =
+        r.error;
 
 
       const m =
-        (r.error.message || "")
-          .toLowerCase();
+        (
+          r.error.message ||
+          ""
+        ).toLowerCase();
 
-
-      /*
-         Continue trying another schema
-         only when the error indicates a
-         missing column/schema field.
-      */
 
       if (
         !(
@@ -1644,6 +1839,7 @@
           m.includes("could not find")
         )
       ) {
+
         throw r.error;
       }
     }
@@ -1660,20 +1856,26 @@
 
   async function sendNotification() {
 
-    const d = getDB();
+    const d =
+      getDB();
 
 
     const target =
-      $("aguNotifyTarget")?.value ||
+      $("aguNotifyTarget")
+        ?.value ||
       "all";
 
 
     const title =
-      $("aguNotifyTitle")?.value.trim();
+      $("aguNotifyTitle")
+        ?.value
+        .trim();
 
 
     const message =
-      $("aguNotifyMessage")?.value.trim();
+      $("aguNotifyMessage")
+        ?.value
+        .trim();
 
 
     const status =
@@ -1682,22 +1884,30 @@
 
     if (!title || !message) {
 
-      status.textContent =
-        "Please enter a title and message.";
+      if (status) {
+
+        status.textContent =
+          "Please enter a title and message.";
+      }
 
       return;
     }
 
 
-    status.textContent =
-      "Sending...";
+    if (status) {
+
+      status.textContent =
+        "Sending...";
+    }
 
 
     try {
 
       const recipients =
         target === "all"
+
           ? students
+
           : students.filter(
               p =>
                 getId(p) ===
@@ -1719,9 +1929,13 @@
       let sent = 0;
 
 
-      for (const p of recipients) {
+      for (
+        const p of recipients
+      ) {
 
-        const id = getId(p);
+        const id =
+          getId(p);
+
 
         if (!id) continue;
 
@@ -1738,13 +1952,25 @@
       }
 
 
-      status.textContent =
-        `✅ Notification sent to ${sent} student${
-          sent === 1 ? "" : "s"
-        }.`;
+      if (status) {
 
-      $("aguNotifyTitle").value = "";
-      $("aguNotifyMessage").value = "";
+        status.textContent =
+          `✅ Notification sent to ${sent} student${
+            sent === 1 ? "" : "s"
+          }.`;
+      }
+
+
+      if ($("aguNotifyTitle")) {
+        $("aguNotifyTitle").value =
+          "";
+      }
+
+
+      if ($("aguNotifyMessage")) {
+        $("aguNotifyMessage").value =
+          "";
+      }
 
 
       await loadNotificationCount();
@@ -1754,12 +1980,16 @@
 
       console.error(e);
 
-      status.textContent =
-        "❌ " +
-        (
-          e.message ||
-          "Notification could not be sent."
-        );
+
+      if (status) {
+
+        status.textContent =
+          "❌ " +
+          (
+            e.message ||
+            "Notification could not be sent."
+          );
+      }
     }
   }
 
@@ -1770,11 +2000,16 @@
 
       const r =
         await getDB()
-          .from("student_notifications")
-          .select("*", {
-            count: "exact",
-            head: true
-          });
+          .from(
+            "student_notifications"
+          )
+          .select(
+            "*",
+            {
+              count: "exact",
+              head: true
+            }
+          );
 
 
       if (
@@ -1782,7 +2017,8 @@
         $("aguNotificationCount")
       ) {
 
-        $("aguNotificationCount").textContent =
+        $("aguNotificationCount")
+          .textContent =
           r.count ?? 0;
       }
 
@@ -1796,18 +2032,18 @@
 
   async function finishAdmin() {
 
-    $("loginPanel")?.classList.add(
-      "hidden"
-    );
+    $("loginPanel")
+      ?.classList.add("hidden");
 
-    $("dashboardPanel")?.classList.remove(
-      "hidden"
-    );
+
+    $("dashboardPanel")
+      ?.classList.remove("hidden");
 
 
     if (currentSession) {
 
-      $("adminIdentity").textContent =
+      $("adminIdentity")
+        .textContent =
         "Signed in as " +
         (
           currentSession.user.email ||
@@ -1817,9 +2053,13 @@
 
 
     await Promise.all([
+
       loadStudents(),
+
       loadResources(),
+
       loadNotificationCount()
+
     ]);
   }
 
@@ -1832,38 +2072,43 @@
 
     try {
 
-      const d = getDB();
+      const d =
+        getDB();
 
 
       const r =
         await d.auth.getSession();
 
 
-      if (r.error) {
+      if (r.error)
         throw r.error;
-      }
 
 
       currentSession =
-        r.data?.session || null;
+        r.data?.session ||
+        null;
 
 
       if (!currentSession) {
 
-        $("loginPanel")?.classList.remove(
-          "hidden"
-        );
+        $("loginPanel")
+          ?.classList.remove(
+            "hidden"
+          );
 
-        $("dashboardPanel")?.classList.add(
-          "hidden"
-        );
+        $("dashboardPanel")
+          ?.classList.add(
+            "hidden"
+          );
 
         return;
       }
 
 
       if (
-        !(await isAdmin(currentSession))
+        !(await isAdmin(
+          currentSession
+        ))
       ) {
 
         await d.auth.signOut();
@@ -1913,7 +2158,9 @@
       $("adminLoginButton");
 
 
-    button.disabled = true;
+    if (button) {
+      button.disabled = true;
+    }
 
 
     showLoginMessage(
@@ -1924,25 +2171,28 @@
 
     try {
 
-      const d = getDB();
+      const d =
+        getDB();
 
 
       const r =
-        await d.auth.signInWithPassword({
-          email:
-            $("adminEmail")
-              .value
-              .trim(),
+        await d.auth
+          .signInWithPassword({
 
-          password:
-            $("adminPassword")
-              .value
-        });
+            email:
+              $("adminEmail")
+                .value
+                .trim(),
+
+            password:
+              $("adminPassword")
+                .value
+
+          });
 
 
-      if (r.error) {
+      if (r.error)
         throw r.error;
-      }
 
 
       currentSession =
@@ -1950,7 +2200,9 @@
 
 
       if (
-        !(await isAdmin(currentSession))
+        !(await isAdmin(
+          currentSession
+        ))
       ) {
 
         await d.auth.signOut();
@@ -1990,7 +2242,9 @@
 
     } finally {
 
-      button.disabled = false;
+      if (button) {
+        button.disabled = false;
+      }
     }
   }
 
@@ -2019,6 +2273,7 @@
 
 
     mfaOpen = false;
+
     currentSession = null;
 
 
@@ -2095,8 +2350,11 @@
       ?.addEventListener(
         "click",
         () => {
+
           loadStudents();
+
           loadResources();
+
           loadNotificationCount();
         }
       );
@@ -2113,13 +2371,16 @@
       ?.addEventListener(
         "click",
         async () => {
+
           await logout();
         }
       );
 
 
     document
-      .querySelectorAll("[data-target]")
+      .querySelectorAll(
+        "[data-target]"
+      )
       .forEach(button => {
 
         button.addEventListener(
@@ -2127,7 +2388,10 @@
           () => {
 
             const input =
-              $(button.dataset.target);
+              $(
+                button.dataset.target
+              );
+
 
             if (input) {
 
@@ -2142,8 +2406,10 @@
 
 
     if ($("year")) {
+
       $("year").textContent =
-        new Date().getFullYear();
+        new Date()
+          .getFullYear();
     }
   }
 
@@ -2157,6 +2423,7 @@
     () => {
 
       bind();
+
       checkSession();
 
     }
@@ -2168,12 +2435,19 @@
      ========================================================= */
 
   window.AGU_ADMIN = {
+
     loadStudents,
+
     loadResources,
+
     sendNotification,
+
     uploadFile,
+
     deleteResource,
+
     logout
+
   };
 
 

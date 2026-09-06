@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AGULIBRARY — Student Account</title>
+<meta name="agu-auth-version" content="20260906-visibility-fix">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="./config.js"></script>
 
@@ -25,7 +26,8 @@ input:disabled{background:#eef5f1;color:#66766f}
 .secondary{width:100%;margin-top:10px;border:1px solid #cfe0d9;background:#fff;color:#087f52;padding:14px;border-radius:13px;font-weight:800;cursor:pointer}
 .message{display:none;margin-top:17px;padding:14px;border-radius:12px;line-height:1.5;font-weight:600}.success{display:block;background:#e8f8f0;color:#087f52}.error{display:block;background:#fff0f0;color:#b42318}.info{display:block;background:#eef6ff;color:#15558a}
 .small{text-align:center;color:#74827c;margin-top:20px;line-height:1.5;font-size:14px}.link{color:#087f52;font-weight:800;text-decoration:none;cursor:pointer}
-.hidden{display:none!important}.returning-box{display:none;background:#edf8f3;border:1px solid #ccebdd;padding:15px;border-radius:13px;margin-bottom:18px;line-height:1.5}.returning-box.show{display:block}
+.hidden{display:none!important}
+#registerForm.hidden,#loginForm.hidden{display:none!important}
 .invitation-box{display:none;margin-bottom:22px;padding:18px;border-radius:18px;background:#e8f8f0;border:1px solid #b9e3cf}.invitation-box.show{display:block}.invitation-title{color:#087f52;font-size:17px;font-weight:800;margin-bottom:9px}.invitation-code{margin-top:10px;padding:11px;border-radius:12px;background:#fff;border:1px dashed #087f52;text-align:center;font-size:21px;font-weight:800;letter-spacing:3px;color:#087f52}.invitation-note{margin-top:10px;color:#49635a;line-height:1.5}.invalid-invitation{display:none;margin-bottom:18px;padding:15px;border-radius:13px;background:#fff0f0;color:#b42318;font-weight:700;line-height:1.5}
 .step{display:flex;gap:8px;margin:0 0 20px}.step span{flex:1;text-align:center;padding:8px 5px;border-radius:10px;background:#edf4f0;color:#66766f;font-size:12px;font-weight:800}.step span.active{background:#087f52;color:#fff}
 .otp-box{background:#f4faf7;border:1px solid #d8e8e0;border-radius:17px;padding:20px;margin-top:18px}.otp-input{text-align:center;letter-spacing:8px;font-size:25px;font-weight:800}.notice{background:#fff9e8;border:1px solid #f1df9b;color:#735b00;padding:13px;border-radius:12px;line-height:1.5;font-size:14px;margin-top:14px}
@@ -49,8 +51,6 @@ footer{text-align:center;color:#84918c;padding:25px;font-size:13px}
   <h2 id="title">Welcome to AGULIBRARY</h2>
   <p class="intro" id="intro">Create your student account and begin learning with AGULIBRARY.</p>
 
-  <div id="returningBox" class="returning-box"><strong>Welcome back.</strong><br><span>Your email is remembered on this device. Enter your password to continue.</span></div>
-
   <div id="invitationBox" class="invitation-box">
     <div class="invitation-title">🎟️ You have been invited to AGULIBRARY</div>
     <div>Your invitation code:</div>
@@ -63,12 +63,12 @@ footer{text-align:center;color:#84918c;padding:25px;font-size:13px}
   </div>
 
   <div class="tabs">
-    <button class="tab active" id="registerTab" type="button">Create Account</button>
-    <button class="tab" id="loginTab" type="button">Sign In</button>
+    <button class="tab" id="registerTab" type="button">Create Account</button>
+    <button class="tab active" id="loginTab" type="button">Sign In</button>
   </div>
 
   <!-- REGISTRATION -->
-  <form id="registerForm">
+  <form id="registerForm" class="hidden">
     <div class="step" id="regSteps">
       <span class="active">1. Details</span><span>2. Phone OTP</span><span>3. Email</span>
     </div>
@@ -146,7 +146,7 @@ footer{text-align:center;color:#84918c;padding:25px;font-size:13px}
   </section>
 
   <!-- LOGIN -->
-  <form id="loginForm" class="hidden">
+  <form id="loginForm">
     <label for="loginEmail">Email address</label>
     <input id="loginEmail" type="email" autocomplete="email" required>
 
@@ -161,6 +161,8 @@ footer{text-align:center;color:#84918c;padding:25px;font-size:13px}
     </div>
 
     <button class="primary" type="submit" id="loginButton">Sign In to AGULIBRARY</button>
+
+    <button class="secondary" type="button" id="switchAccountButton">Switch Account</button>
 
     <!-- ADDED: retry confirmation email from the login page -->
     <div id="unconfirmedEmailBox" class="resend-box hidden">
@@ -302,8 +304,12 @@ function fullName(){
 }
 function setRegisterVisible(show){
   registerForm.classList.toggle('hidden',!show);
+  loginForm.classList.add('hidden');
   otpSection.classList.add('hidden');
   emailConfirmSection.classList.add('hidden');
+  forgotSection.classList.add('hidden');
+  updatePasswordSection.classList.add('hidden');
+  unconfirmedEmailBox.classList.add('hidden');
 }
 function setLoginVisible(){
   registerForm.classList.add('hidden');
@@ -317,16 +323,17 @@ function setLoginVisible(){
   const fullRequired=localStorage.getItem(REQUIRE_FULL_LOGIN_KEY)==='1' || !remembered;
   const emailInput=$('loginEmail');
   const emailLabel=emailInput.previousElementSibling;
+  const switchButton=$('switchAccountButton');
   if(fullRequired){
     emailInput.disabled=false;emailInput.value='';emailInput.required=true;emailInput.style.display='block';if(emailLabel)emailLabel.style.display='block';
-    $('returningBox').classList.remove('show');
+    switchButton.classList.remove('hidden');
     title.textContent='Welcome to AGULIBRARY';
     intro.textContent='Enter your email and password to access AGULIBRARY.';
   }else{
     emailInput.disabled=true;emailInput.value=remembered;emailInput.required=false;emailInput.style.display='none';if(emailLabel)emailLabel.style.display='none';
-    $('returningBox').classList.add('show');
-    title.textContent='Welcome Back';
-    intro.textContent='Enter your password to return to AGULIBRARY.';
+    switchButton.classList.remove('hidden');
+    title.textContent='Welcome to AGULIBRARY';
+    intro.textContent='Enter your password to access AGULIBRARY.';
   }
 }
 
@@ -608,6 +615,17 @@ $('resendUnconfirmedEmailButton').addEventListener('click',async()=>{
   }finally{
     btn.disabled=false;btn.textContent='Resend Confirmation Link';
   }
+});
+
+/* ---------- Switch account ---------- */
+$('switchAccountButton').addEventListener('click',()=>{
+  localStorage.removeItem(REMEMBERED_EMAIL_KEY);
+  localStorage.setItem(REQUIRE_FULL_LOGIN_KEY,'1');
+  $('loginPassword').value='';
+  clearMessage();
+  setLoginVisible();
+  $('loginEmail').focus();
+  showMessage('Enter the email address and password for the account you want to use.','info');
 });
 
 /* ---------- Login ---------- */

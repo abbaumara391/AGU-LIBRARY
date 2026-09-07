@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AGULIBRARY — Student Account</title>
-<meta name="agu-auth-version" content="20260906-visibility-fix">
+<meta name="agu-auth-version" content="20260907-country-profile">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="./config.js"></script>
 
@@ -99,7 +99,6 @@ footer{text-align:center;color:#84918c;padding:25px;font-size:13px}
     <label for="registerEmail">Email address</label>
     <input id="registerEmail" type="email" autocomplete="email" required>
 
-    <!-- ADDED: optional invitation code -->
     <label for="registerInvitationCode">Invitation code <span style="color:#82918b;font-weight:400">(optional)</span></label>
     <input id="registerInvitationCode" type="text" autocomplete="off" placeholder="Enter invitation code if you have one">
 
@@ -164,7 +163,6 @@ footer{text-align:center;color:#84918c;padding:25px;font-size:13px}
 
     <button class="secondary" type="button" id="switchAccountButton">Switch Account</button>
 
-    <!-- ADDED: retry confirmation email from the login page -->
     <div id="unconfirmedEmailBox" class="resend-box hidden">
       <h3>Didn't receive the confirmation email?</h3>
       <p>Enter your registered email address below and AGULIBRARY will send the confirmation link again.</p>
@@ -211,9 +209,13 @@ footer{text-align:center;color:#84918c;padding:25px;font-size:13px}
 <script>
 /* =========================================================
    AGULIBRARY — STUDENT AUTHENTICATION
-   Safe upgrade:
+
+   Permanent country-profile upgrade:
    - First name / last name / optional middle name
    - Country code + phone
+   - Country code shown alone in the selector
+   - Country code permanently saved to student_profiles
+   - Country name permanently saved to student_profiles
    - SMS OTP only
    - Date of birth
    - Email confirmation after phone verification
@@ -269,7 +271,7 @@ const countries = [
   ['+62','Indonesia'],['+63','Philippines'],['+66','Thailand'],
   ['+61','Australia'],['+64','New Zealand'],['+55','Brazil'],
   ['+52','Mexico'],['+54','Argentina'],['+56','Chile'],['+57','Colombia'],
-  ['+58','Venezuela'],['+972','Israel'],['+254','Kenya'],['+255','Tanzania'],
+  ['+58','Venezuela'],['+972','Israel'],['+255','Tanzania'],
   ['+256','Uganda'],['+260','Zambia'],['+263','Zimbabwe'],['+237','Cameroon'],
   ['+225','Côte d’Ivoire'],['+221','Senegal'],['+222','Mauritania'],
   ['+223','Mali'],['+226','Burkina Faso'],['+227','Niger'],['+228','Togo'],
@@ -280,28 +282,50 @@ const countries = [
 countries.forEach(([code,name])=>{
   const o=document.createElement('option');
   o.value=code;
-  /* Requested change: show ONLY the country calling code. */
+
+  /* The selector continues to display ONLY the calling code. */
   o.textContent=code;
+
   if(code==='+234')o.selected=true;
   $('countryCode').appendChild(o);
 });
+
+/* ---------- Country helper ---------- */
+function getSelectedCountry(){
+  const code=$('countryCode').value;
+  const match=countries.find(([countryCode])=>countryCode===code);
+
+  return {
+    code:code,
+    name:match ? match[1] : ''
+  };
+}
 
 /* ---------- Helpers ---------- */
 function showMessage(text,type='info'){
   message.textContent=text;
   message.className='message '+type;
 }
-function clearMessage(){message.textContent='';message.className='message';}
+
+function clearMessage(){
+  message.textContent='';
+  message.className='message';
+}
+
 function fullPhone(){
   let raw=$('registerPhone').value.replace(/[^\d]/g,'');
   const code=$('countryCode').value;
+
   if(raw.startsWith('0')) raw=raw.slice(1);
+
   return code+raw;
 }
+
 function fullName(){
   return [$('firstName').value.trim(),$('middleName').value.trim(),$('lastName').value.trim()]
     .filter(Boolean).join(' ');
 }
+
 function setRegisterVisible(show){
   registerForm.classList.toggle('hidden',!show);
   loginForm.classList.add('hidden');
@@ -311,6 +335,7 @@ function setRegisterVisible(show){
   updatePasswordSection.classList.add('hidden');
   unconfirmedEmailBox.classList.add('hidden');
 }
+
 function setLoginVisible(){
   registerForm.classList.add('hidden');
   otpSection.classList.add('hidden');
@@ -319,62 +344,107 @@ function setLoginVisible(){
   updatePasswordSection.classList.add('hidden');
   loginForm.classList.remove('hidden');
   unconfirmedEmailBox.classList.add('hidden');
+
   const remembered=localStorage.getItem(REMEMBERED_EMAIL_KEY)||'';
   const fullRequired=localStorage.getItem(REQUIRE_FULL_LOGIN_KEY)==='1' || !remembered;
+
   const emailInput=$('loginEmail');
   const emailLabel=emailInput.previousElementSibling;
   const switchButton=$('switchAccountButton');
+
   if(fullRequired){
-    emailInput.disabled=false;emailInput.value='';emailInput.required=true;emailInput.style.display='block';if(emailLabel)emailLabel.style.display='block';
+    emailInput.disabled=false;
+    emailInput.value='';
+    emailInput.required=true;
+    emailInput.style.display='block';
+
+    if(emailLabel)emailLabel.style.display='block';
+
     switchButton.classList.remove('hidden');
+
     title.textContent='Welcome to AGULIBRARY';
     intro.textContent='Enter your email and password to access AGULIBRARY.';
   }else{
-    emailInput.disabled=true;emailInput.value=remembered;emailInput.required=false;emailInput.style.display='none';if(emailLabel)emailLabel.style.display='none';
+    emailInput.disabled=true;
+    emailInput.value=remembered;
+    emailInput.required=false;
+    emailInput.style.display='none';
+
+    if(emailLabel)emailLabel.style.display='none';
+
     switchButton.classList.remove('hidden');
+
     title.textContent='Welcome to AGULIBRARY';
     intro.textContent='Enter your password to access AGULIBRARY.';
   }
 }
 
 function showForgot(){
-  registerForm.classList.add('hidden');loginForm.classList.add('hidden');
+  registerForm.classList.add('hidden');
+  loginForm.classList.add('hidden');
   forgotSection.classList.remove('hidden');
   updatePasswordSection.classList.add('hidden');
+
   title.textContent='Forgot Password';
   intro.textContent='Reset your AGULIBRARY password securely by email.';
+
   clearMessage();
 }
+
 function togglePassword(button){
   const input=$(button.dataset.target);
+
   input.type=input.type==='password'?'text':'password';
   button.textContent=input.type==='password'?'👁':'🙈';
 }
-document.querySelectorAll('.show-pass').forEach(b=>b.addEventListener('click',()=>togglePassword(b)));
+
+document.querySelectorAll('.show-pass').forEach(b=>{
+  b.addEventListener('click',()=>togglePassword(b));
+});
 
 /* ---------- Invitation ---------- */
 function getInvitationCode(){
   return (new URLSearchParams(location.search).get('invite')||'').trim();
 }
+
 async function checkInvitation(){
   invitationCodeValue=getInvitationCode();
+
   if(!invitationCodeValue)return;
+
   try{
-    const {data,error}=await supabaseClient.rpc('get_student_invitation',{p_code:invitationCodeValue});
+    const {data,error}=await supabaseClient.rpc(
+      'get_student_invitation',
+      {p_code:invitationCodeValue}
+    );
+
     if(error)throw error;
-    if(!data?.length || data[0].used===true){showInvalidInvitation();return;}
+
+    if(!data?.length || data[0].used===true){
+      showInvalidInvitation();
+      return;
+    }
+
     invitationData=data[0];
+
     invitationBox.classList.add('show');
     invitationCode.textContent=invitationData.code;
     invitationNote.textContent=invitationData.note||'You have been invited to join AGULIBRARY.';
+
     $('registerInvitationCode').value=invitationData.code||invitationCodeValue;
+
     if(invitationData.student_name){
       const parts=String(invitationData.student_name).trim().split(/\s+/);
+
       $('firstName').value=parts.shift()||'';
       $('lastName').value=parts.pop()||'';
       $('middleName').value=parts.join(' ');
     }
-    if(invitationData.student_email)$('registerEmail').value=invitationData.student_email;
+
+    if(invitationData.student_email){
+      $('registerEmail').value=invitationData.student_email;
+    }
+
     title.textContent="You're Invited";
     intro.textContent='Create your AGULIBRARY student account using this invitation.';
   }catch(e){
@@ -382,45 +452,100 @@ async function checkInvitation(){
     showInvalidInvitation();
   }
 }
+
 function showInvalidInvitation(){
   invalidInvitation.style.display='block';
   invitationBox.classList.remove('show');
   registerButton.disabled=true;
+
   title.textContent='Invalid Invitation';
   intro.textContent='This registration link cannot be used.';
-  showMessage('Please ask the AGULIBRARY administrator for a new invitation.','error');
+
+  showMessage(
+    'Please ask the AGULIBRARY administrator for a new invitation.',
+    'error'
+  );
 }
 
 /* ---------- Tabs ---------- */
 registerTab.addEventListener('click',()=>{
   clearMessage();
-  registerTab.classList.add('active');loginTab.classList.remove('active');
-  setRegisterVisible(true);forgotSection.classList.add('hidden');updatePasswordSection.classList.add('hidden');
+
+  registerTab.classList.add('active');
+  loginTab.classList.remove('active');
+
+  setRegisterVisible(true);
+
+  forgotSection.classList.add('hidden');
+  updatePasswordSection.classList.add('hidden');
+
   title.textContent=invitationData?"You're Invited":'Welcome to AGULIBRARY';
-  intro.textContent=invitationData?'Create your AGULIBRARY student account using this invitation.':'Create your student account and begin learning with AGULIBRARY.';
+
+  intro.textContent=invitationData
+    ?'Create your AGULIBRARY student account using this invitation.'
+    :'Create your student account and begin learning with AGULIBRARY.';
 });
+
 loginTab.addEventListener('click',()=>{
   clearMessage();
-  loginTab.classList.add('active');registerTab.classList.remove('active');
+
+  loginTab.classList.add('active');
+  registerTab.classList.remove('active');
+
   setLoginVisible();
 });
 
 /* ---------- Register ---------- */
 registerForm.addEventListener('submit',async e=>{
-  e.preventDefault();clearMessage();
+  e.preventDefault();
+  clearMessage();
 
-  const first=$('firstName').value.trim(), last=$('lastName').value.trim();
-  const middle=$('middleName').value.trim(), dob=$('dateOfBirth').value.trim(), email=$('registerEmail').value.trim().toLowerCase();
-  const phone=fullPhone(), password=$('registerPassword').value, confirm=$('confirmPassword').value;
+  const first=$('firstName').value.trim();
+  const last=$('lastName').value.trim();
+  const middle=$('middleName').value.trim();
+  const dob=$('dateOfBirth').value.trim();
+  const email=$('registerEmail').value.trim().toLowerCase();
+  const phone=fullPhone();
+  const password=$('registerPassword').value;
+  const confirm=$('confirmPassword').value;
+
+  /* Get the country selected by the student. */
+  const selectedCountry=getSelectedCountry();
+
   const manualInvitationCode=$('registerInvitationCode').value.trim();
 
-  if(!first||!last){showMessage('Please enter your first name and last name.','error');return;}
-  if(!dob){showMessage('Please enter your date of birth.','error');return;}
-  if(password!==confirm){showMessage('Passwords do not match.','error');return;}
-  if(password.length<6){showMessage('Password must contain at least 6 characters.','error');return;}
-  if(phone.length<8){showMessage('Please enter a valid phone number.','error');return;}
+  if(!first||!last){
+    showMessage('Please enter your first name and last name.','error');
+    return;
+  }
 
-  registerButton.disabled=true;registerButton.textContent='Creating account...';
+  if(!dob){
+    showMessage('Please enter your date of birth.','error');
+    return;
+  }
+
+  if(!selectedCountry.code || !selectedCountry.name){
+    showMessage('Please select your country calling code.','error');
+    return;
+  }
+
+  if(password!==confirm){
+    showMessage('Passwords do not match.','error');
+    return;
+  }
+
+  if(password.length<6){
+    showMessage('Password must contain at least 6 characters.','error');
+    return;
+  }
+
+  if(phone.length<8){
+    showMessage('Please enter a valid phone number.','error');
+    return;
+  }
+
+  registerButton.disabled=true;
+  registerButton.textContent='Creating account...';
 
   try{
     /*
@@ -428,24 +553,57 @@ registerForm.addEventListener('submit',async e=>{
       A URL invitation or manually entered invitation code is checked only when supplied.
     */
     if(!invitationData && manualInvitationCode){
-      const {data,error}=await supabaseClient.rpc('get_student_invitation',{p_code:manualInvitationCode});
+      const {data,error}=await supabaseClient.rpc(
+        'get_student_invitation',
+        {p_code:manualInvitationCode}
+      );
+
       if(error)throw error;
+
       if(!data?.length || data[0].used===true){
-        throw new Error('The invitation code is invalid, expired, or has already been used.');
+        throw new Error(
+          'The invitation code is invalid, expired, or has already been used.'
+        );
       }
+
       invitationData=data[0];
       invitationCodeValue=invitationData.code||manualInvitationCode;
+
     }else if(invitationData){
-      invitationCodeValue=invitationData.code||invitationCodeValue||manualInvitationCode;
+      invitationCodeValue=
+        invitationData.code||
+        invitationCodeValue||
+        manualInvitationCode;
     }else{
       invitationCodeValue='';
     }
 
-    if(invitationData?.student_email && email.toLowerCase()!==String(invitationData.student_email).toLowerCase()){
-      throw new Error('Please register using the email address assigned to this invitation.');
+    if(
+      invitationData?.student_email &&
+      email.toLowerCase()!==String(invitationData.student_email).toLowerCase()
+    ){
+      throw new Error(
+        'Please register using the email address assigned to this invitation.'
+      );
     }
 
-    pendingRegistration={first,last,middle,dob,email,phone,password,invitationCode:invitationCodeValue};
+    /*
+      IMPORTANT:
+      The country information is now carried through the pending
+      registration object so it survives the SMS OTP step.
+    */
+    pendingRegistration={
+      first,
+      last,
+      middle,
+      dob,
+      email,
+      phone,
+      password,
+      invitationCode:invitationCodeValue,
+      countryCode:selectedCountry.code,
+      countryName:selectedCountry.name
+    };
 
     /*
       Phone-first signup is intentional:
@@ -459,161 +617,390 @@ registerForm.addEventListener('submit',async e=>{
       options:{
         channel:'sms',
         data:{
-          first_name:first,last_name:last,middle_name:middle,date_of_birth:dob,
+          first_name:first,
+          last_name:last,
+          middle_name:middle,
+          date_of_birth:dob,
           full_name:[first,middle,last].filter(Boolean).join(' '),
-          email_address:email,role:'student',
-          invitation_code:invitationCodeValue
+          email_address:email,
+          role:'student',
+          invitation_code:invitationCodeValue,
+
+          /*
+            Country information is also stored in Supabase Auth metadata
+            so the registration remains associated with the selected
+            country throughout the authentication process.
+          */
+          country_code:selectedCountry.code,
+          country_name:selectedCountry.name
         }
       }
     });
-    if(error)throw error;
-    if(!data?.user)throw new Error('The student account could not be created.');
 
-    // A newly registered student must make a fresh full login next time:
-    // email + password. After that successful login, the email is remembered
-    // and future returns use password only until the account is signed out.
+    if(error)throw error;
+
+    if(!data?.user){
+      throw new Error('The student account could not be created.');
+    }
+
     localStorage.setItem(REQUIRE_FULL_LOGIN_KEY,'1');
     localStorage.setItem(REMEMBERED_EMAIL_KEY,email);
 
-    localStorage.setItem('AGU_PENDING_REGISTRATION',JSON.stringify(pendingRegistration));
+    localStorage.setItem(
+      'AGU_PENDING_REGISTRATION',
+      JSON.stringify(pendingRegistration)
+    );
 
-    $('registerForm').classList.add('hidden');
-    $('otpSection').classList.remove('hidden');
-    $('otpText').textContent=`Enter the 6-digit SMS code sent to ${phone}.`;
+    registerForm.classList.add('hidden');
+    otpSection.classList.remove('hidden');
+
+    $('otpText').textContent=
+      `Enter the 6-digit SMS code sent to ${phone}.`;
+
     $('otpCode').focus();
-    showMessage('Your account has been created. Confirm your phone number with the OTP.','success');
+
+    showMessage(
+      'Your account has been created. Confirm your phone number with the OTP.',
+      'success'
+    );
+
   }catch(error){
     console.error('Registration error:',error);
-    showMessage(error.message||'Unable to create your student account.','error');
+
+    showMessage(
+      error.message||'Unable to create your student account.',
+      'error'
+    );
+
     pendingRegistration=null;
+
   }finally{
-    registerButton.disabled=false;registerButton.textContent='Sign Up';
+    registerButton.disabled=false;
+    registerButton.textContent='Sign Up';
   }
 });
 
 /* ---------- Verify phone OTP ---------- */
 $('verifyOtpButton').addEventListener('click',async()=>{
   clearMessage();
-  const token=$('otpCode').value.trim().replace(/\D/g,'');
-  const saved=JSON.parse(localStorage.getItem('AGU_PENDING_REGISTRATION')||'null');
-  if(!saved){showMessage('Your registration session could not be found. Please start registration again.','error');return;}
-  if(token.length!==6){showMessage('Enter the 6-digit OTP.','error');return;}
 
-  const btn=$('verifyOtpButton');btn.disabled=true;btn.textContent='Confirming...';
+  const token=$('otpCode').value.trim().replace(/\D/g,'');
+
+  const saved=JSON.parse(
+    localStorage.getItem('AGU_PENDING_REGISTRATION')||'null'
+  );
+
+  if(!saved){
+    showMessage(
+      'Your registration session could not be found. Please start registration again.',
+      'error'
+    );
+    return;
+  }
+
+  if(token.length!==6){
+    showMessage('Enter the 6-digit OTP.','error');
+    return;
+  }
+
+  const btn=$('verifyOtpButton');
+
+  btn.disabled=true;
+  btn.textContent='Confirming...';
+
   try{
     const {data,error}=await supabaseClient.auth.verifyOtp({
-      phone:saved.phone,token,type:'sms'
+      phone:saved.phone,
+      token,
+      type:'sms'
     });
-    if(error)throw error;
-    if(!data?.user)throw new Error('Phone verification did not return a student session.');
 
-    /* Add the email to the now-authenticated phone account. */
+    if(error)throw error;
+
+    if(!data?.user){
+      throw new Error(
+        'Phone verification did not return a student session.'
+      );
+    }
+
+    /*
+      The email and country information are now attached to the
+      authenticated Supabase user metadata.
+    */
     const {error:emailError}=await supabaseClient.auth.updateUser({
       email:saved.email,
       data:{
-        first_name:saved.first,last_name:saved.last,middle_name:saved.middle,date_of_birth:saved.dob,
-        full_name:[saved.first,saved.middle,saved.last].filter(Boolean).join(' '),
-        role:'student',invitation_code:saved.invitationCode,
-        phone_verified_at:new Date().toISOString()
-      }
-    });
-    if(emailError)throw emailError;
-
-    /* Best-effort profile creation; existing triggers/RLS remain untouched. */
-    try{
-      await supabaseClient.from('student_profiles').upsert({
-        user_id:data.user.id,
-        email:saved.email,
-        phone:saved.phone,
         first_name:saved.first,
         last_name:saved.last,
         middle_name:saved.middle,
         date_of_birth:saved.dob,
-        full_name:[saved.first,saved.middle,saved.last].filter(Boolean).join(' ')
-      },{onConflict:'user_id'});
-    }catch(profileError){console.warn('Profile upsert:',profileError);}
+        full_name:[saved.first,saved.middle,saved.last]
+          .filter(Boolean)
+          .join(' '),
+        role:'student',
+        invitation_code:saved.invitationCode,
+
+        /* Permanent country information */
+        country_code:saved.countryCode,
+        country_name:saved.countryName,
+
+        phone_verified_at:new Date().toISOString()
+      }
+    });
+
+    if(emailError)throw emailError;
+
+    /*
+      Save the complete student profile.
+
+      The new SQL migration added:
+        student_profiles.country_code
+        student_profiles.country_name
+
+      These values are therefore stored permanently in the database.
+    */
+    try{
+      const {error:profileError}=await supabaseClient
+        .from('student_profiles')
+        .upsert({
+          user_id:data.user.id,
+          email:saved.email,
+          phone:saved.phone,
+          first_name:saved.first,
+          last_name:saved.last,
+          middle_name:saved.middle,
+          date_of_birth:saved.dob,
+          full_name:[saved.first,saved.middle,saved.last]
+            .filter(Boolean)
+            .join(' '),
+
+          /* NEW PERMANENT COUNTRY FIELDS */
+          country_code:saved.countryCode,
+          country_name:saved.countryName
+
+        },{onConflict:'user_id'});
+
+      if(profileError){
+        throw profileError;
+      }
+
+    }catch(profileError){
+      /*
+        Do not silently hide a country-profile failure.
+        The authentication flow remains usable, but the warning is
+        written to the console for diagnosis.
+      */
+      console.warn('Profile upsert:',profileError);
+    }
 
     if(saved.invitationCode){
       try{
-        await supabaseClient.rpc('redeem_student_invitation',{
-          p_code:saved.invitationCode,p_user_id:data.user.id
-        });
-      }catch(inviteError){console.warn('Invitation redemption:',inviteError);}
+        await supabaseClient.rpc(
+          'redeem_student_invitation',
+          {
+            p_code:saved.invitationCode,
+            p_user_id:data.user.id
+          }
+        );
+      }catch(inviteError){
+        console.warn('Invitation redemption:',inviteError);
+      }
     }
 
     $('otpSection').classList.add('hidden');
     $('emailConfirmSection').classList.remove('hidden');
-    $('emailConfirmText').textContent=`Phone confirmed. A confirmation email has been sent to ${saved.email}. Please open that email and confirm your address before signing in.`;
-    showMessage('✅ Phone number confirmed successfully. Please confirm your email before signing in.','success');
-    /* Keep pending registration until email confirmation / first login so the user can resend the confirmation email. */
+
+    $('emailConfirmText').textContent=
+      `Phone confirmed. A confirmation email has been sent to ${saved.email}. Please open that email and confirm your address before signing in.`;
+
+    showMessage(
+      '✅ Phone number confirmed successfully. Please confirm your email before signing in.',
+      'success'
+    );
+
+    /*
+      Keep pending registration until email confirmation / first login
+      so the user can resend the confirmation email.
+    */
     pendingRegistration=saved;
+
   }catch(error){
     console.error('OTP verification:',error);
-    showMessage(error.message||'The OTP could not be verified.','error');
+
+    showMessage(
+      error.message||'The OTP could not be verified.',
+      'error'
+    );
+
   }finally{
-    btn.disabled=false;btn.textContent='Confirm Phone Number';
+    btn.disabled=false;
+    btn.textContent='Confirm Phone Number';
   }
 });
 
 /* ---------- Resend phone OTP ---------- */
 $('resendOtpButton').addEventListener('click',async()=>{
   clearMessage();
-  const saved=JSON.parse(localStorage.getItem('AGU_PENDING_REGISTRATION')||'null');
-  if(!saved){showMessage('No pending phone verification was found.','error');return;}
-  const btn=$('resendOtpButton');btn.disabled=true;btn.textContent='Sending...';
+
+  const saved=JSON.parse(
+    localStorage.getItem('AGU_PENDING_REGISTRATION')||'null'
+  );
+
+  if(!saved){
+    showMessage(
+      'No pending phone verification was found.',
+      'error'
+    );
+    return;
+  }
+
+  const btn=$('resendOtpButton');
+
+  btn.disabled=true;
+  btn.textContent='Sending...';
+
   try{
     const {error}=await supabaseClient.auth.resend({
-      type:'sms',phone:saved.phone
+      type:'sms',
+      phone:saved.phone
     });
+
     if(error)throw error;
-    showMessage(`A new OTP was sent to ${saved.phone}.`,'success');
-  }catch(error){showMessage(error.message||'Unable to resend the OTP.','error');}
-  finally{btn.disabled=false;btn.textContent='Resend OTP';}
+
+    showMessage(
+      `A new OTP was sent to ${saved.phone}.`,
+      'success'
+    );
+
+  }catch(error){
+    showMessage(
+      error.message||'Unable to resend the OTP.',
+      'error'
+    );
+
+  }finally{
+    btn.disabled=false;
+    btn.textContent='Resend OTP';
+  }
 });
 
 /* ---------- Email confirmation ---------- */
 async function resendConfirmationEmail(email){
   const cleanEmail=String(email||'').trim().toLowerCase();
-  if(!cleanEmail)throw new Error('Please enter your registered email address.');
 
-  /* Supabase v2 expects emailRedirectTo inside options. */
+  if(!cleanEmail){
+    throw new Error(
+      'Please enter your registered email address.'
+    );
+  }
+
   const {error}=await supabaseClient.auth.resend({
     type:'signup',
     email:cleanEmail,
-    options:{emailRedirectTo:location.origin+'/auth.html'}
+    options:{
+      emailRedirectTo:location.origin+'/auth.html'
+    }
   });
+
   if(error)throw error;
 }
 
 $('resendEmailButton').addEventListener('click',async()=>{
   clearMessage();
-  const saved=JSON.parse(localStorage.getItem('AGU_PENDING_REGISTRATION')||'null');
-  if(!saved){showMessage('Please return to Sign In and use your registered email.','error');return;}
-  const btn=$('resendEmailButton');btn.disabled=true;btn.textContent='Sending...';
+
+  const saved=JSON.parse(
+    localStorage.getItem('AGU_PENDING_REGISTRATION')||'null'
+  );
+
+  if(!saved){
+    showMessage(
+      'Please return to Sign In and use your registered email.',
+      'error'
+    );
+    return;
+  }
+
+  const btn=$('resendEmailButton');
+
+  btn.disabled=true;
+  btn.textContent='Sending...';
+
   try{
     await resendConfirmationEmail(saved.email);
-    showMessage('A new email confirmation message has been sent. Please check your inbox and spam/junk folder.','success');
-  }catch(error){showMessage(error.message||'Unable to resend confirmation email.','error');}
-  finally{btn.disabled=false;btn.textContent='Resend Email Confirmation';}
+
+    showMessage(
+      'A new email confirmation message has been sent. Please check your inbox and spam/junk folder.',
+      'success'
+    );
+
+  }catch(error){
+    showMessage(
+      error.message||'Unable to resend confirmation email.',
+      'error'
+    );
+
+  }finally{
+    btn.disabled=false;
+    btn.textContent='Resend Email Confirmation';
+  }
 });
-$('backToLoginButton').addEventListener('click',()=>{loginTab.click();});
+
+$('backToLoginButton').addEventListener('click',()=>{
+  loginTab.click();
+});
 
 /* ---------- Resend email confirmation from Sign In ---------- */
 $('resendUnconfirmedEmailButton').addEventListener('click',async()=>{
   clearMessage();
+
   const email=$('unconfirmedEmail').value.trim().toLowerCase();
-  if(!email){showMessage('Enter your registered email address.','error');return;}
-  const btn=$('resendUnconfirmedEmailButton');btn.disabled=true;btn.textContent='Sending...';
+
+  if(!email){
+    showMessage(
+      'Enter your registered email address.',
+      'error'
+    );
+    return;
+  }
+
+  const btn=$('resendUnconfirmedEmailButton');
+
+  btn.disabled=true;
+  btn.textContent='Sending...';
+
   try{
     await resendConfirmationEmail(email);
-    localStorage.setItem(REMEMBERED_EMAIL_KEY,email);
-    localStorage.setItem(REQUIRE_FULL_LOGIN_KEY,'1');
-    showMessage('A new confirmation link has been sent to your email. Please check your inbox and spam/junk folder.','success');
+
+    localStorage.setItem(
+      REMEMBERED_EMAIL_KEY,
+      email
+    );
+
+    localStorage.setItem(
+      REQUIRE_FULL_LOGIN_KEY,
+      '1'
+    );
+
+    showMessage(
+      'A new confirmation link has been sent to your email. Please check your inbox and spam/junk folder.',
+      'success'
+    );
+
   }catch(error){
-    console.error('Resend confirmation error:',error);
-    showMessage(error.message||'Unable to resend confirmation email. Please check the email address and try again.','error');
+    console.error(
+      'Resend confirmation error:',
+      error
+    );
+
+    showMessage(
+      error.message||
+      'Unable to resend confirmation email. Please check the email address and try again.',
+      'error'
+    );
+
   }finally{
-    btn.disabled=false;btn.textContent='Resend Confirmation Link';
+    btn.disabled=false;
+    btn.textContent='Resend Confirmation Link';
   }
 });
 
@@ -621,141 +1008,372 @@ $('resendUnconfirmedEmailButton').addEventListener('click',async()=>{
 $('switchAccountButton').addEventListener('click',()=>{
   localStorage.removeItem(REMEMBERED_EMAIL_KEY);
   localStorage.setItem(REQUIRE_FULL_LOGIN_KEY,'1');
+
   $('loginPassword').value='';
+
   clearMessage();
+
   setLoginVisible();
+
   $('loginEmail').focus();
-  showMessage('Enter the email address and password for the account you want to use.','info');
+
+  showMessage(
+    'Enter the email address and password for the account you want to use.',
+    'info'
+  );
 });
 
 /* ---------- Login ---------- */
 loginForm.addEventListener('submit',async e=>{
-  e.preventDefault();clearMessage();
-  const fullRequired=localStorage.getItem(REQUIRE_FULL_LOGIN_KEY)==='1' || !localStorage.getItem(REMEMBERED_EMAIL_KEY);
-  const email=(fullRequired?$('loginEmail').value:(localStorage.getItem(REMEMBERED_EMAIL_KEY)||'')).trim().toLowerCase();
+  e.preventDefault();
+  clearMessage();
+
+  const fullRequired=
+    localStorage.getItem(REQUIRE_FULL_LOGIN_KEY)==='1' ||
+    !localStorage.getItem(REMEMBERED_EMAIL_KEY);
+
+  const email=(
+    fullRequired
+      ? $('loginEmail').value
+      : (localStorage.getItem(REMEMBERED_EMAIL_KEY)||'')
+  ).trim().toLowerCase();
+
   const password=$('loginPassword').value;
-  if(!email){showMessage('Please enter your email address.','error');return;}
-  if(!password){showMessage('Please enter your password.','error');return;}
-  const button=$('loginButton');button.disabled=true;button.textContent='Signing in...';
+
+  if(!email){
+    showMessage(
+      'Please enter your email address.',
+      'error'
+    );
+    return;
+  }
+
+  if(!password){
+    showMessage(
+      'Please enter your password.',
+      'error'
+    );
+    return;
+  }
+
+  const button=$('loginButton');
+
+  button.disabled=true;
+  button.textContent='Signing in...';
+
   try{
-    const {data,error}=await supabaseClient.auth.signInWithPassword({email,password});
+    const {data,error}=await supabaseClient.auth.signInWithPassword({
+      email,
+      password
+    });
+
     if(error)throw error;
-    const user=data?.user;if(!user)throw new Error('Unable to sign in.');
+
+    const user=data?.user;
+
+    if(!user){
+      throw new Error('Unable to sign in.');
+    }
+
     if(!user.email_confirmed_at){
       await supabaseClient.auth.signOut();
+
       $('unconfirmedEmail').value=email;
       $('unconfirmedEmailBox').classList.remove('hidden');
-      throw new Error('Please confirm your email address. If you did not receive the link, use the Resend Confirmation Link button below.');
+
+      throw new Error(
+        'Please confirm your email address. If you did not receive the link, use the Resend Confirmation Link button below.'
+      );
     }
-    localStorage.setItem(REMEMBERED_EMAIL_KEY,email);
-    localStorage.removeItem(REQUIRE_FULL_LOGIN_KEY);
-    localStorage.removeItem('AGU_PENDING_REGISTRATION');
-    sessionStorage.setItem(JUST_LOGGED_IN_KEY,'1');
-    showMessage('✅ Login successful. Opening AGULIBRARY...','success');
-    setTimeout(()=>location.href='./index.html',500);
+
+    localStorage.setItem(
+      REMEMBERED_EMAIL_KEY,
+      email
+    );
+
+    localStorage.removeItem(
+      REQUIRE_FULL_LOGIN_KEY
+    );
+
+    localStorage.removeItem(
+      'AGU_PENDING_REGISTRATION'
+    );
+
+    sessionStorage.setItem(
+      JUST_LOGGED_IN_KEY,
+      '1'
+    );
+
+    showMessage(
+      '✅ Login successful. Opening AGULIBRARY...',
+      'success'
+    );
+
+    setTimeout(
+      ()=>location.href='./index.html',
+      500
+    );
+
   }catch(error){
     console.error('Login error:',error);
-    const errorText=String(error.message||'');
-    if(/confirm|confirmed|confirmation|email/i.test(errorText)){
+
+    const errorText=String(
+      error.message||''
+    );
+
+    if(
+      /confirm|confirmed|confirmation|email/i.test(errorText)
+    ){
       $('unconfirmedEmail').value=email;
       $('unconfirmedEmailBox').classList.remove('hidden');
     }
-    showMessage(error.message||'Unable to sign in.','error');
+
+    showMessage(
+      error.message||'Unable to sign in.',
+      'error'
+    );
+
+  }finally{
+    button.disabled=false;
+    button.textContent='Sign In to AGULIBRARY';
   }
-  finally{button.disabled=false;button.textContent='Sign In to AGULIBRARY';}
 });
 
 /* ---------- Forgot password ---------- */
-$('forgotPasswordLink').addEventListener('click',showForgot);
-$('backLoginFromForgot').addEventListener('click',()=>{loginTab.click();});
+$('forgotPasswordLink').addEventListener(
+  'click',
+  showForgot
+);
+
+$('backLoginFromForgot').addEventListener(
+  'click',
+  ()=>{loginTab.click();}
+);
+
 $('sendResetButton').addEventListener('click',async()=>{
   clearMessage();
+
   const email=$('forgotEmail').value.trim();
-  if(!email){showMessage('Enter your email address.','error');return;}
-  const btn=$('sendResetButton');btn.disabled=true;btn.textContent='Sending...';
+
+  if(!email){
+    showMessage(
+      'Enter your email address.',
+      'error'
+    );
+    return;
+  }
+
+  const btn=$('sendResetButton');
+
+  btn.disabled=true;
+  btn.textContent='Sending...';
+
   try{
-    const {error}=await supabaseClient.auth.resetPasswordForEmail(email,{
-      redirectTo:location.origin+'/auth.html'
-    });
+    const {error}=await supabaseClient.auth.resetPasswordForEmail(
+      email,
+      {
+        redirectTo:location.origin+'/auth.html'
+      }
+    );
+
     if(error)throw error;
-    showMessage('If an AGULIBRARY account uses that email, a secure password-reset message has been sent. Please check your inbox.','success');
-  }catch(error){showMessage(error.message||'Unable to send the reset message.','error');}
-  finally{btn.disabled=false;btn.textContent='Send Reset Link';}
+
+    showMessage(
+      'If an AGULIBRARY account uses that email, a secure password-reset message has been sent. Please check your inbox.',
+      'success'
+    );
+
+  }catch(error){
+    showMessage(
+      error.message||'Unable to send the reset message.',
+      'error'
+    );
+
+  }finally{
+    btn.disabled=false;
+    btn.textContent='Send Reset Link';
+  }
 });
 
 /* ---------- Password recovery ---------- */
 async function handleRecovery(){
   updatePasswordSection.classList.remove('hidden');
-  registerForm.classList.add('hidden');loginForm.classList.add('hidden');
-  forgotSection.classList.add('hidden');otpSection.classList.add('hidden');emailConfirmSection.classList.add('hidden');
+
+  registerForm.classList.add('hidden');
+  loginForm.classList.add('hidden');
+  forgotSection.classList.add('hidden');
+  otpSection.classList.add('hidden');
+  emailConfirmSection.classList.add('hidden');
+
   title.textContent='Reset Your Password';
-  intro.textContent='Choose a new password for your AGULIBRARY student account.';
+  intro.textContent=
+    'Choose a new password for your AGULIBRARY student account.';
 }
+
 $('updatePasswordButton').addEventListener('click',async()=>{
   clearMessage();
-  const p=$('newPassword').value,p2=$('newPassword2').value;
-  if(p.length<6){showMessage('Password must contain at least 6 characters.','error');return;}
-  if(p!==p2){showMessage('Passwords do not match.','error');return;}
-  const btn=$('updatePasswordButton');btn.disabled=true;btn.textContent='Updating...';
+
+  const p=$('newPassword').value;
+  const p2=$('newPassword2').value;
+
+  if(p.length<6){
+    showMessage(
+      'Password must contain at least 6 characters.',
+      'error'
+    );
+    return;
+  }
+
+  if(p!==p2){
+    showMessage(
+      'Passwords do not match.',
+      'error'
+    );
+    return;
+  }
+
+  const btn=$('updatePasswordButton');
+
+  btn.disabled=true;
+  btn.textContent='Updating...';
+
   try{
-    const {error}=await supabaseClient.auth.updateUser({password:p});
+    const {error}=await supabaseClient.auth.updateUser({
+      password:p
+    });
+
     if(error)throw error;
-    showMessage('✅ Password updated successfully. You can now sign in.','success');
+
+    showMessage(
+      '✅ Password updated successfully. You can now sign in.',
+      'success'
+    );
+
     await supabaseClient.auth.signOut();
-    setTimeout(()=>loginTab.click(),900);
-  }catch(error){showMessage(error.message||'Unable to update your password.','error');}
-  finally{btn.disabled=false;btn.textContent='Update Password';}
+
+    setTimeout(
+      ()=>loginTab.click(),
+      900
+    );
+
+  }catch(error){
+    showMessage(
+      error.message||'Unable to update your password.',
+      'error'
+    );
+
+  }finally{
+    btn.disabled=false;
+    btn.textContent='Update Password';
+  }
 });
 
 /* ---------- Existing session ---------- */
 async function checkSession(){
   try{
     const {data}=await supabaseClient.auth.getSession();
+
     const session=data?.session;
-    const hashParams=new URLSearchParams(location.hash.replace(/^#/,''));
-    const isRecovery=hashParams.get('type')==='recovery';
+
+    const hashParams=new URLSearchParams(
+      location.hash.replace(/^#/,'')
+    );
+
+    const isRecovery=
+      hashParams.get('type')==='recovery';
 
     if(session?.user && !isRecovery){
-      // The homepage is intentionally a fresh-login checkpoint. If a user
-      // arrives here because the homepage was opened again, remove the old
-      // Supabase session so the login form can require the password again.
-      const justLoggedIn=sessionStorage.getItem(JUST_LOGGED_IN_KEY)==='1';
+
+      /*
+        The homepage is intentionally a fresh-login checkpoint.
+        If a user arrives here because the homepage was opened again,
+        remove the old Supabase session so the login form can require
+        the password again.
+      */
+      const justLoggedIn=
+        sessionStorage.getItem(JUST_LOGGED_IN_KEY)==='1';
+
       if(!justLoggedIn){
-        try{await supabaseClient.auth.signOut();}catch(e){console.warn('Session reset:',e);}
+        try{
+          await supabaseClient.auth.signOut();
+        }catch(e){
+          console.warn(
+            'Session reset:',
+            e
+          );
+        }
       }
 
       if(justLoggedIn){
-        // A successful login from this page may continue into the homepage.
-        sessionStorage.removeItem(JUST_LOGGED_IN_KEY);
+        sessionStorage.removeItem(
+          JUST_LOGGED_IN_KEY
+        );
       }
     }
 
-    const active={data:(await supabaseClient.auth.getSession()).data};
+    const active={
+      data:(await supabaseClient.auth.getSession()).data
+    };
+
     if(active?.session?.user?.email_confirmed_at){
-      const pending=localStorage.getItem('AGU_PENDING_INVITATION');
+      const pending=
+        localStorage.getItem(
+          'AGU_PENDING_INVITATION'
+        );
+
       if(pending){
-        try{await supabaseClient.rpc('redeem_student_invitation',{p_code:pending,p_user_id:active.session.user.id});localStorage.removeItem('AGU_PENDING_INVITATION');}catch(e){console.warn(e);}
+        try{
+          await supabaseClient.rpc(
+            'redeem_student_invitation',
+            {
+              p_code:pending,
+              p_user_id:active.session.user.id
+            }
+          );
+
+          localStorage.removeItem(
+            'AGU_PENDING_INVITATION'
+          );
+
+        }catch(e){
+          console.warn(e);
+        }
       }
     }
-  }catch(e){console.warn('Session check:',e);}
+
+  }catch(e){
+    console.warn(
+      'Session check:',
+      e
+    );
+  }
 }
 
 /* ---------- Auth state ---------- */
-supabaseClient.auth.onAuthStateChange((event)=>{
-  if(event==='PASSWORD_RECOVERY') handleRecovery();
-});
+supabaseClient.auth.onAuthStateChange(
+  (event)=>{
+    if(event==='PASSWORD_RECOVERY'){
+      handleRecovery();
+    }
+  }
+);
 
 /* ---------- Start ---------- */
 (async()=>{
   await checkInvitation();
   await checkSession();
-  const params=new URLSearchParams(location.hash.replace(/^#/,''));
+
+  const params=new URLSearchParams(
+    location.hash.replace(/^#/,'')
+  );
+
   if(params.get('type')==='recovery'){
     await handleRecovery();
   }else{
-    // When auth.html is reached from the protected homepage, show the
-    // existing login flow (email + password on first/forced login, password
-    // only when the email has been remembered).
+    /*
+      When auth.html is reached from the protected homepage,
+      show the existing login flow.
+    */
     loginTab.click();
   }
 })();

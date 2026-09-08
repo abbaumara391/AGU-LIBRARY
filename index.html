@@ -166,6 +166,7 @@ footer{text-align:center;padding:30px;background:#fff;border-top:1px solid #dcee
 .exam-option input{margin-top:4px}
 .exam-actions{display:flex;gap:10px;flex-wrap:wrap;position:sticky;bottom:0;padding:14px 0;background:#f7fcfa;border-top:1px solid #dceee6;margin-top:15px}
 .exam-timer{font-weight:950;color:#b42323;background:#fff0f0;border:1px solid #efcccc;border-radius:12px;padding:10px 13px}.exam-notice{background:#fffdf2;border:1px solid #eadb9b;border-radius:18px;padding:18px;margin:14px 0}.exam-notice h3{margin:0 0 8px;color:#6b5600}.exam-notice ul{margin:8px 0 0 20px;color:#5f665f;line-height:1.6}.exam-notice-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}.answer-feedback{margin-top:14px;padding:14px;border-radius:12px;font-weight:900;text-align:center}.answer-feedback.correct{background:#e9f8f0;color:#087a4b;border:1px solid #b9e7d0}.answer-feedback.wrong{background:#fff0f0;color:#b42323;border:1px solid #efcccc}.answer-feedback.unanswered{background:#f0f2f1;color:#526a60;border:1px solid #d9dfdc}
+.exam-live-head{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:12px}.exam-live-head h2{margin:6px 0;color:#173b2d}.exam-progress{height:7px;background:#e8f2ed;border-radius:99px;overflow:hidden;margin:10px 0 18px}.exam-progress span{display:block;height:100%;background:#087a4b;border-radius:99px;transition:width .2s linear}
 .exam-result{text-align:center;background:#fff;border:1px solid #ccebdd;border-radius:20px;padding:28px}
 .exam-score{font-size:48px;font-weight:950;color:#087a4b;margin:8px 0}
 .certificate{background:#fff;border:7px double #087a4b;border-radius:4px;padding:38px 28px;text-align:center;max-width:850px;margin:0 auto;color:#17352a}
@@ -736,16 +737,20 @@ window.openService=openService;
 
 /* =========================================================
    AGULIBRARY REAL EXAMINATION ROOM + RESULT & CERTIFICATION
-   Permanent Supabase-backed examination system.
-   - One question at a time.
-   - Five seconds per question, enforced by server timestamps.
-   - Leaving the question page does not reset the daily lock.
-   - One examination-question session per student per Lagos calendar day.
-   - Results and certificates are stored permanently in Supabase.
+   Connected to the existing public.agu_exam_* database system.
+   Only this examination/result section is changed.
    ========================================================= */
-let examSettings={enabled:true,registration_enabled:false,question_seconds:5,default_pass_percentage:50};
+let examSettings={
+  examination_enabled:true,
+  registration_enabled:false,
+  payment_enabled:false,
+  payment_required:false,
+  default_question_duration_seconds:5,
+  important_notice:""
+};
 let availableExams=[];
 let examRegistrations=[];
+let examPrices=[];
 let activeExamSession=null;
 let examTimer=null;
 let examClockOffset=0;
@@ -759,12 +764,23 @@ function lagosDate(){
 function formatDate(v){try{return new Date(v).toLocaleString()}catch(e){return String(v||"")}}
 function examScoreClass(status){return status==="correct"?"correct":status==="wrong"?"wrong":"unanswered"}
 function escapeForAttr(v){return escAttr(String(v??""))}
+function currentStudentCountryCode(){
+  const m=currentUser?.user_metadata||{};
+  return String(m.country_code||m.countryCode||m.phone_country_code||"").trim();
+}
 
 async function loadExamSettings(){
   if(!client)return;
   try{
-    const r=await client.from("agu_exam_settings").select("enabled,registration_enabled,question_seconds,default_pass_percentage").eq("id",true).maybeSingle();
-    if(!r.error&&r.data)examSettings={...examSettings,...r.data};
+    const r=await client.from("agu_exam_settings")
+      .select("id,examination_enabled,registration_enabled,payment_enabled,payment_required,default_question_duration_seconds,important_notice")
+      .eq("id",true)
+      .maybeSingle();
+    if(!r.error&&r.data){
+      examSettings={...examSettings,...r.data};
+      /* The system requirement is always exactly five seconds. */
+      examSettings.default_question_duration_seconds=5;
+    }
   }catch(e){console.warn("Exam settings:",e)}
 }
 
@@ -776,49 +792,142 @@ async function loadExaminations(){
   if(activeExamSession){clearInterval(examTimer);examTimer=null;activeExamSession=null}
   status.textContent="Loading examination room...";list.innerHTML="";
   if(!currentUser){status.textContent="Please sign in to use the Examination Room.";return}
+
   await loadExamSettings();
-  if(!examSettings.enabled){
+
+  if(!examSettings.examination_enabled){
     status.innerHTML="🔒 <strong>The Examination Room is currently OFF.</strong><br>The administrator has temporarily closed examination access. Please check again later.";
     return;
   }
+
   try{
     const [examRes,regRes,accessRes]=await Promise.all([
-      client.from("agu_examinations").select("id,title,description,subject,education_level,class_level,term,pass_percentage,registration_required,is_published,created_at").eq("is_published",true).order("created_at",{ascending:false}),
-      client.from("agu_exam_registrations").select("exam_id,status").eq("student_id",currentUser.id),
-      client.from("agu_exam_daily_access").select("exam_id,accessed_at").eq("student_id",currentUser.id).eq("access_date",lagosDate()).maybeSingle()
+      client.from("agu_examinations")
+        .select("id,title,description,education_level,subject,examination_notice,published,registration_open,payment_enabled,payment_required,pass_mark,certificate_enabled,question_duration_seconds,created_at")
+        .eq("published",true)
+        .order("created_at",{ascending:false}),
+      client.from("agu_exam_registrations")
+        .select("id,examination_id,country_code,country_name,price_snapshot,currency_snapshot,payment_required,payment_status,registration_status,payment_reference,registered_at,paid_at,approved_at")
+        .eq("student_id",currentUser.id),
+      client.from("agu_exam_attempts")
+        .select("id,examination_id,daily_lock_date,question_page_opened_at,status")
+        .eq("student_id",currentUser.id)
+        .eq("daily_lock_date",lagosDate())
+        .order("question_page_opened_at",{ascending:false})
+        .limit(1)
     ]);
+
     if(examRes.error)throw examRes.error;
     if(regRes.error)throw regRes.error;
+    if(accessRes.error)throw accessRes.error;
+
     availableExams=examRes.data||[];
     examRegistrations=regRes.data||[];
-    renderExamList(accessRes.data||null);
+
+    /* Only load the price belonging to this student's registered country. */
+    const countryCode=currentStudentCountryCode();
+    if(countryCode){
+      const priceRes=await client.from("agu_exam_country_prices")
+        .select("id,examination_id,country_code,country_name,currency_code,amount,enabled")
+        .eq("country_code",countryCode)
+        .eq("enabled",true);
+      if(!priceRes.error)examPrices=priceRes.data||[];
+    }else{
+      examPrices=[];
+    }
+
+    renderExamList(accessRes.data?.[0]||null);
   }catch(e){
     console.error("Examination Room:",e);
     status.innerHTML="Unable to load the Examination Room right now.<br><small>"+esc(e.message||"Database error")+"</small>";
   }
 }
 
-function registrationFor(exam){return examRegistrations.find(x=>String(x.exam_id)===String(exam.id))||null}
+function registrationFor(exam){
+  return examRegistrations.find(x=>String(x.examination_id)===String(exam.id))||null;
+}
+function priceFor(exam){
+  return examPrices.find(x=>String(x.examination_id)===String(exam.id))||null;
+}
+function effectiveRegistrationRequired(exam){
+  return !!exam.registration_open || !!exam.payment_required || !!exam.payment_enabled || !!examSettings.registration_enabled;
+}
+function paymentIsRequired(exam){
+  return !!exam.payment_required || (!!examSettings.payment_required && (exam.payment_enabled!==false));
+}
+function paymentIsEnabled(exam){
+  return !!exam.payment_enabled || !!examSettings.payment_enabled;
+}
+function paymentStatusText(reg){
+  if(!reg)return "Not registered";
+  const s=String(reg.payment_status||"").toLowerCase();
+  if(["paid","completed","approved"].includes(s))return "Payment confirmed";
+  if(["not_required","free"].includes(s))return "No payment required";
+  if(s)return "Payment: "+s.replace(/_/g," ");
+  return "Payment pending";
+}
+
 function renderExamList(dailyAccess){
   const list=document.getElementById("examList"),status=document.getElementById("examStatus"),q=document.getElementById("examSearch")?.value?.toLowerCase().trim()||"";
   if(!list||!status)return;
-  if(dailyAccess){
-    status.innerHTML=`🔒 <strong>Today's examination access has already been used.</strong><br>You opened the examination question page today. You cannot open another examination question page until tomorrow. You may still view your saved results.`;
+
+  const locked=!!dailyAccess;
+  if(locked){
+    status.innerHTML=`🔒 <strong>Today's examination access has already been used.</strong><br>You opened an examination question page today. You cannot open another examination question page until tomorrow.`;
   }else{
-    status.textContent=`${availableExams.length} published examination${availableExams.length===1?"":"s"} available. Each question has ${Number(examSettings.question_seconds)||5} seconds.`;
+    status.innerHTML=`${availableExams.length} published examination${availableExams.length===1?"":"s"} available. <strong>Exactly 5 seconds per question.</strong>`;
   }
-  const filtered=availableExams.filter(e=>`${e.title||""} ${e.subject||""} ${e.education_level||""} ${e.class_level||""} ${e.term||""}`.toLowerCase().includes(q));
+
+  const filtered=availableExams.filter(e=>`${e.title||""} ${e.subject||""} ${e.education_level||""}`.toLowerCase().includes(q));
   if(!filtered.length){list.innerHTML='<div class="empty">No published examinations match your search.</div>';return}
+
   list.innerHTML=filtered.map((e,i)=>{
-    const reg=registrationFor(e),registered=!!reg&&["registered","approved"].includes(String(reg.status||""));
-    const required=!!e.registration_required;
-    const blocked=!!dailyAccess;
-    let action=blocked?`<button class="btn light" type="button" disabled>🔒 Available Tomorrow</button>`:required&&!registered?`<button class="btn primary exam-register" type="button" data-exam-index="${i}">📝 Register for Exam</button>`:`<button class="btn primary exam-start" type="button" data-exam-index="${i}">Start Examination →</button>`;
-    return `<article class="exam-card"><div class="resource-icon">📝</div><h3>${esc(e.title||"AGULIBRARY Examination")}</h3><p>${esc(e.description||"Complete this examination in the AGULIBRARY Examination Room.")}</p><div class="exam-meta"><span>${esc(e.subject||"General")}</span>${e.class_level?`<span>${esc(e.class_level)}</span>`:""}${e.term?`<span>${esc(e.term)}</span>`:""}<span>5 sec / question</span>${required?`<span>${registered?"Registered":"Registration Required"}</span>`:""}</div>${action}</article>`;
+    const reg=registrationFor(e);
+    const registered=!!reg;
+    const required=effectiveRegistrationRequired(e);
+    const payRequired=paymentIsRequired(e);
+    const price=priceFor(e);
+    const blocked=locked;
+
+    let action="";
+    if(blocked){
+      action=`<button class="btn outline" type="button" disabled>🔒 Available Tomorrow</button>`;
+    }else if(required&&!registered){
+      action=`<button class="btn primary exam-register" type="button" data-exam-index="${i}">📝 Register for Exam</button>`;
+    }else if(registered && reg.payment_required && !["paid","completed","approved","not_required"].includes(String(reg.payment_status||"").toLowerCase())){
+      action=`<button class="btn outline" type="button" disabled>💳 Payment Pending</button>`;
+    }else if(required && reg.registration_status && !["registered","approved","active","completed"].includes(String(reg.registration_status).toLowerCase())){
+      action=`<button class="btn outline" type="button" disabled>⏳ Registration Pending</button>`;
+    }else{
+      action=`<button class="btn primary exam-start" type="button" data-exam-index="${i}">Start Examination →</button>`;
+    }
+
+    const priceText=price&&paymentIsEnabled(e)
+      ? `<span>Price: ${esc(price.currency_code)} ${esc(Number(price.amount).toLocaleString())}</span>`
+      : (paymentIsEnabled(e)?`<span>Payment enabled</span>`:"");
+
+    return `<article class="exam-card">
+      <div class="resource-icon">📝</div>
+      <h3>${esc(e.title||"AGULIBRARY Examination")}</h3>
+      <p>${esc(e.description||"Complete this examination in the AGULIBRARY Examination Room.")}</p>
+      <div class="exam-meta">
+        <span>${esc(e.subject||"General")}</span>
+        ${e.education_level?`<span>${esc(e.education_level)}</span>`:""}
+        <span>5 sec / question</span>
+        ${required?`<span>${registered?"Registered":"Registration Required"}</span>`:""}
+        ${payRequired?`<span>Payment Required</span>`:""}
+        ${priceText}
+      </div>
+      ${registered?`<div class="service-status"><strong>${esc(reg.country_name||currentStudentCountryCode()||"Registered country")}</strong><br>${esc(paymentStatusText(reg))}</div>`:""}
+      ${action}
+    </article>`;
   }).join("");
+
   filtered.forEach((e,i)=>{
     list.querySelector(`[data-exam-index="${i}"]`)?.addEventListener("click",()=>{
-      if(e.registration_required&&!registrationFor(e)){registerForExam(e)}else{showExamNotice(e)}
+      const reg=registrationFor(e);
+      if(effectiveRegistrationRequired(e)&&!reg){registerForExam(e);return}
+      showExamNotice(e);
     });
   });
 }
@@ -826,6 +935,8 @@ function renderExamList(dailyAccess){
 function showExamNotice(exam){
   const existing=document.getElementById("examNoticeOverlay");
   if(existing)existing.remove();
+
+  const notice=String(exam.examination_notice||examSettings.important_notice||"").trim();
   const overlay=document.createElement("div");
   overlay.id="examNoticeOverlay";
   overlay.style.cssText="position:fixed;inset:0;z-index:1900;background:rgba(12,35,26,.55);display:grid;place-items:center;padding:18px";
@@ -833,6 +944,7 @@ function showExamNotice(exam){
     <div class="service-icon">⚠️</div>
     <h2 style="margin:0;color:#173b2d">Important Examination Notice</h2>
     <p style="color:#71847b;line-height:1.6">You are about to open <strong>${esc(exam.title||"this examination")}</strong>.</p>
+    ${notice?`<div class="service-status"><strong>Administrator's notice</strong><br>${esc(notice).replace(/\n/g,"<br>")}</div>`:""}
     <div class="exam-notice">
       <h3>Before you continue</h3>
       <ul>
@@ -840,7 +952,8 @@ function showExamNotice(exam){
         <li>An unanswered question becomes <strong>⬜ Empty</strong> when its time expires.</li>
         <li>A wrong answer is recorded as <strong>❌</strong> and a correct answer as <strong>✅</strong>.</li>
         <li>Opening the first question permanently uses your examination access for today.</li>
-        <li>Leaving this page does not reset the daily access. You must wait until tomorrow to open an examination question page again.</li>
+        <li>Leaving this page does not reset the daily access. You must wait until tomorrow to open another examination question page.</li>
+        <li>Your result is stored permanently after the examination is finalized.</li>
       </ul>
     </div>
     <div class="exam-notice-actions">
@@ -855,24 +968,57 @@ function showExamNotice(exam){
 
 async function registerForExam(exam){
   if(!currentUser)return;
+
+  const price=priceFor(exam);
+  const paymentRequired=paymentIsRequired(exam);
+  const country=currentStudentCountryCode();
+  let message=`Register for "${exam.title||"this examination"}"?`;
+  if(country)message+=`\nCountry: ${country}`;
+  if(price&&paymentIsEnabled(exam))message+=`\nPrice: ${price.currency_code} ${Number(price.amount).toLocaleString()}`;
+  if(paymentRequired)message+="\nPayment is required according to the current examination settings.";
+
+  if(!confirm(message))return;
+
   try{
-    const r=await client.rpc("agu_register_for_exam",{p_exam_id:exam.id});
+    const r=await client.rpc("agu_register_for_exam",{p_examination_id:exam.id});
     if(r.error)throw r.error;
-    alert("You are registered for this examination. You may start it now if today's examination access is still available.");
+    alert(paymentRequired
+      ? "Your examination registration has been submitted. Payment/approval status is shown in the Examination Room."
+      : "You are registered for this examination.");
     await loadExaminations();
   }catch(e){alert(e.message||"Unable to register for this examination.")}
 }
 
 async function startExam(exam){
   if(!currentUser){location.href="auth.html";return}
+
   try{
-    const r=await client.rpc("agu_start_exam",{p_exam_id:exam.id});
+    /* This RPC creates the permanent daily lock on the server. */
+    const r=await client.rpc("agu_start_exam",{p_examination_id:exam.id});
     if(r.error)throw r.error;
+
     const data=r.data||{};
-    const q=await client.from("agu_exam_questions_public").select("id,exam_id,position,question_text,options,marks").eq("exam_id",exam.id).order("position",{ascending:true});
+    const attempt=data?.id||data?.attempt_id;
+    if(!attempt)throw new Error("The examination server did not return an attempt ID.");
+
+    const q=await client.from("agu_exam_questions_public")
+      .select("id,examination_id,question_number,question_text,options,marks")
+      .eq("examination_id",exam.id)
+      .order("question_number",{ascending:true});
+
     if(q.error)throw q.error;
     if(!q.data?.length)throw new Error("This examination has no questions yet. Please contact the administrator.");
-    activeExamSession={attemptId:data.attempt_id,exam:{...exam,...data},questions:q.data,index:0,statuses:[]};
+
+    activeExamSession={
+      attemptId:attempt,
+      exam:{...exam,...data},
+      questions:q.data,
+      index:0,
+      statuses:[],
+      selectedOption:null,
+      answerSubmitted:false
+    };
+
     document.getElementById("examHomeView").style.display="none";
     document.getElementById("examRunnerView").style.display="block";
     await renderCurrentExamQuestion();
@@ -885,35 +1031,62 @@ async function startExam(exam){
 async function renderCurrentExamQuestion(){
   if(!activeExamSession)return;
   clearInterval(examTimer);examTimer=null;
+
   const session=activeExamSession;
   if(session.index>=session.questions.length){await finishExam();return}
+
   const question=session.questions[session.index];
   const runner=document.getElementById("examRunnerView");
-  runner.innerHTML=`<div class="service-panel-card"><div class="exam-live-head"><div><span class="eyebrow">LIVE EXAMINATION</span><h2>${esc(session.exam.title||"AGULIBRARY Examination")}</h2><small>Question ${session.index+1} of ${session.questions.length}</small></div><div id="examCountdown" class="exam-timer">5</div></div><div class="exam-progress"><span style="width:${Math.round(((session.index)/session.questions.length)*100)}%"></span></div><div id="liveQuestion" class="exam-question"><div class="exam-question-number">QUESTION ${session.index+1}</div><div class="exam-question-text">${esc(question.question_text||"")}</div><div class="exam-options">${renderQuestionOptions(question)}</div></div><p class="panel-note">⏱️ You have five seconds only. If you do not answer in time, this question is recorded as <strong>empty</strong> and marked wrong/unanswered.</p></div>`;
+  runner.innerHTML=`<div class="service-panel-card">
+    <div class="exam-live-head">
+      <div><span class="eyebrow">LIVE EXAMINATION</span><h2>${esc(session.exam.title||"AGULIBRARY Examination")}</h2><small>Question ${session.index+1} of ${session.questions.length}</small></div>
+      <div id="examCountdown" class="exam-timer">5</div>
+    </div>
+    <div class="exam-progress"><span style="width:${Math.round((session.index/session.questions.length)*100)}%"></span></div>
+    <div id="liveQuestion" class="exam-question">
+      <div class="exam-question-number">QUESTION ${session.index+1}</div>
+      <div class="exam-question-text">${esc(question.question_text||"")}</div>
+      <div class="exam-options">${renderQuestionOptions(question)}</div>
+    </div>
+    <p class="panel-note">⏱️ Exactly five seconds. If you do not answer in time, this question is recorded as <strong>⬜ Empty</strong>.</p>
+  </div>`;
+
   try{
-    const r=await client.rpc("agu_start_exam_question",{p_attempt_id:session.attemptId,p_question_id:question.id});
+    const r=await client.rpc("agu_start_exam_question",{
+      p_attempt_id:session.attemptId,
+      p_question_id:question.id
+    });
     if(r.error)throw r.error;
+
     const server=r.data||{};
-    examClockOffset=new Date(server.server_now||new Date().toISOString()).getTime()-Date.now();
-    const expires=new Date(server.expires_at).getTime();
-    session.questionStartedAt=server.started_at;session.questionExpiresAt=server.expires_at;
-    const answerButtons=runner.querySelectorAll("input[name=liveExamAnswer]");
-    answerButtons.forEach(input=>input.addEventListener("change",()=>{
-      session.selectedOption=input.value;
-    }));
+    const startedAt=server.started_at||new Date().toISOString();
+    const expiresAt=server.expires_at||new Date(Date.parse(startedAt)+5000).toISOString();
+    examClockOffset=server.server_now?new Date(server.server_now).getTime()-Date.now():0;
+
+    const expires=new Date(expiresAt).getTime();
+    session.questionStartedAt=startedAt;
+    session.questionExpiresAt=expiresAt;
     session.selectedOption=null;
+    session.answerSubmitted=false;
+
+    runner.querySelectorAll("input[name=liveExamAnswer]").forEach(input=>input.addEventListener("change",()=>{
+      if(activeExamSession)activeExamSession.selectedOption=input.value;
+    }));
+
     tickExamCountdown(expires);
     examTimer=setInterval(()=>tickExamCountdown(expires),100);
   }catch(e){
     runner.innerHTML=`<div class="service-panel-card"><h2>Unable to open this question</h2><p class="panel-note">${esc(e.message||"The examination server could not start the question.")}</p></div>`;
   }
 }
+
 function renderQuestionOptions(question){
   let options=question.options;
   if(!Array.isArray(options)&&options&&typeof options==="object")options=Object.values(options);
   options=Array.isArray(options)?options:[];
   return options.map((o,i)=>`<label class="exam-option"><input type="radio" name="liveExamAnswer" value="${escapeForAttr(String(i))}"><span><strong>${String.fromCharCode(65+i)}.</strong> ${esc(o)}</span></label>`).join("");
 }
+
 function tickExamCountdown(expires){
   if(!activeExamSession)return;
   const left=Math.max(0,expires-(Date.now()+examClockOffset));
@@ -921,21 +1094,29 @@ function tickExamCountdown(expires){
   const el=document.getElementById("examCountdown");if(el)el.textContent=String(seconds);
   if(left<=0){
     clearInterval(examTimer);examTimer=null;
-    submitCurrentAnswer(activeExamSession.selectedOption ?? null,true);
+    submitCurrentAnswer(activeExamSession.selectedOption??null,true);
   }
 }
+
 async function submitCurrentAnswer(value,expired=false){
   if(!activeExamSession||activeExamSession.answerSubmitted)return;
   activeExamSession.answerSubmitted=true;
   clearInterval(examTimer);examTimer=null;
+
   const question=activeExamSession.questions[activeExamSession.index];
   try{
-    const r=await client.rpc("agu_submit_exam_answer",{p_attempt_id:activeExamSession.attemptId,p_question_id:question.id,p_selected_option:value===null?null:String(value)});
+    const r=await client.rpc("agu_submit_exam_answer",{
+      p_attempt_id:activeExamSession.attemptId,
+      p_question_id:question.id,
+      p_selected_option:expired?null:(value===null?null:String(value))
+    });
     if(r.error)throw r.error;
+
     const data=r.data||{};
-    activeExamSession.statuses.push({question_id:question.id,status:data.status||"unanswered",selected_option:value});
-    const status=data.status||"unanswered";
+    const status=String(data.outcome||data.status||"unanswered").toLowerCase();
+    activeExamSession.statuses.push({question_id:question.id,status,selected_option:value});
     showQuestionFeedback(status,expired||status==="unanswered");
+
     setTimeout(async()=>{
       if(!activeExamSession)return;
       activeExamSession.index++;
@@ -949,35 +1130,86 @@ async function submitCurrentAnswer(value,expired=false){
     await renderCurrentExamQuestion();
   }
 }
+
 function showQuestionFeedback(status,expired){
   const q=document.getElementById("liveQuestion");if(!q)return;
   const existing=q.querySelector(".answer-feedback");if(existing)return;
-  const div=document.createElement("div");div.className="answer-feedback "+examScoreClass(status);
+  const div=document.createElement("div");
+  div.className="answer-feedback "+examScoreClass(status);
   div.innerHTML=status==="correct"?"✅ Correct answer":status==="wrong"?"❌ Wrong answer":"⬜ Empty — time expired";
-  q.querySelectorAll("input").forEach(x=>x.disabled=true);q.appendChild(div);
+  q.querySelectorAll("input").forEach(x=>x.disabled=true);
+  q.appendChild(div);
 }
+
 async function finishExam(){
   if(!activeExamSession)return;
   clearInterval(examTimer);examTimer=null;
+
   try{
     const attemptId=activeExamSession.attemptId;
     const questions=activeExamSession.questions.slice();
+
     const r=await client.rpc("agu_finish_exam",{p_attempt_id:attemptId});
     if(r.error)throw r.error;
     const result=r.data||{};
+
     try{
-      const answers=await client.from("agu_exam_answers").select("question_id,answer_status,selected_option").eq("attempt_id",attemptId);
+      const answers=await client.from("agu_exam_answers")
+        .select("question_id,question_number,selected_option,is_correct,outcome,elapsed_seconds")
+        .eq("attempt_id",attemptId)
+        .order("question_number",{ascending:true});
+      if(answers.error)throw answers.error;
       const map=new Map((answers.data||[]).map(a=>[String(a.question_id),a]));
-      lastExamReview=questions.map(q=>({question:q,answer:map.get(String(q.id))||{answer_status:"unanswered",selected_option:null}}));
-    }catch(e){lastExamReview=questions.map(q=>({question:q,answer:{answer_status:"unanswered",selected_option:null}}))}
+      lastExamReview=questions.map(q=>({
+        question:q,
+        answer:map.get(String(q.id))||{outcome:"unanswered",selected_option:null,is_correct:false}
+      }));
+    }catch(e){
+      lastExamReview=questions.map(q=>({question:q,answer:{outcome:"unanswered",selected_option:null,is_correct:false}}));
+    }
+
     activeExamSession=null;
     renderSubmittedExamResult(result);
-  }catch(e){alert(e.message||"Unable to finalize the examination.");}
+  }catch(e){
+    alert(e.message||"Unable to finalize the examination.");
+  }
 }
+
+function resultCounts(){
+  let correct=0,wrong=0,unanswered=0;
+  lastExamReview.forEach(x=>{
+    const s=String(x.answer?.outcome||"").toLowerCase();
+    if(s==="correct")correct++;
+    else if(s==="wrong")wrong++;
+    else unanswered++;
+  });
+  return {correct,wrong,unanswered};
+}
+
 function renderSubmittedExamResult(result){
   const runner=document.getElementById("examRunnerView");
-  const review=lastExamReview.map((row,i)=>{const st=row.answer?.answer_status||"unanswered";const mark=st==="correct"?"✅":st==="wrong"?"❌":"⬜";return `<div class="exam-review-row"><span class="exam-review-mark ${examScoreClass(st)}">${mark}</span><div><strong>Question ${i+1}</strong><p>${esc(row.question?.question_text||"")}</p></div></div>`}).join("");
-  runner.innerHTML=`<div class="exam-result"><div class="service-icon">${result.passed?"🏆":"📊"}</div><h2>Examination Submitted</h2><div class="exam-score">${Number(result.percentage||0)}%</div><p><strong>${Number(result.correct_count||0)}</strong> correct • <strong>${Number(result.wrong_count||0)}</strong> wrong • <strong>${Number(result.unanswered_count||0)}</strong> empty</p><p>${result.passed?"Congratulations! You have passed this examination and earned a certificate.":"You did not reach the pass mark for certification on this attempt."}</p><div class="exam-review"><h3>Question Results</h3>${review}</div><div class="exam-actions" style="justify-content:center"><button class="btn primary" id="viewResultsAfterExam" type="button">🏆 View Result &amp; Certification</button></div></div>`;
+  const counts=resultCounts();
+  const review=lastExamReview.map((row,i)=>{
+    const st=String(row.answer?.outcome||"unanswered").toLowerCase();
+    const mark=st==="correct"?"✅":st==="wrong"?"❌":"⬜";
+    return `<div class="exam-review-row"><span class="exam-review-mark ${examScoreClass(st)}">${mark}</span><div><strong>Question ${i+1}</strong><p>${esc(row.question?.question_text||"")}</p></div></div>`;
+  }).join("");
+
+  const certMessage=result.certificate_id
+    ? "Congratulations! You passed this examination and a permanent certificate has been issued."
+    : (result.passed?"Congratulations! You passed this examination.":"You did not reach the pass mark for this attempt.");
+
+  runner.innerHTML=`<div class="exam-result">
+    <div class="service-icon">${result.passed?"🏆":"📊"}</div>
+    <h2>Examination Submitted</h2>
+    <div class="exam-score">${Number(result.percentage||0)}%</div>
+    <p><strong>${counts.correct}</strong> correct • <strong>${counts.wrong}</strong> wrong • <strong>${counts.unanswered}</strong> empty</p>
+    <p>${certMessage}</p>
+    <div class="exam-review"><h3>Question Results</h3>${review}</div>
+    <div class="exam-actions" style="justify-content:center">
+      <button class="btn primary" id="viewResultsAfterExam" type="button">🏆 View Result &amp; Certification</button>
+    </div>
+  </div>`;
   document.getElementById("viewResultsAfterExam").addEventListener("click",()=>openService("results"));
 }
 
@@ -992,182 +1224,112 @@ async function loadResults(){
   }
   if(!status||!list)return;
   if(!currentUser){status.textContent="Please sign in to view your results.";return}
+
   status.textContent="Loading permanent examination records...";list.innerHTML="";
   try{
-    const r=await client.from("agu_exam_attempts").select("id,exam_id,status,started_at,finished_at,score,percentage,correct_count,wrong_count,unanswered_count,total_questions,passed,certificate_id,agu_examinations(title,subject,class_level,term)").eq("student_id",currentUser.id).eq("status","completed").order("finished_at",{ascending:false});
+    const r=await client.from("agu_exam_attempts")
+      .select("id,examination_id,status,started_at,completed_at,score,total_marks,percentage,grade,passed,certificate_id,agu_examinations(title,subject,education_level,pass_mark)")
+      .eq("student_id",currentUser.id)
+      .eq("status","completed")
+      .order("completed_at",{ascending:false});
     if(r.error)throw r.error;
+
     studentResults=r.data||[];
-    if(!studentResults.length){status.textContent="No examination results are available yet. Complete an examination to create your permanent result record.";return}
+    if(!studentResults.length){
+      status.textContent="No examination results are available yet. Complete an examination to create your permanent result record.";
+      return;
+    }
+
     status.textContent=`${studentResults.length} permanent result${studentResults.length===1?"":"s"} available.`;
-    list.innerHTML=studentResults.map((r,i)=>`<article class="result-card"><div class="resource-icon">${r.passed?"🏆":"📊"}</div><h3>${esc(r.agu_examinations?.title||"AGULIBRARY Examination")}</h3><p>${r.agu_examinations?.subject?`Subject: ${esc(r.agu_examinations.subject)}<br>`:""}Completed: ${esc(formatDate(r.finished_at))}</p><div class="result-meta"><span>Score: ${Number(r.percentage||0)}%</span><span>${r.passed?"PASS":"NOT PASSED"}</span><span>${Number(r.correct_count||0)} correct</span><span>${Number(r.unanswered_count||0)} empty</span></div><div class="actions"><button class="btn primary" type="button" data-result-index="${i}">${r.passed?"View Certificate":"View Result"}</button></div></article>`).join("");
+    list.innerHTML=studentResults.map((r,i)=>`<article class="result-card">
+      <div class="resource-icon">${r.passed?"🏆":"📊"}</div>
+      <h3>${esc(r.agu_examinations?.title||"AGULIBRARY Examination")}</h3>
+      <p>${r.agu_examinations?.subject?`Subject: ${esc(r.agu_examinations.subject)}<br>`:""}Completed: ${esc(formatDate(r.completed_at))}</p>
+      <div class="result-meta">
+        <span>Score: ${Number(r.percentage||0)}%</span>
+        <span>${r.passed?"PASS":"NOT PASSED"}</span>
+        ${r.grade?`<span>Grade: ${esc(r.grade)}</span>`:""}
+      </div>
+      <div class="actions"><button class="btn primary" type="button" data-result-index="${i}">${r.certificate_id?"View Certificate":"View Result"}</button></div>
+    </article>`).join("");
+
     list.querySelectorAll("[data-result-index]").forEach(btn=>btn.addEventListener("click",()=>showPermanentResult(studentResults[Number(btn.dataset.resultIndex)])));
   }catch(e){
     console.error("Results:",e);
     status.innerHTML="Unable to load your permanent results.<br><small>"+esc(e.message||"Database error")+"</small>";
   }
 }
+
 async function showPermanentResult(result){
   const resultsView=document.getElementById("resultsView");
   const name=document.getElementById("fullProfileName")?.textContent||currentUser?.user_metadata?.full_name||currentUser?.email?.split("@")[0]||"Student";
   const examTitle=result.agu_examinations?.title||"AGULIBRARY Examination";
   const score=Number(result.percentage||0);
-  const back=()=>{resultsView.innerHTML=`<div class="service-icon">🏆</div><h2>Result &amp; Certification</h2><p>Your completed AGULIBRARY examination results and certificates are shown here.</p><div id="resultsStatus" class="service-status">Loading results...</div><div id="resultsList" class="service-grid"></div>`;loadResults()};
+  const back=()=>{
+    resultsView.innerHTML=`<div class="service-icon">🏆</div><h2>Result &amp; Certification</h2><p>Your completed AGULIBRARY examination results and certificates are shown here.</p><div id="resultsStatus" class="service-status">Loading results...</div><div id="resultsList" class="service-grid"></div>`;
+    loadResults();
+  };
+
   let cert=null;
   if(result.certificate_id){
-    try{const c=await client.from("agu_exam_certificates").select("certificate_number,issued_at").eq("id",result.certificate_id).maybeSingle();if(!c.error)cert=c.data}catch(e){}
+    try{
+      const c=await client.from("agu_exam_certificates")
+        .select("id,certificate_number,verification_code,issued_at,status")
+        .eq("id",result.certificate_id)
+        .eq("student_id",currentUser.id)
+        .maybeSingle();
+      if(!c.error)cert=c.data;
+    }catch(e){}
   }
-  resultsView.innerHTML=`<div class="service-toolbar"><button class="btn outline" id="backPermanentResults" type="button">← Results</button></div><div class="exam-result"><div class="service-icon">${result.passed?"🏆":"📊"}</div><h2>${esc(examTitle)}</h2><div class="exam-score">${score}%</div><p><strong>${Number(result.correct_count||0)}</strong> correct • <strong>${Number(result.wrong_count||0)}</strong> wrong • <strong>${Number(result.unanswered_count||0)}</strong> empty</p><p>Completed: ${esc(formatDate(result.finished_at))}</p>${cert?`<p><strong>Certificate No:</strong> ${esc(cert.certificate_number)}</p><button class="btn primary" id="showPermanentCertificate" type="button">🏆 View Certificate</button>`:`<p class="panel-note">This attempt did not qualify for certification.</p>`}</div>`;
+
+  resultsView.innerHTML=`<div class="service-toolbar"><button class="btn outline" id="backPermanentResults" type="button">← Results</button></div>
+    <div class="exam-result">
+      <div class="service-icon">${result.passed?"🏆":"📊"}</div>
+      <h2>${esc(examTitle)}</h2>
+      <div class="exam-score">${score}%</div>
+      <p>${result.grade?`Grade: <strong>${esc(result.grade)}</strong><br>`:""}Status: <strong>${result.passed?"PASSED":"NOT PASSED"}</strong></p>
+      <p>Score: <strong>${Number(result.score||0)}</strong> / ${Number(result.total_marks||0)}</p>
+      <p>Completed: ${esc(formatDate(result.completed_at))}</p>
+      ${cert?`<p><strong>Certificate No:</strong> ${esc(cert.certificate_number)}<br><strong>Verification Code:</strong> ${esc(cert.verification_code)}<br>Issued: ${esc(formatDate(cert.issued_at))}</p><button class="btn primary" id="showPermanentCertificate" type="button">🏆 View Certificate</button>`:`<p class="panel-note">This attempt did not qualify for certification.</p>`}
+    </div>`;
+
   document.getElementById("backPermanentResults").addEventListener("click",back);
   if(cert)document.getElementById("showPermanentCertificate").addEventListener("click",()=>showPermanentCertificate(name,examTitle,result,cert));
 }
+
 function showPermanentCertificate(name,examTitle,result,cert){
   const resultsView=document.getElementById("resultsView");
-  resultsView.innerHTML=`<div class="service-toolbar"><button class="btn outline" id="backCertificate" type="button">← Result</button></div><div class="certificate" id="certificateArea"><div class="eyebrow">AGULIBRARY</div><h2>CERTIFICATE OF ACHIEVEMENT</h2><p>This certificate is proudly presented to</p><h3>${esc(name)}</h3><p>for successfully completing</p><h3>${esc(examTitle)}</h3><p>with a score of <strong>${Number(result.percentage||0)}%</strong>.</p><p>Certificate No: <strong>${esc(cert.certificate_number)}</strong><br>Issued: ${esc(formatDate(cert.issued_at))}</p><p>AGULIBRARY • Owner: Umar Mohammed</p></div><div class="certificate-actions"><button class="btn primary" id="printCertificate" type="button">🖨️ Print Certificate</button><button class="btn outline" id="backCertificate2" type="button">Back to Result</button></div>`;
-  const back=()=>showPermanentResult(result);document.getElementById("backCertificate").addEventListener("click",back);document.getElementById("backCertificate2").addEventListener("click",back);document.getElementById("printCertificate").addEventListener("click",printCertificate);
+  resultsView.innerHTML=`<div class="service-toolbar"><button class="btn outline" id="backCertificate" type="button">← Result</button></div>
+    <div class="certificate" id="certificateArea">
+      <div class="eyebrow">AGULIBRARY</div>
+      <h2>CERTIFICATE OF ACHIEVEMENT</h2>
+      <p>This certificate is proudly presented to</p>
+      <h3>${esc(name)}</h3>
+      <p>for successfully completing</p>
+      <h3>${esc(examTitle)}</h3>
+      <p>with a score of <strong>${Number(result.percentage||0)}%</strong>.</p>
+      <p>Certificate No: <strong>${esc(cert.certificate_number)}</strong><br>Verification Code: <strong>${esc(cert.verification_code||"")}</strong><br>Issued: ${esc(formatDate(cert.issued_at))}</p>
+      <p>AGULIBRARY • Owner: Umar Mohammed</p>
+    </div>
+    <div class="certificate-actions"><button class="btn primary" id="printCertificate" type="button">🖨️ Print Certificate</button><button class="btn outline" id="backCertificate2" type="button">Back to Result</button></div>`;
+
+  const back=()=>showPermanentResult(result);
+  document.getElementById("backCertificate").addEventListener("click",back);
+  document.getElementById("backCertificate2").addEventListener("click",back);
+  document.getElementById("printCertificate").addEventListener("click",printCertificate);
 }
+
 function printCertificate(){
   const area=document.getElementById("certificateArea");if(!area)return;
-  const w=window.open("","_blank","noopener,noreferrer");if(!w){alert("Please allow pop-ups to print the certificate.");return}
-  w.document.write(`<!doctype html><html><head><title>AGULIBRARY Certificate</title><style>body{font-family:system-ui,-apple-system,Segoe UI,sans-serif;padding:40px;color:#17352a}.certificate{border:7px double #087a4b;border-radius:4px;padding:60px 40px;text-align:center;max-width:850px;margin:auto}.eyebrow{color:#087a4b;font-size:12px;font-weight:900;letter-spacing:3px}.certificate h2{color:#087a4b;font-size:34px}.certificate h3{font-size:25px}.certificate p{line-height:1.7;color:#526a60}@media print{body{padding:0}}</style></head><body><div class="certificate">${area.innerHTML}</div><script>window.onload=()=>window.print()<\/script></body></html>`);w.document.close();
+  const w=window.open("","_blank","noopener,noreferrer");
+  if(!w){alert("Please allow pop-ups to print the certificate.");return}
+  w.document.write(`<!doctype html><html><head><title>AGULIBRARY Certificate</title><style>body{font-family:system-ui,-apple-system,Segoe UI,sans-serif;padding:40px;color:#17352a}.certificate{border:7px double #087a4b;border-radius:4px;padding:60px 40px;text-align:center;max-width:850px;margin:auto}.eyebrow{color:#087a4b;font-size:12px;font-weight:900;letter-spacing:3px}.certificate h2{color:#087a4b;font-size:34px}.certificate h3{font-size:25px}.certificate p{line-height:1.7;color:#526a60}@media print{body{padding:0}}</style></head><body><div class="certificate">${area.innerHTML}</div><script>window.onload=()=>window.print()<\/script></body></html>`);
+  w.document.close();
 }
 
 function setupExamUI(){
   document.getElementById("examSearch")?.addEventListener("input",()=>renderExamList(null));
 }
-
-async function signOut(){try{localStorage.setItem("AGU_REQUIRE_FULL_LOGIN","1");if(client)await client.auth.signOut()}catch(e){}location.href="index.html"}
-
-function setupAI(){
- const tp=document.getElementById("aiTeacherPanel"),tl=document.getElementById("aiTeacherLauncher");
- const toggle=show=>{tp.classList.toggle("show",show);tp.setAttribute("aria-hidden",show?"false":"true");tl.setAttribute("aria-expanded",show?"true":"false");document.documentElement.style.overflow=show?"hidden":"";document.body.style.overflow=show?"hidden":""};
- tl.onclick=()=>toggle(!tp.classList.contains("show"));document.getElementById("closeTeacher").onclick=()=>toggle(false);
- document.getElementById("teacherSend").onclick=sendTeacher;
- document.getElementById("teacherInput").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();sendTeacher()}});
-  const supportToggle=document.getElementById("supportToggle");
-  if(supportToggle){
-    supportToggle.onclick=()=>{window.location.href="support.html"};
-  }
-}
-function renderTeacherMarkdown(text){
-  const source=String(text??"").replace(/\r\n?/g,"\n");
-  const root=document.createElement("div");
-  const lines=source.split("\n");
-  let i=0;
-  let list=null,listType=null;
-  let paragraph=[];
-
-  const escHtml=v=>String(v).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
-  const inline=v=>{
-    let x=escHtml(v);
-    const stash=[];
-    const hold=(value)=>{const key="\u0000M"+stash.length+"\u0000";stash.push(value);return key};
-    x=x.replace(/(`+)([\s\S]*?)\1/g,(_,ticks,code)=>hold("<code>"+code+"</code>"));
-    x=x.replace(/(\\\\\[[\s\S]*?\\\\\]|\\\\\([\s\S]*?\\\\\)|\$\$[\s\S]*?\$\$|\$[^$\n]+\$)/g,m=>hold(m));
-    x=x.replace(/\*\*([^*\n]+)\*\*/g,"<strong>$1</strong>");
-    x=x.replace(/__([^_\n]+)__/g,"<strong>$1</strong>");
-    x=x.replace(/\*([^*\n]+)\*/g,"<em>$1</em>");
-    x=x.replace(/_([^_\n]+)_/g,"<em>$1</em>");
-    x=x.replace(/\[([^\]\n]+)\]\((https?:\/\/[^\s)]+)\)/g,'<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
-    x=x.replace(/  $/g,"<br>");
-    x=x.replace(/\u0000M(\d+)\u0000/g,(_,n)=>stash[Number(n)]);
-    return x;
-  };
-  const flushParagraph=()=>{
-    if(!paragraph.length)return;
-    const p=document.createElement("p");
-    p.innerHTML=inline(paragraph.join("\n")).replace(/\n/g,"<br>");
-    root.appendChild(p);paragraph=[];
-  };
-  const closeList=()=>{if(list){root.appendChild(list);list=null;listType=null}};
-  const isFence=line=>/^\s*```/.test(line);
-  const isUl=line=>/^\s*[-*+]\s+/.test(line);
-  const isOl=line=>/^\s*\d+[.)]\s+/.test(line);
-
-  while(i<lines.length){
-    const line=lines[i];
-    if(/^\s*$/.test(line)){flushParagraph();closeList();i++;continue}
-
-    if(isFence(line)){
-      flushParagraph();closeList();
-      const lang=line.trim().slice(3).trim();
-      i++;const code=[];
-      while(i<lines.length&&!/^\s*```/.test(lines[i])){code.push(lines[i]);i++}
-      if(i<lines.length)i++;
-      const pre=document.createElement("pre"),c=document.createElement("code");
-      if(lang)c.className="language-"+lang.replace(/[^a-z0-9_-]/gi,"");
-      c.textContent=code.join("\n");pre.appendChild(c);root.appendChild(pre);continue;
-    }
-
-    if(/^\s*(\\\\\[|\$\$)/.test(line.trim())){
-      flushParagraph();closeList();
-      const first=line.trim();let math=[first];
-      const closing=first.startsWith("\\\\[")?"\\\\]":"$$";
-      if(!first.endsWith(closing)){
-        i++;
-        while(i<lines.length){math.push(lines[i]);if(lines[i].trim().endsWith(closing)){break}i++}
-      }
-      const div=document.createElement("div");div.className="math-block";div.textContent=math.join("\n");root.appendChild(div);i++;continue;
-    }
-
-    const hm=line.match(/^\s*(#{1,4})\s+(.+?)\s*#*\s*$/);
-    if(hm){flushParagraph();closeList();const h=document.createElement("h"+hm[1].length);h.innerHTML=inline(hm[2]);root.appendChild(h);i++;continue}
-    if(/^\s*([-*_])(?:\s*\1){2,}\s*$/.test(line)){flushParagraph();closeList();root.appendChild(document.createElement("hr"));i++;continue}
-
-    const bq=line.match(/^\s*>\s?(.*)$/);
-    if(bq){flushParagraph();closeList();const q=document.createElement("blockquote");q.innerHTML=inline(bq[1]);root.appendChild(q);i++;continue}
-
-    let m=line.match(/^\s*[-*+]\s+(.*)$/);let type="ul";
-    if(!m){m=line.match(/^\s*\d+[.)]\s+(.*)$/);type="ol"}
-    if(m){
-      flushParagraph();
-      if(!list||listType!==type){closeList();list=document.createElement(type);listType=type}
-      const li=document.createElement("li");li.innerHTML=inline(m[1]);list.appendChild(li);i++;continue;
-    }
-
-    if(list){closeList()}
-    paragraph.push(line);i++;
-  }
-  flushParagraph();closeList();
-  return root;
-}
-
-function addChat(id,text,user){
-  const box=document.getElementById(id),d=document.createElement("div");
-  d.className="msg"+(user?" user":"");
-  if(user){
-    d.textContent=String(text??"");
-  }else{
-    d.classList.add("ai-response");
-    d.appendChild(renderTeacherMarkdown(text));
-  }
-  box.appendChild(d);
-  if(window.MathJax?.typesetPromise)window.MathJax.typesetPromise([d]).catch(()=>{});
-  box.scrollTop=box.scrollHeight;
-}
-async function callAI(endpoint,message,conversation){
- const r=await fetch(endpoint,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({message,conversation,student_id:currentUser?.id||null})});
- if(!r.ok)throw new Error("AI service error");
- const d=await r.json();return d.answer||d.message||d.response||"The AI returned no answer.";
-}
-async function sendTeacher(){
- const input=document.getElementById("teacherInput"),btn=document.getElementById("teacherSend"),m=input.value.trim();if(!m)return;
- addChat("teacherChat",m,true);input.value="";btn.disabled=true;teacherConversation.push({role:"user",content:m});
- try{
-  const answer=await callAI((window.AGU_CONFIG?.supabaseUrl||"").replace(/\/$/,"")+"/functions/v1/ai-learning-agent",m,teacherConversation);
-  addChat("teacherChat",answer,false);teacherConversation.push({role:"assistant",content:answer});
- }catch(e){addChat("teacherChat","The AI Learning Teacher interface is ready, but its secure AI backend endpoint still needs to be connected.",false)}
- btn.disabled=false;input.focus();
-}
-async function sendSupport(){
- const input=document.getElementById("supportInput"),btn=document.getElementById("supportSend"),m=input.value.trim();if(!m)return;
- addChat("supportChat",m,true);input.value="";btn.disabled=true;supportConversation.push({role:"user",content:m});
- try{
-  const answer=await callAI((window.AGU_CONFIG?.supabaseUrl||"").replace(/\/$/,"")+"/functions/v1/customer-support-agent",m,supportConversation);
-  addChat("supportChat",answer,false);supportConversation.push({role:"assistant",content:answer});
- }catch(e){addChat("supportChat","The Customer Support Agent interface is ready, but its secure support AI backend endpoint still needs to be connected.",false)}
- btn.disabled=false;input.focus();
-}
-
 
 /* =========================================================
    ACCOUNT MENU / PROFILE / INVITATION / SECURITY

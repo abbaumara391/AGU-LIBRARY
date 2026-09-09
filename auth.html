@@ -27,39 +27,58 @@ input:focus,select:focus{border-color:#087f52;box-shadow:0 0 0 3px rgba(8,127,82
 input:disabled{background:#eef5f1;color:#66766f}
 .row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .phone-row{display:grid;grid-template-columns:145px 1fr;gap:10px}
+/* FIX REGISTRATION FIELD LAYOUT */
 #registerForm{
-  display:block;
-  width:100%;
+  display:block !important;
+  width:100% !important;
 }
 
-#registerForm > label,
+#registerForm > label{
+  display:block !important;
+  width:100% !important;
+  grid-column:1 / -1 !important;
+}
+
 #registerForm > input,
-#registerForm > select,
-#registerForm > .password-wrap,
+#registerForm > select{
+  display:block !important;
+  width:100% !important;
+  grid-column:1 / -1 !important;
+}
+
+#registerForm > .password-wrap{
+  display:block !important;
+  width:100% !important;
+  grid-column:1 / -1 !important;
+}
+
 #registerForm > button{
-  width:100%;
-  display:block;
+  display:block !important;
+  width:100% !important;
+  grid-column:1 / -1 !important;
 }
 
 #registerForm .row{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:14px;
+  display:grid !important;
+  grid-template-columns:1fr 1fr !important;
+  gap:14px !important;
+  width:100% !important;
 }
 
 #registerForm .phone-row{
-  display:grid;
-  grid-template-columns:145px 1fr;
-  gap:10px;
+  display:grid !important;
+  grid-template-columns:145px 1fr !important;
+  gap:10px !important;
+  width:100% !important;
 }
 
 @media(max-width:600px){
   #registerForm .row{
-    grid-template-columns:1fr;
+    grid-template-columns:1fr !important;
   }
 
   #registerForm .phone-row{
-    grid-template-columns:125px 1fr;
+    grid-template-columns:125px 1fr !important;
   }
 }
   .password-wrap{position:relative}
@@ -2554,4 +2573,4 @@ loginTab.click();
 })();
 
 </script></body>
-                                             </html>
+  </html>

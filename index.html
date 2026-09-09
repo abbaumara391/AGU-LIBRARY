@@ -144,7 +144,6 @@ footer{text-align:center;padding:30px;background:#fff;border-top:1px solid #dcee
 .security-card{background:#fff;border:1px solid #dceee6;border-radius:18px;padding:22px;text-align:left;color:#214638}
 .security-card b{display:block;margin-top:12px}.security-card small{display:block;color:#71847b;margin-top:7px;line-height:1.5}
 
-
 .service-panel-body{display:block}
 .service-panel-card{background:#fff;border:1px solid #dceee6;border-radius:20px;padding:22px}
 .service-icon{font-size:38px;margin-bottom:8px}
@@ -173,7 +172,6 @@ footer{text-align:center;padding:30px;background:#fff;border-top:1px solid #dcee
 .certificate h2{font-size:32px;color:#087a4b;margin:5px 0 10px}.certificate h3{font-size:24px;margin:12px 0}.certificate p{line-height:1.6;color:#526a60}
 .certificate-actions{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:18px}.exam-review{margin-top:20px;text-align:left}.exam-review h3{color:#173b2d}.exam-review-row{display:flex;gap:12px;align-items:flex-start;padding:12px;border:1px solid #dceee6;border-radius:13px;background:#f8fcfa;margin-top:8px}.exam-review-row p{margin:5px 0 0;color:#71847b;line-height:1.45}.exam-review-mark{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;font-weight:950;flex:0 0 34px}.exam-review-mark.correct{background:#e9f8f0;color:#087a4b}.exam-review-mark.wrong{background:#fff0f0;color:#b42323}.exam-review-mark.unanswered{background:#f0f2f1;color:#526a60}
 @media(max-width:760px){.service-grid{grid-template-columns:1fr}.service-toolbar input,.service-toolbar select{min-width:0;width:100%;flex-basis:100%}}
-
 @media(max-width:1000px){.subject-grid{grid-template-columns:repeat(2,1fr)}.resource-grid{grid-template-columns:repeat(2,1fr)}.account-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:760px){.profile-info-grid{grid-template-columns:1fr}.security-grid{grid-template-columns:1fr}.hero{grid-template-columns:1fr;gap:8px;padding:14px 16px;margin:8px auto 10px;min-height:0}.hero-title-row{gap:9px;white-space:normal;flex-wrap:wrap}.hero h1{font-size:clamp(28px,8vw,46px)}.hero-art{height:80px;min-height:80px}.orb{width:80px;height:80px}.book{width:56px;height:70px;font-size:28px}.menu-button{top:10px;right:10px}.nav{flex-wrap:wrap}.nav-links{order:3;width:100%;justify-content:center}.ai-launch{top:auto;bottom:18px}.ai-panel{inset:0;width:100dvw;height:100dvh;max-width:100dvw;max-height:100dvh;border-radius:0}.flow-grid{grid-template-columns:1fr 1fr}.resource-grid{grid-template-columns:1fr}.resource-tools{grid-template-columns:1fr}.account-bar{align-items:flex-start;flex-direction:column}}
 @media(max-width:520px){.subject-grid{grid-template-columns:1fr}.flow-grid{grid-template-columns:1fr}.account-grid{grid-template-columns:1fr}.hero{padding:20px}.float{font-size:11px}.float.a{left:0}.float.b{right:0}}
@@ -190,8 +188,6 @@ footer{text-align:center;padding:30px;background:#fff;border-top:1px solid #dcee
   </nav>
 </header>
 
-
-<!-- AGULIBRARY account menu -->
 <button id="menuButton" class="menu-button" type="button" aria-label="Open account menu" aria-expanded="false">
   <span></span><span></span><span></span>
 </button>
@@ -223,7 +219,8 @@ footer{text-align:center;padding:30px;background:#fff;border-top:1px solid #dcee
       <div class="settings-grid">
         <div class="settings-row"><div><b>Learning reminders</b><small>Keep your learning activity organized.</small></div><button type="button" class="setting-toggle" data-setting="reminders">ON</button></div>
         <div class="settings-row"><div><b>Remember this device</b><small>Allows the next login to request your password only.</small></div><button type="button" class="setting-toggle active" data-setting="device">ON</button></div>
-        <div class="settings-row"><div><b>Resource notifications</b><small>Keep useful library updates available.</small></div><button type="button" class="setting-toggle" data-setting="notifications">ON</button></div><div class="settings-row"><div><b>Account</b><small>Sign out of your AGULIBRARY account.</small></div><button class="btn danger" id="signOutButton" type="button">🚪 Sign Out</button></div>
+        <div class="settings-row"><div><b>Resource notifications</b><small>Keep useful library updates available.</small></div><button type="button" class="setting-toggle" data-setting="notifications">ON</button></div>
+        <div class="settings-row"><div><b>Account</b><small>Sign out of your AGULIBRARY account.</small></div><button class="btn danger" id="signOutButton" type="button">🚪 Sign Out</button></div>
       </div>
     </div>
   </section>
@@ -283,9 +280,9 @@ footer{text-align:center;padding:30px;background:#fff;border-top:1px solid #dcee
   </section>
 </div>
 
-
 <button id="aiTeacherLauncher" class="ai-launch" type="button" aria-expanded="false">
-  <img src="./ai-teacher.jpg" alt="AI Learning Teacher"><span>AI LEARNING<br>TEACHER</span>
+  <img src="./ai-teacher.jpg" alt="AI Learning Teacher">
+  <span>AI LEARNING<br>TEACHER</span>
 </button>
 
 <section id="aiTeacherPanel" class="ai-panel" aria-hidden="true">
@@ -294,10 +291,15 @@ footer{text-align:center;padding:30px;background:#fff;border-top:1px solid #dcee
     <div><strong>AGULIBRARY AI Learning Teacher</strong><small>Teach • Explain • Practice • Guide</small></div>
     <button class="ai-close" id="closeTeacher" type="button">×</button>
   </div>
+
   <div id="teacherChat" class="chat">
     <div class="msg">Hello! 👋 I am your AGULIBRARY AI Learning Teacher. Ask me about a subject or topic and I will teach you step by step.</div>
   </div>
-  <div class="chat-input"><input id="teacherInput" placeholder="Ask your AI Learning Teacher..." autocomplete="off"><button id="teacherSend" type="button">Send</button></div>
+
+  <div class="chat-input">
+    <input id="teacherInput" placeholder="Ask your AI Learning Teacher..." autocomplete="off">
+    <button id="teacherSend" type="button">Send</button>
+  </div>
 </section>
 
 <section class="hero">
@@ -321,22 +323,26 @@ footer{text-align:center;padding:30px;background:#fff;border-top:1px solid #dcee
   <span class="eyebrow">STUDENT LEARNING CENTER</span>
   <h2>My Learning</h2>
   <p class="muted">Useful student-dashboard functions are available here without opening a separate student dashboard.</p>
+
   <div class="account-grid">
     <div class="account-card"><strong id="statResources">0</strong><span>Available Resources</span></div>
     <div class="account-card"><strong id="statLessons">0</strong><span>Lessons & Courses</span></div>
     <div class="account-card"><strong id="statSubjects">0</strong><span>Subjects Available</span></div>
     <div class="account-card"><strong id="statRecent">0</strong><span>Recently Viewed</span></div>
   </div>
+
   <div class="account-card" style="margin-top:15px">
     <span class="eyebrow">PROFILE</span>
     <h3 id="profileName">Student</h3>
     <p id="profileEmail" class="muted">Not signed in.</p>
     <p id="progressText" class="muted">Open resources to build your learning activity.</p>
   </div>
+
   <div class="account-card" style="margin-top:15px">
     <span class="eyebrow">SAVED RESOURCES</span>
     <div id="savedList" class="saved-list"><div class="empty">No saved resources yet.</div></div>
   </div>
+
   <div class="account-card" style="margin-top:15px">
     <span class="eyebrow">RECENTLY VIEWED</span>
     <div id="recentList" class="saved-list"><div class="empty">You haven't opened a resource yet.</div></div>
@@ -345,8 +351,6 @@ footer{text-align:center;padding:30px;background:#fff;border-top:1px solid #dcee
 
 <section id="subjects" class="section">
   <span class="eyebrow">GLOBAL SUBJECT AREAS</span>
-  
-  
 
   <div id="mainSubjectGrid" class="subject-grid">
     <button class="main-subject" data-main="Science"><span class="icon">🔬</span><b>Science</b><small>Physics • Chemistry • Biology</small></button>
@@ -361,15 +365,35 @@ footer{text-align:center;padding:30px;background:#fff;border-top:1px solid #dcee
 </section>
 
 <section id="subjectFlow" class="flow" aria-live="polite">
-  <div class="flow-top"><span class="eyebrow" id="flowEyebrow">LEARNING PATH</span><button id="flowBack" class="back" type="button">← Back</button></div>
+  <div class="flow-top">
+    <span class="eyebrow" id="flowEyebrow">LEARNING PATH</span>
+    <button id="flowBack" class="back" type="button">← Back</button>
+  </div>
+
   <h2 id="flowTitle">Choose an education level</h2>
   <p id="flowSubtitle"></p>
   <div id="flowGrid" class="flow-grid"></div>
+
   <div id="leafTools" class="resource-tools" style="display:none">
     <input id="leafSearch" type="search" placeholder="Search this subject's resources...">
-    <select id="leafType"><option value="">All resource types</option><option value="book">📚 Books</option><option value="digital_book">📘 Digital Books</option><option value="pdf">📄 PDFs</option><option value="video">🎥 Videos</option><option value="image">🖼️ Images</option><option value="lesson">📖 Lessons</option><option value="course">🎓 Courses</option><option value="document">📄 Documents</option><option value="audio">🎧 Audio</option></select>
+    <select id="leafType">
+      <option value="">All resource types</option>
+      <option value="book">📚 Books</option>
+      <option value="digital_book">📘 Digital Books</option>
+      <option value="pdf">📄 PDFs</option>
+      <option value="video">🎥 Videos</option>
+      <option value="image">🖼️ Images</option>
+      <option value="lesson">📖 Lessons</option>
+      <option value="course">🎓 Courses</option>
+      <option value="document">📄 Documents</option>
+      <option value="audio">🎧 Audio</option>
+    </select>
   </div>
-  <div id="resourceGrid" class="resource-grid compatibility-hidden"><div class="empty">Loading resources...</div></div>
+
+  <div id="resourceGrid" class="resource-grid compatibility-hidden">
+    <div class="empty">Loading resources...</div>
+  </div>
+
   <div id="leafResourceGrid" class="resource-grid" style="display:none"></div>
 </section>
 
@@ -377,9 +401,15 @@ footer{text-align:center;padding:30px;background:#fff;border-top:1px solid #dcee
   <span class="eyebrow">STUDENT SERVICES</span>
   <h2>Examination &amp; Certification</h2>
   <p class="muted">Access AGULIBRARY examination activities and view academic results and certification records.</p>
+
   <div class="subject-grid" style="margin-top:16px">
-    <button class="main-subject service-card" type="button" onclick="openService('examination')"><span class="icon">📝</span><b>Examination Room</b><small>Enter examinations, tests and practice assessments.</small></button>
-    <button class="main-subject service-card" type="button" onclick="openService('results')"><span class="icon">🏆</span><b>Result &amp; Certification</b><small>Check examination results and certification records.</small></button>
+    <button class="main-subject service-card" type="button" onclick="openService('examination')">
+      <span class="icon">📝</span><b>Examination Room</b><small>Enter examinations, tests and practice assessments.</small>
+    </button>
+
+    <button class="main-subject service-card" type="button" onclick="openService('results')">
+      <span class="icon">🏆</span><b>Result &amp; Certification</b><small>Check examination results and certification records.</small>
+    </button>
   </div>
 </section>
 
@@ -387,12 +417,15 @@ footer{text-align:center;padding:30px;background:#fff;border-top:1px solid #dcee
   <span class="eyebrow">CUSTOMER SUPPORT</span>
   <h2>AGULIBRARY Customer Support Agent</h2>
   <p>Get help with your AGULIBRARY account, resources, payments, technical issues and website use. This AI branch is separate from the Learning Teacher and has its own support conversation.</p>
-  <button id="supportToggle" class="btn primary" type="button" aria-expanded="false">💬 Support</button>
+
+  <button id="supportToggle" class="btn primary" type="button" aria-expanded="false">
+    💬 Support
+  </button>
+
   <div id="supportChoices" class="support-actions" style="display:none">
     <a id="supportLaunch" class="btn primary" href="support.html">💬 Chat with AI</a>
     <a class="btn outline" href="mailto:support@agulibrary.com">✉️ Mail to Support</a>
   </div>
-
 </section>
 
 <section id="examinationPanel" class="full-panel" aria-hidden="true">
@@ -405,6 +438,7 @@ footer{text-align:center;padding:30px;background:#fff;border-top:1px solid #dcee
       <div class="service-icon">📝</div>
       <h2>Examination Room</h2>
       <p>Choose an available examination below. Every examination question is presented individually and has exactly five seconds.</p>
+
       <div class="exam-notice">
         <h3>⚠️ Important Examination Rules</h3>
         <ul>
@@ -415,12 +449,15 @@ footer{text-align:center;padding:30px;background:#fff;border-top:1px solid #dcee
           <li>Your examination result and certificate record are stored permanently after submission.</li>
         </ul>
       </div>
+
       <div class="service-toolbar">
         <input id="examSearch" type="search" placeholder="Search examinations..." autocomplete="off">
       </div>
+
       <div id="examStatus" class="service-status">Loading examinations...</div>
       <div id="examList" class="service-grid"></div>
     </div>
+
     <div id="examRunnerView" style="display:none"></div>
   </div>
 </section>
@@ -430,6 +467,7 @@ footer{text-align:center;padding:30px;background:#fff;border-top:1px solid #dcee
     <div><strong>Result &amp; Certification</strong><small>AGULIBRARY academic results and certification records</small></div>
     <button class="full-panel-close" type="button" data-service-close="resultsPanel">×</button>
   </div>
+
   <div class="panel-body service-panel-body">
     <div id="resultsView" class="service-panel-card">
       <div class="service-icon">🏆</div>
@@ -441,54 +479,67 @@ footer{text-align:center;padding:30px;background:#fff;border-top:1px solid #dcee
   </div>
 </section>
 
-<footer><b>AGULIBRARY</b> — Global Digital Education Library<br><br>Owner: Umar Mohammed<br>© <span id="year"></span> AGULIBRARY. All rights reserved.</footer>
+<footer>
+  <b>AGULIBRARY</b> — Global Digital Education Library<br><br>
+  Owner: Umar Mohammed<br>
+  © <span id="year"></span> AGULIBRARY. All rights reserved.
+</footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
 <script src="supabase.js"></script>
+
 <script>
-/* AGULIBRARY HARD AUTH GATE
-   The homepage stays invisible until authentication is verified.
-   A fresh login gets a one-time entry marker; every later visit must
-   return to auth.html, where the remembered email allows password-only login.
-*/
+/* =========================================================
+   AGULIBRARY HARD AUTH GATE
+   ========================================================= */
 (function(){
   "use strict";
+
   document.documentElement.classList.add("agu-auth-pending");
-  const FULL_LOGIN_KEY="AGU_REQUIRE_FULL_LOGIN";
+
   const JUST_LOGGED_IN_KEY="AGU_JUST_LOGGED_IN";
   const AUTHORIZED_ENTRY_KEY="AGU_AUTHORIZED_ENTRY";
+
   async function gate(){
     try{
       const client=typeof getSupabase==="function"?getSupabase():null;
-      if(!client || !client.auth) throw new Error("Authentication service unavailable");
+
+      if(!client || !client.auth){
+        throw new Error("Authentication service unavailable");
+      }
+
       const r=await client.auth.getSession();
       const user=r.data?.session?.user||null;
       const just=sessionStorage.getItem(JUST_LOGGED_IN_KEY)==="1";
+
       if(user && just){
         sessionStorage.removeItem(JUST_LOGGED_IN_KEY);
         sessionStorage.setItem(AUTHORIZED_ENTRY_KEY,"1");
+
         document.documentElement.classList.remove("agu-auth-pending");
         document.documentElement.classList.add("agu-auth-ready");
         return;
       }
-      // Never allow an existing Supabase session to silently open the homepage.
-      // Returning users are sent to auth.html for the password checkpoint.
+
       sessionStorage.removeItem(AUTHORIZED_ENTRY_KEY);
+
       if(user){
-        localStorage.removeItem(FULL_LOGIN_KEY);
         window.location.replace("auth.html");
       }else{
         window.location.replace("auth.html");
       }
+
     }catch(e){
       console.error("AGULIBRARY authentication gate:",e);
       window.location.replace("auth.html");
     }
   }
+
   gate();
 })();
 </script>
+
 <script src="app.js"></script>
 
 <script>
@@ -550,785 +601,799 @@ const HIERARCHY={
 
 let client=null,currentUser=null,allResources=[],flow={main:"",level:"",area:"",subject:""};
 const RECENT_KEY="AGU_RECENT_RESOURCES", SAVED_KEY="AGU_SAVED_RESOURCES";
+
 let teacherConversation=[],supportConversation=[];
 
-function esc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));}
-function escAttr(v){return esc(v).replace(/`/g,"&#096;");}
-function icon(type){return ({book:"📚",digital_book:"📘",pdf:"📄",video:"🎥",image:"🖼️",photo:"🖼️",lesson:"📖",course:"🎓",document:"📄",audio:"🎧"})[String(type||"").toLowerCase()]||"📘";}
-function setText(id,v){const e=document.getElementById(id);if(e)e.textContent=v;}
+function esc(v){
+  return String(v??"").replace(/[&<>"']/g,c=>({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#039;"
+  }[c]));
+}
+
+function escAttr(v){
+  return esc(v).replace(/`/g,"&#096;");
+}
+
+function icon(type){
+  return ({
+    book:"📚",
+    digital_book:"📘",
+    pdf:"📄",
+    video:"🎥",
+    image:"🖼️",
+    photo:"🖼️",
+    lesson:"📖",
+    course:"🎓",
+    document:"📄",
+    audio:"🎧"
+  })[String(type||"").toLowerCase()]||"📘";
+}
+
+function setText(id,v){
+  const e=document.getElementById(id);
+  if(e)e.textContent=v;
+}
 
 async function init(){
- setText("year",new Date().getFullYear());
- try{client=typeof getSupabase==="function"?getSupabase():null}catch(e){client=null}
+  setText("year",new Date().getFullYear());
 
- // The hard gate above runs before app.js. This second check protects
- // against scripts/caches that bypass the preflight gate.
- if(client && !(await enforceWebsiteLogin())) return;
+  try{
+    client=typeof getSupabase==="function"?getSupabase():null;
+  }catch(e){
+    client=null;
+  }
 
- if(client) await loadSession();
- await loadResources();
- setupHierarchy();
- setupAI();
+  if(client && !(await enforceWebsiteLogin()))return;
+
+  /*
+    IMPORTANT:
+    Initialize all clickable UI first.
+    Resource loading must not prevent the AI Teacher or Support
+    buttons from receiving their click handlers.
+  */
+  setupHierarchy();
+  setupAI();
+  setupAccountMenu();
+  setupExamUI();
+
+  if(client)await loadSession();
+  await loadResources();
 }
 
 async function loadSession(){
- try{
-  const r=await client.auth.getSession();
-  currentUser=r.data?.session?.user||null;
-  if(currentUser){
-   let name=currentUser.user_metadata?.full_name||currentUser.user_metadata?.name||currentUser.email?.split("@")[0]||"Student";
-   try{
-    const p=await client.from("student_profiles").select("first_name,last_name").eq("id",currentUser.id).maybeSingle();
-    if(!p.error&&p.data){const n=[p.data.first_name,p.data.last_name].filter(Boolean).join(" ").trim();if(n)name=n}
-   }catch(e){}
-   setText("accountName",name);setText("accountEmail",currentUser.email||"");
-    setText("heroStudentName",name);
-   setText("profileName",name);setText("profileEmail",currentUser.email||"");
-   document.getElementById("accountBar").classList.add("show");
-   
-   updateStudentStats();
+  try{
+    const r=await client.auth.getSession();
+    currentUser=r.data?.session?.user||null;
+
+    if(currentUser){
+      let name=currentUser.user_metadata?.full_name||
+        currentUser.user_metadata?.name||
+        currentUser.email?.split("@")[0]||
+        "Student";
+
+      try{
+        const p=await client
+          .from("student_profiles")
+          .select("first_name,last_name")
+          .eq("id",currentUser.id)
+          .maybeSingle();
+
+        if(!p.error&&p.data){
+          const n=[p.data.first_name,p.data.last_name]
+            .filter(Boolean).join(" ").trim();
+
+          if(n)name=n;
+        }
+      }catch(e){}
+
+      setText("heroStudentName",name);
+      setText("profileName",name);
+      setText("profileEmail",currentUser.email||"");
+
+      const accountBar=document.getElementById("accountBar");
+      if(accountBar)accountBar.classList.add("show");
+
+      updateStudentStats();
+    }
+  }catch(e){
+    console.warn("Session check:",e);
   }
- }catch(e){console.warn("Session check:",e)}
 }
 
 async function loadResources(){
- if(!client)return;
- try{
-  const r=await client.from("resources").select("*").order("created_at",{ascending:false});
-  if(!r.error)allResources=r.data||[];
- }catch(e){console.warn("Resources:",e)}
- updateStudentStats();
+  if(!client)return;
+
+  try{
+    const r=await client
+      .from("resources")
+      .select("*")
+      .order("created_at",{ascending:false});
+
+    if(!r.error)allResources=r.data||[];
+  }catch(e){
+    console.warn("Resources:",e);
+  }
+
+  updateStudentStats();
 }
 
 function setupHierarchy(){
- document.querySelectorAll(".main-subject").forEach(card=>{
-  card.addEventListener("click",()=>openLevelPage(card.dataset.main));
- });
- document.getElementById("flowBack").addEventListener("click",backFlow);
- document.getElementById("leafSearch").addEventListener("input",renderLeafResources);
- document.getElementById("leafType").addEventListener("change",renderLeafResources);
- document.getElementById("accountDetailsButton").addEventListener("click",()=>document.getElementById("account").classList.toggle("show"));
- document.getElementById("signOutButton").addEventListener("click",signOut);
+  document.querySelectorAll(".main-subject").forEach(card=>{
+    card.addEventListener("click",()=>{
+      if(card.dataset.main)openLevelPage(card.dataset.main);
+    });
+  });
+
+  document.getElementById("flowBack")?.addEventListener("click",backFlow);
+
+  document.getElementById("leafSearch")?.addEventListener(
+    "input",
+    renderLeafResources
+  );
+
+  document.getElementById("leafType")?.addEventListener(
+    "change",
+    renderLeafResources
+  );
+
+  document.getElementById("accountDetailsButton")?.addEventListener(
+    "click",
+    ()=>document.getElementById("account").classList.toggle("show")
+  );
+
+  document.getElementById("signOutButton")?.addEventListener(
+    "click",
+    signOut
+  );
 }
 
 function showFlow(){
- document.getElementById("subjectFlow").classList.add("show");
- document.getElementById("subjectFlow").scrollIntoView({behavior:"smooth",block:"start"});
-}
-function renderCards(cards){
- const grid=document.getElementById("flowGrid"),leaf=document.getElementById("leafResourceGrid"),tools=document.getElementById("leafTools");
- tools.style.display="none";leaf.style.display="none";grid.style.display="grid";
- grid.innerHTML=cards.map(c=>`<button type="button" class="flow-card" data-key="${escAttr(c.key)}"><span class="icon">${c.icon||"📚"}</span><strong>${esc(c.title)}</strong><small>${esc(c.small||"Open related content")}</small></button>`).join("");
- cards.forEach((c,i)=>grid.children[i].addEventListener("click",c.action));
- showFlow();
-}
-function openLevelPage(main){
- flow={main,level:"",area:"",subject:""};
- setText("flowEyebrow",main.toUpperCase());
- setText("flowTitle","Select education level");
- setText("flowSubtitle",`Choose the education level for ${main}.`);
- renderCards(EDUCATION_LEVELS.map(level=>({key:level,icon:"🎓",title:level,small:"Open learning areas",action:()=>openAreaPage(main,level)})));
-}
-function openAreaPage(main,level){
- flow={main,level,area:"",subject:""};
- const areas=Object.keys(HIERARCHY[main]||{});
- setText("flowEyebrow",main.toUpperCase()+" • "+level.toUpperCase());
- setText("flowTitle","Related learning areas");
- setText("flowSubtitle",`Choose an area within ${main} for ${level}.`);
- renderCards(areas.map(area=>({key:area,icon:"🧩",title:area,small:(level==="University Courses"?"Open related courses":"Open related subjects"),action:()=>openSubjectPage(main,level,area)})));
-}
-function openSubjectPage(main,level,area){
- flow={main,level,area,subject:""};
- const subjects=HIERARCHY[main]?.[area]||[];
- setText("flowEyebrow",main.toUpperCase()+" • "+level.toUpperCase());
- setText("flowTitle",area);
- setText("flowSubtitle",`Choose a related subject. Resources will be shown only after selecting a subject.`);
- renderCards(subjects.map(subject=>({key:subject,icon:"📘",title:subject,small:"Open this subject's resources",action:()=>openResourcePage(main,level,area,subject)})));
-}
-function openResourcePage(main,level,area,subject){
- flow={main,level,area,subject};
- setText("flowEyebrow",main.toUpperCase()+" • "+level.toUpperCase());
- setText("flowTitle",subject);
- setText("flowSubtitle",`Resources for ${subject} • ${level}. Use the resource-type selector to choose Books, PDFs, Videos, Lessons, Courses and other uploaded types.`);
- document.getElementById("flowGrid").style.display="none";
- document.getElementById("leafTools").style.display="grid";
- document.getElementById("leafResourceGrid").style.display="grid";
- renderLeafResources();
- showFlow();
-}
-function backFlow(){
- if(flow.subject){openSubjectPage(flow.main,flow.level,flow.area)}
- else if(flow.area){openAreaPage(flow.main,flow.level)}
- else if(flow.level){openLevelPage(flow.main)}
- else document.getElementById("subjectFlow").classList.remove("show");
-}
-function resourceMatches(r){
- const q=document.getElementById("leafSearch").value.toLowerCase().trim();
- const type=document.getElementById("leafType").value.toLowerCase().trim();
- const rType=String(r.type||"").toLowerCase().trim();
- const subject=String(r.subject||r.subject_name||"").trim().toLowerCase();
- const area=String(r.subject_area||"").trim().toLowerCase();
- const parent=String(r.parent_subject||"").trim().toLowerCase();
- const level=String(r.education_stage||r.level||r.class_level||"").trim().toLowerCase();
- const searchable=`${r.title||""} ${r.description||""} ${r.subject||""} ${r.subject_name||""} ${r.type||""} ${r.level||""} ${r.class_level||""} ${r.term||""}`.toLowerCase();
- const subjectOK=subject===flow.subject.toLowerCase() || subject.includes(flow.subject.toLowerCase()) || area===flow.subject.toLowerCase();
- const parentOK=!parent || parent===flow.main.toLowerCase();
- const levelOK=!level || level===flow.level.toLowerCase() || level.includes(flow.level.toLowerCase()) || (flow.level.startsWith("Secondary") && /secondary|high school|sss|senior secondary/i.test(level)) || (flow.level.startsWith("University") && /university|tertiary|college/i.test(level)) || (flow.level.startsWith("Primary") && /primary|elementary/i.test(level));
- return subjectOK && parentOK && levelOK && (!type||rType===type) && (!q||searchable.includes(q));
-}
-function renderLeafResources(){
- const grid=document.getElementById("leafResourceGrid");
- const list=allResources.filter(resourceMatches);
- if(!list.length){grid.innerHTML=`<div class="empty">📚<br><br>No resources are currently available for <strong>${esc(flow.subject)}</strong> at <strong>${esc(flow.level)}</strong>.<br><br>When the administrator uploads a matching resource, it will appear here.</div>`;return}
- grid.innerHTML=list.map(r=>{
-  const id=escAttr(r.id),type=String(r.type||"resource").toLowerCase().trim(),title=esc(r.title||"Untitled Resource"),desc=esc(r.description||"Educational resource");
-  return `<article class="resource-card"><div class="resource-icon">${icon(type)}</div><span class="resource-type">${esc(type.toUpperCase())}</span><h3>${title}</h3><p>${desc}</p><button type="button" data-resource="${id}">${type==="lesson"||type==="course"?"📖 Open Lesson →":"Open Resource →"}</button></article>`;
- }).join("");
- grid.querySelectorAll("[data-resource]").forEach(btn=>btn.addEventListener("click",()=>openResource(btn.dataset.resource)));
-}
-function openResource(id){
- const r=allResources.find(x=>String(x.id)===String(id));if(!r)return;
- if(currentUser){recordRecent(id)}
- const type=String(r.type||"").toLowerCase().trim();
- if(type==="lesson"||type==="course"){location.href="lesson.html?id="+encodeURIComponent(r.id);return}
- const url=r.file_url||r.url||"";
- if(!url){alert("This resource does not have a file attached yet.");return}
- window.open(url,"_blank","noopener,noreferrer");
-}
-function getSaved(){if(!currentUser)return[];try{return JSON.parse(localStorage.getItem(SAVED_KEY+"_"+currentUser.id)||"[]")}catch(e){return[]}}
-function getRecent(){if(!currentUser)return[];try{return JSON.parse(localStorage.getItem(RECENT_KEY+"_"+currentUser.id)||"[]")}catch(e){return[]}}
-function recordRecent(id){const a=getRecent().filter(x=>String(x)!==String(id));a.unshift(String(id));localStorage.setItem(RECENT_KEY+"_"+currentUser.id,JSON.stringify(a.slice(0,12)));updateStudentStats()}
-function toggleSaved(id){if(!currentUser){location.href="auth.html";return}let a=getSaved();const exists=a.some(x=>String(x)===String(id));a=exists?a.filter(x=>String(x)!==String(id)):[String(id),...a];localStorage.setItem(SAVED_KEY+"_"+currentUser.id,JSON.stringify(a.slice(0,100)));renderStudentLists();updateStudentStats()}
-function updateStudentStats(){
- if(!currentUser)return;
- setText("statResources",allResources.length);
- setText("statLessons",allResources.filter(r=>["lesson","course"].includes(String(r.type||"").toLowerCase())).length);
- setText("statSubjects",new Set(allResources.map(r=>r.subject||r.subject_name||"").filter(Boolean)).size);
- setText("statRecent",getRecent().length);
- setText("progressText",getRecent().length?`You have explored ${getRecent().length} resource${getRecent().length===1?"":"s"} from AGULIBRARY.`:"Open resources to begin building your learning activity.");
- renderStudentLists();
-}
-function renderStudentLists(){
- if(!currentUser)return;
- const saved=getSaved(),recent=getRecent();
- const make=(ids,empty)=>{const rows=ids.map(id=>allResources.find(r=>String(r.id)===String(id))).filter(Boolean);return rows.length?rows.map(r=>`<div class="saved-item"><span>${esc(r.title||"Untitled Resource")}</span><button class="btn outline" type="button" data-open="${escAttr(r.id)}">Open</button></div>`).join(""):`<div class="empty">${empty}</div>`};
- document.getElementById("savedList").innerHTML=make(saved,"No saved resources yet.");
- document.getElementById("recentList").innerHTML=make(recent,"You haven't opened a resource yet.");
- document.querySelectorAll("[data-open]").forEach(b=>b.addEventListener("click",()=>openResource(b.dataset.open)));
+  document.getElementById("subjectFlow").classList.add("show");
+
+  document.getElementById("subjectFlow").scrollIntoView({
+    behavior:"smooth",
+    block:"start"
+  });
 }
 
-function openService(kind){
-  const id=kind==="examination"?"examinationPanel":"resultsPanel";
-  document.querySelectorAll(".full-panel").forEach(p=>{
-    p.classList.remove("open");
-    p.setAttribute("aria-hidden","true");
+function renderCards(cards){
+  const grid=document.getElementById("flowGrid");
+  const leaf=document.getElementById("leafResourceGrid");
+  const tools=document.getElementById("leafTools");
+
+  tools.style.display="none";
+  leaf.style.display="none";
+  grid.style.display="grid";
+
+  grid.innerHTML=cards.map(c=>`
+    <button type="button"
+      class="flow-card"
+      data-key="${escAttr(c.key)}">
+      <span class="icon">${c.icon||"📚"}</span>
+      <strong>${esc(c.title)}</strong>
+      <small>${esc(c.small||"Open related content")}</small>
+    </button>
+  `).join("");
+
+  cards.forEach((c,i)=>{
+    grid.children[i].addEventListener("click",c.action);
   });
-  const panel=document.getElementById(id);
-  if(panel){
-    panel.classList.add("open");
-    panel.setAttribute("aria-hidden","false");
-    document.documentElement.style.overflow="hidden";
-    document.body.style.overflow="hidden";
-    if(kind==="examination") loadExaminations();
-    if(kind==="results") loadResults();
+
+  showFlow();
+}
+
+function openLevelPage(main){
+  flow={main,level:"",area:"",subject:""};
+
+  setText("flowEyebrow",main.toUpperCase());
+  setText("flowTitle","Select education level");
+  setText("flowSubtitle",`Choose the education level for ${main}.`);
+
+  renderCards(
+    EDUCATION_LEVELS.map(level=>({
+      key:level,
+      icon:"🎓",
+      title:level,
+      small:"Open learning areas",
+      action:()=>openAreaPage(main,level)
+    }))
+  );
+}
+
+function openAreaPage(main,level){
+  flow={main,level,area:"",subject:""};
+
+  const areas=Object.keys(HIERARCHY[main]||{});
+
+  setText(
+    "flowEyebrow",
+    main.toUpperCase()+" • "+level.toUpperCase()
+  );
+
+  setText("flowTitle","Related learning areas");
+
+  setText(
+    "flowSubtitle",
+    `Choose an area within ${main} for ${level}.`
+  );
+
+  renderCards(
+    areas.map(area=>({
+      key:area,
+      icon:"🧩",
+      title:area,
+      small:level==="University Courses"
+        ?"Open related courses"
+        :"Open related subjects",
+      action:()=>openSubjectPage(main,level,area)
+    }))
+  );
+}
+
+function openSubjectPage(main,level,area){
+  flow={main,level,area,subject:""};
+
+  const subjects=HIERARCHY[main]?.[area]||[];
+
+  setText(
+    "flowEyebrow",
+    main.toUpperCase()+" • "+level.toUpperCase()
+  );
+
+  setText("flowTitle",area);
+
+  setText(
+    "flowSubtitle",
+    `Choose a related subject. Resources will be shown only after selecting a subject.`
+  );
+
+  renderCards(
+    subjects.map(subject=>({
+      key:subject,
+      icon:"📘",
+      title:subject,
+      small:"Open this subject's resources",
+      action:()=>openResourcePage(main,level,area,subject)
+    }))
+  );
+}
+
+function openResourcePage(main,level,area,subject){
+  flow={main,level,area,subject};
+
+  setText(
+    "flowEyebrow",
+    main.toUpperCase()+" • "+level.toUpperCase()
+  );
+
+  setText("flowTitle",subject);
+
+  setText(
+    "flowSubtitle",
+    `Resources for ${subject} • ${level}. Use the resource-type selector to choose Books, PDFs, Videos, Lessons, Courses and other uploaded types.`
+  );
+
+  document.getElementById("flowGrid").style.display="none";
+  document.getElementById("leafTools").style.display="grid";
+  document.getElementById("leafResourceGrid").style.display="grid";
+
+  renderLeafResources();
+  showFlow();
+}
+
+function backFlow(){
+  if(flow.subject){
+    openSubjectPage(flow.main,flow.level,flow.area);
+  }else if(flow.area){
+    openAreaPage(flow.main,flow.level);
+  }else if(flow.level){
+    openLevelPage(flow.main);
+  }else{
+    document.getElementById("subjectFlow").classList.remove("show");
   }
 }
-window.openService=openService;
 
-/* =========================================================
-   AGULIBRARY REAL EXAMINATION ROOM + RESULT & CERTIFICATION
-   Connected to the existing public.agu_exam_* database system.
-   Only this examination/result section is changed.
-   ========================================================= */
-let examSettings={
-  examination_enabled:true,
-  registration_enabled:false,
-  payment_enabled:false,
-  payment_required:false,
-  default_question_duration_seconds:5,
-  important_notice:""
-};
-let availableExams=[];
-let examRegistrations=[];
-let examPrices=[];
-let activeExamSession=null;
-let examTimer=null;
-let examClockOffset=0;
-let studentResults=[];
-let lastExamReview=[];
+function resourceMatches(r){
+  const q=document.getElementById("leafSearch").value.toLowerCase().trim();
+  const type=document.getElementById("leafType").value.toLowerCase().trim();
 
-function lagosDate(){
-  try{return new Intl.DateTimeFormat("en-CA",{timeZone:"Africa/Lagos",year:"numeric",month:"2-digit",day:"2-digit"}).format(new Date())}
-  catch(e){return new Date().toISOString().slice(0,10)}
+  const rType=String(r.type||"").toLowerCase().trim();
+  const subject=String(r.subject||r.subject_name||"").trim().toLowerCase();
+  const area=String(r.subject_area||"").trim().toLowerCase();
+  const parent=String(r.parent_subject||"").trim().toLowerCase();
+  const level=String(
+    r.education_stage||r.level||r.class_level||""
+  ).trim().toLowerCase();
+
+  const searchable=`
+    ${r.title||""}
+    ${r.description||""}
+    ${r.subject||""}
+    ${r.subject_name||""}
+    ${r.type||""}
+    ${r.level||""}
+    ${r.class_level||""}
+    ${r.term||""}
+  `.toLowerCase();
+
+  const subjectOK=
+    subject===flow.subject.toLowerCase() ||
+    subject.includes(flow.subject.toLowerCase()) ||
+    area===flow.subject.toLowerCase();
+
+  const parentOK=
+    !parent ||
+    parent===flow.main.toLowerCase();
+
+  const levelOK=
+    !level ||
+    level===flow.level.toLowerCase() ||
+    level.includes(flow.level.toLowerCase()) ||
+    (
+      flow.level.startsWith("Secondary") &&
+      /secondary|high school|sss|senior secondary/i.test(level)
+    ) ||
+    (
+      flow.level.startsWith("University") &&
+      /university|tertiary|college/i.test(level)
+    ) ||
+    (
+      flow.level.startsWith("Primary") &&
+      /primary|elementary/i.test(level)
+    );
+
+  return subjectOK &&
+    parentOK &&
+    levelOK &&
+    (!type||rType===type) &&
+    (!q||searchable.includes(q));
 }
-function formatDate(v){try{return new Date(v).toLocaleString()}catch(e){return String(v||"")}}
-function examScoreClass(status){return status==="correct"?"correct":status==="wrong"?"wrong":"unanswered"}
-function escapeForAttr(v){return escAttr(String(v??""))}
-function currentStudentCountryCode(){
-  const m=currentUser?.user_metadata||{};
-  return String(m.country_code||m.countryCode||m.phone_country_code||"").trim();
-}
 
-async function loadExamSettings(){
-  if(!client)return;
-  try{
-    const r=await client.from("agu_exam_settings")
-      .select("id,examination_enabled,registration_enabled,payment_enabled,payment_required,default_question_duration_seconds,important_notice")
-      .eq("id",true)
-      .maybeSingle();
-    if(!r.error&&r.data){
-      examSettings={...examSettings,...r.data};
-      /* The system requirement is always exactly five seconds. */
-      examSettings.default_question_duration_seconds=5;
-    }
-  }catch(e){console.warn("Exam settings:",e)}
-}
+function renderLeafResources(){
+  const grid=document.getElementById("leafResourceGrid");
+  const list=allResources.filter(resourceMatches);
 
-async function loadExaminations(){
-  const status=document.getElementById("examStatus"),list=document.getElementById("examList");
-  if(!status||!list)return;
-  document.getElementById("examHomeView").style.display="block";
-  document.getElementById("examRunnerView").style.display="none";
-  if(activeExamSession){clearInterval(examTimer);examTimer=null;activeExamSession=null}
-  status.textContent="Loading examination room...";list.innerHTML="";
-  if(!currentUser){status.textContent="Please sign in to use the Examination Room.";return}
-
-  await loadExamSettings();
-
-  if(!examSettings.examination_enabled){
-    status.innerHTML="🔒 <strong>The Examination Room is currently OFF.</strong><br>The administrator has temporarily closed examination access. Please check again later.";
+  if(!list.length){
+    grid.innerHTML=`
+      <div class="empty">
+        📚<br><br>
+        No resources are currently available for
+        <strong>${esc(flow.subject)}</strong>
+        at
+        <strong>${esc(flow.level)}</strong>.<br><br>
+        When the administrator uploads a matching resource,
+        it will appear here.
+      </div>
+    `;
     return;
   }
 
-  try{
-    const [examRes,regRes,accessRes]=await Promise.all([
-      client.from("agu_examinations")
-        .select("id,title,description,education_level,subject,examination_notice,published,registration_open,payment_enabled,payment_required,pass_mark,certificate_enabled,question_duration_seconds,created_at")
-        .eq("published",true)
-        .order("created_at",{ascending:false}),
-      client.from("agu_exam_registrations")
-        .select("id,examination_id,country_code,country_name,price_snapshot,currency_snapshot,payment_required,payment_status,registration_status,payment_reference,registered_at,paid_at,approved_at")
-        .eq("student_id",currentUser.id),
-      client.from("agu_exam_attempts")
-        .select("id,examination_id,daily_lock_date,question_page_opened_at,status")
-        .eq("student_id",currentUser.id)
-        .eq("daily_lock_date",lagosDate())
-        .order("question_page_opened_at",{ascending:false})
-        .limit(1)
-    ]);
+  grid.innerHTML=list.map(r=>{
+    const id=escAttr(r.id);
+    const type=String(r.type||"resource").toLowerCase().trim();
+    const title=esc(r.title||"Untitled Resource");
+    const desc=esc(r.description||"Educational resource");
 
-    if(examRes.error)throw examRes.error;
-    if(regRes.error)throw regRes.error;
-    if(accessRes.error)throw accessRes.error;
-
-    availableExams=examRes.data||[];
-    examRegistrations=regRes.data||[];
-
-    /* Only load the price belonging to this student's registered country. */
-    const countryCode=currentStudentCountryCode();
-    if(countryCode){
-      const priceRes=await client.from("agu_exam_country_prices")
-        .select("id,examination_id,country_code,country_name,currency_code,amount,enabled")
-        .eq("country_code",countryCode)
-        .eq("enabled",true);
-      if(!priceRes.error)examPrices=priceRes.data||[];
-    }else{
-      examPrices=[];
-    }
-
-    renderExamList(accessRes.data?.[0]||null);
-  }catch(e){
-    console.error("Examination Room:",e);
-    status.innerHTML="Unable to load the Examination Room right now.<br><small>"+esc(e.message||"Database error")+"</small>";
-  }
-}
-
-function registrationFor(exam){
-  return examRegistrations.find(x=>String(x.examination_id)===String(exam.id))||null;
-}
-function priceFor(exam){
-  return examPrices.find(x=>String(x.examination_id)===String(exam.id))||null;
-}
-function effectiveRegistrationRequired(exam){
-  return !!exam.registration_open || !!exam.payment_required || !!exam.payment_enabled || !!examSettings.registration_enabled;
-}
-function paymentIsRequired(exam){
-  return !!exam.payment_required || (!!examSettings.payment_required && (exam.payment_enabled!==false));
-}
-function paymentIsEnabled(exam){
-  return !!exam.payment_enabled || !!examSettings.payment_enabled;
-}
-function paymentStatusText(reg){
-  if(!reg)return "Not registered";
-  const s=String(reg.payment_status||"").toLowerCase();
-  if(["paid","completed","approved"].includes(s))return "Payment confirmed";
-  if(["not_required","free"].includes(s))return "No payment required";
-  if(s)return "Payment: "+s.replace(/_/g," ");
-  return "Payment pending";
-}
-
-function renderExamList(dailyAccess){
-  const list=document.getElementById("examList"),status=document.getElementById("examStatus"),q=document.getElementById("examSearch")?.value?.toLowerCase().trim()||"";
-  if(!list||!status)return;
-
-  const locked=!!dailyAccess;
-  if(locked){
-    status.innerHTML=`🔒 <strong>Today's examination access has already been used.</strong><br>You opened an examination question page today. You cannot open another examination question page until tomorrow.`;
-  }else{
-    status.innerHTML=`${availableExams.length} published examination${availableExams.length===1?"":"s"} available. <strong>Exactly 5 seconds per question.</strong>`;
-  }
-
-  const filtered=availableExams.filter(e=>`${e.title||""} ${e.subject||""} ${e.education_level||""}`.toLowerCase().includes(q));
-  if(!filtered.length){list.innerHTML='<div class="empty">No published examinations match your search.</div>';return}
-
-  list.innerHTML=filtered.map((e,i)=>{
-    const reg=registrationFor(e);
-    const registered=!!reg;
-    const required=effectiveRegistrationRequired(e);
-    const payRequired=paymentIsRequired(e);
-    const price=priceFor(e);
-    const blocked=locked;
-
-    let action="";
-    if(blocked){
-      action=`<button class="btn outline" type="button" disabled>🔒 Available Tomorrow</button>`;
-    }else if(required&&!registered){
-      action=`<button class="btn primary exam-register" type="button" data-exam-index="${i}">📝 Register for Exam</button>`;
-    }else if(registered && reg.payment_required && !["paid","completed","approved","not_required"].includes(String(reg.payment_status||"").toLowerCase())){
-      action=`<button class="btn outline" type="button" disabled>💳 Payment Pending</button>`;
-    }else if(required && reg.registration_status && !["registered","approved","active","completed"].includes(String(reg.registration_status).toLowerCase())){
-      action=`<button class="btn outline" type="button" disabled>⏳ Registration Pending</button>`;
-    }else{
-      action=`<button class="btn primary exam-start" type="button" data-exam-index="${i}">Start Examination →</button>`;
-    }
-
-    const priceText=price&&paymentIsEnabled(e)
-      ? `<span>Price: ${esc(price.currency_code)} ${esc(Number(price.amount).toLocaleString())}</span>`
-      : (paymentIsEnabled(e)?`<span>Payment enabled</span>`:"");
-
-    return `<article class="exam-card">
-      <div class="resource-icon">📝</div>
-      <h3>${esc(e.title||"AGULIBRARY Examination")}</h3>
-      <p>${esc(e.description||"Complete this examination in the AGULIBRARY Examination Room.")}</p>
-      <div class="exam-meta">
-        <span>${esc(e.subject||"General")}</span>
-        ${e.education_level?`<span>${esc(e.education_level)}</span>`:""}
-        <span>5 sec / question</span>
-        ${required?`<span>${registered?"Registered":"Registration Required"}</span>`:""}
-        ${payRequired?`<span>Payment Required</span>`:""}
-        ${priceText}
-      </div>
-      ${registered?`<div class="service-status"><strong>${esc(reg.country_name||currentStudentCountryCode()||"Registered country")}</strong><br>${esc(paymentStatusText(reg))}</div>`:""}
-      ${action}
-    </article>`;
+    return `
+      <article class="resource-card">
+        <div class="resource-icon">${icon(type)}</div>
+        <span class="resource-type">${esc(type.toUpperCase())}</span>
+        <h3>${title}</h3>
+        <p>${desc}</p>
+        <button type="button" data-resource="${id}">
+          ${type==="lesson"||type==="course"
+            ?"📖 Open Lesson →"
+            :"Open Resource →"}
+        </button>
+      </article>
+    `;
   }).join("");
 
-  filtered.forEach((e,i)=>{
-    list.querySelector(`[data-exam-index="${i}"]`)?.addEventListener("click",()=>{
-      const reg=registrationFor(e);
-      if(effectiveRegistrationRequired(e)&&!reg){registerForExam(e);return}
-      showExamNotice(e);
+  grid.querySelectorAll("[data-resource]").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      openResource(btn.dataset.resource);
     });
   });
 }
 
-function showExamNotice(exam){
-  const existing=document.getElementById("examNoticeOverlay");
-  if(existing)existing.remove();
+function openResource(id){
+  const r=allResources.find(x=>String(x.id)===String(id));
+  if(!r)return;
 
-  const notice=String(exam.examination_notice||examSettings.important_notice||"").trim();
-  const overlay=document.createElement("div");
-  overlay.id="examNoticeOverlay";
-  overlay.style.cssText="position:fixed;inset:0;z-index:1900;background:rgba(12,35,26,.55);display:grid;place-items:center;padding:18px";
-  overlay.innerHTML=`<div style="width:min(620px,100%);max-height:90vh;overflow:auto;background:#fff;border:1px solid #cfe5da;border-radius:22px;padding:24px;box-shadow:0 25px 80px rgba(8,25,18,.25)">
-    <div class="service-icon">⚠️</div>
-    <h2 style="margin:0;color:#173b2d">Important Examination Notice</h2>
-    <p style="color:#71847b;line-height:1.6">You are about to open <strong>${esc(exam.title||"this examination")}</strong>.</p>
-    ${notice?`<div class="service-status"><strong>Administrator's notice</strong><br>${esc(notice).replace(/\n/g,"<br>")}</div>`:""}
-    <div class="exam-notice">
-      <h3>Before you continue</h3>
-      <ul>
-        <li>Each question will remain available for exactly <strong>5 seconds</strong>.</li>
-        <li>An unanswered question becomes <strong>⬜ Empty</strong> when its time expires.</li>
-        <li>A wrong answer is recorded as <strong>❌</strong> and a correct answer as <strong>✅</strong>.</li>
-        <li>Opening the first question permanently uses your examination access for today.</li>
-        <li>Leaving this page does not reset the daily access. You must wait until tomorrow to open another examination question page.</li>
-        <li>Your result is stored permanently after the examination is finalized.</li>
-      </ul>
-    </div>
-    <div class="exam-notice-actions">
-      <button id="cancelExamNotice" class="btn outline" type="button">Cancel</button>
-      <button id="continueExamNotice" class="btn primary" type="button">I Understand — Start Examination</button>
-    </div>
-  </div>`;
-  document.body.appendChild(overlay);
-  document.getElementById("cancelExamNotice").onclick=()=>overlay.remove();
-  document.getElementById("continueExamNotice").onclick=async()=>{overlay.remove();await startExam(exam)};
+  if(currentUser)recordRecent(id);
+
+  const type=String(r.type||"").toLowerCase().trim();
+
+  if(type==="lesson"||type==="course"){
+    location.href="lesson.html?id="+encodeURIComponent(r.id);
+    return;
+  }
+
+  const url=r.file_url||r.url||"";
+
+  if(!url){
+    alert("This resource does not have a file attached yet.");
+    return;
+  }
+
+  window.open(url,"_blank","noopener,noreferrer");
 }
 
-async function registerForExam(exam){
+function getSaved(){
+  if(!currentUser)return[];
+
+  try{
+    return JSON.parse(
+      localStorage.getItem(SAVED_KEY+"_"+currentUser.id)||"[]"
+    );
+  }catch(e){
+    return[];
+  }
+}
+
+function getRecent(){
+  if(!currentUser)return[];
+
+  try{
+    return JSON.parse(
+      localStorage.getItem(RECENT_KEY+"_"+currentUser.id)||"[]"
+    );
+  }catch(e){
+    return[];
+  }
+}
+
+function recordRecent(id){
+  const a=getRecent()
+    .filter(x=>String(x)!==String(id));
+
+  a.unshift(String(id));
+
+  localStorage.setItem(
+    RECENT_KEY+"_"+currentUser.id,
+    JSON.stringify(a.slice(0,12))
+  );
+
+  updateStudentStats();
+}
+
+function toggleSaved(id){
+  if(!currentUser){
+    location.href="auth.html";
+    return;
+  }
+
+  let a=getSaved();
+
+  const exists=a.some(
+    x=>String(x)===String(id)
+  );
+
+  a=exists
+    ?a.filter(x=>String(x)!==String(id))
+    :[String(id),...a];
+
+  localStorage.setItem(
+    SAVED_KEY+"_"+currentUser.id,
+    JSON.stringify(a.slice(0,100))
+  );
+
+  renderStudentLists();
+  updateStudentStats();
+}
+
+function updateStudentStats(){
   if(!currentUser)return;
 
-  const price=priceFor(exam);
-  const paymentRequired=paymentIsRequired(exam);
-  const country=currentStudentCountryCode();
-  let message=`Register for "${exam.title||"this examination"}"?`;
-  if(country)message+=`\nCountry: ${country}`;
-  if(price&&paymentIsEnabled(exam))message+=`\nPrice: ${price.currency_code} ${Number(price.amount).toLocaleString()}`;
-  if(paymentRequired)message+="\nPayment is required according to the current examination settings.";
+  setText("statResources",allResources.length);
 
-  if(!confirm(message))return;
+  setText(
+    "statLessons",
+    allResources.filter(r=>
+      ["lesson","course"].includes(
+        String(r.type||"").toLowerCase()
+      )
+    ).length
+  );
 
-  try{
-    const r=await client.rpc("agu_register_for_exam",{p_examination_id:exam.id});
-    if(r.error)throw r.error;
-    alert(paymentRequired
-      ? "Your examination registration has been submitted. Payment/approval status is shown in the Examination Room."
-      : "You are registered for this examination.");
-    await loadExaminations();
-  }catch(e){alert(e.message||"Unable to register for this examination.")}
+  setText(
+    "statSubjects",
+    new Set(
+      allResources
+        .map(r=>r.subject||r.subject_name||"")
+        .filter(Boolean)
+    ).size
+  );
+
+  setText("statRecent",getRecent().length);
+
+  setText(
+    "progressText",
+    getRecent().length
+      ?`You have explored ${getRecent().length} resource${getRecent().length===1?"":"s"} from AGULIBRARY.`
+      :"Open resources to begin building your learning activity."
+  );
+
+  renderStudentLists();
 }
 
-async function startExam(exam){
-  if(!currentUser){location.href="auth.html";return}
+function renderStudentLists(){
+  if(!currentUser)return;
 
-  try{
-    /* This RPC creates the permanent daily lock on the server. */
-    const r=await client.rpc("agu_start_exam",{p_examination_id:exam.id});
-    if(r.error)throw r.error;
+  const saved=getSaved();
+  const recent=getRecent();
 
-    const data=r.data||{};
-    const attempt=data?.id||data?.attempt_id;
-    if(!attempt)throw new Error("The examination server did not return an attempt ID.");
+  const make=(ids,empty)=>{
+    const rows=ids
+      .map(id=>allResources.find(r=>String(r.id)===String(id)))
+      .filter(Boolean);
 
-    const q=await client.from("agu_exam_questions_public")
-      .select("id,examination_id,question_number,question_text,options,marks")
-      .eq("examination_id",exam.id)
-      .order("question_number",{ascending:true});
-
-    if(q.error)throw q.error;
-    if(!q.data?.length)throw new Error("This examination has no questions yet. Please contact the administrator.");
-
-    activeExamSession={
-      attemptId:attempt,
-      exam:{...exam,...data},
-      questions:q.data,
-      index:0,
-      statuses:[],
-      selectedOption:null,
-      answerSubmitted:false
-    };
-
-    document.getElementById("examHomeView").style.display="none";
-    document.getElementById("examRunnerView").style.display="block";
-    await renderCurrentExamQuestion();
-  }catch(e){
-    alert(e.message||"This examination cannot be started right now.");
-    await loadExaminations();
-  }
-}
-
-async function renderCurrentExamQuestion(){
-  if(!activeExamSession)return;
-  clearInterval(examTimer);examTimer=null;
-
-  const session=activeExamSession;
-  if(session.index>=session.questions.length){await finishExam();return}
-
-  const question=session.questions[session.index];
-  const runner=document.getElementById("examRunnerView");
-  runner.innerHTML=`<div class="service-panel-card">
-    <div class="exam-live-head">
-      <div><span class="eyebrow">LIVE EXAMINATION</span><h2>${esc(session.exam.title||"AGULIBRARY Examination")}</h2><small>Question ${session.index+1} of ${session.questions.length}</small></div>
-      <div id="examCountdown" class="exam-timer">5</div>
-    </div>
-    <div class="exam-progress"><span style="width:${Math.round((session.index/session.questions.length)*100)}%"></span></div>
-    <div id="liveQuestion" class="exam-question">
-      <div class="exam-question-number">QUESTION ${session.index+1}</div>
-      <div class="exam-question-text">${esc(question.question_text||"")}</div>
-      <div class="exam-options">${renderQuestionOptions(question)}</div>
-    </div>
-    <p class="panel-note">⏱️ Exactly five seconds. If you do not answer in time, this question is recorded as <strong>⬜ Empty</strong>.</p>
-  </div>`;
-
-  try{
-    const r=await client.rpc("agu_start_exam_question",{
-      p_attempt_id:session.attemptId,
-      p_question_id:question.id
-    });
-    if(r.error)throw r.error;
-
-    const server=r.data||{};
-    const startedAt=server.started_at||new Date().toISOString();
-    const expiresAt=server.expires_at||new Date(Date.parse(startedAt)+5000).toISOString();
-    examClockOffset=server.server_now?new Date(server.server_now).getTime()-Date.now():0;
-
-    const expires=new Date(expiresAt).getTime();
-    session.questionStartedAt=startedAt;
-    session.questionExpiresAt=expiresAt;
-    session.selectedOption=null;
-    session.answerSubmitted=false;
-
-    runner.querySelectorAll("input[name=liveExamAnswer]").forEach(input=>input.addEventListener("change",()=>{
-      if(activeExamSession)activeExamSession.selectedOption=input.value;
-    }));
-
-    tickExamCountdown(expires);
-    examTimer=setInterval(()=>tickExamCountdown(expires),100);
-  }catch(e){
-    runner.innerHTML=`<div class="service-panel-card"><h2>Unable to open this question</h2><p class="panel-note">${esc(e.message||"The examination server could not start the question.")}</p></div>`;
-  }
-}
-
-function renderQuestionOptions(question){
-  let options=question.options;
-  if(!Array.isArray(options)&&options&&typeof options==="object")options=Object.values(options);
-  options=Array.isArray(options)?options:[];
-  return options.map((o,i)=>`<label class="exam-option"><input type="radio" name="liveExamAnswer" value="${escapeForAttr(String(i))}"><span><strong>${String.fromCharCode(65+i)}.</strong> ${esc(o)}</span></label>`).join("");
-}
-
-function tickExamCountdown(expires){
-  if(!activeExamSession)return;
-  const left=Math.max(0,expires-(Date.now()+examClockOffset));
-  const seconds=Math.ceil(left/1000);
-  const el=document.getElementById("examCountdown");if(el)el.textContent=String(seconds);
-  if(left<=0){
-    clearInterval(examTimer);examTimer=null;
-    submitCurrentAnswer(activeExamSession.selectedOption??null,true);
-  }
-}
-
-async function submitCurrentAnswer(value,expired=false){
-  if(!activeExamSession||activeExamSession.answerSubmitted)return;
-  activeExamSession.answerSubmitted=true;
-  clearInterval(examTimer);examTimer=null;
-
-  const question=activeExamSession.questions[activeExamSession.index];
-  try{
-    const r=await client.rpc("agu_submit_exam_answer",{
-      p_attempt_id:activeExamSession.attemptId,
-      p_question_id:question.id,
-      p_selected_option:expired?null:(value===null?null:String(value))
-    });
-    if(r.error)throw r.error;
-
-    const data=r.data||{};
-    const status=String(data.outcome||data.status||"unanswered").toLowerCase();
-    activeExamSession.statuses.push({question_id:question.id,status,selected_option:value});
-    showQuestionFeedback(status,expired||status==="unanswered");
-
-    setTimeout(async()=>{
-      if(!activeExamSession)return;
-      activeExamSession.index++;
-      activeExamSession.answerSubmitted=false;
-      activeExamSession.selectedOption=null;
-      await renderCurrentExamQuestion();
-    },650);
-  }catch(e){
-    activeExamSession.answerSubmitted=false;
-    alert(e.message||"Unable to record this answer.");
-    await renderCurrentExamQuestion();
-  }
-}
-
-function showQuestionFeedback(status,expired){
-  const q=document.getElementById("liveQuestion");if(!q)return;
-  const existing=q.querySelector(".answer-feedback");if(existing)return;
-  const div=document.createElement("div");
-  div.className="answer-feedback "+examScoreClass(status);
-  div.innerHTML=status==="correct"?"✅ Correct answer":status==="wrong"?"❌ Wrong answer":"⬜ Empty — time expired";
-  q.querySelectorAll("input").forEach(x=>x.disabled=true);
-  q.appendChild(div);
-}
-
-async function finishExam(){
-  if(!activeExamSession)return;
-  clearInterval(examTimer);examTimer=null;
-
-  try{
-    const attemptId=activeExamSession.attemptId;
-    const questions=activeExamSession.questions.slice();
-
-    const r=await client.rpc("agu_finish_exam",{p_attempt_id:attemptId});
-    if(r.error)throw r.error;
-    const result=r.data||{};
-
-    try{
-      const answers=await client.from("agu_exam_answers")
-        .select("question_id,question_number,selected_option,is_correct,outcome,elapsed_seconds")
-        .eq("attempt_id",attemptId)
-        .order("question_number",{ascending:true});
-      if(answers.error)throw answers.error;
-      const map=new Map((answers.data||[]).map(a=>[String(a.question_id),a]));
-      lastExamReview=questions.map(q=>({
-        question:q,
-        answer:map.get(String(q.id))||{outcome:"unanswered",selected_option:null,is_correct:false}
-      }));
-    }catch(e){
-      lastExamReview=questions.map(q=>({question:q,answer:{outcome:"unanswered",selected_option:null,is_correct:false}}));
-    }
-
-    activeExamSession=null;
-    renderSubmittedExamResult(result);
-  }catch(e){
-    alert(e.message||"Unable to finalize the examination.");
-  }
-}
-
-function resultCounts(){
-  let correct=0,wrong=0,unanswered=0;
-  lastExamReview.forEach(x=>{
-    const s=String(x.answer?.outcome||"").toLowerCase();
-    if(s==="correct")correct++;
-    else if(s==="wrong")wrong++;
-    else unanswered++;
-  });
-  return {correct,wrong,unanswered};
-}
-
-function renderSubmittedExamResult(result){
-  const runner=document.getElementById("examRunnerView");
-  const counts=resultCounts();
-  const review=lastExamReview.map((row,i)=>{
-    const st=String(row.answer?.outcome||"unanswered").toLowerCase();
-    const mark=st==="correct"?"✅":st==="wrong"?"❌":"⬜";
-    return `<div class="exam-review-row"><span class="exam-review-mark ${examScoreClass(st)}">${mark}</span><div><strong>Question ${i+1}</strong><p>${esc(row.question?.question_text||"")}</p></div></div>`;
-  }).join("");
-
-  const certMessage=result.certificate_id
-    ? "Congratulations! You passed this examination and a permanent certificate has been issued."
-    : (result.passed?"Congratulations! You passed this examination.":"You did not reach the pass mark for this attempt.");
-
-  runner.innerHTML=`<div class="exam-result">
-    <div class="service-icon">${result.passed?"🏆":"📊"}</div>
-    <h2>Examination Submitted</h2>
-    <div class="exam-score">${Number(result.percentage||0)}%</div>
-    <p><strong>${counts.correct}</strong> correct • <strong>${counts.wrong}</strong> wrong • <strong>${counts.unanswered}</strong> empty</p>
-    <p>${certMessage}</p>
-    <div class="exam-review"><h3>Question Results</h3>${review}</div>
-    <div class="exam-actions" style="justify-content:center">
-      <button class="btn primary" id="viewResultsAfterExam" type="button">🏆 View Result &amp; Certification</button>
-    </div>
-  </div>`;
-  document.getElementById("viewResultsAfterExam").addEventListener("click",()=>openService("results"));
-}
-
-async function loadResults(){
-  let status=document.getElementById("resultsStatus"),list=document.getElementById("resultsList");
-  if(!status||!list){
-    const view=document.getElementById("resultsView");
-    if(view){
-      view.innerHTML=`<div class="service-icon">🏆</div><h2>Result &amp; Certification</h2><p>Your completed AGULIBRARY examination results and certificates are shown here.</p><div id="resultsStatus" class="service-status">Loading results...</div><div id="resultsList" class="service-grid"></div>`;
-      status=document.getElementById("resultsStatus");list=document.getElementById("resultsList");
-    }
-  }
-  if(!status||!list)return;
-  if(!currentUser){status.textContent="Please sign in to view your results.";return}
-
-  status.textContent="Loading permanent examination records...";list.innerHTML="";
-  try{
-    const r=await client.from("agu_exam_attempts")
-      .select("id,examination_id,status,started_at,completed_at,score,total_marks,percentage,grade,passed,certificate_id,agu_examinations(title,subject,education_level,pass_mark)")
-      .eq("student_id",currentUser.id)
-      .eq("status","completed")
-      .order("completed_at",{ascending:false});
-    if(r.error)throw r.error;
-
-    studentResults=r.data||[];
-    if(!studentResults.length){
-      status.textContent="No examination results are available yet. Complete an examination to create your permanent result record.";
-      return;
-    }
-
-    status.textContent=`${studentResults.length} permanent result${studentResults.length===1?"":"s"} available.`;
-    list.innerHTML=studentResults.map((r,i)=>`<article class="result-card">
-      <div class="resource-icon">${r.passed?"🏆":"📊"}</div>
-      <h3>${esc(r.agu_examinations?.title||"AGULIBRARY Examination")}</h3>
-      <p>${r.agu_examinations?.subject?`Subject: ${esc(r.agu_examinations.subject)}<br>`:""}Completed: ${esc(formatDate(r.completed_at))}</p>
-      <div class="result-meta">
-        <span>Score: ${Number(r.percentage||0)}%</span>
-        <span>${r.passed?"PASS":"NOT PASSED"}</span>
-        ${r.grade?`<span>Grade: ${esc(r.grade)}</span>`:""}
-      </div>
-      <div class="actions"><button class="btn primary" type="button" data-result-index="${i}">${r.certificate_id?"View Certificate":"View Result"}</button></div>
-    </article>`).join("");
-
-    list.querySelectorAll("[data-result-index]").forEach(btn=>btn.addEventListener("click",()=>showPermanentResult(studentResults[Number(btn.dataset.resultIndex)])));
-  }catch(e){
-    console.error("Results:",e);
-    status.innerHTML="Unable to load your permanent results.<br><small>"+esc(e.message||"Database error")+"</small>";
-  }
-}
-
-async function showPermanentResult(result){
-  const resultsView=document.getElementById("resultsView");
-  const name=document.getElementById("fullProfileName")?.textContent||currentUser?.user_metadata?.full_name||currentUser?.email?.split("@")[0]||"Student";
-  const examTitle=result.agu_examinations?.title||"AGULIBRARY Examination";
-  const score=Number(result.percentage||0);
-  const back=()=>{
-    resultsView.innerHTML=`<div class="service-icon">🏆</div><h2>Result &amp; Certification</h2><p>Your completed AGULIBRARY examination results and certificates are shown here.</p><div id="resultsStatus" class="service-status">Loading results...</div><div id="resultsList" class="service-grid"></div>`;
-    loadResults();
+    return rows.length
+      ?rows.map(r=>`
+        <div class="saved-item">
+          <span>${esc(r.title||"Untitled Resource")}</span>
+          <button class="btn outline"
+            type="button"
+            data-open="${escAttr(r.id)}">
+            Open
+          </button>
+        </div>
+      `).join("")
+      :`<div class="empty">${empty}</div>`;
   };
 
-  let cert=null;
-  if(result.certificate_id){
-    try{
-      const c=await client.from("agu_exam_certificates")
-        .select("id,certificate_number,verification_code,issued_at,status")
-        .eq("id",result.certificate_id)
-        .eq("student_id",currentUser.id)
-        .maybeSingle();
-      if(!c.error)cert=c.data;
-    }catch(e){}
+  document.getElementById("savedList").innerHTML=
+    make(saved,"No saved resources yet.");
+
+  document.getElementById("recentList").innerHTML=
+    make(recent,"You haven't opened a resource yet.");
+
+  document.querySelectorAll("[data-open]").forEach(b=>{
+    b.addEventListener("click",()=>{
+      openResource(b.dataset.open);
+    });
+  });
+}
+
+/* =========================================================
+   FIXED AI TEACHER + SUPPORT
+   ========================================================= */
+
+function addChat(id,text,user){
+  const box=document.getElementById(id);
+  if(!box)return;
+
+  const d=document.createElement("div");
+  d.className="msg"+(user?" user":"");
+
+  d.textContent=text;
+
+  box.appendChild(d);
+  box.scrollTop=box.scrollHeight;
+}
+
+async function callAI(endpoint,message,conversation){
+  if(!endpoint){
+    throw new Error("AI endpoint is not configured.");
   }
 
-  resultsView.innerHTML=`<div class="service-toolbar"><button class="btn outline" id="backPermanentResults" type="button">← Results</button></div>
-    <div class="exam-result">
-      <div class="service-icon">${result.passed?"🏆":"📊"}</div>
-      <h2>${esc(examTitle)}</h2>
-      <div class="exam-score">${score}%</div>
-      <p>${result.grade?`Grade: <strong>${esc(result.grade)}</strong><br>`:""}Status: <strong>${result.passed?"PASSED":"NOT PASSED"}</strong></p>
-      <p>Score: <strong>${Number(result.score||0)}</strong> / ${Number(result.total_marks||0)}</p>
-      <p>Completed: ${esc(formatDate(result.completed_at))}</p>
-      ${cert?`<p><strong>Certificate No:</strong> ${esc(cert.certificate_number)}<br><strong>Verification Code:</strong> ${esc(cert.verification_code)}<br>Issued: ${esc(formatDate(cert.issued_at))}</p><button class="btn primary" id="showPermanentCertificate" type="button">🏆 View Certificate</button>`:`<p class="panel-note">This attempt did not qualify for certification.</p>`}
-    </div>`;
+  const r=await fetch(endpoint,{
+    method:"POST",
+    headers:{
+      "Content-Type":"application/json"
+    },
+    body:JSON.stringify({
+      message,
+      conversation,
+      student_id:currentUser?.id||null
+    })
+  });
 
-  document.getElementById("backPermanentResults").addEventListener("click",back);
-  if(cert)document.getElementById("showPermanentCertificate").addEventListener("click",()=>showPermanentCertificate(name,examTitle,result,cert));
+  if(!r.ok){
+    throw new Error("AI service error");
+  }
+
+  const d=await r.json();
+
+  return d.answer||
+    d.message||
+    d.response||
+    "The AI returned no answer.";
 }
 
-function showPermanentCertificate(name,examTitle,result,cert){
-  const resultsView=document.getElementById("resultsView");
-  resultsView.innerHTML=`<div class="service-toolbar"><button class="btn outline" id="backCertificate" type="button">← Result</button></div>
-    <div class="certificate" id="certificateArea">
-      <div class="eyebrow">AGULIBRARY</div>
-      <h2>CERTIFICATE OF ACHIEVEMENT</h2>
-      <p>This certificate is proudly presented to</p>
-      <h3>${esc(name)}</h3>
-      <p>for successfully completing</p>
-      <h3>${esc(examTitle)}</h3>
-      <p>with a score of <strong>${Number(result.percentage||0)}%</strong>.</p>
-      <p>Certificate No: <strong>${esc(cert.certificate_number)}</strong><br>Verification Code: <strong>${esc(cert.verification_code||"")}</strong><br>Issued: ${esc(formatDate(cert.issued_at))}</p>
-      <p>AGULIBRARY • Owner: Umar Mohammed</p>
-    </div>
-    <div class="certificate-actions"><button class="btn primary" id="printCertificate" type="button">🖨️ Print Certificate</button><button class="btn outline" id="backCertificate2" type="button">Back to Result</button></div>`;
+async function sendTeacher(){
+  const input=document.getElementById("teacherInput");
+  const btn=document.getElementById("teacherSend");
 
-  const back=()=>showPermanentResult(result);
-  document.getElementById("backCertificate").addEventListener("click",back);
-  document.getElementById("backCertificate2").addEventListener("click",back);
-  document.getElementById("printCertificate").addEventListener("click",printCertificate);
+  if(!input||!btn)return;
+
+  const m=input.value.trim();
+
+  if(!m)return;
+
+  addChat("teacherChat",m,true);
+
+  input.value="";
+  btn.disabled=true;
+
+  teacherConversation.push({
+    role:"user",
+    content:m
+  });
+
+  try{
+    const base=(window.AGU_CONFIG?.supabaseUrl||"")
+      .replace(/\/$/,"");
+
+    const answer=await callAI(
+      base+"/functions/v1/ai-learning-agent",
+      m,
+      teacherConversation
+    );
+
+    addChat("teacherChat",answer,false);
+
+    teacherConversation.push({
+      role:"assistant",
+      content:answer
+    });
+
+  }catch(e){
+    console.error("AI Learning Teacher:",e);
+
+    addChat(
+      "teacherChat",
+      "The AI Learning Teacher interface is ready, but its secure AI backend endpoint still needs to be connected.",
+      false
+    );
+  }
+
+  btn.disabled=false;
+  input.focus();
 }
 
-function printCertificate(){
-  const area=document.getElementById("certificateArea");if(!area)return;
-  const w=window.open("","_blank","noopener,noreferrer");
-  if(!w){alert("Please allow pop-ups to print the certificate.");return}
-  w.document.write(`<!doctype html><html><head><title>AGULIBRARY Certificate</title><style>body{font-family:system-ui,-apple-system,Segoe UI,sans-serif;padding:40px;color:#17352a}.certificate{border:7px double #087a4b;border-radius:4px;padding:60px 40px;text-align:center;max-width:850px;margin:auto}.eyebrow{color:#087a4b;font-size:12px;font-weight:900;letter-spacing:3px}.certificate h2{color:#087a4b;font-size:34px}.certificate h3{font-size:25px}.certificate p{line-height:1.7;color:#526a60}@media print{body{padding:0}}</style></head><body><div class="certificate">${area.innerHTML}</div><script>window.onload=()=>window.print()<\/script></body></html>`);
-  w.document.close();
+async function sendSupport(){
+  const input=document.getElementById("supportInput");
+  const btn=document.getElementById("supportSend");
+
+  if(!input||!btn)return;
+
+  const m=input.value.trim();
+
+  if(!m)return;
+
+  addChat("supportChat",m,true);
+
+  input.value="";
+  btn.disabled=true;
+
+  supportConversation.push({
+    role:"user",
+    content:m
+  });
+
+  try{
+    const base=(window.AGU_CONFIG?.supabaseUrl||"")
+      .replace(/\/$/,"");
+
+    const answer=await callAI(
+      base+"/functions/v1/customer-support-agent",
+      m,
+      supportConversation
+    );
+
+    addChat("supportChat",answer,false);
+
+    supportConversation.push({
+      role:"assistant",
+      content:answer
+    });
+
+  }catch(e){
+    console.error("Customer Support:",e);
+
+    addChat(
+      "supportChat",
+      "The Customer Support Agent interface is ready, but its secure support AI backend endpoint still needs to be connected.",
+      false
+    );
+  }
+
+  btn.disabled=false;
+  input.focus();
 }
 
-function setupExamUI(){
-  document.getElementById("examSearch")?.addEventListener("input",()=>renderExamList(null));
+function setupAI(){
+
+  const tp=document.getElementById("aiTeacherPanel");
+  const tl=document.getElementById("aiTeacherLauncher");
+  const close=document.getElementById("closeTeacher");
+  const teacherSend=document.getElementById("teacherSend");
+  const teacherInput=document.getElementById("teacherInput");
+
+  /*
+    AI Learning Teacher
+  */
+  if(tl&&tp){
+
+    const toggleTeacher=show=>{
+      tp.classList.toggle("show",show);
+      tp.setAttribute(
+        "aria-hidden",
+        show?"false":"true"
+      );
+
+      tl.setAttribute(
+        "aria-expanded",
+        show?"true":"false"
+      );
+
+      document.documentElement.style.overflow=
+        show?"hidden":"";
+
+      document.body.style.overflow=
+        show?"hidden":"";
+    };
+
+    tl.addEventListener("click",()=>{
+      toggleTeacher(!tp.classList.contains("show"));
+    });
+
+    close?.addEventListener("click",()=>{
+      toggleTeacher(false);
+    });
+
+    teacherSend?.addEventListener(
+      "click",
+      sendTeacher
+    );
+
+    teacherInput?.addEventListener(
+      "keydown",
+      e=>{
+        if(e.key==="Enter"){
+          e.preventDefault();
+          sendTeacher();
+        }
+      }
+    );
+  }
+
+  /*
+    Customer Support
+    The Support button now reliably reveals
+    its existing choices instead of relying on
+    a navigation handler.
+  */
+  const supportToggle=
+    document.getElementById("supportToggle");
+
+  const supportChoices=
+    document.getElementById("supportChoices");
+
+  if(supportToggle&&supportChoices){
+
+    supportToggle.addEventListener("click",()=>{
+
+      const open=
+        supportChoices.style.display!=="none";
+
+      supportChoices.style.display=
+        open?"none":"flex";
+
+      supportToggle.setAttribute(
+        "aria-expanded",
+        open?"false":"true"
+      );
+
+      supportToggle.textContent=
+        open?"💬 Support":"✕ Close Support";
+    });
+  }
 }
 
 /* =========================================================
@@ -1336,104 +1401,152 @@ function setupExamUI(){
    ========================================================= */
 
 function makePermanentInviteCode(user){
-  const raw = String(user?.id || user?.email || "AGULIBRARY");
-  let hash = 2166136261;
+  const raw=String(
+    user?.id||
+    user?.email||
+    "AGULIBRARY"
+  );
+
+  let hash=2166136261;
+
   for(let i=0;i<raw.length;i++){
-    hash ^= raw.charCodeAt(i);
-    hash += (hash<<1)+(hash<<4)+(hash<<7)+(hash<<8)+(hash<<24);
+    hash^=raw.charCodeAt(i);
+    hash+=(hash<<1)+(hash<<4)+(hash<<7)+(hash<<8)+(hash<<24);
   }
-  hash >>>= 0;
-  return "AGU-" + hash.toString(36).toUpperCase().padStart(8,"0").slice(0,8);
+
+  hash>>>=0;
+
+  return "AGU-"+
+    hash.toString(36)
+      .toUpperCase()
+      .padStart(8,"0")
+      .slice(0,8);
 }
 
 function populateAccountPanels(){
-  if(!currentUser) return;
+  if(!currentUser)return;
 
-  const meta = currentUser.user_metadata || {};
-  const name =
-    meta.full_name ||
-    meta.name ||
-    [meta.first_name,meta.last_name].filter(Boolean).join(" ") ||
-    currentUser.email?.split("@")[0] ||
+  const meta=currentUser.user_metadata||{};
+
+  const name=
+    meta.full_name||
+    meta.name||
+    [meta.first_name,meta.last_name]
+      .filter(Boolean)
+      .join(" ")||
+    currentUser.email?.split("@")[0]||
     "Student";
 
-  const phone =
-    meta.phone ||
-    currentUser.phone ||
+  const phone=
+    meta.phone||
+    currentUser.phone||
     "Not provided";
 
-  const dob =
-    meta.date_of_birth ||
-    meta.dob ||
+  const dob=
+    meta.date_of_birth||
+    meta.dob||
     "Not provided";
 
-  const level =
-    meta.education_level ||
-    meta.level ||
+  const level=
+    meta.education_level||
+    meta.level||
     "Not provided";
 
   setText("heroStudentName",name);
   setText("fullProfileName",name);
-  setText("fullProfileEmail",currentUser.email || "Not provided");
+  setText("fullProfileEmail",currentUser.email||"Not provided");
   setText("infoFullName",name);
-  setText("infoEmail",currentUser.email || "Not provided");
+  setText("infoEmail",currentUser.email||"Not provided");
   setText("infoPhone",phone);
   setText("infoDob",dob);
   setText("infoLevel",level);
 
-  const created =
-    currentUser.created_at
-      ? new Date(currentUser.created_at).toLocaleDateString()
-      : "Not available";
+  const created=currentUser.created_at
+    ?new Date(currentUser.created_at).toLocaleDateString()
+    :"Not available";
 
   setText("infoCreated",created);
 
-  const initials =
-    name.split(/\s+/).filter(Boolean).slice(0,2).map(x=>x[0]).join("").toUpperCase() || "AG";
+  const initials=
+    name
+      .split(/\s+/)
+      .filter(Boolean)
+      .slice(0,2)
+      .map(x=>x[0])
+      .join("")
+      .toUpperCase()||"AG";
 
   setText("profileAvatar",initials);
 
-  const code = makePermanentInviteCode(currentUser);
+  const code=makePermanentInviteCode(currentUser);
+
   setText("inviteCode",code);
 
-  const base = new URL("register.html",window.location.href).href;
-  const joiner = base.includes("?") ? "&" : "?";
-  const link = base + joiner + "invitation=" + encodeURIComponent(code);
+  const base=new URL(
+    "register.html",
+    window.location.href
+  ).href;
 
-  const linkInput = document.getElementById("inviteLink");
-  if(linkInput) linkInput.value = link;
+  const joiner=
+    base.includes("?")?"&":"?";
+
+  const link=
+    base+
+    joiner+
+    "invitation="+
+    encodeURIComponent(code);
+
+  const linkInput=
+    document.getElementById("inviteLink");
+
+  if(linkInput)linkInput.value=link;
 }
 
 function openMenu(){
-  const menu = document.getElementById("accountMenu");
-  const shade = document.getElementById("menuShade");
+  const menu=document.getElementById("accountMenu");
+  const shade=document.getElementById("menuShade");
+
   menu.classList.add("open");
   menu.setAttribute("aria-hidden","false");
-  shade.hidden = false;
-  document.getElementById("menuButton").setAttribute("aria-expanded","true");
+
+  shade.hidden=false;
+
+  document
+    .getElementById("menuButton")
+    .setAttribute("aria-expanded","true");
+
   populateAccountPanels();
 }
 
 function closeMenu(){
-  const menu = document.getElementById("accountMenu");
-  const shade = document.getElementById("menuShade");
+  const menu=document.getElementById("accountMenu");
+  const shade=document.getElementById("menuShade");
+
   menu.classList.remove("open");
   menu.setAttribute("aria-hidden","true");
-  shade.hidden = true;
-  document.getElementById("menuButton").setAttribute("aria-expanded","false");
+
+  shade.hidden=true;
+
+  document
+    .getElementById("menuButton")
+    .setAttribute("aria-expanded","false");
 }
 
 function openAccountPanel(id){
   if(!currentUser){
-    window.location.href = "auth.html";
+    window.location.href="auth.html";
     return;
   }
+
   closeMenu();
+
   document.querySelectorAll(".full-panel").forEach(p=>{
     p.classList.remove("open");
     p.setAttribute("aria-hidden","true");
   });
-  const panel = document.getElementById(id);
+
+  const panel=document.getElementById(id);
+
   if(panel){
     panel.classList.add("open");
     panel.setAttribute("aria-hidden","false");
@@ -1442,7 +1555,8 @@ function openAccountPanel(id){
 }
 
 function closeAccountPanel(id){
-  const panel = document.getElementById(id);
+  const panel=document.getElementById(id);
+
   if(panel){
     panel.classList.remove("open");
     panel.setAttribute("aria-hidden","true");
@@ -1450,28 +1564,51 @@ function closeAccountPanel(id){
 }
 
 function setupAccountMenu(){
-  const menuButton = document.getElementById("menuButton");
-  const shade = document.getElementById("menuShade");
-  const close = document.getElementById("menuClose");
 
-  menuButton.addEventListener("click",openMenu);
-  shade.addEventListener("click",closeMenu);
-  close.addEventListener("click",closeMenu);
+  const menuButton=document.getElementById("menuButton");
+  const shade=document.getElementById("menuShade");
+  const close=document.getElementById("menuClose");
+
+  menuButton?.addEventListener(
+    "click",
+    openMenu
+  );
+
+  shade?.addEventListener(
+    "click",
+    closeMenu
+  );
+
+  close?.addEventListener(
+    "click",
+    closeMenu
+  );
 
   document.querySelectorAll(".menu-item").forEach(item=>{
-    item.addEventListener("click",()=>openAccountPanel(item.dataset.panel));
+    item.addEventListener(
+      "click",
+      ()=>openAccountPanel(item.dataset.panel)
+    );
   });
 
   document.querySelectorAll("[data-close-panel]").forEach(btn=>{
-    btn.addEventListener("click",()=>closeAccountPanel(btn.dataset.closePanel));
+    btn.addEventListener(
+      "click",
+      ()=>closeAccountPanel(btn.dataset.closePanel)
+    );
   });
+
   document.querySelectorAll("[data-service-close]").forEach(btn=>{
     btn.addEventListener("click",()=>{
-      const panel=document.getElementById(btn.dataset.serviceClose);
+      const panel=document.getElementById(
+        btn.dataset.serviceClose
+      );
+
       if(panel){
         panel.classList.remove("open");
         panel.setAttribute("aria-hidden","true");
       }
+
       document.documentElement.style.overflow="";
       document.body.style.overflow="";
     });
@@ -1480,126 +1617,268 @@ function setupAccountMenu(){
   document.querySelectorAll(".setting-toggle").forEach(btn=>{
     btn.addEventListener("click",()=>{
       btn.classList.toggle("active");
-      btn.textContent = btn.classList.contains("active") ? "ON" : "OFF";
+
+      btn.textContent=
+        btn.classList.contains("active")
+          ?"ON"
+          :"OFF";
+
       try{
-        localStorage.setItem("AGU_SETTING_"+btn.dataset.setting,btn.classList.contains("active") ? "1" : "0");
+        localStorage.setItem(
+          "AGU_SETTING_"+btn.dataset.setting,
+          btn.classList.contains("active")
+            ?"1"
+            :"0"
+        );
       }catch(e){}
     });
   });
 
-  const copyCode = document.getElementById("copyInviteCode");
-  const copyLink = document.getElementById("copyInviteLink");
+  const copyCode=
+    document.getElementById("copyInviteCode");
+
+  const copyLink=
+    document.getElementById("copyInviteLink");
 
   if(copyCode){
     copyCode.addEventListener("click",async()=>{
-      const text = document.getElementById("inviteCode").textContent.trim();
-      try{await navigator.clipboard.writeText(text);copyCode.textContent="Copied ✓";setTimeout(()=>copyCode.textContent="Copy Code",1300)}catch(e){alert(text)}
+      const text=
+        document.getElementById("inviteCode")
+          .textContent.trim();
+
+      try{
+        await navigator.clipboard.writeText(text);
+
+        copyCode.textContent="Copied ✓";
+
+        setTimeout(
+          ()=>copyCode.textContent="Copy Code",
+          1300
+        );
+
+      }catch(e){
+        alert(text);
+      }
     });
   }
 
   if(copyLink){
     copyLink.addEventListener("click",async()=>{
-      const text = document.getElementById("inviteLink").value;
-      try{await navigator.clipboard.writeText(text);copyLink.textContent="Copied ✓";setTimeout(()=>copyLink.textContent="Copy Link",1300)}catch(e){alert(text)}
+      const text=
+        document.getElementById("inviteLink").value;
+
+      try{
+        await navigator.clipboard.writeText(text);
+
+        copyLink.textContent="Copied ✓";
+
+        setTimeout(
+          ()=>copyLink.textContent="Copy Link",
+          1300
+        );
+
+      }catch(e){
+        alert(text);
+      }
     });
   }
 
-  document.getElementById("securityResetPassword")?.addEventListener("click",async()=>{
-    if(!client || !currentUser?.email){
-      alert("Please sign in before resetting your password.");
-      return;
-    }
-    try{
-      const redirectUrl = new URL("auth.html",window.location.href).href;
-      const r = await client.auth.resetPasswordForEmail(currentUser.email,{redirectTo:redirectUrl});
-      if(r.error) throw r.error;
-      alert("A secure password-reset link has been sent to your email.");
-    }catch(e){
-      alert(e?.message || "Unable to send the password-reset email.");
-    }
-  });
+  document
+    .getElementById("securityResetPassword")
+    ?.addEventListener("click",async()=>{
+      if(!client||!currentUser?.email){
+        alert("Please sign in before resetting your password.");
+        return;
+      }
 
-  document.getElementById("securityChangeEmail")?.addEventListener("click",async()=>{
-    if(!client || !currentUser){
-      alert("Please sign in first.");
-      return;
-    }
-    const email = prompt("Enter your new email address:",currentUser.email || "");
-    if(!email || email.trim().toLowerCase() === String(currentUser.email || "").toLowerCase()) return;
-    try{
-      const r = await client.auth.updateUser({email:email.trim().toLowerCase()});
-      if(r.error) throw r.error;
-      alert("A confirmation message has been sent to the new email address.");
-    }catch(e){
-      alert(e?.message || "Unable to change your email address.");
-    }
-  });
+      try{
+        const redirectUrl=
+          new URL(
+            "auth.html",
+            window.location.href
+          ).href;
 
-  document.getElementById("securityChangePhone")?.addEventListener("click",async()=>{
-    if(!client || !currentUser){
-      alert("Please sign in first.");
-      return;
-    }
-    const phone = prompt("Enter your new phone number in international format:",currentUser.phone || "");
-    if(!phone || phone.trim() === String(currentUser.phone || "")) return;
-    try{
-      const r = await client.auth.updateUser({phone:phone.trim()});
-      if(r.error) throw r.error;
-      alert("Your phone-number update request has been submitted. Complete any verification required by your Supabase authentication settings.");
-      populateAccountPanels();
-    }catch(e){
-      alert(e?.message || "Unable to change your phone number.");
-    }
-  });
+        const r=
+          await client.auth.resetPasswordForEmail(
+            currentUser.email,
+            {redirectTo:redirectUrl}
+          );
 
-  document.getElementById("examSearch")?.addEventListener("input",renderExamList);
+        if(r.error)throw r.error;
+
+        alert(
+          "A secure password-reset link has been sent to your email."
+        );
+
+      }catch(e){
+        alert(
+          e?.message||
+          "Unable to send the password-reset email."
+        );
+      }
+    });
+
+  document
+    .getElementById("securityChangeEmail")
+    ?.addEventListener("click",async()=>{
+      if(!client||!currentUser){
+        alert("Please sign in first.");
+        return;
+      }
+
+      const email=prompt(
+        "Enter your new email address:",
+        currentUser.email||""
+      );
+
+      if(
+        !email||
+        email.trim().toLowerCase()===
+        String(currentUser.email||"").toLowerCase()
+      )return;
+
+      try{
+        const r=
+          await client.auth.updateUser({
+            email:email.trim().toLowerCase()
+          });
+
+        if(r.error)throw r.error;
+
+        alert(
+          "A confirmation message has been sent to the new email address."
+        );
+
+      }catch(e){
+        alert(
+          e?.message||
+          "Unable to change your email address."
+        );
+      }
+    });
+
+  document
+    .getElementById("securityChangePhone")
+    ?.addEventListener("click",async()=>{
+      if(!client||!currentUser){
+        alert("Please sign in first.");
+        return;
+      }
+
+      const phone=prompt(
+        "Enter your new phone number in international format:",
+        currentUser.phone||""
+      );
+
+      if(
+        !phone||
+        phone.trim()===String(currentUser.phone||"")
+      )return;
+
+      try{
+        const r=
+          await client.auth.updateUser({
+            phone:phone.trim()
+          });
+
+        if(r.error)throw r.error;
+
+        alert(
+          "Your phone-number update request has been submitted. Complete any verification required by your Supabase authentication settings."
+        );
+
+        populateAccountPanels();
+
+      }catch(e){
+        alert(
+          e?.message||
+          "Unable to change your phone number."
+        );
+      }
+    });
 
   window.addEventListener("keydown",e=>{
-    if(e.key === "Escape"){
+    if(e.key==="Escape"){
       closeMenu();
-      document.querySelectorAll(".full-panel.open").forEach(p=>p.classList.remove("open"));
+
+      document
+        .querySelectorAll(".full-panel.open")
+        .forEach(p=>{
+          p.classList.remove("open");
+        });
     }
   });
 }
 
-/* Require authentication before entering the working student website.
-   The auth page controls whether the next login asks for email + password
-   or password only. */
+/* =========================================================
+   AUTHENTICATION
+   ========================================================= */
+
 async function enforceWebsiteLogin(){
+
   if(!client){
     window.location.replace("auth.html");
     return false;
   }
 
-  const AUTHORIZED_ENTRY_KEY="AGU_AUTHORIZED_ENTRY";
-  if(sessionStorage.getItem(AUTHORIZED_ENTRY_KEY)==="1"){
-    sessionStorage.removeItem(AUTHORIZED_ENTRY_KEY);
+  const AUTHORIZED_ENTRY_KEY=
+    "AGU_AUTHORIZED_ENTRY";
+
+  if(
+    sessionStorage.getItem(
+      AUTHORIZED_ENTRY_KEY
+    )==="1"
+  ){
+
+    sessionStorage.removeItem(
+      AUTHORIZED_ENTRY_KEY
+    );
+
     try{
-      const r=await client.auth.getSession();
+      const r=
+        await client.auth.getSession();
+
       if(r.data?.session?.user){
-        currentUser=r.data.session.user;
+        currentUser=
+          r.data.session.user;
+
         return true;
       }
+
     }catch(e){}
+
     window.location.replace("auth.html");
     return false;
   }
 
   try{
-    const result=await client.auth.getSession();
+    const result=
+      await client.auth.getSession();
+
     if(result.data?.session?.user){
       window.location.replace("auth.html");
       return false;
     }
+
   }catch(e){}
 
   window.location.replace("auth.html");
   return false;
 }
 
+/* =========================================================
+   START
+   ========================================================= */
 
-document.addEventListener("DOMContentLoaded",()=>{setupAccountMenu();init();});
+document.addEventListener(
+  "DOMContentLoaded",
+  ()=>{
+    init();
+  }
+);
+
 })();
 </script>
+
 </body>
-</html>
+  </html>

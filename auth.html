@@ -1,190 +1,637 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
+
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>AGULIBRARY — Student Account</title>
-<meta name="agu-auth-version" content="20260909-gender">
+
+<meta name="agu-auth-version" content="20260906-visibility-fix">
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="./config.js"></script><style>
+<script src="./config.js"></script>
+
+<style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:Arial,sans-serif;background:#f3faf7;color:#10231d;min-height:100vh}
-header{background:#fff;border-bottom:1px solid #dce8e3;padding:18px 24px;display:flex;justify-content:space-between;align-items:center}
-.brand{display:flex;align-items:center;gap:14px}
-.logo{width:58px;height:58px;border-radius:16px;background:#087f52;color:#fff;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800}
-.brand h1{font-size:25px}
-.brand p{color:#718079;margin-top:3px;font-size:13px;letter-spacing:2px}
-main{width:100%;max-width:680px;margin:42px auto;padding:0 20px}
-.card{background:#fff;border:1px solid #dce8e3;border-radius:28px;padding:34px;box-shadow:0 12px 40px rgba(0,0,0,.05)}
-.eyebrow{color:#087f52;font-size:13px;font-weight:800;letter-spacing:4px;margin-bottom:18px}
-h2{font-size:42px;line-height:1.05;margin-bottom:15px}
-.intro{color:#6d7c76;font-size:16px;line-height:1.6;margin-bottom:25px}
-.tabs{display:flex;background:#f0f6f3;padding:5px;border-radius:14px;margin-bottom:24px}
-.tab{flex:1;border:0;background:transparent;padding:13px;border-radius:10px;font-size:16px;font-weight:700;color:#60716a;cursor:pointer}
-.tab.active{background:#fff;color:#087f52;box-shadow:0 2px 8px rgba(0,0,0,.06)}
-label{display:block;font-weight:700;margin:16px 0 8px}
-input,select{width:100%;padding:15px;border:1px solid #d5e2dd;border-radius:13px;font-size:16px;outline:none;background:#fff}
-input:focus,select:focus{border-color:#087f52;box-shadow:0 0 0 3px rgba(8,127,82,.10)}
-input:disabled{background:#eef5f1;color:#66766f}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.phone-row{display:grid;grid-template-columns:145px 1fr;gap:10px}
-/* FIX REGISTRATION FIELD LAYOUT 
-  /* REGISTRATION FORM LAYOUT FIX */
-#registerForm{
-  display:flex !important;
-  flex-direction:column !important;
-  align-items:stretch !important;
-  width:100% !important;
+
+body{
+font-family:Arial,sans-serif;
+background:#f3faf7;
+color:#10231d;
+min-height:100vh
 }
 
-#registerForm .step{
-  width:100%;
+header{
+background:#fff;
+border-bottom:1px solid #dce8e3;
+padding:18px 24px;
+display:flex;
+justify-content:space-between;
+align-items:center
 }
 
-#registerForm .row{
-  display:grid !important;
-  grid-template-columns:1fr 1fr !important;
-  gap:14px !important;
-  width:100% !important;
+.brand{
+display:flex;
+align-items:center;
+gap:14px
 }
 
-#registerForm label{
-  display:block !important;
-  width:100% !important;
+.logo{
+width:58px;
+height:58px;
+border-radius:16px;
+background:#087f52;
+color:#fff;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:24px;
+font-weight:800
 }
 
-#registerForm input,
-#registerForm select{
-  display:block !important;
-  width:100% !important;
+.brand h1{
+font-size:25px
 }
 
-#registerForm .phone-row{
-  display:grid !important;
-  grid-template-columns:145px 1fr !important;
-  gap:10px !important;
-  width:100% !important;
+.brand p{
+color:#718079;
+margin-top:3px;
+font-size:13px;
+letter-spacing:2px
 }
 
-#registerForm .password-wrap{
-  position:relative !important;
-  display:block !important;
-  width:100% !important;
+main{
+width:100%;
+max-width:680px;
+margin:42px auto;
+padding:0 20px
 }
 
-#registerForm .password-wrap input{
-  width:100% !important;
+.card{
+background:#fff;
+border:1px solid #dce8e3;
+border-radius:28px;
+padding:34px;
+box-shadow:0 12px 40px rgba(0,0,0,.05)
 }
 
-#registerForm > button{
-  width:100% !important;
-  display:block !important;
+.eyebrow{
+color:#087f52;
+font-size:13px;
+font-weight:800;
+letter-spacing:4px;
+margin-bottom:18px
+}
+
+h2{
+font-size:42px;
+line-height:1.05;
+margin-bottom:15px
+}
+
+.intro{
+color:#6d7c76;
+font-size:16px;
+line-height:1.6;
+margin-bottom:25px
+}
+
+.tabs{
+display:flex;
+background:#f0f6f3;
+padding:5px;
+border-radius:14px;
+margin-bottom:24px
+}
+
+.tab{
+flex:1;
+border:0;
+background:transparent;
+padding:13px;
+border-radius:10px;
+font-size:16px;
+font-weight:700;
+color:#60716a;
+cursor:pointer
+}
+
+.tab.active{
+background:#fff;
+color:#087f52;
+box-shadow:0 2px 8px rgba(0,0,0,.06)
+}
+
+label{
+display:block;
+font-weight:700;
+margin:16px 0 8px
+}
+
+input,select{
+width:100%;
+padding:15px;
+border:1px solid #d5e2dd;
+border-radius:13px;
+font-size:16px;
+outline:none;
+background:#fff
+}
+
+input:focus,select:focus{
+border-color:#087f52;
+box-shadow:0 0 0 3px rgba(8,127,82,.10)
+}
+
+input:disabled{
+background:#eef5f1;
+color:#66766f
+}
+
+.row{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:14px
+}
+
+.phone-row{
+display:grid;
+grid-template-columns:145px 1fr;
+gap:10px
+}
+
+.password-wrap{
+position:relative
+}
+
+.password-wrap input{
+padding-right:54px
+}
+
+.show-pass{
+position:absolute;
+right:7px;
+top:7px;
+height:42px;
+width:42px;
+border:0;
+background:transparent;
+border-radius:10px;
+cursor:pointer;
+font-size:18px
+}
+
+.primary{
+width:100%;
+margin-top:23px;
+border:0;
+background:#087f52;
+color:#fff;
+padding:16px;
+border-radius:14px;
+font-size:17px;
+font-weight:800;
+cursor:pointer
+}
+
+.primary:disabled{
+opacity:.6;
+cursor:not-allowed
+}
+
+.secondary{
+width:100%;
+margin-top:10px;
+border:1px solid #cfe0d9;
+background:#fff;
+color:#087f52;
+padding:14px;
+border-radius:13px;
+font-weight:800;
+cursor:pointer
+}
+
+.message{
+display:none;
+margin-top:17px;
+padding:14px;
+border-radius:12px;
+line-height:1.5;
+font-weight:600
+}
+
+.success{
+display:block;
+background:#e8f8f0;
+color:#087f52
+}
+
+.error{
+display:block;
+background:#fff0f0;
+color:#b42318
+}
+
+.info{
+display:block;
+background:#eef6ff;
+color:#15558a
+}
+
+.small{
+text-align:center;
+color:#74827c;
+margin-top:20px;
+line-height:1.5;
+font-size:14px
+}
+
+.link{
+color:#087f52;
+font-weight:800;
+text-decoration:none;
+cursor:pointer
+}
+
+.hidden{
+display:none!important
+}
+
+#registerForm.hidden,#loginForm.hidden{
+display:none!important
+}
+
+.invitation-box{
+display:none;
+margin-bottom:22px;
+padding:18px;
+border-radius:18px;
+background:#e8f8f0;
+border:1px solid #b9e3cf
+}
+
+.invitation-box.show{
+display:block
+}
+
+.invitation-title{
+color:#087f52;
+font-size:17px;
+font-weight:800;
+margin-bottom:9px
+}
+
+.invitation-code{
+margin-top:10px;
+padding:11px;
+border-radius:12px;
+background:#fff;
+border:1px dashed #087f52;
+text-align:center;
+font-size:21px;
+font-weight:800;
+letter-spacing:3px;
+color:#087f52
+}
+
+.invitation-note{
+margin-top:10px;
+color:#49635a;
+line-height:1.5
+}
+
+.invalid-invitation{
+display:none;
+margin-bottom:18px;
+padding:15px;
+border-radius:13px;
+background:#fff0f0;
+color:#b42318;
+font-weight:700;
+line-height:1.5
+}
+
+.step{
+display:flex;
+gap:8px;
+margin:0 0 20px
+}
+
+.step span{
+flex:1;
+text-align:center;
+padding:8px 5px;
+border-radius:10px;
+background:#edf4f0;
+color:#66766f;
+font-size:12px;
+font-weight:800
+}
+
+.step span.active{
+background:#087f52;
+color:#fff
+}
+
+.otp-box{
+background:#f4faf7;
+border:1px solid #d8e8e0;
+border-radius:17px;
+padding:20px;
+margin-top:18px
+}
+
+.otp-input{
+text-align:center;
+letter-spacing:8px;
+font-size:25px;
+font-weight:800
+}
+
+.notice{
+background:#fff9e8;
+border:1px solid #f1df9b;
+color:#735b00;
+padding:13px;
+border-radius:12px;
+line-height:1.5;
+font-size:14px;
+margin-top:14px
+}
+
+.resend-box{
+margin-top:18px;
+padding:18px;
+border-radius:17px;
+background:#f4faf7;
+border:1px solid #d8e8e0
+}
+
+.resend-box h3{
+margin-bottom:7px
+}
+
+.resend-box p{
+color:#6d7c76;
+line-height:1.5;
+font-size:14px
+}
+
+.resend-box .primary{
+margin-top:14px
+}
+
+footer{
+text-align:center;
+color:#84918c;
+padding:25px;
+font-size:13px
 }
 
 @media(max-width:600px){
-  #registerForm .row{
-    grid-template-columns:1fr !important;
-  }
 
-  #registerForm .phone-row{
-    grid-template-columns:125px 1fr !important;
-  }
+header{
+padding:14px
 }
-  .password-wrap{position:relative}
-.password-wrap input{padding-right:54px}
-.show-pass{position:absolute;right:7px;top:7px;height:42px;width:42px;border:0;background:transparent;border-radius:10px;cursor:pointer;font-size:18px}
-.primary{width:100%;margin-top:23px;border:0;background:#087f52;color:#fff;padding:16px;border-radius:14px;font-size:17px;font-weight:800;cursor:pointer}
-.primary:disabled{opacity:.6;cursor:not-allowed}
-.secondary{width:100%;margin-top:10px;border:1px solid #cfe0d9;background:#fff;color:#087f52;padding:14px;border-radius:13px;font-weight:800;cursor:pointer}
-.message{display:none;margin-top:17px;padding:14px;border-radius:12px;line-height:1.5;font-weight:600}
-.success{display:block;background:#e8f8f0;color:#087f52}
-.error{display:block;background:#fff0f0;color:#b42318}
-.info{display:block;background:#eef6ff;color:#15558a}
-.small{text-align:center;color:#74827c;margin-top:20px;line-height:1.5;font-size:14px}
-.link{color:#087f52;font-weight:800;text-decoration:none;cursor:pointer}
-.hidden{display:none!important}
-#registerForm.hidden,#loginForm.hidden{display:none!important}
-.invitation-box{display:none;margin-bottom:22px;padding:18px;border-radius:18px;background:#e8f8f0;border:1px solid #b9e3cf}
-.invitation-box.show{display:block}
-.invitation-title{color:#087f52;font-size:17px;font-weight:800;margin-bottom:9px}
-.invitation-code{margin-top:10px;padding:11px;border-radius:12px;background:#fff;border:1px dashed #087f52;text-align:center;font-size:21px;font-weight:800;letter-spacing:3px;color:#087f52}
-.invitation-note{margin-top:10px;color:#49635a;line-height:1.5}
-.invalid-invitation{display:none;margin-bottom:18px;padding:15px;border-radius:13px;background:#fff0f0;color:#b42318;font-weight:700;line-height:1.5}
-.step{display:flex;gap:8px;margin:0 0 20px}
-.step span{flex:1;text-align:center;padding:8px 5px;border-radius:10px;background:#edf4f0;color:#66766f;font-size:12px;font-weight:800}
-.step span.active{background:#087f52;color:#fff}
-.otp-box{background:#f4faf7;border:1px solid #d8e8e0;border-radius:17px;padding:20px;margin-top:18px}
-.otp-input{text-align:center;letter-spacing:8px;font-size:25px;font-weight:800}
-.notice{background:#fff9e8;border:1px solid #f1df9b;color:#735b00;padding:13px;border-radius:12px;line-height:1.5;font-size:14px;margin-top:14px}
-.resend-box{margin-top:18px;padding:18px;border-radius:17px;background:#f4faf7;border:1px solid #d8e8e0}
-.resend-box h3{margin-bottom:7px}
-.resend-box p{color:#6d7c76;line-height:1.5;font-size:14px}
-.resend-box .primary{margin-top:14px}
-footer{text-align:center;color:#84918c;padding:25px;font-size:13px}
 
-@media(max-width:600px){
-header{padding:14px}
-.brand h1{font-size:20px}
-.brand p{font-size:9px}
-.logo{width:48px;height:48px;font-size:20px}
-main{margin:25px auto}
-.card{padding:24px 19px;border-radius:22px}
-h2{font-size:34px}
-.row{grid-template-columns:1fr}
-.phone-row{grid-template-columns:125px 1fr}
+.brand h1{
+font-size:20px
 }
-</style></head><body><header>
-  <div class="brand">
-    <div class="logo">AG</div>
-    <div>
-      <h1>AGULIBRARY</h1>
-      <p>LEARN • READ • WATCH • GROW</p>
-    </div>
-  </div>
-</header><main>
-<section class="card"><div class="eyebrow">STUDENT ACCOUNT</div><h2 id="title">Welcome to AGULIBRARY</h2><p class="intro" id="intro">
+
+.brand p{
+font-size:9px
+}
+
+.logo{
+width:48px;
+height:48px;
+font-size:20px
+}
+
+main{
+margin:25px auto
+}
+
+.card{
+padding:24px 19px;
+border-radius:22px
+}
+
+h2{
+font-size:34px
+}
+
+.row{
+grid-template-columns:1fr
+}
+
+.phone-row{
+grid-template-columns:125px 1fr
+}
+
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+<div class="brand">
+
+<div class="logo">AG</div>
+
+<div>
+
+<h1>AGULIBRARY</h1>
+
+<p>LEARN • READ • WATCH • GROW</p>
+
+</div>
+
+</div>
+
+</header>
+
+
+<main>
+
+<section class="card">
+
+<div class="eyebrow">STUDENT ACCOUNT</div>
+
+<h2 id="title">Welcome to AGULIBRARY</h2>
+
+<p class="intro" id="intro">
 Create your student account and begin learning with AGULIBRARY.
-</p><div id="invitationBox" class="invitation-box">
-  <div class="invitation-title">🎟️ You have been invited to AGULIBRARY</div>
-  <div>Your invitation code:</div>
-  <div id="invitationCode" class="invitation-code"></div>
-  <div id="invitationNote" class="invitation-note"></div>
-</div><div id="invalidInvitation" class="invalid-invitation">
+</p>
+
+
+<div id="invitationBox" class="invitation-box">
+
+<div class="invitation-title">
+🎟️ You have been invited to AGULIBRARY
+</div>
+
+<div>Your invitation code:</div>
+
+<div id="invitationCode" class="invitation-code"></div>
+
+<div id="invitationNote" class="invitation-note"></div>
+
+</div>
+
+
+<div id="invalidInvitation" class="invalid-invitation">
+
 ❌ This invitation is invalid, expired, or has already been used.
-</div><div class="tabs">
-  <button class="tab" id="registerTab" type="button">Create Account</button>
-  <button class="tab active" id="loginTab" type="button">Sign In</button>
-</div><!-- REGISTRATION --><form id="registerForm" class="hidden"><div class="step" id="regSteps">
-  <span class="active">1. Details</span>
-  <span>2. Phone OTP</span>
-  <span>3. Email</span>
-</div><div class="row"><div>
-<label for="firstName">First name</label>
-<input id="firstName" type="text" autocomplete="given-name" required>
-</div><div>
-<label for="lastName">Last name</label>
-<input id="lastName" type="text" autocomplete="family-name" required>
-</div></div><label for="middleName">
+
+</div>
+
+
+<div class="tabs">
+
+<button
+class="tab"
+id="registerTab"
+type="button"
+>
+Create Account
+</button>
+
+<button
+class="tab active"
+id="loginTab"
+type="button"
+>
+Sign In
+</button>
+
+</div>
+
+
+<!-- REGISTRATION -->
+
+<form id="registerForm" class="hidden">
+
+<div class="step" id="regSteps">
+
+<span class="active">1. Details</span>
+
+<span>2. Phone OTP</span>
+
+<span>3. Email</span>
+
+</div>
+
+
+<div class="row">
+
+<div>
+
+<label for="firstName">
+First name
+</label>
+
+<input
+id="firstName"
+type="text"
+autocomplete="given-name"
+required
+>
+
+</div>
+
+
+<div>
+
+<label for="lastName">
+Last name
+</label>
+
+<input
+id="lastName"
+type="text"
+autocomplete="family-name"
+required
+>
+
+</div>
+
+</div>
+
+
+<label for="middleName">
+
 Middle name
-<span style="color:#82918b;font-weight:400">(optional)</span>
-</label><input id="middleName" type="text" autocomplete="additional-name"><label for="dateOfBirth">Date of Birth</label>
+
+<span style="color:#82918b;font-weight:400">
+(optional)
+</span>
+
+</label>
+
+<input
+id="middleName"
+type="text"
+autocomplete="additional-name"
+>
+
+
+<label for="dateOfBirth">
+Date of Birth
+</label>
 
 <input
 id="dateOfBirth"
 type="date"
 autocomplete="bday"
 required
+>
 
-«»
 
-<!-- GENDER ADDED --><label for="gender">Gender</label>
+<!-- GENDER -->
 
-<select id="gender" autocomplete="sex" required>
-<option value="" selected disabled>Select gender</option>
-<option value="Male">Male</option>
-<option value="Female">Female</option>
-</select><label for="registerPhone">Phone number</label>
+<label for="gender">
+Gender
+</label>
 
-<div class="phone-row"><select id="countryCode" aria-label="Country code"></select>
+<select
+id="gender"
+autocomplete="sex"
+required
+>
+
+<option
+value=""
+selected
+disabled
+>
+Select gender
+</option>
+
+<option value="Male">
+Male
+</option>
+
+<option value="Female">
+Female
+</option>
+
+</select>
+
+
+<label for="registerPhone">
+Phone number
+</label>
+
+<div class="phone-row">
+
+<select
+id="countryCode"
+aria-label="Country code"
+></select>
 
 <input
 id="registerPhone"
@@ -193,87 +640,137 @@ inputmode="tel"
 placeholder="8012345678"
 autocomplete="tel"
 required
+>
 
-«»
+</div>
 
-</div><label for="registerEmail">Email address</label>
+
+<label for="registerEmail">
+Email address
+</label>
 
 <input
 id="registerEmail"
 type="email"
 autocomplete="email"
 required
+>
 
-«»
 
 <label for="registerInvitationCode">
+
 Invitation code
-<span style="color:#82918b;font-weight:400">(optional)</span>
-</label><input
+
+<span style="color:#82918b;font-weight:400">
+(optional)
+</span>
+
+</label>
+
+<input
 id="registerInvitationCode"
 type="text"
 autocomplete="off"
 placeholder="Enter invitation code if you have one"
+>
 
-«»
 
-<label for="registerPassword">Password</label>
+<label for="registerPassword">
+Password
+</label>
 
-<div class="password-wrap"><input
+<div class="password-wrap">
+
+<input
 id="registerPassword"
 type="password"
 autocomplete="new-password"
 minlength="6"
 required
-
-«»
+>
 
 <button
 class="show-pass"
 type="button"
 data-target="registerPassword"
+>
+👁
+</button>
 
-«👁</button>»
+</div>
 
-</div><label for="confirmPassword">Confirmation password</label>
 
-<div class="password-wrap"><input
+<label for="confirmPassword">
+Confirmation password
+</label>
+
+<div class="password-wrap">
+
+<input
 id="confirmPassword"
 type="password"
 autocomplete="new-password"
 minlength="6"
 required
-
-«»
+>
 
 <button
 class="show-pass"
 type="button"
 data-target="confirmPassword"
+>
+👁
+</button>
 
-«👁</button>»
+</div>
 
-</div><button
+
+<button
 class="primary"
 type="submit"
 id="registerButton"
-
-«»
-
+>
 Sign Up
 </button>
 
-</form><!-- PHONE OTP --><section id="otpSection" class="hidden"><div class="step">
+</form>
+
+
+<!-- PHONE OTP -->
+
+<section id="otpSection" class="hidden">
+
+<div class="step">
+
 <span>✓ Details</span>
-<span class="active">2. Phone OTP</span>
+
+<span class="active">
+2. Phone OTP
+</span>
+
 <span>3. Email</span>
-</div><div class="otp-box"><h3>Confirm your phone number</h3><p
+
+</div>
+
+
+<div class="otp-box">
+
+<h3>
+Confirm your phone number
+</h3>
+
+<p
 id="otpText"
 class="intro"
 style="font-size:14px;margin:8px 0 0"
 >
 Enter the 6-digit code sent to your phone.
-</p><label for="otpCode">OTP code</label>
+</p>
+
+
+<label for="otpCode">
+OTP code
+</label>
 
 <input
 id="otpCode"
@@ -283,251 +780,361 @@ inputmode="numeric"
 maxlength="6"
 autocomplete="one-time-code"
 placeholder="000000"
+>
 
-«»
 
 <button
 class="primary"
 type="button"
 id="verifyOtpButton"
-
-«»
-
+>
 Confirm Phone Number
 </button>
+
 
 <button
 class="secondary"
 type="button"
 id="resendOtpButton"
-
-«»
-
+>
 Resend OTP
 </button>
 
-</div><div class="notice">
+</div>
+
+
+<div class="notice">
+
 After your phone is confirmed, AGULIBRARY will ask you to confirm
 your email address. Please complete the email confirmation before
 signing in.
-</div></section><!-- EMAIL CONFIRMATION --><section id="emailConfirmSection" class="hidden"><div class="step">
+
+</div>
+
+</section>
+
+
+<!-- EMAIL CONFIRMATION -->
+
+<section id="emailConfirmSection" class="hidden">
+
+<div class="step">
+
 <span>✓ Details</span>
+
 <span>✓ Phone OTP</span>
-<span class="active">3. Email</span>
-</div><div class="otp-box"><h3>Confirm your email address</h3><p
+
+<span class="active">
+3. Email
+</span>
+
+</div>
+
+
+<div class="otp-box">
+
+<h3>
+Confirm your email address
+</h3>
+
+<p
 id="emailConfirmText"
 class="intro"
 style="font-size:14px;margin:8px 0 0"
 >
 Your phone number has been confirmed successfully.
-</p><button
+</p>
+
+
+<button
 class="primary"
 type="button"
 id="backToLoginButton"
-
-«»
-
+>
 Go to Sign In
 </button>
+
 
 <button
 class="secondary"
 type="button"
 id="resendEmailButton"
-
-«»
-
+>
 Resend Email Confirmation
 </button>
 
-</div></section><!-- LOGIN --><form id="loginForm"><label for="loginEmail">Email address</label>
+</div>
+
+</section>
+
+
+<!-- LOGIN -->
+
+<form id="loginForm">
+
+<label for="loginEmail">
+Email address
+</label>
 
 <input
 id="loginEmail"
 type="email"
 autocomplete="email"
 required
+>
 
-«»
 
-<label for="loginPassword">Password</label>
+<label for="loginPassword">
+Password
+</label>
 
-<div class="password-wrap"><input
+<div class="password-wrap">
+
+<input
 id="loginPassword"
 type="password"
 autocomplete="current-password"
 required
-
-«»
+>
 
 <button
 class="show-pass"
 type="button"
 data-target="loginPassword"
-
-«»
-
+>
 👁
 </button>
 
-</div><div style="text-align:right;margin-top:10px"><a
+</div>
+
+
+<div style="text-align:right;margin-top:10px">
+
+<a
 class="link"
 id="forgotPasswordLink"
-
-«»
-
+>
 Forgot password?
 </a>
 
-</div><button
+</div>
+
+
+<button
 class="primary"
 type="submit"
 id="loginButton"
-
-«»
-
+>
 Sign In to AGULIBRARY
 </button>
+
 
 <button
 class="secondary"
 type="button"
 id="switchAccountButton"
-
-«»
-
+>
 Switch Account
 </button>
 
-<!-- RESEND CONFIRMATION --><div
+
+<!-- RESEND CONFIRMATION -->
+
+<div
 id="unconfirmedEmailBox"
 class="resend-box hidden"
-><h3>Didn't receive the confirmation email?</h3><p>
+>
+
+<h3>
+Didn't receive the confirmation email?
+</h3>
+
+<p>
+
 Enter your registered email address below and AGULIBRARY
 will send the confirmation link again.
-</p><label for="unconfirmedEmail">
+
+</p>
+
+
+<label for="unconfirmedEmail">
 Registered email address
-</label><input
+</label>
+
+<input
 id="unconfirmedEmail"
 type="email"
 autocomplete="email"
 placeholder="you@example.com"
+>
 
-«»
 
 <button
 class="primary"
 type="button"
 id="resendUnconfirmedEmailButton"
-
-«»
-
+>
 Resend Confirmation Link
 </button>
 
-</div></form><!-- FORGOT PASSWORD --><section id="forgotSection" class="hidden"><h3>Reset your password</h3><p
+</div>
+
+</form>
+
+
+<!-- FORGOT PASSWORD -->
+
+<section id="forgotSection" class="hidden">
+
+<h3>
+Reset your password
+</h3>
+
+<p
 class="intro"
 style="font-size:14px;margin-top:8px"
 >
+
 Enter the email address on your AGULIBRARY account.
 We will send a secure password-reset link.
-</p><label for="forgotEmail">Email address</label>
+
+</p>
+
+
+<label for="forgotEmail">
+Email address
+</label>
 
 <input
 id="forgotEmail"
 type="email"
 autocomplete="email"
 required
+>
 
-«»
 
 <button
 class="primary"
 type="button"
 id="sendResetButton"
-
-«»
-
+>
 Send Reset Link
 </button>
+
 
 <button
 class="secondary"
 type="button"
 id="backLoginFromForgot"
-
-«»
-
+>
 Back to Sign In
 </button>
 
-</section><!-- UPDATE PASSWORD --><section id="updatePasswordSection" class="hidden"><h3>Choose a new password</h3><label for="newPassword">New password</label>
+</section>
 
-<div class="password-wrap"><input
+
+<!-- UPDATE PASSWORD AFTER RECOVERY -->
+
+<section id="updatePasswordSection" class="hidden">
+
+<h3>
+Choose a new password
+</h3>
+
+
+<label for="newPassword">
+New password
+</label>
+
+<div class="password-wrap">
+
+<input
 id="newPassword"
 type="password"
 minlength="6"
 autocomplete="new-password"
-
-«»
+>
 
 <button
 class="show-pass"
 type="button"
 data-target="newPassword"
-
-«»
-
+>
 👁
 </button>
 
-</div><label for="newPassword2">Confirm new password</label>
+</div>
 
-<div class="password-wrap"><input
+
+<label for="newPassword2">
+Confirm new password
+</label>
+
+<div class="password-wrap">
+
+<input
 id="newPassword2"
 type="password"
 minlength="6"
 autocomplete="new-password"
-
-«»
+>
 
 <button
 class="show-pass"
 type="button"
 data-target="newPassword2"
-
-«»
-
+>
 👁
 </button>
 
-</div><button
+</div>
+
+
+<button
 class="primary"
 type="button"
 id="updatePasswordButton"
-
-«»
-
+>
 Update Password
 </button>
 
-</section><div id="message" class="message"></div><p class="small">
+</section>
+
+
+<div id="message" class="message"></div>
+
+
+<p class="small">
+
 By creating an account, you agree to use AGULIBRARY responsibly
 for educational purposes.
-</p></section>
-</main><footer>
+
+</p>
+
+</section>
+
+</main>
+
+
+<footer>
+
 © AGULIBRARY — Learn • Read • Watch • Grow
-</footer><script>
+
+</footer>
+
+
+<script>
 
 /* =========================================================
 AGULIBRARY — STUDENT AUTHENTICATION
 
 Preserved:
+
 First name / last name / optional middle name
 Country code + phone
 SMS OTP only
 Date of birth
-Gender: Male / Female
+Gender
 Email confirmation after phone verification
 Forgot password
 Password show/hide
@@ -536,13 +1143,25 @@ Optional invitation code
 Resend email confirmation
 Remembered email
 Switch Account
+
+Successful login authorization handoff to index.html
 ========================================================= */
+
 
 const config = window.AGU_CONFIG;
 
-if(!config || !config.supabaseUrl || !config.supabaseAnonKey){
-throw new Error("AGU_CONFIG is missing. Check config.js.");
+if(
+!config ||
+!config.supabaseUrl ||
+!config.supabaseAnonKey
+){
+
+throw new Error(
+"AGU_CONFIG is missing. Check config.js."
+);
+
 }
+
 
 const supabaseClient =
 window.supabase.createClient(
@@ -550,25 +1169,49 @@ config.supabaseUrl,
 config.supabaseAnonKey
 );
 
-const $ = id => document.getElementById(id);
 
-const registerTab = $('registerTab');
-const loginTab = $('loginTab');
+const $ =
+id => document.getElementById(id);
 
-const registerForm = $('registerForm');
-const loginForm = $('loginForm');
 
-const title = $('title');
-const intro = $('intro');
-const message = $('message');
+const registerTab =
+$('registerTab');
 
-const invitationBox = $('invitationBox');
-const invitationCode = $('invitationCode');
-const invitationNote = $('invitationNote');
-const invalidInvitation = $('invalidInvitation');
+const loginTab =
+$('loginTab');
 
-const registerButton = $('registerButton');
-const otpSection = $('otpSection');
+const registerForm =
+$('registerForm');
+
+const loginForm =
+$('loginForm');
+
+const title =
+$('title');
+
+const intro =
+$('intro');
+
+const message =
+$('message');
+
+const invitationBox =
+$('invitationBox');
+
+const invitationCode =
+$('invitationCode');
+
+const invitationNote =
+$('invitationNote');
+
+const invalidInvitation =
+$('invalidInvitation');
+
+const registerButton =
+$('registerButton');
+
+const otpSection =
+$('otpSection');
 
 const emailConfirmSection =
 $('emailConfirmSection');
@@ -582,9 +1225,13 @@ $('updatePasswordSection');
 const unconfirmedEmailBox =
 $('unconfirmedEmailBox');
 
+
 let invitationCodeValue = '';
+
 let invitationData = null;
+
 let pendingRegistration = null;
+
 
 const REMEMBERED_EMAIL_KEY =
 'AGU_REMEMBERED_LOGIN_EMAIL';
@@ -597,6 +1244,7 @@ const JUST_LOGGED_IN_KEY =
 
 const AUTHORIZED_ENTRY_KEY =
 'AGU_AUTHORIZED_ENTRY_KEY';
+
 
 /* ---------- Country codes ---------- */
 
@@ -688,24 +1336,36 @@ const countries = [
 
 ];
 
-countries.forEach(([code,name]) => {
+
+countries.forEach(
+([code,name]) => {
 
 const o =
 document.createElement('option');
 
-o.value = code;
+o.value =
+code;
 
-/* Show only country calling code */
-o.textContent = code;
+/*
+Requested behavior:
+show ONLY the country calling code.
+*/
+
+o.textContent =
+code;
 
 if(code === '+234'){
-o.selected = true;
+
+o.selected =
+true;
+
 }
 
 $('countryCode')
 .appendChild(o);
 
 });
+
 
 /* ---------- Helpers ---------- */
 
@@ -714,21 +1374,25 @@ text,
 type='info'
 ){
 
-message.textContent = text;
+message.textContent =
+text;
 
 message.className =
 'message ' + type;
 
 }
 
+
 function clearMessage(){
 
-message.textContent = '';
+message.textContent =
+'';
 
 message.className =
 'message';
 
 }
+
 
 function fullPhone(){
 
@@ -741,12 +1405,33 @@ const code =
 $('countryCode').value;
 
 if(raw.startsWith('0')){
-raw = raw.slice(1);
+
+raw =
+raw.slice(1);
+
 }
 
 return code + raw;
 
 }
+
+
+function fullName(){
+
+return [
+
+$('firstName').value.trim(),
+
+$('middleName').value.trim(),
+
+$('lastName').value.trim()
+
+]
+.filter(Boolean)
+.join(' ');
+
+}
+
 
 function setRegisterVisible(show){
 
@@ -755,58 +1440,109 @@ registerForm.classList.toggle(
 !show
 );
 
-loginForm.classList.add('hidden');
-otpSection.classList.add('hidden');
-emailConfirmSection.classList.add('hidden');
-forgotSection.classList.add('hidden');
-updatePasswordSection.classList.add('hidden');
-unconfirmedEmailBox.classList.add('hidden');
+loginForm.classList.add(
+'hidden'
+);
 
-}
+otpSection.classList.add(
+'hidden'
+);
 
-function setLoginVisible(){
+emailConfirmSection.classList.add(
+'hidden'
+);
 
-registerForm.classList.add('hidden');
-otpSection.classList.add('hidden');
-emailConfirmSection.classList.add('hidden');
-forgotSection.classList.add('hidden');
-updatePasswordSection.classList.add('hidden');
+forgotSection.classList.add(
+'hidden'
+);
 
-loginForm.classList.remove('hidden');
+updatePasswordSection.classList.add(
+'hidden'
+);
 
 unconfirmedEmailBox.classList.add(
 'hidden'
 );
+
+}
+
+
+function setLoginVisible(){
+
+registerForm.classList.add(
+'hidden'
+);
+
+otpSection.classList.add(
+'hidden'
+);
+
+emailConfirmSection.classList.add(
+'hidden'
+);
+
+forgotSection.classList.add(
+'hidden'
+);
+
+updatePasswordSection.classList.add(
+'hidden'
+);
+
+loginForm.classList.remove(
+'hidden'
+);
+
+unconfirmedEmailBox.classList.add(
+'hidden'
+);
+
 
 const remembered =
 localStorage.getItem(
 REMEMBERED_EMAIL_KEY
 ) || '';
 
+
 const fullRequired =
 localStorage.getItem(
 REQUIRE_FULL_LOGIN_KEY
 ) === '1'
-|| !remembered;
+||
+!remembered;
+
 
 const emailInput =
 $('loginEmail');
 
+
 const emailLabel =
 emailInput.previousElementSibling;
+
 
 const switchButton =
 $('switchAccountButton');
 
+
 if(fullRequired){
 
-emailInput.disabled = false;
-emailInput.value = '';
-emailInput.required = true;
-emailInput.style.display = 'block';
+emailInput.disabled =
+false;
+
+emailInput.value =
+'';
+
+emailInput.required =
+true;
+
+emailInput.style.display =
+'block';
 
 if(emailLabel){
-emailLabel.style.display = 'block';
+
+emailLabel.style.display =
+'block';
+
 }
 
 switchButton.classList.remove(
@@ -821,13 +1557,23 @@ intro.textContent =
 
 }else{
 
-emailInput.disabled = true;
-emailInput.value = remembered;
-emailInput.required = false;
-emailInput.style.display = 'none';
+emailInput.disabled =
+true;
+
+emailInput.value =
+remembered;
+
+emailInput.required =
+false;
+
+emailInput.style.display =
+'none';
 
 if(emailLabel){
-emailLabel.style.display = 'none';
+
+emailLabel.style.display =
+'none';
+
 }
 
 switchButton.classList.remove(
@@ -844,10 +1590,16 @@ intro.textContent =
 
 }
 
+
 function showForgot(){
 
-registerForm.classList.add('hidden');
-loginForm.classList.add('hidden');
+registerForm.classList.add(
+'hidden'
+);
+
+loginForm.classList.add(
+'hidden'
+);
 
 forgotSection.classList.remove(
 'hidden'
@@ -867,6 +1619,7 @@ clearMessage();
 
 }
 
+
 function togglePassword(button){
 
 const input =
@@ -884,28 +1637,36 @@ input.type === 'password'
 
 }
 
+
 document
 .querySelectorAll('.show-pass')
-.forEach(button => {
+.forEach(
+button => {
 
 button.addEventListener(
 'click',
-() => togglePassword(button)
+() =>
+togglePassword(button)
 );
 
-});
+}
+);
+
 
 /* ---------- Invitation ---------- */
 
 function getInvitationCode(){
 
 return (
+
 new URLSearchParams(
 location.search
 ).get('invite') || ''
+
 ).trim();
 
 }
+
 
 async function checkInvitation(){
 
@@ -913,8 +1674,11 @@ invitationCodeValue =
 getInvitationCode();
 
 if(!invitationCodeValue){
+
 return;
+
 }
+
 
 try{
 
@@ -930,9 +1694,13 @@ invitationCodeValue
 }
 );
 
+
 if(error){
+
 throw error;
+
 }
+
 
 if(
 !data?.length ||
@@ -945,25 +1713,32 @@ return;
 
 }
 
+
 invitationData =
 data[0];
+
 
 invitationBox.classList.add(
 'show'
 );
 
+
 invitationCode.textContent =
 invitationData.code;
+
 
 invitationNote.textContent =
 invitationData.note
 ||
 'You have been invited to join AGULIBRARY.';
 
-$('registerInvitationCode').value =
+
+$('registerInvitationCode')
+.value =
 invitationData.code
 ||
 invitationCodeValue;
+
 
 if(invitationData.student_name){
 
@@ -974,16 +1749,20 @@ invitationData.student_name
 .trim()
 .split(/\s+/);
 
+
 $('firstName').value =
 parts.shift() || '';
 
+
 $('lastName').value =
 parts.pop() || '';
+
 
 $('middleName').value =
 parts.join(' ');
 
 }
+
 
 if(invitationData.student_email){
 
@@ -992,11 +1771,14 @@ invitationData.student_email;
 
 }
 
+
 title.textContent =
 "You're Invited";
 
+
 intro.textContent =
 'Create your AGULIBRARY student account using this invitation.';
+
 
 }catch(e){
 
@@ -1010,6 +1792,7 @@ showInvalidInvitation();
 }
 
 }
+
 
 function showInvalidInvitation(){
 
@@ -1035,6 +1818,7 @@ showMessage(
 );
 
 }
+
 
 /* ---------- Tabs ---------- */
 
@@ -1075,6 +1859,7 @@ invitationData
 }
 );
 
+
 loginTab.addEventListener(
 'click',
 () => {
@@ -1094,6 +1879,7 @@ setLoginVisible();
 }
 );
 
+
 /* ---------- Register ---------- */
 
 registerForm.addEventListener(
@@ -1104,30 +1890,37 @@ e.preventDefault();
 
 clearMessage();
 
+
 const first =
 $('firstName')
 .value
 .trim();
+
 
 const last =
 $('lastName')
 .value
 .trim();
 
+
 const middle =
 $('middleName')
 .value
 .trim();
+
 
 const dob =
 $('dateOfBirth')
 .value
 .trim();
 
-/* GENDER */
+
+/* NEW: Gender */
+
 const gender =
 $('gender')
 .value;
+
 
 const email =
 $('registerEmail')
@@ -1135,21 +1928,26 @@ $('registerEmail')
 .trim()
 .toLowerCase();
 
+
 const phone =
 fullPhone();
+
 
 const password =
 $('registerPassword')
 .value;
 
+
 const confirm =
 $('confirmPassword')
 .value;
+
 
 const manualInvitationCode =
 $('registerInvitationCode')
 .value
 .trim();
+
 
 if(!first || !last){
 
@@ -1162,6 +1960,7 @@ return;
 
 }
 
+
 if(!dob){
 
 showMessage(
@@ -1172,6 +1971,9 @@ showMessage(
 return;
 
 }
+
+
+/* NEW: Gender validation */
 
 if(!gender){
 
@@ -1184,6 +1986,7 @@ return;
 
 }
 
+
 if(password !== confirm){
 
 showMessage(
@@ -1194,6 +1997,7 @@ showMessage(
 return;
 
 }
+
 
 if(password.length < 6){
 
@@ -1206,6 +2010,7 @@ return;
 
 }
 
+
 if(phone.length < 8){
 
 showMessage(
@@ -1217,15 +2022,19 @@ return;
 
 }
 
+
 registerButton.disabled =
 true;
 
 registerButton.textContent =
 'Creating account...';
 
+
 try{
 
-/* Invitation is OPTIONAL */
+/*
+Invitation is OPTIONAL.
+*/
 
 if(
 !invitationData &&
@@ -1244,9 +2053,13 @@ manualInvitationCode
 }
 );
 
+
 if(error){
+
 throw error;
+
 }
+
 
 if(
 !data?.length ||
@@ -1259,13 +2072,16 @@ throw new Error(
 
 }
 
+
 invitationData =
 data[0];
+
 
 invitationCodeValue =
 invitationData.code
 ||
 manualInvitationCode;
+
 
 }else if(invitationData){
 
@@ -1276,12 +2092,14 @@ invitationCodeValue
 ||
 manualInvitationCode;
 
+
 }else{
 
 invitationCodeValue =
 '';
 
 }
+
 
 if(
 invitationData?.student_email &&
@@ -1297,7 +2115,12 @@ throw new Error(
 
 }
 
-/* Pending registration */
+
+/*
+Pending registration.
+
+Gender is preserved here.
+*/
 
 pendingRegistration = {
 
@@ -1315,7 +2138,12 @@ invitationCodeValue
 
 };
 
-/* Phone-first signup */
+
+/*
+Phone-first signup is intentional.
+Supabase phone OTP verification is
+a separate phone-auth flow.
+*/
 
 const {
 data,
@@ -1333,20 +2161,29 @@ channel:'sms',
 
 data:{
 
-first_name:first,
+first_name:
+first,
 
-last_name:last,
+last_name:
+last,
 
-middle_name:middle,
+middle_name:
+middle,
 
-date_of_birth:dob,
+date_of_birth:
+dob,
 
-gender:gender,
+/* NEW: Gender metadata */
+
+gender:
+gender,
 
 full_name:[
+
 first,
 middle,
 last
+
 ]
 .filter(Boolean)
 .join(' '),
@@ -1365,9 +2202,13 @@ invitationCodeValue
 
 });
 
+
 if(error){
+
 throw error;
+
 }
+
 
 if(!data?.user){
 
@@ -1377,15 +2218,23 @@ throw new Error(
 
 }
 
+
+/*
+A newly registered student must make
+a fresh full login next time.
+*/
+
 localStorage.setItem(
 REQUIRE_FULL_LOGIN_KEY,
 '1'
 );
 
+
 localStorage.setItem(
 REMEMBERED_EMAIL_KEY,
 email
 );
+
 
 localStorage.setItem(
 'AGU_PENDING_REGISTRATION',
@@ -1394,23 +2243,29 @@ pendingRegistration
 )
 );
 
+
 $('registerForm')
 .classList
 .add('hidden');
+
 
 $('otpSection')
 .classList
 .remove('hidden');
 
+
 $('otpText').textContent =
 `Enter the 6-digit SMS code sent to ${phone}.`;
 
+
 $('otpCode').focus();
+
 
 showMessage(
 'Your account has been created. Confirm your phone number with the OTP.',
 'success'
 );
+
 
 }catch(error){
 
@@ -1419,14 +2274,17 @@ console.error(
 error
 );
 
+
 showMessage(
 error.message ||
 'Unable to create your student account.',
 'error'
 );
 
+
 pendingRegistration =
 null;
+
 
 }finally{
 
@@ -1441,6 +2299,7 @@ registerButton.textContent =
 }
 );
 
+
 /* ---------- Verify phone OTP ---------- */
 
 $('verifyOtpButton').addEventListener(
@@ -1449,11 +2308,13 @@ async () => {
 
 clearMessage();
 
+
 const token =
 $('otpCode')
 .value
 .trim()
 .replace(/\D/g,'');
+
 
 const saved =
 JSON.parse(
@@ -1461,6 +2322,7 @@ localStorage.getItem(
 'AGU_PENDING_REGISTRATION'
 ) || 'null'
 );
+
 
 if(!saved){
 
@@ -1473,6 +2335,7 @@ return;
 
 }
 
+
 if(token.length !== 6){
 
 showMessage(
@@ -1484,14 +2347,17 @@ return;
 
 }
 
+
 const btn =
 $('verifyOtpButton');
+
 
 btn.disabled =
 true;
 
 btn.textContent =
 'Confirming...';
+
 
 try{
 
@@ -1510,9 +2376,13 @@ type:'sms'
 
 });
 
+
 if(error){
+
 throw error;
+
 }
+
 
 if(!data?.user){
 
@@ -1522,7 +2392,10 @@ throw new Error(
 
 }
 
-/* Add email and registration data */
+
+/*
+Add email to authenticated phone account.
+*/
 
 const {
 error:emailError
@@ -1546,13 +2419,17 @@ saved.middle,
 date_of_birth:
 saved.dob,
 
+/* NEW: Gender metadata */
+
 gender:
 saved.gender,
 
 full_name:[
+
 saved.first,
 saved.middle,
 saved.last
+
 ]
 .filter(Boolean)
 .join(' '),
@@ -1569,16 +2446,18 @@ new Date().toISOString()
 
 });
 
+
 if(emailError){
+
 throw emailError;
+
 }
 
-/*
-Profile creation remains exactly as before.
 
-Gender is intentionally NOT added to
-student_profiles yet because you said we
-will add the database column later.
+/*
+Best-effort profile creation.
+
+Gender is intentionally NOT added here.
 */
 
 try{
@@ -1609,16 +2488,20 @@ date_of_birth:
 saved.dob,
 
 full_name:[
+
 saved.first,
 saved.middle,
 saved.last
+
 ]
 .filter(Boolean)
 .join(' ')
 
 },{
-onConflict:'user_id'
+onConflict:
+'user_id'
 });
+
 
 }catch(profileError){
 
@@ -1629,6 +2512,7 @@ profileError
 
 }
 
+
 if(saved.invitationCode){
 
 try{
@@ -1636,13 +2520,16 @@ try{
 await supabaseClient.rpc(
 'redeem_student_invitation',
 {
+
 p_code:
 saved.invitationCode,
 
 p_user_id:
 data.user.id
+
 }
 );
+
 
 }catch(inviteError){
 
@@ -1655,24 +2542,35 @@ inviteError
 
 }
 
+
 $('otpSection')
 .classList
 .add('hidden');
+
 
 $('emailConfirmSection')
 .classList
 .remove('hidden');
 
+
 $('emailConfirmText').textContent =
 `Phone confirmed. A confirmation email has been sent to ${saved.email}. Please open that email and confirm your address before signing in.`;
+
 
 showMessage(
 '✅ Phone number confirmed successfully. Please confirm your email before signing in.',
 'success'
 );
 
+
+/*
+Keep pending registration so the
+confirmation email can be resent.
+*/
+
 pendingRegistration =
 saved;
+
 
 }catch(error){
 
@@ -1680,6 +2578,7 @@ console.error(
 'OTP verification:',
 error
 );
+
 
 showMessage(
 error.message ||
@@ -1700,6 +2599,7 @@ btn.textContent =
 }
 );
 
+
 /* ---------- Resend phone OTP ---------- */
 
 $('resendOtpButton').addEventListener(
@@ -1708,12 +2608,14 @@ async () => {
 
 clearMessage();
 
+
 const saved =
 JSON.parse(
 localStorage.getItem(
 'AGU_PENDING_REGISTRATION'
 ) || 'null'
 );
+
 
 if(!saved){
 
@@ -1726,14 +2628,17 @@ return;
 
 }
 
+
 const btn =
 $('resendOtpButton');
+
 
 btn.disabled =
 true;
 
 btn.textContent =
 'Sending...';
+
 
 try{
 
@@ -1749,14 +2654,19 @@ saved.phone
 
 });
 
+
 if(error){
+
 throw error;
+
 }
+
 
 showMessage(
 `A new OTP was sent to ${saved.phone}.`,
 'success'
 );
+
 
 }catch(error){
 
@@ -1779,6 +2689,7 @@ btn.textContent =
 }
 );
 
+
 /* ---------- Email confirmation ---------- */
 
 async function resendConfirmationEmail(email){
@@ -1788,6 +2699,7 @@ String(email || '')
 .trim()
 .toLowerCase();
 
+
 if(!cleanEmail){
 
 throw new Error(
@@ -1795,6 +2707,7 @@ throw new Error(
 );
 
 }
+
 
 const {
 error
@@ -1814,11 +2727,15 @@ location.origin +
 
 });
 
+
 if(error){
+
 throw error;
+
 }
 
 }
+
 
 $('resendEmailButton').addEventListener(
 'click',
@@ -1826,12 +2743,14 @@ async () => {
 
 clearMessage();
 
+
 const saved =
 JSON.parse(
 localStorage.getItem(
 'AGU_PENDING_REGISTRATION'
 ) || 'null'
 );
+
 
 if(!saved){
 
@@ -1844,8 +2763,10 @@ return;
 
 }
 
+
 const btn =
 $('resendEmailButton');
+
 
 btn.disabled =
 true;
@@ -1853,16 +2774,19 @@ true;
 btn.textContent =
 'Sending...';
 
+
 try{
 
 await resendConfirmationEmail(
 saved.email
 );
 
+
 showMessage(
 'A new email confirmation message has been sent. Please check your inbox and spam/junk folder.',
 'success'
 );
+
 
 }catch(error){
 
@@ -1885,12 +2809,16 @@ btn.textContent =
 }
 );
 
+
 $('backToLoginButton').addEventListener(
 'click',
 () => {
+
 loginTab.click();
+
 }
 );
+
 
 /* ---------- Resend email confirmation from Sign In ---------- */
 
@@ -1900,11 +2828,13 @@ async () => {
 
 clearMessage();
 
+
 const email =
 $('unconfirmedEmail')
 .value
 .trim()
 .toLowerCase();
+
 
 if(!email){
 
@@ -1917,8 +2847,10 @@ return;
 
 }
 
+
 const btn =
 $('resendUnconfirmedEmailButton');
+
 
 btn.disabled =
 true;
@@ -1926,26 +2858,31 @@ true;
 btn.textContent =
 'Sending...';
 
+
 try{
 
 await resendConfirmationEmail(
 email
 );
 
+
 localStorage.setItem(
 REMEMBERED_EMAIL_KEY,
 email
 );
+
 
 localStorage.setItem(
 REQUIRE_FULL_LOGIN_KEY,
 '1'
 );
 
+
 showMessage(
 'A new confirmation link has been sent to your email. Please check your inbox and spam/junk folder.',
 'success'
 );
+
 
 }catch(error){
 
@@ -1953,6 +2890,7 @@ console.error(
 'Resend confirmation error:',
 error
 );
+
 
 showMessage(
 error.message ||
@@ -1973,6 +2911,7 @@ btn.textContent =
 }
 );
 
+
 /* ---------- Switch account ---------- */
 
 $('switchAccountButton').addEventListener(
@@ -1983,19 +2922,25 @@ localStorage.removeItem(
 REMEMBERED_EMAIL_KEY
 );
 
+
 localStorage.setItem(
 REQUIRE_FULL_LOGIN_KEY,
 '1'
 );
 
+
 $('loginPassword').value =
 '';
 
+
 clearMessage();
+
 
 setLoginVisible();
 
+
 $('loginEmail').focus();
+
 
 showMessage(
 'Enter the email address and password for the account you want to use.',
@@ -2004,6 +2949,7 @@ showMessage(
 
 }
 );
+
 
 /* ---------- Login ---------- */
 
@@ -2015,6 +2961,7 @@ e.preventDefault();
 
 clearMessage();
 
+
 const fullRequired =
 localStorage.getItem(
 REQUIRE_FULL_LOGIN_KEY
@@ -2024,12 +2971,12 @@ REQUIRE_FULL_LOGIN_KEY
 REMEMBERED_EMAIL_KEY
 );
 
+
 const email =
 (
 fullRequired
 ? $('loginEmail').value
-:
-(
+: (
 localStorage.getItem(
 REMEMBERED_EMAIL_KEY
 ) || ''
@@ -2038,8 +2985,10 @@ REMEMBERED_EMAIL_KEY
 .trim()
 .toLowerCase();
 
+
 const password =
 $('loginPassword').value;
+
 
 if(!email){
 
@@ -2052,6 +3001,7 @@ return;
 
 }
 
+
 if(!password){
 
 showMessage(
@@ -2063,14 +3013,17 @@ return;
 
 }
 
+
 const button =
 $('loginButton');
+
 
 button.disabled =
 true;
 
 button.textContent =
 'Signing in...';
+
 
 try{
 
@@ -2086,12 +3039,17 @@ password
 
 });
 
+
 if(error){
+
 throw error;
+
 }
+
 
 const user =
 data?.user;
+
 
 if(!user){
 
@@ -2101,16 +3059,20 @@ throw new Error(
 
 }
 
+
 if(!user.email_confirmed_at){
 
 await supabaseClient.auth.signOut();
 
+
 $('unconfirmedEmail').value =
 email;
+
 
 $('unconfirmedEmailBox')
 .classList
 .remove('hidden');
+
 
 throw new Error(
 'Please confirm your email address. If you did not receive the link, use the Resend Confirmation Link button below.'
@@ -2118,33 +3080,44 @@ throw new Error(
 
 }
 
+
 localStorage.setItem(
 REMEMBERED_EMAIL_KEY,
 email
 );
 
+
 localStorage.removeItem(
 REQUIRE_FULL_LOGIN_KEY
 );
 
+
 localStorage.removeItem(
 'AGU_PENDING_REGISTRATION'
 );
+
+
+/*
+Successful-login handoff.
+*/
 
 sessionStorage.setItem(
 JUST_LOGGED_IN_KEY,
 '1'
 );
 
+
 sessionStorage.setItem(
 AUTHORIZED_ENTRY_KEY,
 '1'
 );
 
+
 showMessage(
 '✅ Login successful. Opening AGULIBRARY...',
 'success'
 );
+
 
 setTimeout(
 () => {
@@ -2156,6 +3129,7 @@ location.href =
 500
 );
 
+
 }catch(error){
 
 console.error(
@@ -2163,10 +3137,13 @@ console.error(
 error
 );
 
+
 const errorText =
 String(
-error.message || ''
+error.message ||
+''
 );
+
 
 if(
 /confirm|confirmed|confirmation|email/i
@@ -2176,11 +3153,13 @@ if(
 $('unconfirmedEmail').value =
 email;
 
+
 $('unconfirmedEmailBox')
 .classList
 .remove('hidden');
 
 }
+
 
 showMessage(
 error.message ||
@@ -2201,6 +3180,7 @@ button.textContent =
 }
 );
 
+
 /* ---------- Forgot password ---------- */
 
 $('forgotPasswordLink').addEventListener(
@@ -2208,12 +3188,16 @@ $('forgotPasswordLink').addEventListener(
 showForgot
 );
 
+
 $('backLoginFromForgot').addEventListener(
 'click',
 () => {
+
 loginTab.click();
+
 }
 );
+
 
 $('sendResetButton').addEventListener(
 'click',
@@ -2221,10 +3205,12 @@ async () => {
 
 clearMessage();
 
+
 const email =
 $('forgotEmail')
 .value
 .trim();
+
 
 if(!email){
 
@@ -2237,14 +3223,17 @@ return;
 
 }
 
+
 const btn =
 $('sendResetButton');
+
 
 btn.disabled =
 true;
 
 btn.textContent =
 'Sending...';
+
 
 try{
 
@@ -2254,20 +3243,27 @@ error
 await supabaseClient.auth.resetPasswordForEmail(
 email,
 {
+
 redirectTo:
 location.origin +
 '/auth.html'
+
 }
 );
 
+
 if(error){
+
 throw error;
+
 }
+
 
 showMessage(
 'If an AGULIBRARY account uses that email, a secure password-reset message has been sent. Please check your inbox.',
 'success'
 );
+
 
 }catch(error){
 
@@ -2290,6 +3286,7 @@ btn.textContent =
 }
 );
 
+
 /* ---------- Password recovery ---------- */
 
 async function handleRecovery(){
@@ -2298,33 +3295,41 @@ updatePasswordSection
 .classList
 .remove('hidden');
 
+
 registerForm
 .classList
 .add('hidden');
+
 
 loginForm
 .classList
 .add('hidden');
 
+
 forgotSection
 .classList
 .add('hidden');
+
 
 otpSection
 .classList
 .add('hidden');
 
+
 emailConfirmSection
 .classList
 .add('hidden');
 
+
 title.textContent =
 'Reset Your Password';
+
 
 intro.textContent =
 'Choose a new password for your AGULIBRARY student account.';
 
 }
+
 
 $('updatePasswordButton').addEventListener(
 'click',
@@ -2332,11 +3337,14 @@ async () => {
 
 clearMessage();
 
+
 const p =
 $('newPassword').value;
 
+
 const p2 =
 $('newPassword2').value;
+
 
 if(p.length < 6){
 
@@ -2349,6 +3357,7 @@ return;
 
 }
 
+
 if(p !== p2){
 
 showMessage(
@@ -2360,14 +3369,17 @@ return;
 
 }
 
+
 const btn =
 $('updatePasswordButton');
+
 
 btn.disabled =
 true;
 
 btn.textContent =
 'Updating...';
+
 
 try{
 
@@ -2378,21 +3390,28 @@ await supabaseClient.auth.updateUser({
 password:p
 });
 
+
 if(error){
+
 throw error;
+
 }
+
 
 showMessage(
 '✅ Password updated successfully. You can now sign in.',
 'success'
 );
 
+
 await supabaseClient.auth.signOut();
+
 
 setTimeout(
 () => loginTab.click(),
 900
 );
+
 
 }catch(error){
 
@@ -2412,7 +3431,9 @@ btn.textContent =
 
 }
 
-});
+}
+);
+
 
 /* ---------- Existing session ---------- */
 
@@ -2425,8 +3446,10 @@ data
 } =
 await supabaseClient.auth.getSession();
 
+
 const session =
 data?.session;
+
 
 const hashParams =
 new URLSearchParams(
@@ -2436,19 +3459,32 @@ location.hash.replace(
 )
 );
 
+
 const isRecovery =
 hashParams.get('type') ===
 'recovery';
+
 
 if(
 session?.user &&
 !isRecovery
 ){
 
+/*
+The homepage is intentionally a
+fresh-login checkpoint.
+
+If auth.html is opened directly while
+an old Supabase session exists, remove
+the old session so the login form can
+require authentication again.
+*/
+
 const justLoggedIn =
 sessionStorage.getItem(
 JUST_LOGGED_IN_KEY
 ) === '1';
+
 
 if(!justLoggedIn){
 
@@ -2467,6 +3503,7 @@ e
 
 }
 
+
 if(justLoggedIn){
 
 sessionStorage.removeItem(
@@ -2477,12 +3514,16 @@ JUST_LOGGED_IN_KEY
 
 }
 
+
 const active = {
+
 data:
 (
 await supabaseClient.auth.getSession()
 ).data
+
 };
+
 
 if(
 active?.session?.user?.email_confirmed_at
@@ -2493,6 +3534,7 @@ localStorage.getItem(
 'AGU_PENDING_INVITATION'
 );
 
+
 if(pending){
 
 try{
@@ -2500,17 +3542,21 @@ try{
 await supabaseClient.rpc(
 'redeem_student_invitation',
 {
+
 p_code:
 pending,
 
 p_user_id:
 active.session.user.id
+
 }
 );
+
 
 localStorage.removeItem(
 'AGU_PENDING_INVITATION'
 );
+
 
 }catch(e){
 
@@ -2522,6 +3568,7 @@ console.warn(e);
 
 }
 
+
 }catch(e){
 
 console.warn(
@@ -2532,6 +3579,7 @@ e
 }
 
 }
+
 
 /* ---------- Auth state ---------- */
 
@@ -2547,7 +3595,9 @@ handleRecovery();
 
 }
 
-});
+}
+);
+
 
 /* ---------- Start ---------- */
 
@@ -2557,6 +3607,7 @@ await checkInvitation();
 
 await checkSession();
 
+
 const params =
 new URLSearchParams(
 location.hash.replace(
@@ -2564,6 +3615,7 @@ location.hash.replace(
 ''
 )
 );
+
 
 if(
 params.get('type') ===
@@ -2574,11 +3626,19 @@ await handleRecovery();
 
 }else{
 
+/*
+Always show the existing Sign In flow
+when auth.html is opened normally.
+*/
+
 loginTab.click();
 
 }
 
 })();
 
-</script></body>
-  </html>
+</script>
+
+</body>
+
+</html>

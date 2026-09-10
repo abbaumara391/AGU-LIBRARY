@@ -181,6 +181,207 @@
   .subject-item{min-height:135px;padding:16px}
   .subject-item b{font-size:17px}
 }
+/* =========================================================
+   AGULIBRARY STUDENT NOTIFICATIONS
+   Safe addition — existing styles remain unchanged.
+========================================================= */
+
+.notification-badge{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:21px;
+  height:21px;
+  margin-left:7px;
+  padding:0 6px;
+  border-radius:20px;
+  background:#d93025;
+  color:#fff;
+  font-size:11px;
+  font-weight:900;
+  line-height:1;
+  float:right;
+}
+
+.student-notifications{
+  display:none;
+  background:#fff;
+  border:1px solid #dceee6;
+  border-radius:24px;
+  padding:28px;
+  margin-bottom:22px;
+  box-shadow:0 10px 30px rgba(8,122,75,.05);
+}
+
+.student-notifications.show{
+  display:block;
+}
+
+.notifications-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  margin-bottom:20px;
+}
+
+.notifications-heading h2{
+  margin:7px 0 5px;
+  color:#173b2d;
+  font-size:30px;
+}
+
+.notifications-heading p{
+  margin:0;
+  color:#71847b;
+  line-height:1.5;
+}
+
+.notifications-actions{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+.notification-action{
+  border:1px solid #b9dccd;
+  background:#fff;
+  color:#087a4b;
+  padding:9px 13px;
+  border-radius:10px;
+  font-weight:800;
+  cursor:pointer;
+}
+
+.notification-action:hover{
+  background:#e8f8f0;
+}
+
+.notification-list{
+  display:flex;
+  flex-direction:column;
+  gap:11px;
+}
+
+.notification-item{
+  position:relative;
+  padding:18px 18px 18px 21px;
+  border:1px solid #dceee6;
+  border-radius:17px;
+  background:#fbfefd;
+  cursor:pointer;
+  transition:.2s ease;
+}
+
+.notification-item:hover{
+  border-color:#9ed9bb;
+  transform:translateY(-1px);
+}
+
+.notification-item.unread{
+  background:#eaf8f1;
+  border-color:#a9ddc1;
+}
+
+.notification-item.unread:before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:15px;
+  bottom:15px;
+  width:4px;
+  border-radius:0 5px 5px 0;
+  background:#087a4b;
+}
+
+.notification-title{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:7px;
+}
+
+.notification-title strong{
+  color:#173b2d;
+  font-size:16px;
+  line-height:1.4;
+}
+
+.notification-new{
+  flex-shrink:0;
+  padding:4px 7px;
+  border-radius:10px;
+  background:#087a4b;
+  color:#fff;
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:.7px;
+}
+
+.notification-message{
+  color:#667b72;
+  line-height:1.65;
+  font-size:14px;
+  white-space:pre-wrap;
+  word-break:break-word;
+}
+
+.notification-time{
+  margin-top:10px;
+  color:#8a9a93;
+  font-size:11px;
+  font-weight:700;
+}
+
+.notifications-loading,
+.notifications-empty,
+.notifications-error{
+  padding:38px 20px;
+  text-align:center;
+  border-radius:17px;
+}
+
+.notifications-loading{
+  color:#087a4b;
+  font-weight:800;
+}
+
+.notifications-empty{
+  background:#f7fcfa;
+  border:1px dashed #bfded0;
+  color:#73877e;
+}
+
+.notifications-error{
+  background:#fff5f5;
+  border:1px solid #f0cccc;
+  color:#b42323;
+}
+
+@media(max-width:700px){
+  .notifications-header{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+
+  .notifications-actions{
+    width:100%;
+  }
+
+  .notification-action{
+    flex:1;
+  }
+
+  .student-notifications{
+    padding:20px;
+    border-radius:21px;
+  }
+
+  .notifications-heading h2{
+    font-size:26px;
+  }
+}
 </style>
 </head>
 <body>
@@ -190,7 +391,19 @@
     <button id="menuToggle" class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false">☰</button>
     <button id="logoutButton" class="logout">🚪 Sign out</button>
     <div id="studentMenu" class="student-menu" aria-hidden="true">
-      <button type="button" id="menuSettings">⚙️ Settings</button>
+  <div id="studentMenu" class="student-menu" aria-hidden="true">
+  <button type="button" id="menuNotifications">
+    🔔 Notifications
+    <span id="notificationBadge" class="notification-badge" style="display:none">0</span>
+  </button>
+
+  <button type="button" id="menuSettings">⚙️ Settings</button>
+  <button type="button" id="menuInvitation">🎟️ Invitation Area</button>
+  <button type="button" id="menuSupport">💬 Support</button>
+  <div id="supportEmail" class="support-email">support@agulibrary.com</div>
+  <button type="button" id="menuProfile">👤 Profile</button>
+</div>    
+<button type="button" id="menuSettings">⚙️ Settings</button>
       <button type="button" id="menuInvitation">🎟️ Invitation Area</button>
       <button type="button" id="menuSupport">💬 Support</button>
       <div id="supportEmail" class="support-email">support@agulibrary.com</div>
@@ -204,6 +417,44 @@
 </header>
 <main class="dashboard">
 <div id="message" class="message"></div>
+<!-- =========================================================
+     AGULIBRARY STUDENT NOTIFICATIONS
+========================================================= -->
+<section id="studentNotifications" class="student-notifications" aria-live="polite">
+
+  <div class="notifications-header">
+
+    <div class="notifications-heading">
+      <span class="eyebrow">STUDENT NOTIFICATIONS</span>
+      <h2>🔔 Your Notifications</h2>
+      <p>Messages and important updates from AGULIBRARY.</p>
+    </div>
+
+    <div class="notifications-actions">
+      <button
+        type="button"
+        id="markAllNotificationsRead"
+        class="notification-action">
+        ✓ Mark all as read
+      </button>
+
+      <button
+        type="button"
+        id="closeNotifications"
+        class="notification-action">
+        ✕ Close
+      </button>
+    </div>
+
+  </div>
+
+  <div id="notificationList" class="notification-list">
+    <div class="notifications-loading">
+      🔔 Loading notifications...
+    </div>
+  </div>
+
+</section>
 <section class="welcome"><span class="eyebrow">STUDENT LEARNING CENTER</span><h1>Welcome to AGULIBRARY, <span id="welcomeName">Student</span> 👋</h1></section>
 
 <!-- ===================================================== AI LEARNING AGENT ===================================================== -->
@@ -270,9 +521,34 @@
 <script src="config.js"></script>
 <script src="supabase.js"></script>
 <script>
-let client=null,studentUser=null,studentResources=[];let aiConversation=[];const RECENT_KEY="AGU_RECENT_RESOURCES",SAVED_KEY="AGU_SAVED_RESOURCES";
-document.addEventListener("DOMContentLoaded",async function(){document.getElementById("year").textContent=new Date().getFullYear();setupSearch();setupSubjects();setupLogout();setupAI();setupAITeacherLauncher();setupStudentMenu();await loadDashboard();});
-async function loadDashboard(){try{if(typeof getSupabase!=="function"){showMessage("Supabase connection is unavailable.","error");return}client=getSupabase();const result=await client.auth.getSession();if(result.error)throw result.error;const session=result.data?.session;if(!session){window.location.href="auth.html";return}studentUser=session.user;const email=studentUser.email||"Student";let name=studentUser.user_metadata?.full_name||studentUser.user_metadata?.name||studentUser.user_metadata?.display_name||[studentUser.user_metadata?.first_name,studentUser.user_metadata?.last_name].filter(Boolean).join(" ");try{const profile=await client.from("student_profiles").select("first_name,last_name").eq("id",studentUser.id).maybeSingle();if(!profile.error&&profile.data){const profileName=[profile.data.first_name,profile.data.last_name].filter(Boolean).join(" ").trim();if(profileName)name=profileName}}catch(profileError){console.warn("Student profile lookup skipped:",profileError)}if(!name||/^[a-z0-9]{7,}$/i.test(name.trim()))name="Student";setText("welcomeName",name);setText("profileName",name);setText("profileEmail",email);setAvatar(name);await loadResources();renderRecent();updateStats()}catch(error){console.error(error);showMessage("Unable to load your dashboard.","error")}}
+let client=null,studentUser=null,studentResources=[];
+let aiConversation=[];
+let studentNotifications=[];
+const RECENT_KEY="AGU_RECENT_RESOURCES",SAVED_KEY="AGU_SAVED_RESOURCES";
+document.addEventListener("DOMContentLoaded",async function(){
+  document.getElementById("year").textContent=new Date().getFullYear();
+
+  setupSearch();
+  setupSubjects();
+  setupLogout();
+  setupAI();
+  setupAITeacherLauncher();
+  setupStudentMenu();
+  setupNotifications();
+
+  await loadDashboard();
+});
+async function loadDashboard(){try{if(typeof getSupabase!=="function"){showMessage("Supabase connection is unavailable.","error");return}client=getSupabase();const result=await client.auth.getSession();if(result.error)throw result.error;const session=result.data?.session;if(!session){window.location.href="auth.html";return}studentUser=session.user;const email=studentUser.email||"Student";let name=studentUser.user_metadata?.full_name||studentUser.user_metadata?.name||studentUser.user_metadata?.display_name||[studentUser.user_metadata?.first_name,studentUser.user_metadata?.last_name].filter(Boolean).join(" ");try{const profile=await client.from("student_profiles").select("first_name,last_name").eq("id",studentUser.id).maybeSingle();if(!profile.error&&profile.data){const profileName=[profile.data.first_name,profile.data.last_name].filter(Boolean).join(" ").trim();if(profileName)name=profileName}}catch(profileError){console.warn("Student profile lookup skipped:",profileError)}if(!name||/^[a-z0-9]{7,}$/i.test(name.trim()))name="Student";
+setText("welcomeName",name);
+setText("profileName",name);
+setText("profileEmail",email);
+setAvatar(name);
+
+await loadResources();
+await loadStudentNotifications();
+
+renderRecent();
+updateStats()}catch(error){console.error(error);showMessage("Unable to load your dashboard.","error")}}
 async function loadResources(){const grid=document.getElementById("studentResourceGrid");grid.innerHTML='<div class="loading">📚 Loading AGULIBRARY resources...</div>';try{const result=await client.from("resources").select("*").order("created_at",{ascending:false});if(result.error)throw result.error;studentResources=result.data||[];renderResources(studentResources);updateStats()}catch(error){console.error("Resource error:",error);grid.innerHTML='<div class="empty-state">⚠️<br><br>AGULIBRARY resources could not be loaded.<br><br>Please refresh the page.</div>'}}
 function createResourceCard(resource){const id=String(resource.id||"");const title=escapeHTML(resource.title||"Untitled Resource");const description=escapeHTML(resource.description||"Educational resource");const subject=escapeHTML(resource.subject||resource.subject_name||"");const type=String(resource.type||"resource").toLowerCase().trim();const icon=getIcon(type);const level=resource.level||resource.class_level||"";const term=resource.term||"";const saved=isSaved(id);let meta="";if(level)meta+=`<span>${escapeHTML(level)}</span>`;if(term)meta+=`<span>${escapeHTML(term)}</span>`;return `<article class="resource-card"><div class="resource-icon">${icon}</div><span class="resource-type">${escapeHTML(type.toUpperCase())}</span><h3>${title}</h3>${subject?`<div class="resource-subject">${subject}</div>`:""}${meta?`<div class="resource-meta">${meta}</div>`:""}<p>${description}</p><div class="resource-buttons"><button class="resource-open" type="button" onclick="openResource('${escapeJS(id)}')">${type==="lesson"||type==="course"?"📖 Open Lesson →":"Open Resource →"}</button><button class="save-resource ${saved?"saved":""}" type="button" onclick="toggleSaved('${escapeJS(id)}')">${saved?"★ Saved":"☆ Save"}</button></div></article>`}
 function renderResources(list){const grid=document.getElementById("studentResourceGrid");if(!list.length){grid.innerHTML='<div class="empty-state">📚<br><br>No educational resources are available yet.</div>';return}grid.innerHTML=list.map(createResourceCard).join("")}
@@ -373,9 +649,520 @@ function setupStudentMenu(){
   document.getElementById("menuSettings")?.addEventListener("click",function(){alert("Settings are managed through your AGULIBRARY account.");document.getElementById("studentMenu")?.classList.remove("show");});
   document.getElementById("menuInvitation")?.addEventListener("click",function(){alert("Invitation Area is available to students through an invitation link.");document.getElementById("studentMenu")?.classList.remove("show");});
 }
+/* =========================================================
+   AGULIBRARY STUDENT NOTIFICATIONS
+========================================================= */
+
+function setupNotifications(){
+
+  const menuButton =
+    document.getElementById("menuNotifications");
+
+  const closeButton =
+    document.getElementById("closeNotifications");
+
+  const markAllButton =
+    document.getElementById("markAllNotificationsRead");
+
+  menuButton?.addEventListener("click",async function(){
+
+    const panel =
+      document.getElementById("studentNotifications");
+
+    if(!panel) return;
+
+    panel.classList.add("show");
+
+    document.getElementById("studentMenu")?.classList.remove("show");
+
+    document.getElementById("menuToggle")?.setAttribute(
+      "aria-expanded",
+      "false"
+    );
+
+    document.getElementById("studentMenu")?.setAttribute(
+      "aria-hidden",
+      "true"
+    );
+
+    await loadStudentNotifications();
+
+    panel.scrollIntoView({
+      behavior:"smooth",
+      block:"start"
+    });
+
+  });
+
+  closeButton?.addEventListener("click",function(){
+
+    document
+      .getElementById("studentNotifications")
+      ?.classList.remove("show");
+
+  });
+
+  markAllButton?.addEventListener(
+    "click",
+    markAllNotificationsRead
+  );
+
+}
+
+
+/* =========================================================
+   LOAD STUDENT NOTIFICATIONS
+========================================================= */
+
+async function loadStudentNotifications(){
+
+  const list =
+    document.getElementById("notificationList");
+
+  if(!list || !studentUser || !client) return;
+
+  list.innerHTML =
+    '<div class="notifications-loading">🔔 Loading notifications...</div>';
+
+  try{
+
+    /*
+      The Admin notification system may use:
+      student_id
+      user_id
+      recipient_id
+
+      We check all three safely.
+    */
+
+    const recipientColumns = [
+      "student_id",
+      "user_id",
+      "recipient_id"
+    ];
+
+    const results = [];
+
+    for(const column of recipientColumns){
+
+      try{
+
+        const result =
+          await client
+            .from("student_notifications")
+            .select("*")
+            .eq(column,studentUser.id);
+
+        if(!result.error && Array.isArray(result.data)){
+          results.push(...result.data);
+        }
+
+      }catch(error){
+
+        console.warn(
+          "Notification column skipped:",
+          column,
+          error
+        );
+
+      }
+
+    }
+
+    /*
+      Remove duplicate records if more than one
+      recipient column contains the same notification.
+    */
+
+    const unique = new Map();
+
+    results.forEach(notification=>{
+
+      const key =
+        notification.id ||
+        [
+          notification.title,
+          notification.message,
+          notification.created_at
+        ].join("|");
+
+      if(!unique.has(String(key))){
+        unique.set(String(key),notification);
+      }
+
+    });
+
+    studentNotifications =
+      Array.from(unique.values());
+
+    studentNotifications.sort(function(a,b){
+
+      const dateA =
+        new Date(
+          a.created_at ||
+          a.updated_at ||
+          0
+        ).getTime();
+
+      const dateB =
+        new Date(
+          b.created_at ||
+          b.updated_at ||
+          0
+        ).getTime();
+
+      return dateB-dateA;
+
+    });
+
+    renderStudentNotifications();
+    updateNotificationBadge();
+
+  }catch(error){
+
+    console.error(
+      "AGULIBRARY notification error:",
+      error
+    );
+
+    list.innerHTML =
+      '<div class="notifications-error">' +
+      '⚠️<br><br>' +
+      'Notifications could not be loaded right now.' +
+      '<br><br>Please try again.' +
+      '</div>';
+
+  }
+
+}
+
+
+/* =========================================================
+   RENDER NOTIFICATIONS
+========================================================= */
+
+function renderStudentNotifications(){
+
+  const list =
+    document.getElementById("notificationList");
+
+  if(!list) return;
+
+  if(!studentNotifications.length){
+
+    list.innerHTML =
+      '<div class="notifications-empty">' +
+      '🔔<br><br>' +
+      '<strong>You have no notifications yet.</strong>' +
+      '<br><br>' +
+      'Important messages from AGULIBRARY will appear here.' +
+      '</div>';
+
+    return;
+
+  }
+
+  list.innerHTML =
+    studentNotifications
+      .map(createNotificationHTML)
+      .join("");
+
+}
+
+
+/* =========================================================
+   CREATE NOTIFICATION CARD
+========================================================= */
+
+function createNotificationHTML(notification){
+
+  const id =
+    escapeJS(
+      String(
+        notification.id ||
+        ""
+      )
+    );
+
+  const title =
+    escapeHTML(
+      notification.title ||
+      "AGULIBRARY Notification"
+    );
+
+  const message =
+    escapeHTML(
+      notification.message ||
+      notification.body ||
+      "You have received a new message from AGULIBRARY."
+    );
+
+  const unread =
+    notification.is_read === false ||
+    notification.is_read === 0 ||
+    notification.is_read === "false";
+
+  const date =
+    formatNotificationDate(
+      notification.created_at ||
+      notification.updated_at
+    );
+
+  return `
+    <article
+      class="notification-item ${unread ? "unread" : ""}"
+      data-notification-id="${id}"
+      onclick="openStudentNotification('${id}')"
+    >
+
+      <div class="notification-title">
+
+        <strong>
+          ${title}
+        </strong>
+
+        ${
+          unread
+          ? '<span class="notification-new">NEW</span>'
+          : ''
+        }
+
+      </div>
+
+      <div class="notification-message">
+        ${message}
+      </div>
+
+      ${
+        date
+        ? `<div class="notification-time">🕐 ${escapeHTML(date)}</div>`
+        : ''
+      }
+
+    </article>
+  `;
+
+}
+
+
+/* =========================================================
+   OPEN / MARK ONE NOTIFICATION AS READ
+========================================================= */
+
+async function openStudentNotification(id){
+
+  const notification =
+    studentNotifications.find(
+      item=>String(item.id)===String(id)
+    );
+
+  if(!notification) return;
+
+  if(
+    notification.is_read === false ||
+    notification.is_read === 0 ||
+    notification.is_read === "false"
+  ){
+
+    try{
+
+      if(notification.id){
+
+        const result =
+          await client
+            .from("student_notifications")
+            .update({
+              is_read:true
+            })
+            .eq("id",notification.id);
+
+        if(result.error){
+          console.warn(
+            "Unable to mark notification as read:",
+            result.error
+          );
+        }else{
+          notification.is_read=true;
+        }
+
+      }
+
+    }catch(error){
+
+      console.warn(
+        "Notification read update failed:",
+        error
+      );
+
+    }
+
+  }
+
+  renderStudentNotifications();
+  updateNotificationBadge();
+
+}
+
+
+/* =========================================================
+   MARK ALL NOTIFICATIONS AS READ
+========================================================= */
+
+async function markAllNotificationsRead(){
+
+  if(!client || !studentUser) return;
+
+  const unread =
+    studentNotifications.filter(
+      notification=>
+        notification.is_read === false ||
+        notification.is_read === 0 ||
+        notification.is_read === "false"
+    );
+
+  if(!unread.length){
+
+    updateNotificationBadge();
+
+    return;
+
+  }
+
+  const button =
+    document.getElementById(
+      "markAllNotificationsRead"
+    );
+
+  if(button){
+
+    button.disabled=true;
+    button.textContent="✓ Marking as read...";
+
+  }
+
+  try{
+
+    const ids =
+      unread
+        .map(notification=>notification.id)
+        .filter(Boolean);
+
+    if(ids.length){
+
+      const result =
+        await client
+          .from("student_notifications")
+          .update({
+            is_read:true
+          })
+          .in("id",ids);
+
+      if(result.error){
+        throw result.error;
+      }
+
+    }
+
+    unread.forEach(
+      notification=>{
+        notification.is_read=true;
+      }
+    );
+
+    renderStudentNotifications();
+    updateNotificationBadge();
+
+  }catch(error){
+
+    console.error(
+      "Mark all notifications failed:",
+      error
+    );
+
+    showMessage(
+      "Unable to mark all notifications as read.",
+      "error"
+    );
+
+  }finally{
+
+    if(button){
+
+      button.disabled=false;
+      button.textContent="✓ Mark all as read";
+
+    }
+
+  }
+
+}
+
+
+/* =========================================================
+   NOTIFICATION BADGE
+========================================================= */
+
+function updateNotificationBadge(){
+
+  const badge =
+    document.getElementById(
+      "notificationBadge"
+    );
+
+  if(!badge) return;
+
+  const unread =
+    studentNotifications.filter(
+      notification=>
+        notification.is_read === false ||
+        notification.is_read === 0 ||
+        notification.is_read === "false"
+    ).length;
+
+  if(unread>0){
+
+    badge.textContent =
+      unread>99 ? "99+" : String(unread);
+
+    badge.style.display="inline-flex";
+
+  }else{
+
+    badge.textContent="0";
+    badge.style.display="none";
+
+  }
+
+}
+
+
+/* =========================================================
+   FORMAT NOTIFICATION DATE
+========================================================= */
+
+function formatNotificationDate(value){
+
+  if(!value) return "";
+
+  const date =
+    new Date(value);
+
+  if(Number.isNaN(date.getTime())){
+    return "";
+  }
+
+  return date.toLocaleString(
+    undefined,
+    {
+      dateStyle:"medium",
+      timeStyle:"short"
+    }
+  );
+
+}
 function setupAITeacherLauncher(){const launcher=document.getElementById("aiTeacherLauncher"),agent=document.getElementById("aiLearningAgent"),closeButton=document.getElementById("closeAITeacher");if(!launcher||!agent)return;const toggle=function(open){agent.classList.toggle("ai-agent-hidden",!open);agent.classList.toggle("ai-agent-open",open);launcher.setAttribute("aria-expanded",open?"true":"false");if(open)agent.scrollIntoView({behavior:"smooth",block:"start"})};launcher.addEventListener("click",function(){toggle(agent.classList.contains("ai-agent-hidden"))});launcher.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();toggle(agent.classList.contains("ai-agent-hidden"))}});closeButton?.addEventListener("click",function(){toggle(false)});agent.classList.add("ai-agent-hidden")}
 function setupAI(){const elements=getAIElements();if(!elements.input||!elements.send)return;elements.send.addEventListener("click",sendAIMessage);elements.input.addEventListener("keydown",function(event){if(event.key==="Enter"&&!event.shiftKey){event.preventDefault();sendAIMessage()}})}
 window.openSubjectAreaPage=openSubjectAreaPage;window.openEducationPage=openEducationPage;window.openResourcePage=openResourcePage;
 </script>
 </body>
-</html>
+   </html>

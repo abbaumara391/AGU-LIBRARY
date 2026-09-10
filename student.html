@@ -391,27 +391,36 @@
     <button id="menuToggle" class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false">☰</button>
     <button id="logoutButton" class="logout">🚪 Sign out</button>
     <div id="studentMenu" class="student-menu" aria-hidden="true">
-  <div id="studentMenu" class="student-menu" aria-hidden="true">
+
   <button type="button" id="menuNotifications">
     🔔 Notifications
     <span id="notificationBadge" class="notification-badge" style="display:none">0</span>
   </button>
 
-  <button type="button" id="menuSettings">⚙️ Settings</button>
-  <button type="button" id="menuInvitation">🎟️ Invitation Area</button>
-  <button type="button" id="menuSupport">💬 Support</button>
-  <div id="supportEmail" class="support-email">support@agulibrary.com</div>
-  <button type="button" id="menuProfile">👤 Profile</button>
-</div>    
-<button type="button" id="menuSettings">⚙️ Settings</button>
-      <button type="button" id="menuInvitation">🎟️ Invitation Area</button>
-      <button type="button" id="menuSupport">💬 Support</button>
-      <div id="supportEmail" class="support-email">support@agulibrary.com</div>
-      <button type="button" id="menuProfile">👤 Profile</button>
-    </div>
+  <button type="button" id="menuSettings">
+    ⚙️ Settings
+  </button>
+
+  <button type="button" id="menuInvitation">
+    🎟️ Invitation Area
+  </button>
+
+  <button type="button" id="menuSupport">
+    💬 Support
+  </button>
+
+  <div id="supportEmail" class="support-email">
+    support@agulibrary.com
   </div>
-  <div class="ai-teacher-launcher" id="aiTeacherLauncher" role="button" tabindex="0" aria-controls="aiLearningAgent" aria-expanded="false">
-    <img src="./ai-teacher.jpg" alt="AI Teacher">
+
+  <button type="button" id="menuProfile">
+    👤 Profile
+  </button>
+  </div>
+</div>
+
+<div class="ai-teacher-launcher" id="aiTeacherLauncher" role="button" tabindex="0" aria-controls="aiLearningAgent" aria-expanded="false">
+<img src="./ai-teacher.jpg" alt="AI Teacher">
     <div>ASK YOUR AI TEACHER FOR ANY<br>EDUCATIONAL QUESTIONS</div>
   </div>
 </header>
@@ -1165,4 +1174,4 @@ function setupAI(){const elements=getAIElements();if(!elements.input||!elements.
 window.openSubjectAreaPage=openSubjectAreaPage;window.openEducationPage=openEducationPage;window.openResourcePage=openResourcePage;
 </script>
 </body>
-   </html>
+</html>

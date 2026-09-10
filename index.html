@@ -46,7 +46,122 @@ button,a{cursor:pointer}
 .account-panel{display:none}.account-panel.show{display:block}.account-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.account-card{background:#fff;border:1px solid #dceee6;border-radius:18px;padding:18px}.account-card strong{display:block;color:#087a4b;font-size:28px}.account-card span{color:#71847b;font-size:13px}.saved-list{margin-top:15px}.saved-item{display:flex;justify-content:space-between;gap:10px;padding:12px;border-bottom:1px solid #edf3ef}
 footer{text-align:center;padding:30px;background:#fff;border-top:1px solid #dceee6;color:#71847b}footer b{color:#087a4b}
 .compatibility-hidden{display:none!important}
+/* =========================================================
+   AGULIBRARY STUDENT NOTIFICATIONS — DESIGN
+   ========================================================= */
 
+.notification-badge{
+  display:none;
+  min-width:22px;
+  height:22px;
+  padding:0 7px;
+  margin-left:auto;
+  border-radius:999px;
+  background:#d92d20;
+  color:#fff;
+  font-size:11px;
+  font-weight:900;
+  align-items:center;
+  justify-content:center;
+  line-height:1;
+}
+
+.notification-list{
+  display:grid;
+  gap:12px;
+}
+
+.notification-item{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:15px;
+  padding:18px;
+  background:#fff;
+  border:1px solid #dceee6;
+  border-radius:18px;
+  box-shadow:0 7px 20px rgba(8,122,75,.05);
+  transition:.2s ease;
+}
+
+.notification-item:hover{
+  border-color:#9ed9bb;
+  box-shadow:0 10px 25px rgba(8,122,75,.08);
+}
+
+.notification-item.unread{
+  background:#f0faf5;
+  border-color:#b9e7d0;
+  box-shadow:0 8px 24px rgba(8,122,75,.08);
+}
+
+.notification-item-content{
+  min-width:0;
+  flex:1;
+}
+
+.notification-item-title{
+  color:#173b2d;
+  font-size:17px;
+  font-weight:900;
+  line-height:1.35;
+  margin-bottom:7px;
+}
+
+.notification-item.unread .notification-item-title{
+  color:#087a4b;
+}
+
+.notification-item-message{
+  color:#426056;
+  font-size:15px;
+  line-height:1.6;
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
+}
+
+.notification-item-date{
+  color:#71847b;
+  font-size:12px;
+  margin-top:10px;
+}
+
+.notification-read-button{
+  flex:0 0 auto;
+  border:1px solid #b9dccd;
+  border-radius:10px;
+  background:#fff;
+  color:#087a4b;
+  padding:9px 12px;
+  font-weight:800;
+  cursor:pointer;
+}
+
+.notification-read-button:hover{
+  background:#087a4b;
+  color:#fff;
+}
+
+.notifications-loading{
+  padding:28px 20px;
+  text-align:center;
+  color:#71847b;
+  background:#f7fcfa;
+  border:1px dashed #bfded0;
+  border-radius:16px;
+  line-height:1.6;
+}
+
+@media(max-width:600px){
+  .notification-item{
+    flex-direction:column;
+    gap:12px;
+  }
+
+  .notification-read-button{
+    width:100%;
+  }
+}
 .menu-button{
   position:fixed;
   top:17px;
@@ -1840,4 +1955,4 @@ setInterval(()=>{
 })();
 </script>
 </body>
-</html>
+  </html>

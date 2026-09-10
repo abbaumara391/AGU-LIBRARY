@@ -1473,127 +1473,150 @@ async function enforceWebsiteLogin(){
 }
 
 
-document.addEventListener("DOMContentLoaded",()=>{setupAccountMenu();init();});
-})();
+document.addEventListener("DOMContentLoaded",()=>{
+  setupAccountMenu();
+  setupNotificationSystem();
+  init();
+});
+
 /* =========================================================
    AGULIBRARY STUDENT NOTIFICATIONS
    ========================================================= */
 
-async function loadStudentNotifications() {
-  const list = document.getElementById("notificationList");
-  const badge = document.getElementById("notificationBadge");
+async function loadStudentNotifications(){
+  const list=document.getElementById("notificationList");
+  const badge=document.getElementById("notificationBadge");
+  const status=document.getElementById("notificationStatus");
 
-  if (!list || !badge) return;
+  if(!list||!badge)return;
 
-  if (!currentUser) {
-    list.innerHTML = `
+  if(!currentUser){
+    list.innerHTML=`
       <div class="notifications-loading">
         🔐 Please sign in to view your notifications.
       </div>
     `;
-    badge.style.display = "none";
+    badge.style.display="none";
+    if(status)status.textContent="Please sign in to view your notifications.";
     return;
   }
 
-  list.innerHTML = `
+  list.innerHTML=`
     <div class="notifications-loading">
       🔔 Loading notifications...
     </div>
   `;
 
-  try {
-    const results = [];
+  if(status)status.textContent="Loading notifications...";
+
+  try{
+    const results=[];
 
     /* Check student_id */
-    const studentResult = await client
-      .from("student_notifications")
-      .select("*")
-      .eq("student_id", currentUser.id)
-      .order("created_at", { ascending: false });
+    try{
+      const r=await client
+        .from("student_notifications")
+        .select("*")
+        .eq("student_id",currentUser.id)
+        .order("created_at",{ascending:false});
 
-    if (!studentResult.error && studentResult.data) {
-      results.push(...studentResult.data);
+      if(!r.error&&r.data)results.push(...r.data);
+    }catch(e){
+      console.warn("student_id notification query:",e);
     }
 
     /* Check user_id */
-    const userResult = await client
-      .from("student_notifications")
-      .select("*")
-      .eq("user_id", currentUser.id)
-      .order("created_at", { ascending: false });
+    try{
+      const r=await client
+        .from("student_notifications")
+        .select("*")
+        .eq("user_id",currentUser.id)
+        .order("created_at",{ascending:false});
 
-    if (!userResult.error && userResult.data) {
-      results.push(...userResult.data);
+      if(!r.error&&r.data)results.push(...r.data);
+    }catch(e){
+      console.warn("user_id notification query:",e);
     }
 
     /* Check recipient_id */
-    const recipientResult = await client
-      .from("student_notifications")
-      .select("*")
-      .eq("recipient_id", currentUser.id)
-      .order("created_at", { ascending: false });
+    try{
+      const r=await client
+        .from("student_notifications")
+        .select("*")
+        .eq("recipient_id",currentUser.id)
+        .order("created_at",{ascending:false});
 
-    if (!recipientResult.error && recipientResult.data) {
-      results.push(...recipientResult.data);
+      if(!r.error&&r.data)results.push(...r.data);
+    }catch(e){
+      console.warn("recipient_id notification query:",e);
     }
 
     /* Remove duplicates */
-    const unique = [];
-    const seen = new Set();
+    const unique=[];
+    const seen=new Set();
 
-    results.forEach(notification => {
-      const key =
-        notification.id ||
-        `${notification.title || ""}|${notification.message || ""}|${notification.created_at || ""}`;
+    results.forEach(notification=>{
+      const key=notification.id
+        ? String(notification.id)
+        : `${notification.title||""}|${notification.message||""}|${notification.created_at||""}`;
 
-      if (!seen.has(key)) {
+      if(!seen.has(key)){
         seen.add(key);
         unique.push(notification);
       }
     });
 
-    /* Sort newest first */
-    unique.sort((a, b) => {
-      return new Date(b.created_at || 0) - new Date(a.created_at || 0);
+    /* Newest first */
+    unique.sort((a,b)=>{
+      return new Date(b.created_at||0)-new Date(a.created_at||0);
     });
 
     renderStudentNotifications(unique);
 
-  } catch (error) {
-    console.error("Notification loading error:", error);
+  }catch(error){
+    console.error("Notification loading error:",error);
 
-    list.innerHTML = `
+    list.innerHTML=`
       <div class="notifications-loading">
         ⚠️ Unable to load notifications right now.
       </div>
     `;
 
-    badge.style.display = "none";
+    badge.style.display="none";
+
+    if(status)status.textContent="Unable to load notifications.";
   }
 }
 
 
-function renderStudentNotifications(notifications) {
-  const list = document.getElementById("notificationList");
-  const badge = document.getElementById("notificationBadge");
+function renderStudentNotifications(notifications){
+  const list=document.getElementById("notificationList");
+  const badge=document.getElementById("notificationBadge");
+  const status=document.getElementById("notificationStatus");
 
-  if (!list || !badge) return;
+  if(!list||!badge)return;
 
-  const unreadCount = notifications.filter(
-    notification => notification.is_read !== true
+  const unreadCount=notifications.filter(
+    notification=>notification.is_read!==true
   ).length;
 
   /* Notification badge */
-  if (unreadCount > 0) {
-    badge.textContent = unreadCount > 99 ? "99+" : unreadCount;
-    badge.style.display = "inline-flex";
-  } else {
-    badge.style.display = "none";
+  if(unreadCount>0){
+    badge.textContent=unreadCount>99?"99+":String(unreadCount);
+    badge.style.display="inline-flex";
+  }else{
+    badge.style.display="none";
+  }
+
+  if(status){
+    status.textContent=notifications.length
+      ? `${notifications.length} notification${notifications.length===1?"":"s"}`
+      : "You have no notifications yet.";
   }
 
   /* No notifications */
-  if (!notifications.length) {
-    list.innerHTML = `
+  if(!notifications.length){
+    list.innerHTML=`
       <div class="notifications-loading">
         🔔 You have no notifications yet.
       </div>
@@ -1601,30 +1624,34 @@ function renderStudentNotifications(notifications) {
     return;
   }
 
-  list.innerHTML = notifications.map(notification => {
-    const unread = notification.is_read !== true;
+  list.innerHTML=notifications.map(notification=>{
+    const unread=notification.is_read!==true;
 
-    const title = escapeNotificationHTML(
-      notification.title || "AGULIBRARY Notification"
+    const title=esc(
+      notification.title||"AGULIBRARY Notification"
     );
 
-    const message = escapeNotificationHTML(
-      notification.message || ""
+    const message=esc(
+      notification.message||""
     );
 
-    const date = formatNotificationDate(
+    const date=formatNotificationDate(
       notification.created_at
     );
 
+    const id=notification.id
+      ? escAttr(notification.id)
+      : "";
+
     return `
       <article
-        class="notification-item ${unread ? "unread" : ""}"
-        data-notification-id="${escapeNotificationHTML(notification.id || "")}"
+        class="notification-item ${unread?"unread":""}"
+        data-notification-id="${id}"
       >
         <div class="notification-item-content">
+
           <div class="notification-item-title">
-            ${unread ? "🔔 " : "✓ "}
-            ${title}
+            ${unread?"🔔":"✓"} ${title}
           </div>
 
           <div class="notification-item-message">
@@ -1634,139 +1661,183 @@ function renderStudentNotifications(notifications) {
           <div class="notification-item-date">
             ${date}
           </div>
+
         </div>
 
         ${
-          unread && notification.id
-            ? `
-              <button
-                type="button"
-                class="notification-read-button"
-                onclick="markStudentNotificationRead('${String(notification.id).replace(/'/g, "\\'")}')"
-              >
-                Mark as read
-              </button>
-            `
-            : ""
+          unread&&notification.id
+          ?`
+            <button
+              type="button"
+              class="notification-read-button"
+              data-read-notification="${escAttr(notification.id)}"
+            >
+              Mark as read
+            </button>
+          `
+          :""
         }
+
       </article>
     `;
   }).join("");
+
+  /* Individual Mark as read buttons */
+  list.querySelectorAll("[data-read-notification]").forEach(button=>{
+    button.addEventListener("click",()=>{
+      markStudentNotificationRead(button.dataset.readNotification);
+    });
+  });
 }
 
 
-async function markStudentNotificationRead(notificationId) {
-  if (!notificationId || !client || !currentUser) return;
+async function markStudentNotificationRead(notificationId){
+  if(!notificationId||!client||!currentUser)return;
 
-  try {
-    const result = await client
+  try{
+    const result=await client
       .from("student_notifications")
-      .update({ is_read: true })
-      .eq("id", notificationId);
+      .update({is_read:true})
+      .eq("id",notificationId);
 
-    if (result.error) {
-      console.error("Could not mark notification as read:", result.error);
+    if(result.error){
+      console.error(
+        "Could not mark notification as read:",
+        result.error
+      );
       return;
     }
 
     await loadStudentNotifications();
 
-  } catch (error) {
-    console.error("Notification read error:", error);
+  }catch(error){
+    console.error(
+      "Notification read error:",
+      error
+    );
   }
 }
 
 
-async function markAllStudentNotificationsRead() {
-  if (!client || !currentUser) return;
+async function markAllStudentNotificationsRead(){
+  if(!client||!currentUser)return;
 
-  try {
-    const notificationIds = [];
+  try{
+    const notificationIds=[];
+    const columns=[
+      "student_id",
+      "user_id",
+      "recipient_id"
+    ];
 
-    const columns = ["student_id", "user_id", "recipient_id"];
+    for(const column of columns){
 
-    for (const column of columns) {
-      const result = await client
-        .from("student_notifications")
-        .select("id")
-        .eq(column, currentUser.id)
-        .eq("is_read", false);
+      try{
+        const result=await client
+          .from("student_notifications")
+          .select("id")
+          .eq(column,currentUser.id)
+          .eq("is_read",false);
 
-      if (!result.error && result.data) {
-        result.data.forEach(row => {
-          if (row.id) notificationIds.push(row.id);
-        });
+        if(!result.error&&result.data){
+          result.data.forEach(row=>{
+            if(row.id)notificationIds.push(row.id);
+          });
+        }
+
+      }catch(e){
+        console.warn(
+          "Mark-all query failed for "+column,
+          e
+        );
       }
     }
 
-    const uniqueIds = [...new Set(notificationIds)];
+    const uniqueIds=[
+      ...new Set(notificationIds)
+    ];
 
-    for (const id of uniqueIds) {
-      await client
-        .from("student_notifications")
-        .update({ is_read: true })
-        .eq("id", id);
+    for(const id of uniqueIds){
+      try{
+        await client
+          .from("student_notifications")
+          .update({is_read:true})
+          .eq("id",id);
+      }catch(e){
+        console.warn(
+          "Unable to mark notification "+id+" as read:",
+          e
+        );
+      }
     }
 
     await loadStudentNotifications();
 
-  } catch (error) {
-    console.error("Mark-all-read error:", error);
+  }catch(error){
+    console.error(
+      "Mark-all-read error:",
+      error
+    );
   }
 }
 
 
-function formatNotificationDate(value) {
-  if (!value) return "";
+function formatNotificationDate(value){
+  if(!value)return "";
 
-  const date = new Date(value);
+  const date=new Date(value);
 
-  if (Number.isNaN(date.getTime())) return "";
+  if(Number.isNaN(date.getTime()))return "";
 
-  return date.toLocaleString(undefined, {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-    hour: "numeric",
-    minute: "2-digit"
+  return date.toLocaleString(undefined,{
+    year:"numeric",
+    month:"short",
+    day:"numeric",
+    hour:"numeric",
+    minute:"2-digit"
   });
 }
 
 
-function escapeNotificationHTML(value) {
-  return String(value)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
+/* =========================================================
+   NOTIFICATION BUTTON CONNECTIONS
+   ========================================================= */
+
+function setupNotificationSystem(){
+
+  const markAllButton=
+    document.getElementById("markAllNotificationsRead");
+
+  if(markAllButton){
+    markAllButton.addEventListener(
+      "click",
+      markAllStudentNotificationsRead
+    );
+  }
+
+  /* Load notifications when Notifications panel is opened */
+  document
+    .querySelectorAll('[data-panel="notificationsPanel"]')
+    .forEach(button=>{
+      button.addEventListener("click",()=>{
+        setTimeout(()=>{
+          loadStudentNotifications();
+        },50);
+      });
+    });
 }
 
 
-/* Mark all notifications as read */
-const markAllNotificationsReadButton =
-  document.getElementById("markAllNotificationsRead");
+/* =========================================================
+   PERIODIC NOTIFICATION REFRESH
+   ========================================================= */
 
-if (markAllNotificationsReadButton) {
-  markAllNotificationsReadButton.addEventListener(
-    "click",
-    markAllStudentNotificationsRead
-  );
-}
-
-
-/* Load notifications after the student session is available */
-if (typeof currentUser !== "undefined" && currentUser) {
-  loadStudentNotifications();
-}
-
-
-/* Refresh notifications periodically */
-setInterval(() => {
-  if (typeof currentUser !== "undefined" && currentUser) {
+setInterval(()=>{
+  if(currentUser){
     loadStudentNotifications();
   }
-}, 30000);
+},30000);
+})();
 </script>
 </body>
-          </html>
+</html>

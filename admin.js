@@ -152,7 +152,7 @@ async function adminMfaGate() {
 
   overlay.innerHTML = `
     <div style="width:min(440px,100%);background:#fff;border-radius:22px;padding:28px;box-shadow:0 20px 60px rgba(0,0,0,.25)">
-      <h2 style="margin-top:0;color:#123d2d">🔐 Admin MFA Verification</h2>
+      <h2 style="margin-top:0;color:#123d2d"> Admin MFA Verification</h2>
       <p style="color:#718079;line-height:1.6">Enter the current 6-digit code from your authenticator app to continue.</p>
       <input id="aguMfaCode" inputmode="numeric" maxlength="6" autocomplete="one-time-code" placeholder="000000"
         style="width:100%;padding:14px;border:1px solid #cfe5da;border-radius:10px;font-size:20px;letter-spacing:5px;text-align:center">
@@ -265,7 +265,7 @@ async function loadStudents() {
   } catch (e) {
     console.error("Student loading error:", e);
     if ($("aguStudentCount")) $("aguStudentCount").textContent = "0";
-    list.innerHTML = `<div class="empty">❌ Unable to load students.<br><small>${esc(e.message || "Unknown database error")}</small></div>`;
+    list.innerHTML = `<div class="empty"> Unable to load students.<br><small>${esc(e.message || "Unknown database error")}</small></div>`;
   }
 }
 
@@ -323,7 +323,7 @@ function updateTargets() {
   if (!s) return;
 
   s.innerHTML =
-    '<option value="all">👥 All students</option>' +
+    '<option value="all"> All students</option>' +
     students.map(p => {
       const id = getId(p);
       const name = profileName(p);
@@ -418,7 +418,7 @@ async function loadResources() {
     renderResources();
   } catch (e) {
     console.error("Resource loading error:", e);
-    list.innerHTML = `<div class="empty">❌ Unable to load resources.<br><small>${esc(e.message || "Unknown database error")}</small></div>`;
+    list.innerHTML = `<div class="empty"> Unable to load resources.<br><small>${esc(e.message || "Unknown database error")}</small></div>`;
   }
 }
 
@@ -461,7 +461,7 @@ function renderResources() {
         </div>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
           ${url ? `<a class="btn blue" href="${esc(url)}" target="_blank" rel="noopener">Open</a>` : ""}
-          <button class="btn delete-resource agu-delete-resource" data-resource-key="${esc(key)}" type="button">🗑 Delete</button>
+          <button class="btn delete-resource agu-delete-resource" data-resource-key="${esc(key)}" type="button"> Delete</button>
         </div>
       </div>`;
   }).join("");
@@ -591,7 +591,7 @@ async function uploadFile(e) {
       const result = await d.from(TABLE).insert(payload);
       if (result.error) throw result.error;
 
-      if (status) status.textContent = "✅ Digital book published successfully.";
+      if (status) status.textContent = " Digital book published successfully.";
       showMessage("Digital book published successfully.", "success");
 
       $("uploadForm")?.reset();
@@ -646,7 +646,7 @@ async function uploadFile(e) {
       throw result.error;
     }
 
-    if (status) status.textContent = "✅ Upload successful.";
+    if (status) status.textContent = " Upload successful.";
     showMessage("Resource uploaded successfully.", "success");
 
     $("uploadForm")?.reset();
@@ -657,13 +657,12 @@ async function uploadFile(e) {
   } catch (err) {
     console.error("AGULIBRARY upload error:", err);
 
-    if (status) status.textContent = "❌ " + (err.message || "Upload failed.");
+    if (status) status.textContent = " " + (err.message || "Upload failed.");
     showMessage(err.message || "Upload failed.", "error");
   } finally {
     button.disabled = false;
   }
 }
-
 /* ---------------- NOTIFICATIONS ---------------- */
 
 async function insertNotification(d, recipientId, title, message) {
@@ -679,7 +678,10 @@ async function insertNotification(d, recipientId, title, message) {
 
   for (const payload of variants) {
     const r = await d.from("student_notifications").insert(payload);
-    if (!r.error) return true;
+
+    if (!r.error) {
+      return true;
+    }
 
     last = r.error;
     const m = (r.error.message || "").toLowerCase();
@@ -692,51 +694,276 @@ async function insertNotification(d, recipientId, title, message) {
   throw last || new Error("Could not insert notification.");
 }
 
-async function sendNotification() {
-  const d = getDB();
-  const target = $("aguNotifyTarget")?.value || "all";
-  const title = $("aguNotifyTitle")?.value.trim();
-  const message = $("aguNotifyMessage")?.value.trim();
-  const status = $("aguNotifyStatus");
 
-  if (!title || !message) {
-    status.textContent = "Please enter a title and message.";
-    return;
-  }
+/*
+   ---------------------------------------------------------
+   AGULIBRARY ANDROID / WEB PUSH
+   ---------------------------------------------------------
+   Sends the already-created notification to the student's
+   registered Android/browser push subscriptions.
 
-  status.textContent = "Sending...";
+   IMPORTANT:
+   The VAPID private key and Supabase service-role key are
+   NEVER placed in this admin.js file.
+   They remain inside the secure Supabase Edge Function.
+   ---------------------------------------------------------
+*/
 
+async function sendPushNotification(recipientId, title, message) {
   try {
-    const recipients = target === "all"
-      ? students
-      : students.filter(p => getId(p) === target.replace("student:", ""));
+    const baseUrl = String(
+      cfg.supabaseUrl ||
+      window.AGU_CONFIG?.supabaseUrl ||
+      ""
+    ).replace(/\/$/, "");
 
-    if (!recipients.length) throw new Error("No student recipient was found.");
-
-    let sent = 0;
-
-    for (const p of recipients) {
-      const id = getId(p);
-      if (!id) continue;
-      await insertNotification(d, id, title, message);
-      sent++;
+    if (!baseUrl) {
+      console.warn("Push notification skipped: Supabase URL unavailable.");
+      return {
+        sent: false,
+        skipped: true,
+        reason: "Supabase URL unavailable"
+      };
     }
 
-    status.textContent = `✅ Notification sent to ${sent} student${sent === 1 ? "" : "s"}.`;
-    $("aguNotifyTitle").value = "";
-    $("aguNotifyMessage").value = "";
-    await loadNotificationCount();
+    /*
+       The Edge Function is responsible for:
+       - verifying the administrator
+       - finding the student's push subscriptions
+       - sending Web Push
+       - removing expired subscriptions
+    */
+    const functionName =
+      cfg.pushNotificationFunction ||
+      window.AGU_CONFIG?.pushNotificationFunction ||
+      "send-push-notification";
 
-  } catch (e) {
-    console.error(e);
-    status.textContent = "❌ " + (e.message || "Notification could not be sent.");
+    const sessionResult = await getDB().auth.getSession();
+
+    if (sessionResult.error) {
+      throw sessionResult.error;
+    }
+
+    const accessToken = sessionResult.data?.session?.access_token;
+
+    if (!accessToken) {
+      throw new Error("Administrator authentication token is unavailable.");
+    }
+
+    const response = await fetch(
+      baseUrl + "/functions/v1/" + functionName,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + accessToken,
+          "apikey": cfg.supabaseAnonKey || ""
+        },
+        body: JSON.stringify({
+          recipient_id: recipientId,
+          title: title,
+          message: message,
+          url: "/index.html"
+        })
+      }
+    );
+
+    let data = {};
+
+    try {
+      data = await response.json();
+    } catch (_) {}
+
+    if (!response.ok) {
+      throw new Error(
+        data?.error ||
+        data?.message ||
+        "Push notification service returned an error."
+      );
+    }
+
+    return {
+      sent: true,
+      data
+    };
+
+  } catch (error) {
+    /*
+       IMPORTANT:
+       The database notification has already been saved.
+       A push failure must NOT make the admin think the
+       database notification was lost.
+    */
+    console.warn(
+      "AGULIBRARY Android push notification could not be sent:",
+      error
+    );
+
+    return {
+      sent: false,
+      skipped: false,
+      error: error
+    };
   }
 }
 
+
+async function sendNotification() {
+  const d = getDB();
+
+  const target =
+    $("aguNotifyTarget")?.value || "all";
+
+  const title =
+    $("aguNotifyTitle")?.value.trim();
+
+  const message =
+    $("aguNotifyMessage")?.value.trim();
+
+  const status =
+    $("aguNotifyStatus");
+
+  if (!title || !message) {
+    if (status) {
+      status.textContent =
+        "Please enter a title and message.";
+    }
+    return;
+  }
+
+  if (status) {
+    status.textContent =
+      "Sending notification...";
+  }
+
+  try {
+
+    const recipients =
+      target === "all"
+        ? students
+        : students.filter(
+            p =>
+              getId(p) ===
+              target.replace("student:", "")
+          );
+
+    if (!recipients.length) {
+      throw new Error(
+        "No student recipient was found."
+      );
+    }
+
+    let sent = 0;
+    let pushSent = 0;
+    let pushUnavailable = 0;
+
+    for (const p of recipients) {
+
+      const id = getId(p);
+
+      if (!id) continue;
+
+      /*
+         FIRST:
+         Save the permanent AGULIBRARY notification.
+      */
+      await insertNotification(
+        d,
+        id,
+        title,
+        message
+      );
+
+      sent++;
+
+      /*
+         SECOND:
+         Send Android/browser system notification.
+         This is intentionally separate from the database
+         insert so the existing notification system keeps
+         working even if push is temporarily unavailable.
+      */
+      const pushResult =
+        await sendPushNotification(
+          id,
+          title,
+          message
+        );
+
+      if (pushResult.sent) {
+        pushSent++;
+      } else {
+        pushUnavailable++;
+      }
+    }
+
+    /*
+       Existing admin notification count remains intact.
+    */
+    await loadNotificationCount();
+
+    $("aguNotifyTitle").value = "";
+    $("aguNotifyMessage").value = "";
+
+    if (pushSent === sent) {
+
+      if (status) {
+        status.textContent =
+          `✅ Notification sent to ${sent} student${sent === 1 ? "" : "s"} and Android push notification${sent === 1 ? "" : "s"} delivered.`;
+      }
+
+    } else if (pushSent > 0) {
+
+      if (status) {
+        status.textContent =
+          `✅ Notification saved for ${sent} student${sent === 1 ? "" : "s"}. Android push delivered to ${pushSent}; ${pushUnavailable} device${pushUnavailable === 1 ? "" : "s"} could not receive push.`;
+      }
+
+    } else {
+
+      if (status) {
+        status.textContent =
+          `✅ Notification saved for ${sent} student${sent === 1 ? "" : "s"}. Android push is not currently available for the selected device${sent === 1 ? "" : "s"}.`;
+      }
+
+    }
+
+  } catch (e) {
+
+    console.error(
+      "AGULIBRARY notification error:",
+      e
+    );
+
+    if (status) {
+      status.textContent =
+        "❌ " +
+        (e.message ||
+          "Notification could not be sent.");
+    }
+  }
+}
+
+
 async function loadNotificationCount() {
   try {
-    const r = await getDB().from("student_notifications").select("*", {count:"exact",head:true});
-    if (!r.error && $("aguNotificationCount")) $("aguNotificationCount").textContent = r.count ?? 0;
+
+    const r =
+      await getDB()
+        .from("student_notifications")
+        .select("*", {
+          count: "exact",
+          head: true
+        });
+
+    if (
+      !r.error &&
+      $("aguNotificationCount")
+    ) {
+      $("aguNotificationCount").textContent =
+        r.count ?? 0;
+    }
+
   } catch (_) {}
 }
 

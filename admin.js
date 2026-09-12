@@ -1479,6 +1479,116 @@ async function saveExam() {
   }
 
 }
+
+/* ---------------- LOAD EXAMINATIONS ---------------- */
+
+async function loadExaminations() {
+
+  const list =
+    $("adminExamList");
+
+  if (!list) return;
+
+  list.innerHTML =
+    '<div class="empty">Loading examinations...</div>';
+
+  try {
+
+    const result =
+      await getDB()
+        .from("agu_examinations")
+        .select("*")
+        .order("created_at", {
+          ascending: false
+        });
+
+    if (result.error) {
+      throw result.error;
+    }
+
+    const examinations =
+      result.data || [];
+
+    if (!examinations.length) {
+
+      list.innerHTML =
+        '<div class="empty">No examinations created yet.</div>';
+
+      return;
+    }
+
+    list.innerHTML =
+      examinations.map(exam => {
+
+        const published =
+          exam.is_published === true;
+
+        const registration =
+          exam.registration_required !== false;
+
+        return `
+          <div class="exam-card">
+
+            <div class="exam-card-title">
+              ${exam.title || "Untitled Examination"}
+            </div>
+
+            <div class="exam-card-info">
+              <strong>Subject:</strong>
+              ${exam.subject || "—"}
+            </div>
+
+            <div class="exam-card-info">
+              <strong>Education Level:</strong>
+              ${exam.education_level || "—"}
+            </div>
+
+            <div class="exam-card-info">
+              <strong>Class / Level:</strong>
+              ${exam.class_level || "—"}
+            </div>
+
+            <div class="exam-card-info">
+              <strong>Term:</strong>
+              ${exam.term || "—"}
+            </div>
+
+            <div class="exam-card-info">
+              <strong>Pass Percentage:</strong>
+              ${exam.pass_percentage ?? 0}%
+            </div>
+
+            <div class="exam-card-info">
+              <strong>Registration:</strong>
+              ${registration ? "Required" : "Not Required"}
+            </div>
+
+            <div class="exam-card-info">
+              <strong>Status:</strong>
+              ${published ? "Published" : "Draft"}
+            </div>
+
+          </div>
+        `;
+
+      }).join("");
+
+  } catch (error) {
+
+    console.error(
+      "AGULIBRARY examination loading error:",
+      error
+    );
+
+    list.innerHTML =
+      `<div class="empty">
+        ❌ ${
+          error.message ||
+          "Unable to load examinations."
+        }
+      </div>`;
+  }
+}
   
   /* ---------------- DASHBOARD ---------------- */
 

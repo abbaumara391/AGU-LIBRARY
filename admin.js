@@ -1602,10 +1602,12 @@ async function finishAdmin() {
   }
 
   await Promise.all([
-    loadStudents(),
-    loadResources(),
-    loadNotificationCount()
-  ]);
+  loadStudents(),
+  loadResources(),
+  loadNotificationCount(),
+  loadExaminations()
+]);
+  
 }
 
 async function checkSession() {

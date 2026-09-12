@@ -1600,6 +1600,8 @@ function bind() {
   $("aguSendNotification")?.addEventListener("click", sendNotification);
   $("adminMfaReset")?.addEventListener("click", logout);
 
+  $("saveExam")?.addEventListener("click", saveExam);
+  
   document.querySelectorAll("[data-target]").forEach(button => {
     button.addEventListener("click", () => {
       const input = $(button.dataset.target);

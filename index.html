@@ -357,7 +357,16 @@ footer{text-align:center;padding:30px;background:#fff;border-top:1px solid #dcee
   </div>
 
   <div class="panel-body">
-    <div id="notificationStatus" class="service-status">
+  <div style="margin-bottom:14px">
+  <button
+    id="enablePushNotifications"
+    class="btn outline"
+    type="button"
+  >
+    🔔 Enable Android Notifications
+  </button>
+</div>
+  <div id="notificationStatus" class="service-status">
       Loading notifications...
     </div>
 
@@ -1918,7 +1927,104 @@ function formatNotificationDate(value){
 /* =========================================================
    NOTIFICATION BUTTON CONNECTIONS
    ========================================================= */
+/* =========================================================
+   AGULIBRARY — STUDENT ANDROID / WEB PUSH REGISTRATION
+   ========================================================= */
 
+const AGU_PUSH_PUBLIC_KEY =
+  "BG4G9BazYIFHAc-Bro_K7IbqPFcMv12LDVa7XRg-acSdETUkocJv74oDyKUJiX2aWfWWLo1fjXehFs8BD6-Z87M";
+
+function urlBase64ToUint8Array(base64String) {
+  const padding =
+    "=".repeat((4 - (base64String.length % 4)) % 4);
+
+  const base64 =
+    (base64String + padding)
+      .replace(/-/g, "+")
+      .replace(/_/g, "/");
+
+  const rawData = atob(base64);
+
+  return Uint8Array.from(
+    [...rawData].map(char => char.charCodeAt(0))
+  );
+}
+
+async function registerAGUPushNotifications() {
+
+  if (!currentUser || !client) {
+    throw new Error("Please sign in first.");
+  }
+
+  if (
+    !("serviceWorker" in navigator) ||
+    !("PushManager" in window) ||
+    !("Notification" in window)
+  ) {
+    throw new Error(
+      "Push notifications are not supported by this browser."
+    );
+  }
+
+  const registration =
+    await navigator.serviceWorker.register(
+      "/sw.js",
+      { scope: "/" }
+    );
+
+  await navigator.serviceWorker.ready;
+
+  let permission = Notification.permission;
+
+  if (permission === "default") {
+    permission =
+      await Notification.requestPermission();
+  }
+
+  if (permission !== "granted") {
+    throw new Error(
+      "Notification permission was not granted."
+    );
+  }
+
+  let subscription =
+    await registration.pushManager.getSubscription();
+
+  if (!subscription) {
+    subscription =
+      await registration.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey:
+          urlBase64ToUint8Array(
+            AGU_PUSH_PUBLIC_KEY
+          )
+      });
+  }
+
+  const subscriptionData =
+    subscription.toJSON();
+
+  const result =
+    await client
+      .from("student_push_subscriptions")
+      .upsert(
+        {
+          student_id: currentUser.id,
+          endpoint: subscription.endpoint,
+          subscription: subscriptionData,
+          updated_at: new Date().toISOString()
+        },
+        {
+          onConflict: "endpoint"
+        }
+      );
+
+  if (result.error) {
+    throw result.error;
+  }
+
+  return true;
+}
 function setupNotificationSystem(){
 
   const markAllButton=
@@ -1941,6 +2047,59 @@ function setupNotificationSystem(){
         },50);
       });
     });
+  const enablePushButton =
+    document.getElementById("enablePushNotifications");
+
+  if (enablePushButton) {
+
+    enablePushButton.addEventListener(
+      "click",
+      async () => {
+
+        if (!currentUser) {
+          alert("Please sign in first.");
+          return;
+        }
+
+        enablePushButton.disabled = true;
+        enablePushButton.textContent =
+          "🔔 Enabling notifications...";
+
+        try {
+
+          await registerAGUPushNotifications();
+
+          enablePushButton.textContent =
+            "✅ Android Notifications Enabled";
+
+          enablePushButton.disabled = true;
+
+          alert(
+            "AGULIBRARY notifications have been enabled on this device."
+          );
+
+        } catch (error) {
+
+          console.error(
+            "AGULIBRARY push registration error:",
+            error
+          );
+
+          enablePushButton.disabled = false;
+
+          enablePushButton.textContent =
+            "🔔 Enable Android Notifications";
+
+          alert(
+            error?.message ||
+            "Unable to enable notifications. Please try again."
+          );
+        }
+
+      }
+    );
+
+  }
 }
 
 

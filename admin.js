@@ -1481,9 +1481,70 @@ async function saveExam() {
 
 }
 
+I'm asking about where to paste this
+/* ---------------- POPULATE EXAMINATION SELECTS ---------------- */
+
+function populateExamSelects() {
+
+const selects = [
+$("questionExamSelect"),
+$("registrationExamFilter"),
+$("resultExamFilter")
+];
+
+selects.forEach(select => {
+
+if (!select) return;  
+
+const currentValue = select.value;  
+
+select.innerHTML = "";  
+
+const firstOption =  
+  document.createElement("option");  
+
+firstOption.value = "";  
+
+firstOption.textContent =  
+  select.id === "questionExamSelect"  
+    ? "Select an examination"  
+    : "All examinations";  
+
+select.appendChild(firstOption);  
+
+examinations.forEach(exam => {  
+
+  const option =  
+    document.createElement("option");  
+
+  option.value = exam.id;  
+
+  option.textContent =  
+    exam.title || "Untitled Examination";  
+
+  select.appendChild(option);  
+
+});  
+
+if (  
+  currentValue &&  
+  examinations.some(  
+    exam =>  
+      String(exam.id) ===  
+      String(currentValue)  
+  )  
+) {  
+  select.value = currentValue;  
+}
+
+});
+
+}
+  
 /* ---------------- LOAD EXAMINATIONS ---------------- */
 
-async function loadExaminations() {
+
+  async function loadExaminations() {
 
   const list =
     $("adminExamList");

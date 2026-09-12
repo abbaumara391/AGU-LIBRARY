@@ -1609,8 +1609,9 @@ loadNotificationCount();
 
 $("aguSendNotification")?.addEventListener("click", sendNotification);
 $("adminMfaReset")?.addEventListener("click", logout);
-
-document.querySelectorAll("[data-target]").forEach(button => {
+$("saveExam")?.addEventListener("click", saveExam);
+  
+  document.querySelectorAll("[data-target]").forEach(button => {
 button.addEventListener("click", () => {
 const input = $(button.dataset.target);
 if (input) input.type = input.type === "password" ? "text" : "password";

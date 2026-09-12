@@ -1,3 +1,23 @@
+
+Edit file...
+Open with...
+Raw file content
+Skip to content
+AGU-LIBRARY
+Repository navigation
+Code
+Issues
+Pull requests
+AGU-LIBRARY
+/index.html
+abbaumara391
+abbaumara391
+2 hours ago
+2129 lines (1894 loc) · 103 KB
+
+Code
+
+Blame
 <!doctype html>
 <html lang="en">
 <head>
@@ -859,13 +879,81 @@ function renderLeafResources(){
  grid.querySelectorAll("[data-resource]").forEach(btn=>btn.addEventListener("click",()=>openResource(btn.dataset.resource)));
 }
 function openResource(id){
- const r=allResources.find(x=>String(x.id)===String(id));if(!r)return;
- if(currentUser){recordRecent(id)}
- const type=String(r.type||"").toLowerCase().trim();
- if(type==="lesson"||type==="course"){location.href="lesson.html?id="+encodeURIComponent(r.id);return}
- const url=r.file_url||r.url||"";
- if(!url){alert("This resource does not have a file attached yet.");return}
- window.open(url,"_blank","noopener,noreferrer");
+  const r=allResources.find(x=>String(x.id)===String(id));
+  if(!r)return;
+
+  if(currentUser){
+    recordRecent(id);
+  }
+
+  const type =
+    String(r.type || "")
+      .toLowerCase()
+      .trim();
+
+  /* DIGITAL BOOK */
+  if(type === "digital_book"){
+
+    const url =
+      r.file_url ||
+      r.url ||
+      "";
+
+    if(!url){
+
+      alert(
+        "This digital book does not have a file attached yet."
+      );
+
+      return;
+    }
+
+    const viewerURL =
+      "digital_book_book_viewer.html?url=" +
+      encodeURIComponent(url);
+
+    window.open(
+      viewerURL,
+      "_blank",
+      "noopener,noreferrer"
+    );
+
+    return;
+  }
+
+  /* LESSON / COURSE */
+  if(
+    type === "lesson" ||
+    type === "course"
+  ){
+
+    location.href =
+      "lesson.html?id=" +
+      encodeURIComponent(r.id);
+
+    return;
+  }
+
+  /* NORMAL RESOURCE */
+  const url =
+    r.file_url ||
+    r.url ||
+    "";
+
+  if(!url){
+
+    alert(
+      "This resource does not have a file attached yet."
+    );
+
+    return;
+  }
+
+  window.open(
+    url,
+    "_blank",
+    "noopener,noreferrer"
+  );
 }
 function getSaved(){if(!currentUser)return[];try{return JSON.parse(localStorage.getItem(SAVED_KEY+"_"+currentUser.id)||"[]")}catch(e){return[]}}
 function getRecent(){if(!currentUser)return[];try{return JSON.parse(localStorage.getItem(RECENT_KEY+"_"+currentUser.id)||"[]")}catch(e){return[]}}
@@ -2127,3 +2215,4 @@ setInterval(()=>{
 </script>
 </body>
   </html>
+ 

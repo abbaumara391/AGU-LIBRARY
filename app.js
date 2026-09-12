@@ -642,11 +642,22 @@ return;
 }
 
 /*
-Open the uploaded digital book.
+DIGITAL BOOK VIEWER
+
+Supabase Storage intentionally serves HTML
+files as plain text. Therefore we open the
+AGULIBRARY Book Viewer instead.
+
+The viewer fetches the stored index.html
+and renders it as an actual webpage.
 */
 
+const viewerURL =
+"book-viewer.html?url=" +
+encodeURIComponent(url);
+
 window.open(
-url,
+viewerURL,
 "_blank",
 "noopener,noreferrer"
 );

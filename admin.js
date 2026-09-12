@@ -22,6 +22,7 @@ let db = null;
 let currentSession = null;
 let students = [];
 let resources = [];
+let examinations = [];
 let mfaOpen = false;
 
 const TABLE = window.AGU_RESOURCE_TABLE || "resources";

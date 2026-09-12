@@ -791,12 +791,56 @@ function openLevelPage(main){
  renderCards(EDUCATION_LEVELS.map(level=>({key:level,icon:"🎓",title:level,small:"Open learning areas",action:()=>openAreaPage(main,level)})));
 }
 function openAreaPage(main,level){
- flow={main,level,area:"",subject:""};
- const areas=Object.keys(HIERARCHY[main]||{});
- setText("flowEyebrow",main.toUpperCase()+" • "+level.toUpperCase());
- setText("flowTitle","Related learning areas");
- setText("flowSubtitle",`Choose an area within ${main} for ${level}.`);
- renderCards(areas.map(area=>({key:area,icon:"🧩",title:area,small:(level==="University Courses"?"Open related courses":"Open related subjects"),action:()=>openSubjectPage(main,level,area)})));
+
+  /*
+   * MATHEMATICS ONLY:
+   * Skip all related-area and related-subject cards.
+   * Show Mathematics resources directly for the selected
+   * education level.
+   */
+
+  if(main==="Mathematics"){
+    openResourcePage(
+      "Mathematics",
+      level,
+      "",
+      "Mathematics"
+    );
+    return;
+  }
+
+  flow={main,level,area:"",subject:""};
+
+  const areas=Object.keys(HIERARCHY[main]||{});
+
+  setText(
+    "flowEyebrow",
+    main.toUpperCase()+" • "+level.toUpperCase()
+  );
+
+  setText(
+    "flowTitle",
+    "Related learning areas"
+  );
+
+  setText(
+    "flowSubtitle",
+    `Choose an area within ${main} for ${level}.`
+  );
+
+  renderCards(
+    areas.map(area=>({
+      key:area,
+      icon:"🧩",
+      title:area,
+      small:"Open related subjects",
+      action:()=>openSubjectPage(
+        main,
+        level,
+        area
+      )
+    }))
+  );
 }
 function openSubjectPage(main,level,area){
  flow={main,level,area,subject:""};

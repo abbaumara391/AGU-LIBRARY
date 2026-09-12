@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
+
+<title>AGULIBRARY — Digital Book</title>
+
+<style>
+
+html,
+body {
+
+  margin: 0;
+  padding: 0;
+
+  width: 100%;
+  height: 100%;
+
+  background: #f4f7f8;
+
+  overflow: hidden;
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+}
+
+#loading {
+
+  position: fixed;
+
+  inset: 0;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  flex-direction: column;
+
+  gap: 12px;
+
+  background: #ffffff;
+
+  color: #087a4b;
+
+  font-size: 16px;
+
+  font-weight: 700;
+
+  z-index: 10;
+
+}
+
+#loading .spinner {
+
+  width: 38px;
+  height: 38px;
+
+  border: 4px solid #dfeee8;
+
+  border-top-color: #087a4b;
+
+  border-radius: 50%;
+
+  animation:
+    aguSpin 0.8s linear infinite;
+
+}
+
+#error {
+
+  display: none;
+
+  position: fixed;
+
+  inset: 0;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 25px;
+
+  box-sizing: border-box;
+
+  background: #ffffff;
+
+  color: #333;
+
+  text-align: center;
+
+  z-index: 20;
+
+}
+
+#errorBox {
+
+  max-width: 600px;
+
+  padding: 25px;
+
+  border-radius: 16px;
+
+  background: #f8faf9;
+
+  border: 1px solid #dce9e3;
+
+}
+
+#errorTitle {
+
+  color: #b42318;
+
+  font-size: 20px;
+
+  font-weight: 800;
+
+  margin-bottom: 10px;
+
+}
+
+#errorMessage {
+
+  line-height: 1.6;
+
+}
+
+#bookFrame {
+
+  display: none;
+
+  width: 100%;
+  height: 100%;
+
+  border: 0;
+
+  background: #ffffff;
+
+}
+
+@keyframes aguSpin {
+
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div id="loading">
+
+  <div class="spinner"></div>
+
+  <div>
+    Opening AGULIBRARY Digital Book...
+  </div>
+
+</div>
+
+<div id="error">
+
+  <div id="errorBox">
+
+    <div id="errorTitle">
+      Unable to open this Digital Book
+    </div>
+
+    <div id="errorMessage">
+      Please try again.
+    </div>
+
+  </div>
+
+</div>
+
+<iframe
+  id="bookFrame"
+  title="AGULIBRARY Digital Book"
+></iframe>
+
+<script>
+
+"use strict";
+
+/* =========================================================
+   AGULIBRARY — DIGITAL BOOK VIEWER
+   ========================================================= */
+
+const loading =
+  document.getElementById("loading");
+
+const errorPanel =
+  document.getElementById("error");
+
+const errorMessage =
+  document.getElementById("errorMessage");
+
+const bookFrame =
+  document.getElementById("bookFrame");
+
+
+function showError(message) {
+
+  loading.style.display = "none";
+
+  errorMessage.textContent =
+    message ||
+    "The digital book could not be opened.";
+
+  errorPanel.style.display = "flex";
+
+}
+
+
+async function openDigitalBook() {
+
+  try {
+
+    const params =
+      new URLSearchParams(
+        window.location.search
+      );
+
+    const bookURL =
+      params.get("url");
+
+    if (!bookURL) {
+
+      showError(
+        "The digital book URL is missing."
+      );
+
+      return;
+
+    }
+
+    let parsedURL;
+
+    try {
+
+      parsedURL =
+        new URL(bookURL);
+
+    } catch (_) {
+
+      showError(
+        "The digital book URL is invalid."
+      );
+
+      return;
+
+    }
+
+    /*
+    Fetch the HTML file from Supabase
+    as text.
+    */
+
+    const response =
+      await fetch(
+        parsedURL.href,
+        {
+          method: "GET",
+          cache: "no-cache"
+        }
+      );
+
+    if (!response.ok) {
+
+      throw new Error(
+        "The digital book returned HTTP " +
+        response.status +
+        "."
+      );
+
+    }
+
+    let html =
+      await response.text();
+
+    if (!html.trim()) {
+
+      throw new Error(
+        "The digital book file is empty."
+      );
+
+    }
+
+    /*
+    Determine the folder containing
+    index.html.
+
+    Example:
+
+    .../agu-library/Mathematics/index.html
+
+    becomes:
+
+    .../agu-library/Mathematics/
+    */
+
+    const folderURL =
+      parsedURL.href.substring(
+        0,
+        parsedURL.href.lastIndexOf("/") + 1
+      );
+
+    /*
+    Make relative files such as:
+
+    app.js
+    data.js
+    style.css
+    images/example.png
+
+    load from the Supabase book folder.
+    */
+
+    const baseTag =
+      '<base href="' +
+      folderURL.replace(
+        /"/g,
+        "&quot;"
+      ) +
+      '">';
+
+    /*
+    Remove an existing base tag if
+    the uploaded book already contains one.
+    */
+
+    html =
+      html.replace(
+        /<base\b[^>]*>/gi,
+        ""
+      );
+
+    /*
+    Insert our base URL inside <head>.
+    */
+
+    if (
+      /<head\b[^>]*>/i.test(html)
+    ) {
+
+      html =
+        html.replace(
+          /<head\b[^>]*>/i,
+          match =>
+            match +
+            baseTag
+        );
+
+    } else {
+
+      html =
+        baseTag +
+        html;
+
+    }
+
+    /*
+    Render the book inside the viewer.
+    */
+
+    bookFrame.srcdoc =
+      html;
+
+    loading.style.display =
+      "none";
+
+    bookFrame.style.display =
+      "block";
+
+  } catch (error) {
+
+    console.error(
+      "AGULIBRARY Digital Book Viewer:",
+      error
+    );
+
+    showError(
+      error?.message ||
+      "Unable to load the digital book."
+    );
+
+  }
+
+}
+
+
+openDigitalBook();
+
+</script>
+
+</body>
+
+</html>

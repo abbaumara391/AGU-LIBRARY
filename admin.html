@@ -136,20 +136,44 @@ footer{text-align:center;padding:30px;color:#70837b;border-top:1px solid #dceee6
 
 <div id="digitalBookFields" class="hidden" style="margin-top:12px">
 
-<div class="row">
+<label for="digitalBookFiles">Digital book files</label>
+<input
+  id="digitalBookFiles"
+  type="file"
+  multiple
+  accept=".html,.js,.css,.json,.png,.jpg,.jpeg,.webp,.gif,.svg,.ico,.mp3,.wav,.mp4,.webm,.pdf"
+>
+
+<div class="small" style="margin-top:8px">
+Select all files that belong to the digital book, such as
+<strong>index.html</strong>, <strong>app.js</strong>,
+<strong>data.js</strong>, CSS files and images.
+</div>
+
+<div class="row" style="margin-top:12px">
+
 <div>
 <label for="bookPath">Digital book folder path</label>
-<input id="bookPath" placeholder="e.g. books/mastery-physics">
+<input
+  id="bookPath"
+  placeholder="e.g. books/mastery-physics"
+>
 </div>
 
 <div>
 <label for="bookEntry">Book entry file</label>
-<input id="bookEntry" value="index.html" placeholder="index.html">
+<input
+  id="bookEntry"
+  value="index.html"
+  placeholder="index.html"
+>
 </div>
+
 </div>
 
 <div class="small" style="margin-top:8px">
-Use the folder containing the complete digital book. The entry file is normally index.html.
+The selected files will be uploaded into the digital book folder.
+The entry file is normally <strong>index.html</strong>.
 </div>
 
 </div>

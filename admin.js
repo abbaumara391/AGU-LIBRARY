@@ -707,10 +707,13 @@ if (type === "digital_book") {
        index.html entry file.
     */
     const digitalBookURL =
-      "/" +
-      bookPath +
-      "/" +
-      bookEntry;
+  d.storage
+    .from(BUCKET)
+    .getPublicUrl(
+      bookPath + "/" + bookEntry
+    )
+    .data
+    .publicUrl;
 
     /*
        ONLY CURRENT resources TABLE COLUMNS

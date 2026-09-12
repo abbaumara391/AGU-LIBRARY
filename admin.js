@@ -583,18 +583,22 @@ if (type === "digital_book") {
     );
 
   if (!bookPath) {
+
     if (status) {
       status.textContent =
         "Please enter the digital book folder path.";
     }
+
     return;
   }
 
   if (!files.length) {
+
     if (status) {
       status.textContent =
         "Please select the digital book files.";
     }
+
     return;
   }
 
@@ -603,45 +607,93 @@ if (type === "digital_book") {
   }
 
   /*
-     Check that the selected digital book
-     contains the entry file.
-  */
-  const hasEntryFile =
-    Array.from(files).some(
+   * ------------------------------------------------------
+   * REQUIRE THE THREE AGULIBRARY BOOK FILES
+   * ------------------------------------------------------
+   */
+
+  const requiredFiles = [
+    "index.html",
+    "app.js",
+    "data.js"
+  ];
+
+  const selectedNames =
+    Array.from(files).map(
       file =>
-        file.name === bookEntry ||
-        file.webkitRelativePath
+        String(
+          file.webkitRelativePath ||
+          file.name ||
+          ""
+        )
+          .replace(/\\/g, "/")
           .split("/")
-          .pop() === bookEntry
+          .pop()
     );
 
-  if (!hasEntryFile) {
-    if (status) {
-      status.textContent =
-        `The selected digital book must contain ${bookEntry}.`;
+  for (const required of requiredFiles) {
+
+    if (!selectedNames.includes(required)) {
+
+      const message =
+        `The digital book must contain ${required}.`;
+
+      if (status) {
+        status.textContent = message;
+      }
+
+      showMessage(
+        message,
+        "error"
+      );
+
+      return;
     }
-
-    showMessage(
-      `The selected digital book must contain ${bookEntry}.`,
-      "error"
-    );
-
-    return;
   }
+
+  /*
+   * ------------------------------------------------------
+   * CONVERT FILES TO BASE64
+   * ------------------------------------------------------
+   */
+
+  const readFileAsDataURL =
+    file =>
+      new Promise(
+        (resolve, reject) => {
+
+          const reader =
+            new FileReader();
+
+          reader.onload =
+            () => resolve(
+              String(
+                reader.result || ""
+              )
+            );
+
+          reader.onerror =
+            () =>
+              reject(
+                new Error(
+                  "Could not read " +
+                  file.name
+                )
+              );
+
+          reader.readAsDataURL(file);
+        }
+      );
 
   if (status) {
     status.textContent =
-      `Uploading digital book files... 0/${files.length}`;
+      `Preparing digital book files... 0/${files.length}`;
   }
 
-  const uploadedPaths = [];
+  const bookFiles = [];
 
   try {
 
-    /*
-       Upload every selected file into the
-       same digital book folder.
-    */
     for (
       let i = 0;
       i < files.length;
@@ -650,93 +702,175 @@ if (type === "digital_book") {
 
       const file = files[i];
 
-      /*
-         Use the actual selected file name.
-         This keeps index.html, app.js, data.js,
-         CSS files and assets together.
-      */
       const relativePath =
         file.webkitRelativePath ||
         file.name;
 
       const cleanRelativePath =
-        relativePath
+        String(relativePath)
           .replace(/\\/g, "/")
-          .replace(/^\/+/, "")
+          .replace(/^\/+/g, "")
           .split("/")
-          .map(part =>
-            part.replace(
-              /[^a-zA-Z0-9._-]/g,
-              "_"
-            )
+          .map(
+            part =>
+              part.replace(
+                /[^a-zA-Z0-9._-]/g,
+                "_"
+              )
           )
           .join("/");
 
-      const storagePath =
-        bookPath +
-        "/" +
-        cleanRelativePath;
+      const content =
+        await readFileAsDataURL(file);
 
-      const uploadResult =
-        await d.storage
-          .from(BUCKET)
-          .upload(
-            storagePath,
-            file,
-            {
-              upsert: true,
-             contentType:
-  file.name.toLowerCase().endsWith(".html")
-    ? "text/html"
-    : file.name.toLowerCase().endsWith(".js")
-      ? "text/javascript"
-      : file.name.toLowerCase().endsWith(".css")
-        ? "text/css"
-        : file.name.toLowerCase().endsWith(".json")
-          ? "application/json"
-          : file.type || "application/octet-stream"
-             
-            }
-          );
-
-      if (uploadResult.error) {
-        throw uploadResult.error;
-      }
-
-      uploadedPaths.push(storagePath);
+      bookFiles.push({
+        name: cleanRelativePath,
+        content: content
+      });
 
       if (status) {
         status.textContent =
-          `Uploading digital book files... ${i + 1}/${files.length}`;
+          `Preparing digital book files... ${i + 1}/${files.length}`;
       }
     }
 
     /*
-       The published book opens through its
-       index.html entry file.
-    */
-    const digitalBookURL =
-  d.storage
-    .from(BUCKET)
-    .getPublicUrl(
-      bookPath + "/" + bookEntry
-    )
-    .data
-    .publicUrl;
+     * ------------------------------------------------------
+     * GET CURRENT ADMIN SESSION
+     * ------------------------------------------------------
+     */
+
+    const sessionResult =
+      await d.auth.getSession();
+
+    if (sessionResult.error) {
+      throw sessionResult.error;
+    }
+
+    const accessToken =
+      sessionResult.data?.session?.access_token;
+
+    if (!accessToken) {
+      throw new Error(
+        "Administrator authentication session is unavailable. Please sign in again."
+      );
+    }
 
     /*
-       ONLY CURRENT resources TABLE COLUMNS
-    */
+     * ------------------------------------------------------
+     * PUBLISH THROUGH NETLIFY FUNCTION
+     * ------------------------------------------------------
+     */
+
+    if (status) {
+      status.textContent =
+        "Publishing digital book to AGULIBRARY...";
+    }
+
+    const publishResponse =
+      await fetch(
+        "/.netlify/functions/publish-digital-book",
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type":
+              "application/json",
+
+            "Authorization":
+              "Bearer " + accessToken
+          },
+
+          body:
+            JSON.stringify({
+              title: title,
+
+              owner:
+                "abbaumara391",
+
+              repo:
+                "AGU-LIBRARY",
+
+              branch:
+                "main",
+
+              folder:
+                bookPath,
+
+              files:
+                bookFiles
+            })
+        }
+      );
+
+    let publishData = {};
+
+    try {
+
+      publishData =
+        await publishResponse.json();
+
+    } catch (_) {
+
+      publishData = {};
+    }
+
+    if (!publishResponse.ok) {
+
+      throw new Error(
+        publishData?.error ||
+        publishData?.message ||
+        "Digital book could not be published."
+      );
+    }
+
+    /*
+     * ------------------------------------------------------
+     * NETLIFY BOOK URL
+     * ------------------------------------------------------
+     */
+
+    const digitalBookURL =
+      window.location.origin +
+      "/" +
+      bookPath +
+      "/" +
+      bookEntry;
+
+    /*
+     * ------------------------------------------------------
+     * CREATE RESOURCE DATABASE RECORD
+     * ------------------------------------------------------
+     */
+
     const payload = {
-      title: title,
-      subject: category,
-      level: level,
-      class_level: classLevel,
-      term: term,
-      type: "digital_book",
-      file_url: digitalBookURL,
-      resource_category: category,
-      folder_path: bookPath
+
+      title:
+        title,
+
+      subject:
+        category,
+
+      level:
+        level,
+
+      class_level:
+        classLevel,
+
+      term:
+        term,
+
+      type:
+        "digital_book",
+
+      file_url:
+        digitalBookURL,
+
+      resource_category:
+        category,
+
+      folder_path:
+        bookPath
     };
 
     const result =
@@ -745,25 +879,19 @@ if (type === "digital_book") {
         .insert(payload);
 
     if (result.error) {
-
-      /*
-         If the database record fails,
-         remove the files we just uploaded.
-      */
-      try {
-        if (uploadedPaths.length) {
-          await d.storage
-            .from(BUCKET)
-            .remove(uploadedPaths);
-        }
-      } catch (_) {}
-
       throw result.error;
     }
 
+    /*
+     * ------------------------------------------------------
+     * SUCCESS
+     * ------------------------------------------------------
+     */
+
     if (status) {
+
       status.textContent =
-        `✅ Digital book published successfully. ${files.length} file${files.length === 1 ? "" : "s"} uploaded.`;
+        `✅ Digital book published successfully. ${files.length} file${files.length === 1 ? "" : "s"} published to GitHub.`;
     }
 
     showMessage(
@@ -774,6 +902,7 @@ if (type === "digital_book") {
     $("uploadForm")?.reset();
 
     updateClassLevels();
+
     updateDigitalBookFields();
 
     await loadResources();
@@ -783,33 +912,23 @@ if (type === "digital_book") {
   } catch (digitalBookError) {
 
     console.error(
-      "AGULIBRARY digital book upload error:",
+      "AGULIBRARY digital book publishing error:",
       digitalBookError
     );
 
-    /*
-       Clean up partially uploaded files.
-    */
-    if (uploadedPaths.length) {
-      try {
-        await d.storage
-          .from(BUCKET)
-          .remove(uploadedPaths);
-      } catch (_) {}
-    }
-
     if (status) {
+
       status.textContent =
         "❌ " +
         (
           digitalBookError.message ||
-          "Digital book upload failed."
+          "Digital book publishing failed."
         );
     }
 
     showMessage(
       digitalBookError.message ||
-      "Digital book upload failed.",
+      "Digital book publishing failed.",
       "error"
     );
 

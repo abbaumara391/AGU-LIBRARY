@@ -559,47 +559,251 @@ async function uploadFile(e) {
 
   try {
     /* DIGITAL BOOK */
-    if (type === "digital_book") {
-      let bookPath = $("bookPath")?.value.trim() || "";
-      let bookEntry = $("bookEntry")?.value.trim() || "index.html";
+if (type === "digital_book") {
 
-      bookPath = bookPath.replace(/^[\/\\]+|[\/\\]+$/g, "");
-      bookEntry = bookEntry.replace(/^[\/\\]+/, "");
+  let bookPath =
+    $("bookPath")?.value.trim() || "";
 
-      if (!bookPath) {
-        if (status) status.textContent = "Please enter the digital book folder path.";
-        return;
+  let bookEntry =
+    $("bookEntry")?.value.trim() || "index.html";
+
+  const files =
+    $("digitalBookFiles")?.files || [];
+
+  bookPath =
+    bookPath.replace(
+      /^[\/\\]+|[\/\\]+$/g,
+      ""
+    );
+
+  bookEntry =
+    bookEntry.replace(
+      /^[\/\\]+/,
+      ""
+    );
+
+  if (!bookPath) {
+    if (status) {
+      status.textContent =
+        "Please enter the digital book folder path.";
+    }
+    return;
+  }
+
+  if (!files.length) {
+    if (status) {
+      status.textContent =
+        "Please select the digital book files.";
+    }
+    return;
+  }
+
+  if (!bookEntry) {
+    bookEntry = "index.html";
+  }
+
+  /*
+     Check that the selected digital book
+     contains the entry file.
+  */
+  const hasEntryFile =
+    Array.from(files).some(
+      file =>
+        file.name === bookEntry ||
+        file.webkitRelativePath
+          .split("/")
+          .pop() === bookEntry
+    );
+
+  if (!hasEntryFile) {
+    if (status) {
+      status.textContent =
+        `The selected digital book must contain ${bookEntry}.`;
+    }
+
+    showMessage(
+      `The selected digital book must contain ${bookEntry}.`,
+      "error"
+    );
+
+    return;
+  }
+
+  if (status) {
+    status.textContent =
+      `Uploading digital book files... 0/${files.length}`;
+  }
+
+  const uploadedPaths = [];
+
+  try {
+
+    /*
+       Upload every selected file into the
+       same digital book folder.
+    */
+    for (
+      let i = 0;
+      i < files.length;
+      i++
+    ) {
+
+      const file = files[i];
+
+      /*
+         Use the actual selected file name.
+         This keeps index.html, app.js, data.js,
+         CSS files and assets together.
+      */
+      const relativePath =
+        file.webkitRelativePath ||
+        file.name;
+
+      const cleanRelativePath =
+        relativePath
+          .replace(/\\/g, "/")
+          .replace(/^\/+/, "")
+          .split("/")
+          .map(part =>
+            part.replace(
+              /[^a-zA-Z0-9._-]/g,
+              "_"
+            )
+          )
+          .join("/");
+
+      const storagePath =
+        bookPath +
+        "/" +
+        cleanRelativePath;
+
+      const uploadResult =
+        await d.storage
+          .from(BUCKET)
+          .upload(
+            storagePath,
+            file,
+            {
+              upsert: true,
+              contentType:
+                file.type || undefined
+            }
+          );
+
+      if (uploadResult.error) {
+        throw uploadResult.error;
       }
 
-      if (!bookEntry) bookEntry = "index.html";
+      uploadedPaths.push(storagePath);
 
-      const digitalBookURL = "/" + bookPath + "/" + bookEntry;
-
-      /* ONLY CURRENT resources TABLE COLUMNS */
-      const payload = {
-        title: title,
-        subject: category,
-        level: level,
-        class_level: classLevel,
-        term: term,
-        type: "digital_book",
-        file_url: digitalBookURL,
-        resource_category: category,
-        folder_path: bookPath
-      };
-
-      const result = await d.from(TABLE).insert(payload);
-      if (result.error) throw result.error;
-
-      if (status) status.textContent = " Digital book published successfully.";
-      showMessage("Digital book published successfully.", "success");
-
-      $("uploadForm")?.reset();
-      updateClassLevels();
-      updateDigitalBookFields();
-      await loadResources();
-      return;
+      if (status) {
+        status.textContent =
+          `Uploading digital book files... ${i + 1}/${files.length}`;
+      }
     }
+
+    /*
+       The published book opens through its
+       index.html entry file.
+    */
+    const digitalBookURL =
+      "/" +
+      bookPath +
+      "/" +
+      bookEntry;
+
+    /*
+       ONLY CURRENT resources TABLE COLUMNS
+    */
+    const payload = {
+      title: title,
+      subject: category,
+      level: level,
+      class_level: classLevel,
+      term: term,
+      type: "digital_book",
+      file_url: digitalBookURL,
+      resource_category: category,
+      folder_path: bookPath
+    };
+
+    const result =
+      await d
+        .from(TABLE)
+        .insert(payload);
+
+    if (result.error) {
+
+      /*
+         If the database record fails,
+         remove the files we just uploaded.
+      */
+      try {
+        if (uploadedPaths.length) {
+          await d.storage
+            .from(BUCKET)
+            .remove(uploadedPaths);
+        }
+      } catch (_) {}
+
+      throw result.error;
+    }
+
+    if (status) {
+      status.textContent =
+        `✅ Digital book published successfully. ${files.length} file${files.length === 1 ? "" : "s"} uploaded.`;
+    }
+
+    showMessage(
+      "Digital book published successfully.",
+      "success"
+    );
+
+    $("uploadForm")?.reset();
+
+    updateClassLevels();
+    updateDigitalBookFields();
+
+    await loadResources();
+
+    return;
+
+  } catch (digitalBookError) {
+
+    console.error(
+      "AGULIBRARY digital book upload error:",
+      digitalBookError
+    );
+
+    /*
+       Clean up partially uploaded files.
+    */
+    if (uploadedPaths.length) {
+      try {
+        await d.storage
+          .from(BUCKET)
+          .remove(uploadedPaths);
+      } catch (_) {}
+    }
+
+    if (status) {
+      status.textContent =
+        "❌ " +
+        (
+          digitalBookError.message ||
+          "Digital book upload failed."
+        );
+    }
+
+    showMessage(
+      digitalBookError.message ||
+      "Digital book upload failed.",
+      "error"
+    );
+
+    return;
+  }
+}
 
     /* NORMAL FILE */
     const file = $("file")?.files?.[0];

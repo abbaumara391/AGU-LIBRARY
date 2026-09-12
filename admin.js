@@ -1571,6 +1571,8 @@ if (
     examinations =
       result.data || [];
 
+  populateExamSelects();
+    
     if (!examinations.length) {
 
       list.innerHTML =

@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#075c46">
+<title>MASTERY MATHEMATICS — SSS 1</title>
+<style>
+*{box-sizing:border-box}
+:root{--green:#075c46;--green2:#087a4b;--blue:#1257a6;--bg:#f3f8f6;--card:#fff;--text:#17352a;--soft:#6d8078;--line:#d9e9e2;--shadow:0 12px 34px rgba(8,122,75,.08)}
+html,body{margin:0;min-height:100%;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text)}
+button{font:inherit}.hidden{display:none!important}
+#cover{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:35px 22px;background:linear-gradient(145deg,#075c46 0 32%,#1257a6 32% 100%);color:#fff;position:relative;overflow:hidden}
+#cover:before,#cover:after{content:"";position:absolute;border:1px solid #ffffff22;border-radius:50%;width:320px;height:320px}#cover:before{left:-150px;top:-100px}#cover:after{right:-170px;bottom:-140px}
+.coverMark{width:82px;height:82px;border-radius:26px;display:grid;place-items:center;background:#fff;color:#075c46;font-size:45px;font-weight:900;margin-bottom:18px;box-shadow:0 18px 45px #0003}
+#cover small{font-weight:800;letter-spacing:1.5px}#cover h1{font-size:clamp(42px,9vw,76px);line-height:.95;margin:18px 0 12px}#cover h2{font-size:clamp(18px,4vw,28px);margin:0 0 18px}#cover p{max-width:800px;line-height:1.6}
+#openBook{margin:22px 0;padding:15px 25px;border:0;border-radius:14px;background:#fff;color:#075c46;font-weight:900;cursor:pointer;box-shadow:0 12px 30px #0003}
+#app{min-height:100vh}header{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 5%;background:#fffffff2;border-bottom:1px solid var(--line);backdrop-filter:blur(12px)}
+header button,.resourceHead button,.readerHead button,.navbtn,.term{border:1px solid #c9ddd5;background:#fff;color:var(--green);padding:10px 14px;border-radius:11px;font-weight:800;cursor:pointer}
+header b{font-size:15px}.iconbtn{min-width:44px}.hero{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:28px;border-radius:24px;background:linear-gradient(135deg,#e8f8f0,#eaf3ff);border:1px solid var(--line);box-shadow:var(--shadow)}
+.hero h2{margin:8px 0}.hero p{color:var(--soft);line-height:1.6}.hero button{border:0;border-radius:12px;padding:13px 16px;background:var(--green);color:#fff;font-weight:900;cursor:pointer}
+main,#reader,#resources{width:min(1100px,100%);margin:auto;padding:22px 5% 60px}.terms{display:flex;gap:9px;overflow:auto;margin:22px 0 15px;padding-bottom:3px}.term.active{background:var(--green);color:#fff}.heading{display:flex;justify-content:space-between;gap:15px;align-items:end}.heading h3{margin:5px 0;font-size:26px}.heading p{color:var(--soft)}
+.chapter-card{display:flex;align-items:center;gap:15px;margin:12px 0;padding:19px;background:var(--card);border:1px solid var(--line);border-radius:19px;box-shadow:0 8px 25px #087a4b0b;cursor:pointer;transition:.18s}.chapter-card:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
+.chapter-num{width:44px;height:44px;display:grid;place-items:center;border-radius:13px;background:#e8f8f0;color:var(--green);font-weight:900}.chapter-body{flex:1}.chapter-title{font-weight:900;font-size:17px}.chapter-sub{color:var(--soft);font-size:13px;margin-top:4px}.chapter-arrow{font-size:30px;color:var(--green)}
+.progress{height:5px;background:#e7f0ec;border-radius:99px;margin-top:9px;overflow:hidden}.progress i{display:block;height:100%;background:var(--green2)}
+.readerHead{position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 0;background:var(--bg)}#pages{display:flex;overflow:hidden;scroll-behavior:smooth;scroll-snap-type:x mandatory}.lesson-page{flex:0 0 100%;scroll-snap-align:start;padding:10px 0}.lesson-inner{background:#fff;border:1px solid var(--line);border-radius:22px;padding:25px;box-shadow:var(--shadow)}
+.lesson-kicker{color:var(--green2);font-size:12px;font-weight:900;letter-spacing:.5px}.lesson-title{font-size:clamp(28px,5vw,42px);font-weight:900;line-height:1.1;margin:10px 0 20px}.section-card{padding:18px;margin:13px 0;border:1px solid #e0ebe6;border-radius:15px;color:var(--text);background:var(--card)}.section-card h3{margin-top:0;color:var(--blue)}.section-card p,.section-card li{line-height:1.75;color:var(--text)}.section-card ol,.section-card ul{color:var(--text)}.example{background:#eaf3ff;border-left:4px solid var(--blue);color:#17352a}.example h3,.example p,.example li{color:#17352a}.practice{background:#e8f8f0;border-left:4px solid var(--green2);color:#17352a}.practice h3,.practice p,.practice li{color:#17352a}.section-card strong{color:inherit}
+.lesson-nav{display:flex;justify-content:space-between;gap:10px;margin-top:20px}.navbtn{background:var(--green);color:#fff}.navbtn:disabled{opacity:.4}.dots{display:flex;justify-content:center;gap:6px;margin:12px}.dot{width:8px;height:8px;border-radius:50%;background:#bfd1c9}.dot.active{background:var(--green)}
+.resourceHead{display:flex;justify-content:space-between;gap:10px}.resource-intro{padding:20px;border-radius:20px;background:linear-gradient(135deg,#e8f8f0,#eaf3ff);border:1px solid var(--line);line-height:1.7;color:var(--soft)}.resource-card{background:#fff;border:1px solid var(--line);border-radius:19px;padding:20px;margin:12px 0;box-shadow:0 8px 25px #087a4b08;cursor:pointer;transition:.18s}.resource-card:hover{transform:translateY(-2px);box-shadow:var(--shadow)}.resource-card h3{margin:0;color:var(--blue)}.resource-card p{line-height:1.7;color:var(--soft)}.resource-open{color:var(--green);font-weight:900;margin-top:10px}.mock{border:1px solid var(--line);padding:18px;border-radius:16px;margin:12px 0;background:#fff}.mock label{display:block;padding:8px 0;cursor:pointer}.result{padding:20px;border-radius:16px;background:#e8f8f0;margin-top:15px;font-weight:800}
+.modal{position:fixed;inset:0;background:#071b1499;z-index:100;display:flex;align-items:center;justify-content:center;padding:18px}.modal-box{width:min(900px,100%);max-height:90vh;overflow:auto;background:var(--card);color:var(--text);border-radius:24px;padding:25px;box-shadow:0 25px 80px #0005}.modal-top{display:flex;justify-content:space-between;gap:15px;align-items:start}.modal-top h2{margin:0;color:var(--green);font-size:clamp(25px,5vw,38px)}.close{border:0;background:#e8f8f0;color:var(--green);border-radius:12px;padding:9px 12px;font-weight:900;cursor:pointer}.resource-section{margin-top:18px;padding:18px;border:1px solid var(--line);border-radius:16px;background:rgba(8,122,75,.035);color:var(--text)}.resource-section h3{margin-top:0;color:var(--blue)}.resource-section li{line-height:1.7;margin:5px 0;color:var(--text)}.formula-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.formula{padding:12px;border-radius:11px;background:#fff;border:1px solid var(--line);color:#17352a;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;line-height:1.55}.formula strong,.formula b{color:#17352a}
+[data-theme="dark"]{--bg:#101917;--card:#17231f;--text:#e8f4ef;--soft:#a8bbb3;--line:#29443a}[data-theme="dark"] header,[data-theme="dark"] .readerHead{background:#101917ee}[data-theme="dark"] header button,[data-theme="dark"] .readerHead button,[data-theme="dark"] .navbtn,[data-theme="dark"] .term{background:#17231f;color:#bce8d3}[data-theme="dark"] .chapter-card,[data-theme="dark"] .lesson-inner,[data-theme="dark"] .resource-card,[data-theme="dark"] .mock,[data-theme="dark"] .modal-box,[data-theme="dark"] .formula{background:var(--card)}[data-theme="dark"] .resource-section{background:#ffffff05;color:var(--text)}[data-theme="dark"] .formula{background:#17231f;color:#e8f4ef}[data-theme="dark"] .formula strong,[data-theme="dark"] .formula b{color:#e8f4ef}[data-theme="dark"] .section-card p,[data-theme="dark"] .section-card li,[data-theme="dark"] .section-card ol,[data-theme="dark"] .section-card ul{color:var(--text)}[data-theme="dark"] .example,[data-theme="dark"] .practice{color:var(--text)}[data-theme="dark"] .example h3,[data-theme="dark"] .example p,[data-theme="dark"] .example li,[data-theme="dark"] .practice h3,[data-theme="dark"] .practice p,[data-theme="dark"] .practice li{color:var(--text)}
+@media(max-width:700px){.hero{display:block}.hero button{margin-top:8px}.heading{display:block}.readerHead b{max-width:45%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.lesson-inner{padding:20px}.formula-grid{grid-template-columns:1fr}.modal-box{padding:20px}.chapter-card{padding:16px}}
+</style>
+</head>
+<body>
+<section id="cover">
+  <div class="coverMark">∑</div>
+  <small>SSS 1 • FIRST • SECOND • THIRD TERM</small>
+  <h1>MASTERY<br>MATHEMATICS</h1>
+  <h2>A COMPLETE WAEC &amp; NECO<br>MATHEMATICS TEXTBOOK</h2>
+  <p>Number • Algebra • Logic • Geometry • Trigonometry • Mensuration • Statistics • Probability • Financial Mathematics</p>
+  <button id="openBook">TAP TO OPEN</button>
+  <p>Owner: <b>Umar Mohammed</b></p>
+</section>
+<div id="app" class="hidden">
+<header><button id="homeBtn" class="iconbtn">⌂</button><b>MASTERY MATHEMATICS</b><button id="themeBtn">☾ Theme</button></header>
+<main id="home">
+<section class="hero"><div><small>COMPLETE SSS1 COURSE</small><h2>Understand Mathematics step by step.</h2><p>Three terms, six chapters per term, long explanations, worked examples, formulas, symbols, study guides and examination practice.</p></div><button id="resourcesBtn">📚 Study Resources</button></section>
+<div id="terms" class="terms"></div><section class="heading"><div><small>CHAPTERS</small><h3 id="termTitle"></h3></div><p id="termInfo"></p></section><div id="chapters"></div>
+</main>
+<section id="reader" class="hidden"><div class="readerHead"><button id="backChapters">← Chapters</button><b id="readerTitle"></b><span id="counter"></span></div><div id="pages"></div><div class="dots" id="dots"></div><nav class="lesson-nav"><button id="prevBtn" class="navbtn">← Previous</button><small>Swipe horizontally</small><button id="nextBtn" class="navbtn">Next →</button></nav></section>
+<section id="resources" class="hidden"><div class="resourceHead"><button id="backLibrary">← Library</button><button id="themeBtn2">☾ Theme</button></div><h2>📚 Study Resources</h2><div class="resource-intro">Tap any card below to open its full reference. Each card contains formulas, symbols, identities, definitions, methods, examples or examination guidance.</div><div id="resourceCards"></div></section>
+</div>
+<div id="resourceModal" class="modal hidden" role="dialog" aria-modal="true"><div class="modal-box"><div class="modal-top"><h2 id="modalTitle"></h2><button id="closeModal" class="close">✕ Close</button></div><p id="modalBody"></p><div id="modalSections"></div></div></div>
+<script src="data.js"></script><script src="app.js"></script>
+</body>
+</html>

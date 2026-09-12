@@ -1,4 +1,4 @@
-export default async function (event) {
+async function publishDigitalBook(event) {
   const headers = {
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Headers": "Content-Type, Authorization",
@@ -491,5 +491,24 @@ export default async function (event) {
           "Digital book publishing failed."
       })
     };
+    }
+}
+
+export default async function (event) {
+  const result = await publishDigitalBook(event);
+
+  if (
+    result === undefined ||
+    result instanceof Response
+  ) {
+    return result;
   }
-};
+
+  return new Response(
+    result.body || "",
+    {
+      status: result.statusCode || 200,
+      headers: result.headers || {}
+    }
+  );
+}

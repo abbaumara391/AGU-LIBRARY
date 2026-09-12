@@ -1302,7 +1302,185 @@ async function loadNotificationCount() {
   } catch (_) {}
 }
 
-/* ---------------- DASHBOARD ---------------- */
+/* ---------------- CREATE / SAVE EXAMINATION ---------------- */
+
+async function saveExam() {
+
+  const status = $("examFormStatus");
+
+  try {
+
+    const verified = await adminMfaGate();
+
+    if (!verified) return;
+
+    const id =
+      $("examEditId")?.value.trim() || "";
+
+    const title =
+      $("examTitle")?.value.trim() || "";
+
+    const subject =
+      $("examSubject")?.value.trim() || "";
+
+    const educationLevel =
+      $("examEducationLevel")?.value.trim() || "";
+
+    const classLevel =
+      $("examClassLevel")?.value.trim() || "";
+
+    const term =
+      $("examTerm")?.value.trim() || "";
+
+    const description =
+      $("examDescription")?.value.trim() || null;
+
+    const pass =
+      Number($("examPassPercentage")?.value);
+
+    if (
+      !title ||
+      !subject ||
+      !educationLevel ||
+      !classLevel ||
+      !term
+    ) {
+
+      throw new Error(
+        "Title, subject, education level, class / level and term are required."
+      );
+
+    }
+
+    if (
+      !Number.isFinite(pass) ||
+      pass < 0 ||
+      pass > 100
+    ) {
+
+      throw new Error(
+        "Pass percentage must be between 0 and 100."
+      );
+
+    }
+
+    const payload = {
+
+      title:
+        title,
+
+      description:
+        description,
+
+      subject:
+        subject,
+
+      education_level:
+        educationLevel,
+
+      class_level:
+        classLevel,
+
+      term:
+        term,
+
+      pass_percentage:
+        pass,
+
+      registration_required:
+        $("examRegistrationRequired")?.value === "true",
+
+      is_published:
+        $("examPublished")?.value === "true"
+
+    };
+
+    let result;
+
+    if (id) {
+
+      result =
+        await getDB()
+          .from("agu_examinations")
+          .update(payload)
+          .eq("id", id);
+
+    } else {
+
+      result =
+        await getDB()
+          .from("agu_examinations")
+          .insert({
+            ...payload,
+            created_by:
+              currentSession?.user?.id || null
+          });
+
+    }
+
+    if (result.error) {
+      throw result.error;
+    }
+
+    if (status) {
+
+      status.textContent =
+        id
+          ? "✅ Examination updated successfully."
+          : "✅ Examination created successfully.";
+
+    }
+
+    showMessage(
+      id
+        ? "Examination updated successfully."
+        : "Examination created successfully.",
+      "success"
+    );
+
+    if (!id) {
+
+      $("examTitle").value = "";
+      $("examSubject").value = "";
+      $("examEducationLevel").value = "";
+      $("examClassLevel").value = "";
+      $("examTerm").value = "";
+      $("examPassPercentage").value = "";
+      $("examRegistrationRequired").value = "true";
+      $("examPublished").value = "false";
+      $("examDescription").value = "";
+
+    }
+
+  } catch (e) {
+
+    console.error(
+      "AGULIBRARY examination save error:",
+      e
+    );
+
+    if (status) {
+
+      status.textContent =
+        "❌ " +
+        (
+          e.message ||
+          "Unable to save examination."
+        );
+
+    }
+
+    showMessage(
+      e.message ||
+      "Unable to save examination.",
+      "error"
+    );
+
+  }
+
+}
+  
+  /* ---------------- DASHBOARD ---------------- */
 
 async function finishAdmin() {
   $("loginPanel")?.classList.add("hidden");

@@ -493,9 +493,26 @@ async function publishDigitalBook(event) {
     };
     }
 }
+export default async function (request) {
 
-export default async function (event) {
-  const result = await publishDigitalBook(event);
+  const legacyEvent = {
+    httpMethod: request.method,
+
+    headers:
+      Object.fromEntries(
+        request.headers.entries()
+      ),
+
+    body:
+      await request.text(),
+
+    isBase64Encoded: false
+  };
+
+  const result =
+    await publishDigitalBook(
+      legacyEvent
+    );
 
   if (
     result === undefined ||
@@ -507,8 +524,11 @@ export default async function (event) {
   return new Response(
     result.body || "",
     {
-      status: result.statusCode || 200,
-      headers: result.headers || {}
+      status:
+        result.statusCode || 200,
+
+      headers:
+        result.headers || {}
     }
   );
 }

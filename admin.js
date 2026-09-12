@@ -1507,7 +1507,7 @@ async function loadExaminations() {
       throw result.error;
     }
 
-    const examinations =
+    examinations =
       result.data || [];
 
     if (!examinations.length) {

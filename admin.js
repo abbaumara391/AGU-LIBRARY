@@ -685,8 +685,17 @@ if (type === "digital_book") {
             file,
             {
               upsert: true,
-              contentType:
-                file.type || undefined
+             contentType:
+  file.name.toLowerCase().endsWith(".html")
+    ? "text/html"
+    : file.name.toLowerCase().endsWith(".js")
+      ? "text/javascript"
+      : file.name.toLowerCase().endsWith(".css")
+        ? "text/css"
+        : file.name.toLowerCase().endsWith(".json")
+          ? "application/json"
+          : file.type || "application/octet-stream"
+             
             }
           );
 

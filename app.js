@@ -1,6 +1,6 @@
 /* =========================================================
-AGULIBRARY — APP.JS
-PHASE 2 — SUBJECT + RESOURCE + LESSON CONNECTION
+AGULIBRARY â€” APP.JS
+PHASE 2 â€” SUBJECT + RESOURCE + LESSON CONNECTION
 DIGITAL BOOK OPENING FIX
 ========================================================= */
 
@@ -369,10 +369,10 @@ typeValue === "digital_book";
 
 const buttonText =
 isDigitalBook
-? "📚 Open Book →"
+? "ðŸ“š Open Book â†’"
 : isLesson
-? "📖 Open Lesson →"
-: "Tap to open →";
+? "ðŸ“– Open Lesson â†’"
+: "Tap to open â†’";
 
 return `
 
@@ -653,7 +653,7 @@ and renders it as an actual webpage.
 */
 
 const viewerURL =
-"book-viewer.html?url=" +
+"digital_book_book_viewer.html?url=" +
 encodeURIComponent(url);
 
 window.open(
@@ -751,25 +751,25 @@ function getResourceIcon(type) {
 
 const icons = {
 
-book: "📚",
+book: "ðŸ“š",
 
-digital_book: "📚",
+digital_book: "ðŸ“š",
 
-pdf: "📄",
+pdf: "ðŸ“„",
 
-video: "🎥",
+video: "ðŸŽ¥",
 
-photo: "🖼️",
+photo: "ðŸ–¼ï¸",
 
-image: "🖼️",
+image: "ðŸ–¼ï¸",
 
-course: "🎓",
+course: "ðŸŽ“",
 
-lesson: "📖",
+lesson: "ðŸ“–",
 
-document: "📄",
+document: "ðŸ“„",
 
-audio: "🎧"
+audio: "ðŸŽ§"
 
 };
 
@@ -780,7 +780,7 @@ type || ""
 ).toLowerCase()
  ]
 ||
-"📘"
+"ðŸ“˜"
 );
 
 }
@@ -932,7 +932,7 @@ user.email?.split("@")[0] ||
 "Student";
 
 accountButton.textContent =
-"🎓 My Account";
+"ðŸŽ“ My Account";
 
 accountButton.href =
 "student.html";
@@ -966,7 +966,7 @@ error
 
 /* =========================================================
    AGULIBRARY AI TEACHER DISPLAY RENDERER
-   SAFE ADDITION — DOES NOT CHANGE AI CONNECTION OR APP LOGIC
+   SAFE ADDITION â€” DOES NOT CHANGE AI CONNECTION OR APP LOGIC
    ========================================================= */
 (function setupAITeacherDisplayRenderer(){
   "use strict";

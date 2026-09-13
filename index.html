@@ -990,7 +990,7 @@ async function loadExaminations(){
   try{
     const [examRes,regRes,accessRes]=await Promise.all([
       client.from("agu_examinations").select("id,title,description,subject,education_level,class_level,term,pass_percentage,registration_required,is_published,created_at").eq("is_published",true).order("created_at",{ascending:false}),
-      client.from("agu_exam_registrations").select("exam_id,status").eq("student_id",currentUser.id),
+      client.from("agu_exam_registrations").select("examination_id,status").eq("student_id",currentUser.id),
       client.from("agu_exam_daily_access").select("exam_id,accessed_at").eq("student_id",currentUser.id).eq("access_date",lagosDate()).maybeSingle()
     ]);
     if(examRes.error)throw examRes.error;

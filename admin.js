@@ -3944,16 +3944,26 @@ $("year").textContent =
 }
 }
 
-document.addEventListener(
-"DOMContentLoaded",
-() => {
+function startAGUAdmin() {
 
-bind();  
+  bind();
 
-checkSession();
+  checkSession();
 
 }
-);
+
+if (document.readyState === "loading") {
+
+  document.addEventListener(
+    "DOMContentLoaded",
+    startAGUAdmin
+  );
+
+} else {
+
+  startAGUAdmin();
+
+}
 
 window.AGU_ADMIN = {
 

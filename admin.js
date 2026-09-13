@@ -3784,14 +3784,12 @@ location.reload();
 }
 
 /* ---------------- EVENTS ---------------- */
+$("adminLoginButton")
+  ?.addEventListener(
+    "click",
+    login
+  );
 
-function bind() {
-
-$("adminLoginForm")
-?.addEventListener(
-"submit",
-login
-);
 
 $("uploadForm")
 ?.addEventListener(

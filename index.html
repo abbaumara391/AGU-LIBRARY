@@ -1004,7 +1004,7 @@ async function loadExaminations(){
   }
 }
 
-function registrationFor(exam){return examRegistrations.find(x=>String(x.exam_id)===String(exam.id))||null}
+function registrationFor(exam){return examRegistrations.find(x=>String(x.examination_id)===String(exam.id))||null}
 function renderExamList(dailyAccess){
   const list=document.getElementById("examList"),status=document.getElementById("examStatus"),q=document.getElementById("examSearch")?.value?.toLowerCase().trim()||"";
   if(!list||!status)return;

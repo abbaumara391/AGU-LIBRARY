@@ -2159,139 +2159,6 @@ function populateExamSelects() {
   });
 }
 
-/* ---------------- LOAD EXAMINATIONS ---------------- */
-
-async function loadExaminations() {
-
-  const list =
-    $("adminExamList");
-
-  if (!list) return;
-
-  list.innerHTML =
-    '<div class="empty">Loading examinations...</div>';
-
-  try {
-
-    const result =
-      await getDB()
-        .from(
-          "agu_examinations"
-        )
-        .select("*")
-        .order(
-          "created_at",
-          {
-            ascending: false
-          }
-        );
-
-    if (result.error) {
-      throw result.error;
-    }
-
-    examinations =
-      result.data || [];
-
-    /*
-     * ------------------------------------------------------
-     * POPULATE EXAMINATION SELECT MENUS
-     * ------------------------------------------------------
-     */
-
-    populateExamSelects();
-
-    if (!examinations.length) {
-
-      list.innerHTML =
-        '<div class="empty">No examinations created yet.</div>';
-
-      return;
-    }
-
-    list.innerHTML =
-      examinations
-        .map(exam => {
-
-          const published =
-            exam.is_published === true;
-
-          const registration =
-            exam.registration_required !== false;
-
-          return `
-            <div class="exam-card">
-
-              <div class="exam-card-title">
-                ${exam.title || "Untitled Examination"}
-              </div>
-
-              <div class="exam-card-info">
-                <strong>Subject:</strong>
-                ${exam.subject || "—"}
-              </div>
-
-              <div class="exam-card-info">
-                <strong>Education Level:</strong>
-                ${exam.education_level || "—"}
-              </div>
-
-              <div class="exam-card-info">
-                <strong>Class / Level:</strong>
-                ${exam.class_level || "—"}
-              </div>
-
-              <div class="exam-card-info">
-                <strong>Term:</strong>
-                ${exam.term || "—"}
-              </div>
-
-              <div class="exam-card-info">
-                <strong>Pass Percentage:</strong>
-                ${exam.pass_percentage ?? 0}%
-              </div>
-
-              <div class="exam-card-info">
-                <strong>Registration:</strong>
-                ${
-                  registration
-                    ? "Required"
-                    : "Not Required"
-                }
-              </div>
-
-              <div class="exam-card-info">
-                <strong>Status:</strong>
-                ${
-                  published
-                    ? "Published"
-                    : "Draft"
-                }
-              </div>
-
-            </div>
-          `;
-
-        })
-        .join("");
-
-  } catch (error) {
-
-    console.error(
-      "AGULIBRARY examination loading error:",
-      error
-    );
-
-    list.innerHTML =
-      `<div class="empty">
-        ❌ ${
-          error.message ||
-          "Unable to load examinations."
-        }
-      </div>`;
-  }
-}
-
 /* ---------------- LOAD QUESTIONS FOR SELECTED EXAM ---------------- */
 
 async function loadQuestionsForSelectedExam() {
@@ -2359,8 +2226,7 @@ async function loadQuestionsForSelectedExam() {
           <div class="question-row">
 
             <h3>
-              Question
-              ${question.question_number ?? ""}
+              Question ${question.question_number ?? ""}
               <span class="badge blue">
                 ${question.marks ?? 0}
                 ${Number(question.marks) === 1 ? "mark" : "marks"}
@@ -2376,9 +2242,7 @@ async function loadQuestionsForSelectedExam() {
               ${options.map((option, index) => {
 
                 const letter =
-                  String.fromCharCode(
-                    65 + index
-                  );
+                  String.fromCharCode(65 + index);
 
                 const isCorrect =
                   letter ===
@@ -2400,16 +2264,181 @@ async function loadQuestionsForSelectedExam() {
               class="small"
               style="margin-top:8px"
             >
-              Marks:
-              ${question.marks ?? 0}
+              Marks: ${question.marks ?? 0}
               • Correct option:
               ${question.correct_option || "—"}
+            </div>
+
+            <div
+              class="actions"
+              style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap"
+            >
+
+              <button
+                class="btn light agu-edit-question"
+                data-id="${question.id}"
+                type="button"
+              >
+                ✏ Edit
+              </button>
+
+              <button
+                class="btn danger agu-delete-question"
+                data-id="${question.id}"
+                type="button"
+              >
+                🗑 Delete
+              </button>
+
             </div>
 
           </div>
         `;
 
       }).join("");
+
+    /* ---------------- EDIT BUTTONS ---------------- */
+
+    list
+      .querySelectorAll(".agu-edit-question")
+      .forEach(button => {
+
+        button.addEventListener(
+          "click",
+          () => {
+
+            const question =
+              questions.find(
+                item =>
+                  String(item.id) ===
+                  String(button.dataset.id)
+              );
+
+            if (!question) return;
+
+            $("questionEditId").value =
+              question.id || "";
+
+            $("questionPosition").value =
+              question.question_number ?? "";
+
+            $("questionMarks").value =
+              question.marks ?? 1;
+
+            $("questionText").value =
+              question.question_text || "";
+
+            const opts =
+              Array.isArray(question.options)
+                ? question.options
+                : [];
+
+            [
+              "optionA",
+              "optionB",
+              "optionC",
+              "optionD",
+              "optionE"
+            ].forEach((id, index) => {
+
+              if ($(id)) {
+                $(id).value =
+                  opts[index] ?? "";
+              }
+
+            });
+
+            $("correctOption").value =
+              question.correct_option || "A";
+
+            $("saveQuestion").textContent =
+              "💾 Save Question Changes";
+
+            if ($("questionFormStatus")) {
+
+              $("questionFormStatus").textContent =
+                "Editing question " +
+                (question.question_number ?? "") +
+                ".";
+
+            }
+
+            window.scrollTo({
+              top:
+                $("questionText")?.getBoundingClientRect().top +
+                window.scrollY -
+                120,
+              behavior: "smooth"
+            });
+
+          }
+        );
+
+      });
+
+    /* ---------------- DELETE BUTTONS ---------------- */
+
+    list
+      .querySelectorAll(".agu-delete-question")
+      .forEach(button => {
+
+        button.addEventListener(
+          "click",
+          async () => {
+
+            const confirmed =
+              confirm(
+                "Are you sure you want to delete this question?"
+              );
+
+            if (!confirmed) return;
+
+            try {
+
+              const verified =
+                await adminMfaGate();
+
+              if (!verified) return;
+
+              const deleteResult =
+                await getDB()
+                  .from("agu_exam_questions")
+                  .delete()
+                  .eq(
+                    "id",
+                    button.dataset.id
+                  );
+
+              if (deleteResult.error) {
+                throw deleteResult.error;
+              }
+
+              showMessage(
+                "Question deleted successfully.",
+                "success"
+              );
+
+              await loadQuestionsForSelectedExam();
+
+            } catch (error) {
+
+              console.error(
+                "AGULIBRARY question deletion error:",
+                error
+              );
+
+              showMessage(
+                error.message ||
+                "Unable to delete question.",
+                "error"
+              );
+
+            }
+
+          }
+        );
+
+      });
 
   } catch (error) {
 
@@ -2429,6 +2458,7 @@ async function loadQuestionsForSelectedExam() {
   }
 
 }
+
   
 /* ---------------- SAVE EXAMINATION QUESTION ---------------- */
 

@@ -2292,6 +2292,151 @@ async function loadExaminations() {
   }
 }
 
+/* ---------------- SAVE EXAMINATION QUESTION ---------------- */
+
+async function saveQuestion() {
+
+  const status = $("questionFormStatus");
+
+  try {
+
+    const verified = await adminMfaGate();
+
+    if (!verified) return;
+
+    const examId =
+      $("questionExamSelect")?.value || "";
+
+    const id =
+      $("questionEditId")?.value.trim() || "";
+
+    const position =
+      Number($("questionPosition")?.value);
+
+    const marks =
+      Number($("questionMarks")?.value);
+
+    const questionText =
+      $("questionText")?.value.trim() || "";
+
+    const options = [
+      $("optionA")?.value.trim() || "",
+      $("optionB")?.value.trim() || "",
+      $("optionC")?.value.trim() || "",
+      $("optionD")?.value.trim() || "",
+      $("optionE")?.value.trim() || ""
+    ];
+
+    const correct =
+      $("correctOption")?.value || "A";
+
+    if (!examId) {
+      throw new Error(
+        "Select an examination first."
+      );
+    }
+
+    if (
+      !Number.isInteger(position) ||
+      position < 1
+    ) {
+      throw new Error(
+        "Question position must be a whole number starting from 1."
+      );
+    }
+
+    if (
+      !Number.isFinite(marks) ||
+      marks < 0
+    ) {
+      throw new Error(
+        "Marks must be zero or greater."
+      );
+    }
+
+    if (!questionText) {
+      throw new Error(
+        "Enter the question text."
+      );
+    }
+
+    if (options.some(option => !option)) {
+      throw new Error(
+        "All five answer options A–E are required."
+      );
+    }
+
+    const payload = {
+      exam_id: examId,
+      position: position,
+      question_text: questionText,
+      options: options,
+      correct_option: correct,
+      marks: marks
+    };
+
+    let result;
+
+    if (id) {
+
+      result =
+        await getDB()
+          .from("agu_exam_questions")
+          .update(payload)
+          .eq("id", id);
+
+    } else {
+
+      result =
+        await getDB()
+          .from("agu_exam_questions")
+          .insert(payload);
+
+    }
+
+    if (result.error) {
+      throw result.error;
+    }
+
+    if (status) {
+      status.textContent =
+        id
+          ? "✅ Question updated successfully."
+          : "✅ Question saved successfully.";
+    }
+
+    showMessage(
+      id
+        ? "Question updated successfully."
+        : "Question saved successfully.",
+      "success"
+    );
+
+  } catch (error) {
+
+    console.error(
+      "AGULIBRARY question save error:",
+      error
+    );
+
+    if (status) {
+      status.textContent =
+        "❌ " +
+        (
+          error.message ||
+          "Unable to save question."
+        );
+    }
+
+    showMessage(
+      error.message ||
+      "Unable to save question.",
+      "error"
+    );
+  }
+
+}
+  
 async function saveExam() {
 
   const status =

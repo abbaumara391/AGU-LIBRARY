@@ -2273,13 +2273,14 @@ async function loadRegistrations() {
       $("registrationStatusFilter")?.value ||
       "";
 
-    if (examId) {
-      query =
-        query.eq(
-          "exam_id",
-          examId
-        );
-    }
+   if (examId) {
+  query =
+    query.eq(
+      "examination_id",
+      examId
+    );
+}
+       
 
     if (status) {
       query =
@@ -2350,7 +2351,7 @@ function renderRegistrations() {
           examinations.find(
             e =>
               String(e.id) ===
-              String(registration.exam_id)
+              String(registration.examination_id)
           );
 
         const studentName =

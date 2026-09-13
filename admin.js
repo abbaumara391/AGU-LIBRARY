@@ -2292,6 +2292,144 @@ async function loadExaminations() {
   }
 }
 
+/* ---------------- LOAD QUESTIONS FOR SELECTED EXAM ---------------- */
+
+async function loadQuestionsForSelectedExam() {
+
+  const list =
+    $("adminQuestionList");
+
+  const examinationId =
+    $("questionExamSelect")?.value || "";
+
+  if (!list) return;
+
+  if (!examinationId) {
+
+    list.innerHTML =
+      '<div class="empty">Select an examination to manage its questions.</div>';
+
+    return;
+  }
+
+  list.innerHTML =
+    '<div class="empty">Loading questions...</div>';
+
+  try {
+
+    const result =
+      await getDB()
+        .from("agu_exam_questions")
+        .select("*")
+        .eq(
+          "examination_id",
+          examinationId
+        )
+        .order(
+          "question_number",
+          {
+            ascending: true
+          }
+        );
+
+    if (result.error) {
+      throw result.error;
+    }
+
+    const questions =
+      result.data || [];
+
+    if (!questions.length) {
+
+      list.innerHTML =
+        '<div class="empty">No questions have been added to this examination yet.</div>';
+
+      return;
+    }
+
+    list.innerHTML =
+      questions.map(question => {
+
+        const options =
+          Array.isArray(question.options)
+            ? question.options
+            : [];
+
+        return `
+          <div class="question-row">
+
+            <h3>
+              Question
+              ${question.question_number ?? ""}
+              <span class="badge blue">
+                ${question.marks ?? 0}
+                ${Number(question.marks) === 1 ? "mark" : "marks"}
+              </span>
+            </h3>
+
+            <div style="margin-top:8px">
+              ${question.question_text || ""}
+            </div>
+
+            <div class="question-options">
+
+              ${options.map((option, index) => {
+
+                const letter =
+                  String.fromCharCode(
+                    65 + index
+                  );
+
+                const isCorrect =
+                  letter ===
+                  String(question.correct_option);
+
+                return `
+                  <div class="question-option ${isCorrect ? "correct" : ""}">
+                    <strong>${letter}.</strong>
+                    ${option}
+                    ${isCorrect ? " ✅" : ""}
+                  </div>
+                `;
+
+              }).join("")}
+
+            </div>
+
+            <div
+              class="small"
+              style="margin-top:8px"
+            >
+              Marks:
+              ${question.marks ?? 0}
+              • Correct option:
+              ${question.correct_option || "—"}
+            </div>
+
+          </div>
+        `;
+
+      }).join("");
+
+  } catch (error) {
+
+    console.error(
+      "AGULIBRARY question loading error:",
+      error
+    );
+
+    list.innerHTML =
+      `<div class="empty">
+        ❌ ${
+          error.message ||
+          "Unable to load questions."
+        }
+      </div>`;
+
+  }
+
+}
+  
 /* ---------------- SAVE EXAMINATION QUESTION ---------------- */
 
 async function saveQuestion() {
@@ -2952,6 +3090,10 @@ function bind() {
       saveExam
     );
   $("saveQuestion")?.addEventListener("click", saveQuestion);
+$("questionExamSelect")?.addEventListener(
+  "change",
+  loadQuestionsForSelectedExam
+);
   
   /*
    * Examination select menus

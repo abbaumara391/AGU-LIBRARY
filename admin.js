@@ -2320,6 +2320,250 @@ async function loadRegistrations() {
       </div>`;
   }
 }
+function renderRegistrations() {
+
+  const list =
+    $("adminRegistrationList");
+
+  if (!list) return;
+
+  if (!examRegistrations.length) {
+
+    list.innerHTML =
+      '<div class="empty">No examination registrations found.</div>';
+
+    return;
+  }
+
+  list.innerHTML =
+    examRegistrations
+      .map(registration => {
+
+        const student =
+          students.find(
+            p =>
+              String(getId(p)) ===
+              String(registration.student_id)
+          );
+
+        const exam =
+          examinations.find(
+            e =>
+              String(e.id) ===
+              String(registration.exam_id)
+          );
+
+        const studentName =
+          student
+            ? profileName(student)
+            : "Student";
+
+        const studentEmail =
+          student
+            ? profileEmail(student)
+            : "";
+
+        const examName =
+          exam
+            ? exam.title
+            : "Examination";
+
+        const state =
+          registration.status ||
+          "registered";
+
+        const badgeClass =
+          state === "approved"
+            ? ""
+            : state === "rejected"
+              ? "badge off"
+              : "badge blue";
+
+        return `
+          <div class="exam-row">
+
+            <h3>
+              ${esc(examName)}
+            </h3>
+
+            <div class="small">
+
+              <strong>
+                ${esc(studentName)}
+              </strong>
+
+              ${
+                studentEmail
+                  ? " • " +
+                    esc(studentEmail)
+                  : ""
+              }
+
+            </div>
+
+            <div class="exam-meta">
+
+              <span class="${badgeClass}">
+                ${esc(
+                  state.toUpperCase()
+                )}
+              </span>
+
+              <span>
+                Registered:
+                ${
+                  registration.registered_at
+                    ? esc(
+                        new Date(
+                          registration.registered_at
+                        ).toLocaleString()
+                      )
+                    : "—"
+                }
+              </span>
+
+              ${
+                registration.approved_at
+                  ? `
+                    <span>
+                      Approved:
+                      ${esc(
+                        new Date(
+                          registration.approved_at
+                        ).toLocaleString()
+                      )}
+                    </span>
+                  `
+                  : ""
+              }
+
+            </div>
+
+            <div class="small">
+
+              Student ID:
+              ${esc(
+                registration.student_id ||
+                "—"
+              )}
+
+            </div>
+
+            <div class="actions">
+
+              <button
+                class="btn primary agu-registration-status"
+                data-id="${esc(registration.id)}"
+                data-status="approved"
+                type="button"
+              >
+                ✓ Approve
+              </button>
+
+              <button
+                class="btn danger agu-registration-status"
+                data-id="${esc(registration.id)}"
+                data-status="rejected"
+                type="button"
+              >
+                ✕ Reject
+              </button>
+
+              ${
+                state !== "registered"
+                  ? `
+                    <button
+                      class="btn light agu-registration-status"
+                      data-id="${esc(registration.id)}"
+                      data-status="registered"
+                      type="button"
+                    >
+                      ↺ Set Registered
+                    </button>
+                  `
+                  : ""
+              }
+
+            </div>
+
+          </div>
+        `;
+
+      })
+      .join("");
+
+  list
+    .querySelectorAll(
+      ".agu-registration-status"
+    )
+    .forEach(button => {
+
+      button.onclick = () => {
+
+        updateRegistrationStatus(
+          button.dataset.id,
+          button.dataset.status
+        );
+
+      };
+
+    });
+}
+async function updateRegistrationStatus(id, status) {
+
+  try {
+
+    const verified =
+      await adminMfaGate();
+
+    if (!verified) return;
+
+    const payload = {
+
+      status:
+        status,
+
+      approved_at:
+        status === "approved"
+          ? new Date().toISOString()
+          : null
+
+    };
+
+    const result =
+      await getDB()
+        .from("agu_exam_registrations")
+        .update(payload)
+        .eq(
+          "id",
+          id
+        );
+
+    if (result.error) {
+      throw result.error;
+    }
+
+    showMessage(
+      `Registration ${status}.`,
+      "success"
+    );
+
+    await loadRegistrations();
+
+  } catch (error) {
+
+    console.error(
+      "AGULIBRARY registration status update error:",
+      error
+    );
+
+    showMessage(
+      error.message ||
+      "Unable to update registration.",
+      "error"
+    );
+  }
+}
 /* ---------------- LOAD EXAMINATIONS ---------------- */
 
 async function loadExaminations() {
@@ -3572,7 +3816,20 @@ function bind() {
     "change",
     loadQuestionsForSelectedExam
   );
+$("registrationExamFilter")?.addEventListener(
+  "change",
+  loadRegistrations
+);
 
+$("registrationStatusFilter")?.addEventListener(
+  "change",
+  loadRegistrations
+);
+
+$("refreshRegistrations")?.addEventListener(
+  "click",
+  loadRegistrations
+);
   /*
    * The incorrect populateExamSelects()
    * change listeners have intentionally been removed.

@@ -3522,18 +3522,21 @@ async function finishAdmin() {
         "administrator"
       );
   }
+await Promise.all([
 
-  await Promise.all([
+  loadStudents(),
 
-    loadStudents(),
+  loadResources(),
 
-    loadResources(),
+  loadNotificationCount(),
 
-    loadNotificationCount(),
+  loadExaminations(),
 
-    loadExaminations()
+  loadRegistrations()
 
-  ]);
+]);
+
+  
 }
 
 async function checkSession() {

@@ -3882,20 +3882,7 @@ $("saveQuestion")
 "click",
 saveQuestion
 );
-$("registrationExamFilter")?.addEventListener(
-  "change",
-  loadRegistrations
-);
 
-$("registrationStatusFilter")?.addEventListener(
-  "change",
-  loadRegistrations
-);
-
-$("refreshRegistrations")?.addEventListener(
-  "click",
-  loadRegistrations
-);
 /*
 
 CORRECT QUESTION SELECT LISTENER

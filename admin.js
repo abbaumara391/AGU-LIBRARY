@@ -130,6 +130,7 @@ async function adminMfaGate() {
   }
 
   let factors;
+
   try {
     factors = await d.auth.mfa.listFactors();
     if (factors.error) throw factors.error;
@@ -139,7 +140,9 @@ async function adminMfaGate() {
     return false;
   }
 
-  const totp = (factors.data?.totp || []).find(f => f.status === "verified");
+  const totp = (factors.data?.totp || []).find(
+    f => f.status === "verified"
+  );
 
   if (!totp) {
     alert("No verified TOTP authenticator was found for this administrator.");
@@ -147,25 +150,49 @@ async function adminMfaGate() {
   }
 
   const overlay = document.createElement("div");
+
   overlay.id = "aguMfaOverlay";
+
   overlay.style.cssText =
     "position:fixed;inset:0;background:rgba(0,0,0,.62);z-index:99999;display:grid;place-items:center;padding:20px";
 
   overlay.innerHTML = `
     <div style="width:min(440px,100%);background:#fff;border-radius:22px;padding:28px;box-shadow:0 20px 60px rgba(0,0,0,.25)">
       <h2 style="margin-top:0;color:#123d2d"> Admin MFA Verification</h2>
-      <p style="color:#718079;line-height:1.6">Enter the current 6-digit code from your authenticator app to continue.</p>
-      <input id="aguMfaCode" inputmode="numeric" maxlength="6" autocomplete="one-time-code" placeholder="000000"
-        style="width:100%;padding:14px;border:1px solid #cfe5da;border-radius:10px;font-size:20px;letter-spacing:5px;text-align:center">
-      <button id="aguMfaVerify" type="button"
-        style="width:100%;margin-top:12px;border:0;border-radius:10px;padding:13px;background:#087a4b;color:#fff;font-weight:900">
+
+      <p style="color:#718079;line-height:1.6">
+        Enter the current 6-digit code from your authenticator app to continue.
+      </p>
+
+      <input
+        id="aguMfaCode"
+        inputmode="numeric"
+        maxlength="6"
+        autocomplete="one-time-code"
+        placeholder="000000"
+        style="width:100%;padding:14px;border:1px solid #cfe5da;border-radius:10px;font-size:20px;letter-spacing:5px;text-align:center"
+      >
+
+      <button
+        id="aguMfaVerify"
+        type="button"
+        style="width:100%;margin-top:12px;border:0;border-radius:10px;padding:13px;background:#087a4b;color:#fff;font-weight:900"
+      >
         Verify & Continue
       </button>
-      <button id="aguMfaCancel" type="button"
-        style="width:100%;margin-top:8px;border:1px solid #cfe5da;border-radius:10px;padding:13px;background:#edf7f2;color:#17352a;font-weight:800">
+
+      <button
+        id="aguMfaCancel"
+        type="button"
+        style="width:100%;margin-top:8px;border:1px solid #cfe5da;border-radius:10px;padding:13px;background:#edf7f2;color:#17352a;font-weight:800"
+      >
         Cancel & Sign Out
       </button>
-      <p id="aguMfaError" style="color:#b42323;font-size:13px;min-height:18px"></p>
+
+      <p
+        id="aguMfaError"
+        style="color:#b42323;font-size:13px;min-height:18px"
+      ></p>
     </div>`;
 
   document.body.appendChild(overlay);
@@ -176,46 +203,78 @@ async function adminMfaGate() {
   const errorBox = $("aguMfaError");
 
   cancelButton.onclick = async () => {
+
     overlay.remove();
+
     mfaOpen = false;
-    try { await d.auth.signOut(); } catch (e) { console.error(e); }
+
+    try {
+      await d.auth.signOut();
+    } catch (e) {
+      console.error(e);
+    }
+
     currentSession = null;
+
     $("dashboardPanel")?.classList.add("hidden");
     $("loginPanel")?.classList.remove("hidden");
-    showLoginMessage("Administrator MFA verification was cancelled. Please sign in again.", "error");
+
+    showLoginMessage(
+      "Administrator MFA verification was cancelled. Please sign in again.",
+      "error"
+    );
   };
 
   verifyButton.onclick = async () => {
-    const code = (codeInput.value || "").replace(/\D/g, "");
+
+    const code =
+      (codeInput.value || "")
+        .replace(/\D/g, "");
 
     if (code.length !== 6) {
-      errorBox.textContent = "Enter the 6-digit authenticator code.";
+
+      errorBox.textContent =
+        "Enter the 6-digit authenticator code.";
+
       return;
     }
 
     verifyButton.disabled = true;
     cancelButton.disabled = true;
-    errorBox.textContent = "Verifying...";
+
+    errorBox.textContent =
+      "Verifying...";
 
     try {
-      const r = await d.auth.mfa.challengeAndVerify({
-        factorId: totp.id,
-        code
-      });
+
+      const r =
+        await d.auth.mfa.challengeAndVerify({
+          factorId: totp.id,
+          code
+        });
 
       if (r.error) throw r.error;
 
-      const after = await d.auth.mfa.getAuthenticatorAssuranceLevel();
+      const after =
+        await d.auth.mfa.getAuthenticatorAssuranceLevel();
 
       if (after.error) throw after.error;
 
-      if (after.data?.currentLevel !== "aal2") {
-        throw new Error("MFA verification completed, but this session is not at AAL2. Please try again.");
+      if (
+        after.data?.currentLevel !== "aal2"
+      ) {
+
+        throw new Error(
+          "MFA verification completed, but this session is not at AAL2. Please try again."
+        );
       }
 
-      const sessionResult = await d.auth.getSession();
+      const sessionResult =
+        await d.auth.getSession();
 
-      if (sessionResult.error) throw sessionResult.error;
+      if (sessionResult.error) {
+        throw sessionResult.error;
+      }
 
       currentSession =
         sessionResult.data?.session ||
@@ -228,6 +287,7 @@ async function adminMfaGate() {
       await finishAdmin();
 
     } catch (e) {
+
       console.error(e);
 
       errorBox.textContent =
@@ -242,22 +302,33 @@ async function adminMfaGate() {
     }
   };
 
-  codeInput.addEventListener("input", () => {
-    codeInput.value =
-      codeInput.value
-        .replace(/\D/g, "")
-        .slice(0, 6);
+  codeInput.addEventListener(
+    "input",
+    () => {
 
-    if (codeInput.value.length === 6) {
-      errorBox.textContent = "";
-    }
-  });
+      codeInput.value =
+        codeInput.value
+          .replace(/\D/g, "")
+          .slice(0, 6);
 
-  codeInput.addEventListener("keydown", e => {
-    if (e.key === "Enter") {
-      verifyButton.click();
+      if (
+        codeInput.value.length === 6
+      ) {
+        errorBox.textContent = "";
+      }
     }
-  });
+  );
+
+  codeInput.addEventListener(
+    "keydown",
+    e => {
+
+      if (e.key === "Enter") {
+        verifyButton.click();
+      }
+
+    }
+  );
 
   codeInput.focus();
 
@@ -267,7 +338,9 @@ async function adminMfaGate() {
 /* ---------------- STUDENTS ---------------- */
 
 async function loadStudents() {
-  const list = $("aguStudentList");
+
+  const list =
+    $("aguStudentList");
 
   if (!list) return;
 
@@ -275,6 +348,7 @@ async function loadStudents() {
     '<div class="empty">Loading students...</div>';
 
   try {
+
     const r =
       await getDB()
         .from("student_profiles")
@@ -288,6 +362,7 @@ async function loadStudents() {
         : [];
 
     students.sort((a, b) => {
+
       const ad =
         String(
           a.created_at ||
@@ -306,6 +381,7 @@ async function loadStudents() {
     });
 
     if ($("aguStudentCount")) {
+
       $("aguStudentCount").textContent =
         students.length;
     }
@@ -336,6 +412,7 @@ async function loadStudents() {
 }
 
 function renderStudents() {
+
   const list =
     $("aguStudentList");
 
@@ -350,11 +427,13 @@ function renderStudents() {
     students.filter(p => {
 
       const text = [
+
         profileName(p),
         profileEmail(p),
         profilePhone(p),
         p.education_level,
         p.class_level
+
       ]
         .filter(Boolean)
         .join(" ")
@@ -442,6 +521,7 @@ function renderStudents() {
           </button>
 
         </div>`;
+
     }).join("");
 
   list
@@ -456,6 +536,7 @@ function renderStudents() {
           $("aguNotifyTarget");
 
         if (target) {
+
           target.value =
             "student:" +
             button.dataset.id;
@@ -611,6 +692,7 @@ function updateDigitalBookFields() {
   );
 
   if (file) {
+
     file.required =
       !isDigital;
   }
@@ -620,6 +702,7 @@ function updateDigitalBookFields() {
     $("bookEntry") &&
     !$("bookEntry").value
   ) {
+
     $("bookEntry").value =
       "index.html";
   }
@@ -656,6 +739,7 @@ async function loadResources() {
       r.data || [];
 
     if ($("aguResourceCount")) {
+
       $("aguResourceCount").textContent =
         resources.length;
     }
@@ -696,6 +780,7 @@ function renderResources() {
     resources.filter(r => {
 
       const text = [
+
         r.title,
         r.subject,
         r.level,
@@ -704,6 +789,7 @@ function renderResources() {
         r.resource_category,
         r.type,
         r.folder_path
+
       ]
         .filter(Boolean)
         .join(" ")
@@ -907,8 +993,7 @@ async function deleteResource(resourceKey) {
           .remove([storagePath]);
 
       if (sr.error) {
-        storageError =
-          sr.error;
+        storageError = sr.error;
       }
     }
 
@@ -2304,9 +2389,11 @@ async function loadQuestionsForSelectedExam() {
     $("questionExamSelect")?.value?.trim() || "";
 
   if (!list) {
+
     console.warn(
       "AGULIBRARY: adminQuestionList was not found."
     );
+
     return;
   }
 
@@ -2363,7 +2450,8 @@ async function loadQuestionsForSelectedExam() {
     list.innerHTML =
       questions.map(question => {
 
-        let options = question.options;
+        let options =
+          question.options;
 
         /*
          * Supabase JSONB normally returns an array,
@@ -2373,11 +2461,11 @@ async function loadQuestionsForSelectedExam() {
         if (typeof options === "string") {
 
           try {
-            options = JSON.parse(options);
+            options =
+              JSON.parse(options);
           } catch (_) {
             options = [];
           }
-
         }
 
         /*
@@ -2392,13 +2480,14 @@ async function loadQuestionsForSelectedExam() {
         ) {
 
           options = [
+
             options.A ?? "",
             options.B ?? "",
             options.C ?? "",
             options.D ?? "",
             options.E ?? ""
-          ];
 
+          ];
         }
 
         if (!Array.isArray(options)) {
@@ -2420,9 +2509,12 @@ async function loadQuestionsForSelectedExam() {
               options[index] ?? "";
 
             const isCorrect =
-              String(question.correct_option || "")
+              String(
+                question.correct_option || ""
+              )
                 .trim()
-                .toUpperCase() === letter;
+                .toUpperCase() ===
+              letter;
 
             return `
               <div
@@ -2547,11 +2639,11 @@ async function loadQuestionsForSelectedExam() {
             if (typeof options === "string") {
 
               try {
-                options = JSON.parse(options);
+                options =
+                  JSON.parse(options);
               } catch (_) {
                 options = [];
               }
-
             }
 
             if (
@@ -2561,13 +2653,14 @@ async function loadQuestionsForSelectedExam() {
             ) {
 
               options = [
+
                 options.A ?? "",
                 options.B ?? "",
                 options.C ?? "",
                 options.D ?? "",
                 options.E ?? ""
-              ];
 
+              ];
             }
 
             if (!Array.isArray(options)) {
@@ -2587,6 +2680,7 @@ async function loadQuestionsForSelectedExam() {
                   $(id);
 
                 if (input) {
+
                   input.value =
                     options[index] ?? "";
                 }
@@ -2604,7 +2698,6 @@ async function loadQuestionsForSelectedExam() {
 
               saveButton.textContent =
                 "💾 Save Question Changes";
-
             }
 
             if ($("questionFormStatus")) {
@@ -2613,7 +2706,6 @@ async function loadQuestionsForSelectedExam() {
                 "Editing question " +
                 (question.question_number ?? "") +
                 ".";
-
             }
 
             const questionTextInput =
@@ -2625,7 +2717,6 @@ async function loadQuestionsForSelectedExam() {
                 behavior: "smooth",
                 block: "center"
               });
-
             }
 
           }
@@ -2691,7 +2782,6 @@ async function loadQuestionsForSelectedExam() {
                 "Unable to delete question.",
                 "error"
               );
-
             }
 
           }
@@ -2713,20 +2803,21 @@ async function loadQuestionsForSelectedExam() {
           "Unable to load questions."
         }
       </div>`;
-
   }
-
 }
-  
+
+
 /* ---------------- SAVE EXAMINATION QUESTION ---------------- */
 
 async function saveQuestion() {
 
-  const status = $("questionFormStatus");
+  const status =
+    $("questionFormStatus");
 
   try {
 
-    const verified = await adminMfaGate();
+    const verified =
+      await adminMfaGate();
 
     if (!verified) return;
 
@@ -2737,26 +2828,33 @@ async function saveQuestion() {
       $("questionEditId")?.value.trim() || "";
 
     const questionNumber =
-      Number($("questionPosition")?.value);
+      Number(
+        $("questionPosition")?.value
+      );
 
     const marks =
-      Number($("questionMarks")?.value);
+      Number(
+        $("questionMarks")?.value
+      );
 
     const questionText =
       $("questionText")?.value.trim() || "";
 
     const options = [
+
       $("optionA")?.value.trim() || "",
       $("optionB")?.value.trim() || "",
       $("optionC")?.value.trim() || "",
       $("optionD")?.value.trim() || "",
       $("optionE")?.value.trim() || ""
+
     ];
 
     const correct =
       $("correctOption")?.value || "A";
 
     if (!examinationId) {
+
       throw new Error(
         "Select an examination first."
       );
@@ -2766,6 +2864,7 @@ async function saveQuestion() {
       !Number.isInteger(questionNumber) ||
       questionNumber < 1
     ) {
+
       throw new Error(
         "Question position must be a whole number starting from 1."
       );
@@ -2775,18 +2874,21 @@ async function saveQuestion() {
       !Number.isFinite(marks) ||
       marks < 0
     ) {
+
       throw new Error(
         "Marks must be zero or greater."
       );
     }
 
     if (!questionText) {
+
       throw new Error(
         "Enter the question text."
       );
     }
 
     if (options.some(option => !option)) {
+
       throw new Error(
         "All five answer options A–E are required."
       );
@@ -2811,7 +2913,6 @@ async function saveQuestion() {
 
       marks:
         marks
-
     };
 
     let result;
@@ -2822,7 +2923,10 @@ async function saveQuestion() {
         await getDB()
           .from("agu_exam_questions")
           .update(payload)
-          .eq("id", id);
+          .eq(
+            "id",
+            id
+          );
 
     } else {
 
@@ -2830,7 +2934,6 @@ async function saveQuestion() {
         await getDB()
           .from("agu_exam_questions")
           .insert(payload);
-
     }
 
     if (result.error) {
@@ -2843,7 +2946,6 @@ async function saveQuestion() {
         id
           ? "✅ Question updated successfully."
           : "✅ Question saved successfully.";
-
     }
 
     showMessage(
@@ -2852,6 +2954,13 @@ async function saveQuestion() {
         : "Question saved successfully.",
       "success"
     );
+
+    /*
+     * IMPORTANT:
+     * Reload the question list after saving so the
+     * newly saved/updated question remains visible.
+     */
+    await loadQuestionsForSelectedExam();
 
   } catch (error) {
 
@@ -2868,7 +2977,6 @@ async function saveQuestion() {
           error.message ||
           "Unable to save question."
         );
-
     }
 
     showMessage(
@@ -2876,11 +2984,9 @@ async function saveQuestion() {
       "Unable to save question.",
       "error"
     );
-
   }
-
 }
-  
+
 async function saveExam() {
 
   const status =
@@ -2980,7 +3086,6 @@ async function saveExam() {
       is_published:
         $("examPublished")?.value ===
         "true"
-
     };
 
     let result;
@@ -3046,7 +3151,6 @@ async function saveExam() {
       $("examRegistrationRequired").value = "true";
       $("examPublished").value = "false";
       $("examDescription").value = "";
-
     }
 
   } catch (e) {
@@ -3071,7 +3175,6 @@ async function saveExam() {
       "Unable to save examination.",
       "error"
     );
-
   }
 }
 
@@ -3377,33 +3480,31 @@ function bind() {
       "click",
       saveExam
     );
-  $("saveQuestion")?.addEventListener("click", saveQuestion);
-$("questionExamSelect")?.addEventListener(
-  "change",
-  loadQuestionsForSelectedExam
-);
-  
+
+  $("saveQuestion")
+    ?.addEventListener(
+      "click",
+      saveQuestion
+    );
+
   /*
-   * Examination select menus
+   * CORRECT QUESTION SELECT LISTENER
+   *
+   * Selecting an examination loads its questions.
    */
+  $("questionExamSelect")?.addEventListener(
+    "change",
+    loadQuestionsForSelectedExam
+  );
 
-  $("questionExamSelect")
-    ?.addEventListener(
-      "change",
-      populateExamSelects
-    );
-
-  $("registrationExamFilter")
-    ?.addEventListener(
-      "change",
-      populateExamSelects
-    );
-
-  $("resultExamFilter")
-    ?.addEventListener(
-      "change",
-      populateExamSelects
-    );
+  /*
+   * The incorrect populateExamSelects()
+   * change listeners have intentionally been removed.
+   *
+   * populateExamSelects() is called by
+   * loadExaminations() after examinations
+   * are loaded from Supabase.
+   */
 
   document
     .querySelectorAll(
@@ -3433,6 +3534,7 @@ $("questionExamSelect")?.addEventListener(
     });
 
   if ($("year")) {
+
     $("year").textContent =
       new Date().getFullYear();
   }

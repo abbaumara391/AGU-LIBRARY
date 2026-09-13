@@ -1071,7 +1071,7 @@ function showExamNotice(exam){
 async function registerForExam(exam){
   if(!currentUser)return;
   try{
-    const r=await client.rpc("agu_register_for_exam",{p_exam_id:exam.id});
+    const r=await client.rpc("agu_register_for_exam",{p_examination_id:exam.id});
     if(r.error)throw r.error;
     alert("You are registered for this examination. You may start it now if today's examination access is still available.");
     await loadExaminations();

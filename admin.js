@@ -23,6 +23,7 @@ let currentSession = null;
 let students = [];
 let resources = [];
 let examinations = [];
+let examRegistrations = [];
 let mfaOpen = false;
 
 const TABLE = window.AGU_RESOURCE_TABLE || "resources";
@@ -2243,7 +2244,82 @@ function populateExamSelects() {
 
   });
 }
+async function loadRegistrations() {
 
+  const list =
+    $("adminRegistrationList");
+
+  if (!list) return;
+
+  list.innerHTML =
+    '<div class="empty">Loading registrations...</div>';
+
+  try {
+
+    let query =
+      getDB()
+        .from("agu_exam_registrations")
+        .select("*")
+        .order(
+          "registered_at",
+          { ascending: false }
+        );
+
+    const examId =
+      $("registrationExamFilter")?.value ||
+      "";
+
+    const status =
+      $("registrationStatusFilter")?.value ||
+      "";
+
+    if (examId) {
+      query =
+        query.eq(
+          "exam_id",
+          examId
+        );
+    }
+
+    if (status) {
+      query =
+        query.eq(
+          "status",
+          status
+        );
+    }
+
+    const result =
+      await query;
+
+    if (result.error) {
+      throw result.error;
+    }
+
+    examRegistrations =
+      Array.isArray(result.data)
+        ? result.data
+        : [];
+
+    renderRegistrations();
+
+  } catch (error) {
+
+    console.error(
+      "AGULIBRARY registration loading error:",
+      error
+    );
+
+    list.innerHTML =
+      `<div class="empty">
+        ❌ Unable to load registrations.<br>
+        <small>${esc(
+          error.message ||
+          "Database error"
+        )}</small>
+      </div>`;
+  }
+}
 /* ---------------- LOAD EXAMINATIONS ---------------- */
 
 async function loadExaminations() {

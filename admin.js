@@ -2304,13 +2304,13 @@ async function saveQuestion() {
 
     if (!verified) return;
 
-    const examId =
+    const examinationId =
       $("questionExamSelect")?.value || "";
 
     const id =
       $("questionEditId")?.value.trim() || "";
 
-    const position =
+    const questionNumber =
       Number($("questionPosition")?.value);
 
     const marks =
@@ -2330,15 +2330,15 @@ async function saveQuestion() {
     const correct =
       $("correctOption")?.value || "A";
 
-    if (!examId) {
+    if (!examinationId) {
       throw new Error(
         "Select an examination first."
       );
     }
 
     if (
-      !Number.isInteger(position) ||
-      position < 1
+      !Number.isInteger(questionNumber) ||
+      questionNumber < 1
     ) {
       throw new Error(
         "Question position must be a whole number starting from 1."
@@ -2367,12 +2367,25 @@ async function saveQuestion() {
     }
 
     const payload = {
-      exam_id: examId,
-      position: position,
-      question_text: questionText,
-      options: options,
-      correct_option: correct,
-      marks: marks
+
+      examination_id:
+        examinationId,
+
+      question_number:
+        questionNumber,
+
+      question_text:
+        questionText,
+
+      options:
+        options,
+
+      correct_option:
+        correct,
+
+      marks:
+        marks
+
     };
 
     let result;
@@ -2399,10 +2412,12 @@ async function saveQuestion() {
     }
 
     if (status) {
+
       status.textContent =
         id
           ? "✅ Question updated successfully."
           : "✅ Question saved successfully.";
+
     }
 
     showMessage(
@@ -2420,12 +2435,14 @@ async function saveQuestion() {
     );
 
     if (status) {
+
       status.textContent =
         "❌ " +
         (
           error.message ||
           "Unable to save question."
         );
+
     }
 
     showMessage(
@@ -2433,6 +2450,7 @@ async function saveQuestion() {
       "Unable to save question.",
       "error"
     );
+
   }
 
 }

@@ -2788,7 +2788,8 @@ function bind() {
       "click",
       saveExam
     );
-
+  $("saveQuestion")?.addEventListener("click", saveQuestion);
+  
   /*
    * Examination select menus
    */

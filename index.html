@@ -1060,7 +1060,7 @@ function renderExamList(dailyAccess){
   if(!filtered.length){list.innerHTML='<div class="empty">No published examinations match your search.</div>';return}
   list.innerHTML=filtered.map((e,i)=>{
     const reg=registrationFor(e),registered=!!reg&&["registered","approved"].includes(String(reg.status||""));
-    const required=!!e.registration_required;
+    const required=!!e.registration_required && examSettings.registration_enabled === true;b
     const blocked=!!dailyAccess;
     let action=blocked?`<button class="btn light" type="button" disabled>🔒 Available Tomorrow</button>`:required&&!registered?`<button class="btn primary exam-register" type="button" data-exam-index="${i}">📝 Register for Exam</button>`:`<button class="btn primary exam-start" type="button" data-exam-index="${i}">Start Examination →</button>`;
     return `<article class="exam-card"><div class="resource-icon">📝</div><h3>${esc(e.title||"AGULIBRARY Examination")}</h3><p>${esc(e.description||"Complete this examination in the AGULIBRARY Examination Room.")}</p><div class="exam-meta"><span>${esc(e.subject||"General")}</span>${e.class_level?`<span>${esc(e.class_level)}</span>`:""}${e.term?`<span>${esc(e.term)}</span>`:""}<span>5 sec / question</span>${required?`<span>${registered?"Registered":"Registration Required"}</span>`:""}</div>${action}</article>`;

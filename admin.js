@@ -30,13 +30,13 @@ const TABLE = window.AGU_RESOURCE_TABLE || "resources";
 const BUCKET = window.AGU_BUCKET || window.BUCKET || "agu-library";
 
 function esc(v) {
-return String(v ?? "").replace(/[&<>"']/g, c => ({
-"&": "&",
-"<": "<",
-">": ">",
-'"': """,
-"'": "'"
-}[c]));
+  return String(v ?? "").replace(/[&<>"']/g, c => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  }[c]));
 }
 
 function showLoginMessage(text, type = "error") {

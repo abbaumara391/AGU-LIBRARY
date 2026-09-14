@@ -1212,8 +1212,7 @@ const lines=source.split("\n");
 let i=0;
 let list=null,listType=null;
 let paragraph=[];
-
-const escHtml=v=>String(v).replace(/[&<>"']/g,c=>({"&":"&","<":"<",">":">",'"':""","'":"'"}[c]));
+const escHtml=v=>String(v).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
 const inline=v=>{
 let x=escHtml(v);
 const stash=[];

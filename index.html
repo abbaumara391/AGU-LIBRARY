@@ -1609,7 +1609,11 @@ const status=document.getElementById("notificationStatus");
 if(!list||!badge)return;
 
 if(!currentUser){
-list.innerHTML=  <div class="notifications-loading">   🔐 Please sign in to view your notifications.   </div>  ;
+list.innerHTML = `
+  <div class="notifications-loading">
+    🔐 Please sign in to view your notifications.
+  </div>
+`;
 badge.style.display="none";
 if(status)status.textContent="Please sign in to view your notifications.";
 return;

@@ -1618,8 +1618,11 @@ badge.style.display="none";
 if(status)status.textContent="Please sign in to view your notifications.";
 return;
 }
-
-list.innerHTML=  <div class="notifications-loading">   🔔 Loading notifications...   </div>  ;
+list.innerHTML = `
+  <div class="notifications-loading">
+    🔔 Loading notifications...
+  </div>
+`;
 
 if(status)status.textContent="Loading notifications...";
 

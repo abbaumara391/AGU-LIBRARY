@@ -1067,7 +1067,7 @@ function renderExamList(dailyAccess){
   }).join("");
   filtered.forEach((e,i)=>{
     list.querySelector(`[data-exam-index="${i}"]`)?.addEventListener("click",()=>{
-      if(e.registration_required&&!registrationFor(e)){registerForExam(e)}else{showExamNotice(e)}
+      if(required&&!registrationFor(e)){registerForExam(e)}else{showExamNotice(e)}
     });
   });
 }

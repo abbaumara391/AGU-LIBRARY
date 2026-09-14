@@ -1719,9 +1719,10 @@ badge.style.display="none";
 }
 
 if(status){
-status.textContent=notifications.length
-? ${notifications.length} notification${notifications.length===1?"":"s"}
-: "You have no notifications yet.";
+status.textContent =
+  notifications.length
+    ? `${notifications.length} notification${notifications.length===1?"":"s"}`
+    : "You have no notifications yet.";
 }
 
 /* No notifications */

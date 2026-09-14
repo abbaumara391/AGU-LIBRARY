@@ -974,11 +974,11 @@ resource.title ||
 "this resource";
 
 if (
-!confirm(
-Delete "${title}"?\n\nThis action removes the published resource from AGULIBRARY. It cannot be undone.
-)
+  !confirm(
+    `Delete "${title}"?\n\nThis action removes the published resource from AGULIBRARY. It cannot be undone.`
+  )
 ) {
-return;
+  return;
 }
 
 try {

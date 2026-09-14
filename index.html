@@ -1219,7 +1219,7 @@ const stash=[];
 const hold=(value)=>{const key="\u0000M"+stash.length+"\u0000";stash.push(value);return key};
 x=x.replace(/(`+)([\s\S]?)\1/g,(_,ticks,code)=>hold("<code>"+code+"</code>"));
 x=x.replace(/(\\[\s\S]?\\\(|\\\)[\s\S]?\\|$$[\s\S]?$$|$[^$\n]+$)/g,m=>hold(m));
-x=x.replace(/**([^\n]+)**/g,"<strong>$1</strong>");
+x=x.replace(/\*\*([^\n]+)\*\*/g,"<strong>$1</strong>");
 x=x.replace(/([^_\n]+)/g,"<strong>$1</strong>");
 x=x.replace(/*([^\n]+)*/g,"<em>$1</em>");
 x=x.replace(/([^\n]+)/g,"<em>$1</em>");

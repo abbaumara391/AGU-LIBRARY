@@ -1311,7 +1311,7 @@ async function sendTeacher(){
 const input=document.getElementById("teacherInput"),btn=document.getElementById("teacherSend"),m=input.value.trim();if(!m)return;
 addChat("teacherChat",m,true);input.value="";btn.disabled=true;teacherConversation.push({role:"user",content:m});
 try{
-const answer=await callAI((window.AGU_CONFIG?.supabaseUrl||"").replace(//$/,"")+"/functions/v1/ai-learning-agent",m,teacherConversation);
+const answer=await callAI((window.AGU_CONFIG?.supabaseUrl||"").replace(/\/$/,"")+"/functions/v1/ai-learning-agent",m,teacherConversation);
 addChat("teacherChat",answer,false);teacherConversation.push({role:"assistant",content:answer});
 }catch(e){addChat("teacherChat","The AI Learning Teacher interface is ready, but its secure AI backend endpoint still needs to be connected.",false)}
 btn.disabled=false;input.focus();

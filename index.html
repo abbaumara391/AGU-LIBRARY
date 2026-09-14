@@ -967,11 +967,45 @@ function examScoreClass(status){return status==="correct"?"correct":status==="wr
 function escapeForAttr(v){return escAttr(String(v??""))}
 
 async function loadExamSettings(){
-  if(!client)return;
-  try{
-    const r=await client.from("agu_exam_settings").select("enabled,registration_enabled,question_seconds,default_pass_percentage").eq("id",true).maybeSingle();
-    if(!r.error&&r.data)examSettings={...examSettings,...r.data};
-  }catch(e){console.warn("Exam settings:",e)}
+  const client = getSupabase();
+
+  const r = await client
+    .from("agu_exam_settings")
+    .select(`
+      examination_enabled,
+      registration_enabled,
+      default_question_duration_seconds,
+      default_pass_percentage
+    `)
+    .eq("id", true)
+    .maybeSingle();
+
+  if (r.error) {
+    console.error("Unable to load examination settings:", r.error);
+    return;
+  }
+
+  if (r.data) {
+    examSettings = {
+      ...examSettings,
+
+      // Admin → Examination Room switch
+      enabled: r.data.examination_enabled !== false,
+
+      // Admin → Exam Registration switch
+      registration_enabled: r.data.registration_enabled === true,
+
+      // Keep the existing exam timer
+      question_seconds:
+        Number(r.data.default_question_duration_seconds) || 5,
+
+      // Keep the existing pass percentage
+      default_pass_percentage:
+        Number(r.data.default_pass_percentage) || 50
+    };
+  }
+
+  console.log("AGULIBRARY examination settings:", examSettings);
 }
 
 async function loadExaminations(){

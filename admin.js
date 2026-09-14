@@ -3307,7 +3307,176 @@ async function saveQuestion() {
     );
   }
 }
+/* =========================================================
+   AGULIBRARY — EXAMINATION GLOBAL SETTINGS
+   Uses the actual agu_exam_settings database columns.
+   ========================================================= */
 
+async function loadExamSettings() {
+
+  const status =
+    $("examSettingsStatus");
+
+  try {
+
+    const result =
+      await getDB()
+        .from("agu_exam_settings")
+        .select(`
+          id,
+          examination_enabled,
+          registration_enabled,
+          payment_enabled,
+          payment_required,
+          default_question_duration_seconds,
+          important_notice
+        `)
+        .eq("id", true)
+        .maybeSingle();
+
+    if (result.error) {
+      throw result.error;
+    }
+
+    const settings =
+      result.data;
+
+    if (!settings) {
+
+      if (status) {
+        status.textContent =
+          "❌ Examination settings record was not found.";
+      }
+
+      return;
+    }
+
+    if ($("examEnabled")) {
+      $("examEnabled").value =
+        String(!!settings.examination_enabled);
+    }
+
+    if ($("examRegistrationEnabled")) {
+      $("examRegistrationEnabled").value =
+        String(!!settings.registration_enabled);
+    }
+
+    if ($("examDefaultPass")) {
+      $("examDefaultPass").value =
+        Number(
+          settings.default_pass_percentage ?? 50
+        );
+    }
+
+    if ($("examQuestionSeconds")) {
+      $("examQuestionSeconds").value =
+        "5 seconds";
+    }
+
+    if (status) {
+      status.textContent =
+        "Current examination settings loaded.";
+    }
+
+  } catch (error) {
+
+    console.error(
+      "AGULIBRARY examination settings load error:",
+      error
+    );
+
+    if (status) {
+      status.textContent =
+        "❌ " +
+        (
+          error.message ||
+          "Unable to load examination settings."
+        );
+    }
+  }
+}
+
+
+async function saveExamSettings() {
+
+  const status =
+    $("examSettingsStatus");
+
+  try {
+
+    const verified =
+      await adminMfaGate();
+
+    if (!verified) {
+      return;
+    }
+
+    const examinationEnabled =
+      $("examEnabled")?.value === "true";
+
+    const registrationEnabled =
+      $("examRegistrationEnabled")?.value === "true";
+
+    const payload = {
+
+      examination_enabled:
+        examinationEnabled,
+
+      registration_enabled:
+        registrationEnabled,
+
+      default_question_duration_seconds:
+        5,
+
+      updated_at:
+        new Date().toISOString()
+    };
+
+    const result =
+      await getDB()
+        .from("agu_exam_settings")
+        .update(payload)
+        .eq("id", true);
+
+    if (result.error) {
+      throw result.error;
+    }
+
+    if (status) {
+      status.textContent =
+        "✅ Examination settings saved successfully.";
+    }
+
+    showMessage(
+      "Examination settings saved successfully.",
+      "success"
+    );
+
+    await loadExamSettings();
+
+  } catch (error) {
+
+    console.error(
+      "AGULIBRARY examination settings save error:",
+      error
+    );
+
+    if (status) {
+      status.textContent =
+        "❌ " +
+        (
+          error.message ||
+          "Unable to save examination settings."
+        );
+    }
+
+    showMessage(
+      error.message ||
+      "Unable to save examination settings.",
+      "error"
+    );
+  }
+}
 async function saveExam() {
 
   const status =
@@ -3523,18 +3692,13 @@ async function finishAdmin() {
         "administrator"
       );
   }
+
 await Promise.all([
-
   loadStudents(),
-
   loadResources(),
-
   loadNotificationCount(),
-
-  loadExaminations(),
-
-  loadRegistrations()
-
+  loadExamSettings(),
+  loadExaminations()
 ]);
 
   
@@ -3798,7 +3962,18 @@ function bind() {
       "click",
       logout
     );
+$("saveExamSettings")?.addEventListener(
+  "click",
+  saveExamSettings
+);
 
+$("refreshExamAdmin")?.addEventListener(
+  "click",
+  async () => {
+    await loadExamSettings();
+    await loadExaminations();
+  }
+);
   $("saveExam")
     ?.addEventListener(
       "click",

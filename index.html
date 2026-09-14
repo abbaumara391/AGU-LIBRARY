@@ -1081,7 +1081,7 @@ async function registerForExam(exam){
 async function startExam(exam){
   if(!currentUser){location.href="auth.html";return}
   try{
-    const r=await client.rpc("agu_start_exam",{p_exam_id:exam.id});
+    const r=await client.rpc("agu_start_exam",{p_examination_id:exam.id});
     if(r.error)throw r.error;
     const data=r.data||{};
     const q=await client.from("agu_exam_questions_public").select("id,exam_id,position,question_text,options,marks").eq("exam_id",exam.id).order("position",{ascending:true});
@@ -2168,4 +2168,4 @@ setInterval(()=>{
 })();
 </script>
 </body>
-                                                                                                                                                                                    </html>
+    </html>

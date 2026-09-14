@@ -901,13 +901,52 @@ function formatDate(v){try{return new Date(v).toLocaleString()}catch(e){return S
 function examScoreClass(status){return status==="correct"?"correct":status==="wrong"?"wrong":"unanswered"}  
 function escapeForAttr(v){return escAttr(String(v??""))}  
   
-async function loadExamSettings(){  
-  if(!client)return;  
-  try{  
-    const r=await client.from("agu_exam_settings").select("examination_enabled,registration_enabled,question_seconds,default_pass_percentage").eq("id",true).maybeSingle();  
-    if(!r.error&&r.data)examSettings={...examSettings,...r.data};  
-  }catch(e){console.warn("Exam settings:",e)}  
-}  
+async function loadExamSettings(){
+  if(!client)return false;
+
+  try{
+    const r = await client
+      .from("agu_exam_settings")
+      .select(
+        "examination_enabled,registration_enabled,question_seconds,default_pass_percentage"
+      )
+      .eq("id",true)
+      .maybeSingle();
+
+    if(r.error){
+      console.error("AGULIBRARY examination settings error:",r.error);
+
+      examSettings.examination_enabled = false;
+      examSettings.registration_enabled = false;
+
+      return false;
+    }
+
+    if(!r.data){
+      console.error("AGULIBRARY examination settings record not found.");
+
+      examSettings.examination_enabled = false;
+      examSettings.registration_enabled = false;
+
+      return false;
+    }
+
+    examSettings = {
+      ...examSettings,
+      ...r.data
+    };
+
+    return true;
+
+  }catch(e){
+    console.error("AGULIBRARY examination settings error:",e);
+
+    examSettings.examination_enabled = false;
+    examSettings.registration_enabled = false;
+
+    return false;
+  }
+}
   
 async function loadExaminations(){  
   const status=document.getElementById("examStatus"),list=document.getElementById("examList");  

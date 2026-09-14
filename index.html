@@ -1206,86 +1206,186 @@ supportToggle.onclick=()=>{window.location.href="support.html"};
 }
 }
 function renderTeacherMarkdown(text){
-const source=String(text??"").replace(/\r\n?/g,"\n");
-const root=document.createElement("div");
-const lines=source.split("\n");
-let i=0;
-let list=null,listType=null;
-let paragraph=[];
-const escHtml=v=>String(v).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
-const inline=v=>{
-let x=escHtml(v);
-const stash=[];
-const hold=(value)=>{const key="\u0000M"+stash.length+"\u0000";stash.push(value);return key};
-x=x.replace(/(`+)([\s\S]?)\1/g,(_,ticks,code)=>hold("<code>"+code+"</code>"));
-x=x.replace(/(\\[\s\S]?\\\(|\\\)[\s\S]?\\|$$[\s\S]?$$|$[^$\n]+$)/g,m=>hold(m));
-x=x.replace(/\*\*([^\n]+)\*\*/g,"<strong>$1</strong>");
-x=x.replace(/([^_\n]+)/g,"<strong>$1</strong>");
-x=x.replace(/\*([^\n]+)\*/g,"<em>$1</em>");
-x=x.replace(/([^\n]+)/g,"<em>$1</em>");
-x=x.replace(/\(([^\)\n]+)]\((https?://[^\s)]+)\)/g,'<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
-x=x.replace(/  $/g,"<br>");
-x=x.replace(/\u0000M(\d+)\u0000/g,(,n)=>stash[Number(n)]);
-return x;
-};
-const flushParagraph=()=>{
-if(!paragraph.length)return;
-const p=document.createElement("p");
-p.innerHTML=inline(paragraph.join("\n")).replace(/\n/g,"<br>");
-root.appendChild(p);paragraph=[];
-};
-const closeList=()=>{if(list){root.appendChild(list);list=null;listType=null}};
-const isFence=line=>/^\s*```/.test(line);
-const isUl=line=>/^\s*[-+]\s+/.test(line);
-const isOl=line=>/^\s\d+[.)]\s+/.test(line);
+  const source = String(text ?? "").replace(/\r\n?/g, "\n");
+  const root = document.createElement("div");
+  const lines = source.split("\n");
+  let i = 0;
+  let list = null;
+  let listType = null;
+  let paragraph = [];
 
-while(i<lines.length){
-const line=lines[i];
-if(/^\s*$/.test(line)){flushParagraph();closeList();i++;continue}
+  const escHtml = v =>
+    String(v).replace(/[&<>"']/g, c => ({
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;"
+    }[c]));
 
-if(isFence(line)){  
-  flushParagraph();closeList();  
-  const lang=line.trim().slice(3).trim();  
-  i++;const code=[];  
-  while(i<lines.length&&!/^\s*```/.test(lines[i])){code.push(lines[i]);i++}  
-  if(i<lines.length)i++;  
-  const pre=document.createElement("pre"),c=document.createElement("code");  
-  if(lang)c.className="language-"+lang.replace(/[^a-z0-9_-]/gi,"");  
-  c.textContent=code.join("\n");pre.appendChild(c);root.appendChild(pre);continue;  
-}  
+  const inline = v => {
+    let x = escHtml(v);
+    const stash = [];
 
-if(/^\s*(\\\\|\$\$)/.test(line.trim())){  
-  flushParagraph();closeList();  
-  const first=line.trim();let math=[first];  
-  const closing=first.startsWith("\\\\[")?"\\\":"$$";  
-  if(!first.endsWith(closing)){  
-    i++;  
-    while(i<lines.length){math.push(lines[i]);if(lines[i].trim().endsWith(closing)){break}i++}  
-  }  
-  const div=document.createElement("div");div.className="math-block";div.textContent=math.join("\n");root.appendChild(div);i++;continue;  
-}  
+    const hold = value => {
+      const key = `\u0000M${stash.length}\u0000`;
+      stash.push(value);
+      return key;
+    };
 
-const hm=line.match(/^\s*(#{1,4})\s+(.+?)\s*#*\s*$/);  
-if(hm){flushParagraph();closeList();const h=document.createElement("h"+hm[1].length);h.innerHTML=inline(hm[2]);root.appendChild(h);i++;continue}  
-if(/^\s*([-*_])(?:\s*\1){2,}\s*$/.test(line)){flushParagraph();closeList();root.appendChild(document.createElement("hr"));i++;continue}  
+    x = x.replace(/(`+)([\s\S]*?)\1/g, (_, ticks, code) =>
+      hold("<code>" + code + "</code>")
+    );
 
-const bq=line.match(/^\s*>\s?(.*)$/);  
-if(bq){flushParagraph();closeList();const q=document.createElement("blockquote");q.innerHTML=inline(bq[1]);root.appendChild(q);i++;continue}  
+    x = x.replace(/(\\\[[\s\S]*?\\\]|\$\$[\s\S]*?\$\$|\$[^$\n]+\$)/g, m =>
+      hold(m)
+    );
 
-let m=line.match(/^\s*[-*+]\s+(.*)$/);let type="ul";  
-if(!m){m=line.match(/^\s*\d+[.)]\s+(.*)$/);type="ol"}  
-if(m){  
-  flushParagraph();  
-  if(!list||listType!==type){closeList();list=document.createElement(type);listType=type}  
-  const li=document.createElement("li");li.innerHTML=inline(m[1]);list.appendChild(li);i++;continue;  
-}  
+    x = x.replace(/\*\*([^\n]+?)\*\*/g, "<strong>$1</strong>");
+    x = x.replace(/(?<!\*)\*([^*\n]+?)\*(?!\*)/g, "<em>$1</em>");
 
-if(list){closeList()}  
-paragraph.push(line);i++;
+    x = x.replace(
+      /\[([^\]\n]+)\]\((https?:\/\/[^\s)]+)\)/g,
+      '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>'
+    );
 
-}
-flushParagraph();closeList();
-return root;
+    x = x.replace(/\u0000M(\d+)\u0000/g, (_, n) => stash[Number(n)]);
+    return x;
+  };
+
+  const flushParagraph = () => {
+    if (!paragraph.length) return;
+    const p = document.createElement("p");
+    p.innerHTML = inline(paragraph.join("\n")).replace(/\n/g, "<br>");
+    root.appendChild(p);
+    paragraph = [];
+  };
+
+  const closeList = () => {
+    if (list) {
+      root.appendChild(list);
+      list = null;
+      listType = null;
+    }
+  };
+
+  const isFence = line => /^\s*```/.test(line);
+
+  while (i < lines.length) {
+    const line = lines[i];
+
+    if (/^\s*$/.test(line)) {
+      flushParagraph();
+      closeList();
+      i++;
+      continue;
+    }
+
+    if (isFence(line)) {
+      flushParagraph();
+      closeList();
+      const lang = line.trim().slice(3).trim();
+      i++;
+      const code = [];
+      while (i < lines.length && !/^\s*```/.test(lines[i])) {
+        code.push(lines[i]);
+        i++;
+      }
+      if (i < lines.length) i++;
+      const pre = document.createElement("pre");
+      const codeElement = document.createElement("code");
+      if (lang) {
+        codeElement.className =
+          "language-" + lang.replace(/[^a-z0-9_-]/gi, "");
+      }
+      codeElement.textContent = code.join("\n");
+      pre.appendChild(codeElement);
+      root.appendChild(pre);
+      continue;
+    }
+
+    if (/^\s*(\\\[|\$\$)/.test(line.trim())) {
+      flushParagraph();
+      closeList();
+      const first = line.trim();
+      const closing = first.startsWith("\\[") ? "\\]" : "$$";
+      const math = [first];
+      if (!first.endsWith(closing)) {
+        i++;
+        while (i < lines.length) {
+          math.push(lines[i]);
+          if (lines[i].trim().endsWith(closing)) break;
+          i++;
+        }
+      }
+      const div = document.createElement("div");
+      div.className = "math-block";
+      div.textContent = math.join("\n");
+      root.appendChild(div);
+      i++;
+      continue;
+    }
+
+    const heading = line.match(/^\s*(#{1,4})\s+(.+?)\s*#*\s*$/);
+    if (heading) {
+      flushParagraph();
+      closeList();
+      const h = document.createElement("h" + heading[1].length);
+      h.innerHTML = inline(heading[2]);
+      root.appendChild(h);
+      i++;
+      continue;
+    }
+
+    if (/^\s*([-*_])(?:\s*\1){2,}\s*$/.test(line)) {
+      flushParagraph();
+      closeList();
+      root.appendChild(document.createElement("hr"));
+      i++;
+      continue;
+    }
+
+    const quote = line.match(/^\s*>\s?(.*)$/);
+    if (quote) {
+      flushParagraph();
+      closeList();
+      const q = document.createElement("blockquote");
+      q.innerHTML = inline(quote[1]);
+      root.appendChild(q);
+      i++;
+      continue;
+    }
+
+    let match = line.match(/^\s*[-*+]\s+(.*)$/);
+    let type = "ul";
+
+    if (!match) {
+      match = line.match(/^\s*\d+[.)]\s+(.*)$/);
+      type = "ol";
+    }
+
+    if (match) {
+      flushParagraph();
+      if (!list || listType !== type) {
+        closeList();
+        list = document.createElement(type);
+        listType = type;
+      }
+      const li = document.createElement("li");
+      li.innerHTML = inline(match[1]);
+      list.appendChild(li);
+      i++;
+      continue;
+    }
+
+    if (list) closeList();
+    paragraph.push(line);
+    i++;
+  }
+
+  flushParagraph();
+  closeList();
+  return root;
 }
 
 function addChat(id,text,user){
@@ -1319,7 +1419,7 @@ async function sendSupport(){
 const input=document.getElementById("supportInput"),btn=document.getElementById("supportSend"),m=input.value.trim();if(!m)return;
 addChat("supportChat",m,true);input.value="";btn.disabled=true;supportConversation.push({role:"user",content:m});
 try{
-const answer=await callAI((window.AGU_CONFIG?.supabaseUrl||"").replace(//$/,"")+"/functions/v1/customer-support-agent",m,supportConversation);
+const answer=await callAI((window.AGU_CONFIG?.supabaseUrl||"").replace(/\/$/,"")+"/functions/v1/customer-support-agent",m,supportConversation);
 addChat("supportChat",answer,false);supportConversation.push({role:"assistant",content:answer});
 }catch(e){addChat("supportChat","The Customer Support Agent interface is ready, but its secure support AI backend endpoint still needs to be connected.",false)}
 btn.disabled=false;input.focus();
@@ -1618,6 +1718,7 @@ badge.style.display="none";
 if(status)status.textContent="Please sign in to view your notifications.";
 return;
 }
+
 list.innerHTML = `
   <div class="notifications-loading">
     🔔 Loading notifications...
@@ -1726,15 +1827,18 @@ badge.style.display="none";
 }
 
 if(status){
-status.textContent =
-  notifications.length
-    ? `${notifications.length} notification${notifications.length===1?"":"s"}`
-    : "You have no notifications yet.";
+status.textContent = notifications.length
+  ? `${notifications.length} notification${notifications.length === 1 ? "" : "s"}`
+  : "You have no notifications yet.";
 }
 
 /* No notifications */
 if(!notifications.length){
-list.innerHTML=  <div class="notifications-loading">   🔔 You have no notifications yet.   </div>  ;
+list.innerHTML = `
+  <div class="notifications-loading">
+    🔔 You have no notifications yet.
+  </div>
+`;
 return;
 }
 
@@ -1912,10 +2016,12 @@ minute:"2-digit"
 
 /* =========================================================
 NOTIFICATION BUTTON CONNECTIONS
-========================================================= /
-/ =========================================================
-AGULIBRARY — STUDENT ANDROID / WEB PUSH REGISTRATION
 ========================================================= */
+/*
+=========================================================
+AGULIBRARY — STUDENT ANDROID / WEB PUSH REGISTRATION
+=========================================================
+*/
 
 const AGU_PUSH_PUBLIC_KEY =
 "BG4G9BazYIFHAc-Bro_K7IbqPFcMv12LDVa7XRg-acSdETUkocJv74oDyKUJiX2aWfWWLo1fjXehFs8BD6-Z87M";
@@ -2101,4 +2207,4 @@ loadStudentNotifications();
 </script>
 
 </body>  
-  </html>
+        </html>

@@ -1221,7 +1221,7 @@ x=x.replace(/(`+)([\s\S]?)\1/g,(_,ticks,code)=>hold("<code>"+code+"</code>"));
 x=x.replace(/(\\[\s\S]?\\\(|\\\)[\s\S]?\\|$$[\s\S]?$$|$[^$\n]+$)/g,m=>hold(m));
 x=x.replace(/\*\*([^\n]+)\*\*/g,"<strong>$1</strong>");
 x=x.replace(/([^_\n]+)/g,"<strong>$1</strong>");
-x=x.replace(/*([^\n]+)*/g,"<em>$1</em>");
+x=x.replace(/\*([^\n]+)\*/g,"<em>$1</em>");
 x=x.replace(/([^\n]+)/g,"<em>$1</em>");
 x=x.replace(/\(([^\)\n]+)]\((https?://[^\s)]+)\)/g,'<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
 x=x.replace(/  $/g,"<br>");

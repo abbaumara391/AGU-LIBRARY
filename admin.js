@@ -4813,6 +4813,7 @@ $("saveExamSettings")?.addEventListener(
 "click",
 saveExamSettings
 );
+setupExamCountrySelector();
 $("saveExamPrice")?.addEventListener(
   "click",
   saveExamPrice

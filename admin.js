@@ -4497,11 +4497,12 @@ $("adminIdentity").textContent =
 }
 
 await Promise.all([
-loadStudents(),
-loadResources(),
-loadNotificationCount(),
-loadExamSettings(),
-loadExaminations()
+  loadStudents(),
+  loadResources(),
+  loadNotificationCount(),
+  loadExamSettings(),
+  loadExamPrices(),
+  loadExaminations()
 ]);
 
 }

@@ -3764,6 +3764,43 @@ function examCurrencyInfo(countryCode, countryName, currencyCode) {
   };
 }
 
+function getExamCountryInfoFromOption(option) {
+  if (!option || !option.value) return null;
+
+  const rawValue = String(option.value || "").trim();
+  const rawText = String(option.textContent || "").trim();
+  const dataCode = String(option.dataset?.code || "").trim().toUpperCase();
+  const dataCurrency = String(option.dataset?.currency || "").trim().toUpperCase();
+
+  // First use explicit data attributes when the HTML provides them.
+  if (dataCode && EXAM_COUNTRY_CURRENCIES[dataCode]) {
+    return EXAM_COUNTRY_CURRENCIES[dataCode];
+  }
+
+  // Also accept an option whose value is the ISO country code.
+  const valueUpper = rawValue.toUpperCase();
+  if (EXAM_COUNTRY_CURRENCIES[valueUpper]) {
+    return EXAM_COUNTRY_CURRENCIES[valueUpper];
+  }
+
+  // Accept the country name as the option value or visible text.
+  const countryName = rawValue || rawText;
+  const foundByName = Object.values(EXAM_COUNTRY_CURRENCIES).find(
+    item => String(item.name).toLowerCase() === countryName.toLowerCase()
+  );
+
+  if (foundByName) {
+    return foundByName;
+  }
+
+  // Final fallback for future countries added to the HTML.
+  return examCurrencyInfo(
+    dataCode,
+    rawValue || rawText,
+    dataCurrency
+  );
+}
+
 function setupExamCountrySelector() {
   const countrySelect = $("examPriceCountryName");
   const countryCode = $("examPriceCountryCode");
@@ -3772,28 +3809,34 @@ function setupExamCountrySelector() {
 
   if (!countrySelect) return;
 
+  // Prevent duplicate listeners if this function is called again while editing.
+  if (countrySelect.dataset.aguCurrencySelectorBound === "true") {
+    const option = countrySelect.options[countrySelect.selectedIndex];
+    const info = getExamCountryInfoFromOption(option);
+    if (countryCode) countryCode.value = info?.code || "";
+    if (currencyCode) currencyCode.value = info?.currency || "";
+    if (currencySymbol) currencySymbol.value = info?.symbol || "";
+    return;
+  }
+
   const fill = () => {
     const option = countrySelect.options[countrySelect.selectedIndex];
+    const info = getExamCountryInfoFromOption(option);
 
-    if (!option || !option.value) {
+    if (!info) {
       if (countryCode) countryCode.value = "";
       if (currencyCode) currencyCode.value = "";
       if (currencySymbol) currencySymbol.value = "";
       return;
     }
 
-    const info = examCurrencyInfo(
-      option.dataset.code || "",
-      option.value || "",
-      option.dataset.currency || ""
-    );
-
-    if (countryCode) countryCode.value = info.code;
-    if (currencyCode) currencyCode.value = info.currency;
-    if (currencySymbol) currencySymbol.value = info.symbol;
+    if (countryCode) countryCode.value = info.code || "";
+    if (currencyCode) currencyCode.value = info.currency || "";
+    if (currencySymbol) currencySymbol.value = info.symbol || "";
   };
 
   countrySelect.addEventListener("change", fill);
+  countrySelect.dataset.aguCurrencySelectorBound = "true";
   fill();
 }
 
@@ -3990,11 +4033,11 @@ async function saveExamPrice() {
       throw new Error("Please select a country.");
     }
 
-    const info = examCurrencyInfo(
-      selectedOption.dataset.code || "",
-      selectedOption.value || "",
-      selectedOption.dataset.currency || ""
-    );
+    const info = getExamCountryInfoFromOption(selectedOption);
+
+    if (!info || !info.code || !info.currency) {
+      throw new Error("The selected country does not have a valid country/currency configuration.");
+    }
 
     const amount = Number(
       $("examPriceAmount")?.value
@@ -4454,6 +4497,10 @@ updateDigitalBookFields
 updateClassLevels();
 
 updateDigitalBookFields();
+
+// Initialize the examination country selector so Country Code, Currency Code
+// and Currency Symbol are revealed automatically when a country is selected.
+setupExamCountrySelector();
 
 $("aguStudentSearch")
 ?.addEventListener(

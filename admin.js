@@ -2644,6 +2644,188 @@ showMessage(
 
 }
 }
+function normalizeExamPriceEducation(value){
+  const v=String(value||"").trim().toLowerCase();
+  if(/early/.test(v))return "Early Years";
+  if(/primary|elementary/.test(v))return "Primary School";
+  if(/junior secondary|jss|basic secondary/.test(v))return "Junior Secondary School";
+  if(/senior secondary|secondary|high school|sss/.test(v))return "Senior Secondary School";
+  if(/tertiary|university|polytechnic|college|undergraduate|postgraduate/.test(v))return "Tertiary / University";
+  if(/professional|career|licen[cs]ing|certification/.test(v))return "Professional / Career";
+  return String(value||"").trim();
+}
+
+function examPriceSetOptions(id,items,placeholder,disabled=false,keepValue=""){
+  const el=$(id);
+  if(!el)return;
+  const unique=[...new Set((items||[]).filter(Boolean).map(x=>String(x).trim()).filter(Boolean))];
+  el.innerHTML='<option value="">'+esc(placeholder)+'</option>'+
+    unique.map(x=>'<option value="'+escAttr(x)+'">'+esc(x)+'</option>').join("");
+  el.disabled=disabled||!unique.length;
+  if(keepValue&&unique.includes(String(keepValue)))el.value=String(keepValue);
+}
+
+function examPriceFilteredExaminations(){
+  const education=$("examPriceEducationLevel")?.value||"";
+  const board=$("examPriceBoard")?.value||"";
+  const type=$("examPriceType")?.value||"";
+  const cls=$("examPriceClassLevel")?.value||"";
+  const subject=$("examPriceSubject")?.value||"";
+
+  return examinations.filter(exam=>{
+    if(education&&normalizeExamPriceEducation(exam.education_level)!==education)return false;
+    if(board&&String(exam.examination_board||"").trim()!==board)return false;
+    if(type&&String(exam.examination_type||"").trim()!==type)return false;
+    if(cls&&String(exam.class_level||"").trim()!==cls)return false;
+    if(subject&&String(exam.subject||"").trim()!==subject)return false;
+    return true;
+  });
+}
+
+function populateExamPriceExamSelect(keepValue=""){
+  const select=$("examPriceExamination");
+  if(!select)return;
+
+  const current=keepValue||select.value||"";
+  const filtered=examPriceFilteredExaminations();
+
+  select.innerHTML='<option value="">Select examination details</option>'+
+    filtered.map(exam=>`<option value="${esc(exam.id)}">${esc(exam.title||"Untitled Examination")}</option>`).join("");
+
+  select.disabled=!filtered.length;
+  if(current&&filtered.some(exam=>String(exam.id)===String(current))){
+    select.value=current;
+  }
+}
+
+function refreshExamPriceHierarchy(resetFrom=""){
+  const education=$("examPriceEducationLevel")?.value||"";
+  const board=$("examPriceBoard")?.value||"";
+  const type=$("examPriceType")?.value||"";
+  const cls=$("examPriceClassLevel")?.value||"";
+  const subject=$("examPriceSubject")?.value||"";
+
+  const selectedEducation=resetFrom==="education"?"":education;
+  const selectedBoard=["education","board"].includes(resetFrom)?"":board;
+  const selectedType=["education","board","type"].includes(resetFrom)?"":type;
+  const selectedClass=["education","board","type","class"].includes(resetFrom)?"":cls;
+  const selectedSubject=resetFrom?"":subject;
+
+  if($("examPriceEducationLevel"))$("examPriceEducationLevel").value=selectedEducation;
+
+  const boards=selectedEducation
+    ? Object.keys(ADMIN_EXAM_HIERARCHY[selectedEducation]||{})
+    : [];
+  examPriceSetOptions(
+    "examPriceBoard",
+    boards,
+    "Select examination board / organization",
+    !selectedEducation,
+    selectedBoard
+  );
+
+  const types=selectedEducation&&selectedBoard
+    ? (ADMIN_EXAM_HIERARCHY[selectedEducation]?.[selectedBoard]||[])
+    : [];
+  examPriceSetOptions(
+    "examPriceType",
+    types,
+    "Select examination type",
+    !selectedBoard,
+    selectedType
+  );
+
+  const classLevels=ADMIN_EXAM_CLASSES[selectedEducation]||[];
+  const examClassLevels=examinations
+    .filter(e=>!selectedEducation||normalizeExamPriceEducation(e.education_level)===selectedEducation)
+    .map(e=>e.class_level);
+  examPriceSetOptions(
+    "examPriceClassLevel",
+    [...classLevels,...examClassLevels],
+    "Select class / level",
+    !selectedEducation,
+    selectedClass
+  );
+
+  const filtered=examinations.filter(exam=>{
+    if(selectedEducation&&normalizeExamPriceEducation(exam.education_level)!==selectedEducation)return false;
+    if(selectedBoard&&String(exam.examination_board||"").trim()!==selectedBoard)return false;
+    if(selectedType&&String(exam.examination_type||"").trim()!==selectedType)return false;
+    if(selectedClass&&String(exam.class_level||"").trim()!==selectedClass)return false;
+    return true;
+  });
+
+  examPriceSetOptions(
+    "examPriceSubject",
+    filtered.map(e=>e.subject),
+    "Select subject",
+    !selectedEducation,
+    selectedSubject
+  );
+
+  populateExamPriceExamSelect();
+
+  const selectedExam=$("examPriceExamination");
+  if(selectedExam&&selectedSubject){
+    const subjectFiltered=filtered.filter(e=>String(e.subject||"").trim()===selectedSubject);
+    const currentExam=selectedExam.value;
+    selectedExam.innerHTML='<option value="">Select examination details</option>'+
+      subjectFiltered.map(exam=>`<option value="${esc(exam.id)}">${esc(exam.title||"Untitled Examination")}</option>`).join("");
+    selectedExam.disabled=!subjectFiltered.length;
+    if(currentExam&&subjectFiltered.some(e=>String(e.id)===String(currentExam)))selectedExam.value=currentExam;
+  }
+}
+
+function setupExamPriceHierarchy(){
+  const level=$("examPriceEducationLevel");
+  const board=$("examPriceBoard");
+  const type=$("examPriceType");
+  const cls=$("examPriceClassLevel");
+  const subject=$("examPriceSubject");
+  if(!level)return;
+
+  if(!level.dataset.aguPriceHierarchyBound){
+    level.addEventListener("change",()=>{refreshExamPriceHierarchy("education");});
+    board?.addEventListener("change",()=>{refreshExamPriceHierarchy("board");});
+    type?.addEventListener("change",()=>{refreshExamPriceHierarchy("type");});
+    cls?.addEventListener("change",()=>{refreshExamPriceHierarchy("class");});
+    subject?.addEventListener("change",()=>{refreshExamPriceHierarchy("subject");});
+    level.dataset.aguPriceHierarchyBound="true";
+  }
+
+  refreshExamPriceHierarchy();
+}
+
+function syncExamPriceHierarchyFromExamination(examinationId){
+  const exam=examinations.find(e=>String(e.id)===String(examinationId));
+  if(!exam)return;
+
+  const education=normalizeExamPriceEducation(exam.education_level);
+  const board=String(exam.examination_board||"").trim();
+  const type=String(exam.examination_type||"").trim();
+  const cls=String(exam.class_level||"").trim();
+  const subject=String(exam.subject||"").trim();
+
+  if($("examPriceEducationLevel"))$("examPriceEducationLevel").value=education;
+  refreshExamPriceHierarchy();
+
+  if($("examPriceBoard")&&board)$("examPriceBoard").value=board;
+  refreshExamPriceHierarchy();
+
+  if($("examPriceType")&&type)$("examPriceType").value=type;
+  refreshExamPriceHierarchy();
+
+  if($("examPriceClassLevel")&&cls)$("examPriceClassLevel").value=cls;
+  refreshExamPriceHierarchy();
+
+  if($("examPriceSubject")&&subject)$("examPriceSubject").value=subject;
+  refreshExamPriceHierarchy();
+
+  if($("examPriceExamination"))$("examPriceExamination").value=String(examinationId);
+}
+
+
+
 /* ---------------- LOAD EXAMINATIONS ---------------- */
 
 async function loadExaminations() {
@@ -2678,15 +2860,8 @@ if (result.error) {
 examinations =  
   result.data || [];
 
-populateExamPriceExamSelect();  
-
-function populateExamPriceExamSelect(){
-  const select=$("examPriceExamination");
-  if(!select)return;
-  const current=select.value;
-  select.innerHTML='<option value="">Select an examination</option>'+examinations.map(exam=>`<option value="${esc(exam.id)}">${esc(exam.title||"Untitled Examination")}</option>`).join("");
-  if(current&&examinations.some(exam=>String(exam.id)===String(current)))select.value=current;
-}
+populateExamPriceExamSelect();
+setupExamPriceHierarchy();  
 
 /*  
  * ------------------------------------------------------  
@@ -4023,6 +4198,7 @@ async function loadExamPrices() {
 
         const examSelect = $("examPriceExamination");
         if (examSelect) examSelect.value = row.examination_id || "";
+        syncExamPriceHierarchyFromExamination(row.examination_id);
 
         const countrySelect = $("examPriceCountryName");
         if (countrySelect) {
@@ -4303,9 +4479,25 @@ function clearExamPriceForm() {
     $("examPriceEditId").value = "";
   }
 
+  if ($("examPriceEducationLevel")) {
+    $("examPriceEducationLevel").value = "";
+  }
+  if ($("examPriceBoard")) {
+    $("examPriceBoard").value = "";
+  }
+  if ($("examPriceType")) {
+    $("examPriceType").value = "";
+  }
+  if ($("examPriceClassLevel")) {
+    $("examPriceClassLevel").value = "";
+  }
+  if ($("examPriceSubject")) {
+    $("examPriceSubject").value = "";
+  }
   if ($("examPriceExamination")) {
     $("examPriceExamination").value = "";
   }
+  refreshExamPriceHierarchy();
 
   if ($("examPriceCountryName")) {
     $("examPriceCountryName").value = "";
@@ -4593,6 +4785,9 @@ updateDigitalBookFields();
 // Initialize the examination country selector so Country Code, Currency Code
 // and Currency Symbol are revealed automatically when a country is selected.
 setupExamCountrySelector();
+
+// Initialize the examination registration-price hierarchy.
+setupExamPriceHierarchy();
 
 $("aguStudentSearch")
 ?.addEventListener(

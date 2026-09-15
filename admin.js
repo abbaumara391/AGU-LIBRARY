@@ -30,13 +30,13 @@ const TABLE = window.AGU_RESOURCE_TABLE || "resources";
 const BUCKET = window.AGU_BUCKET || window.BUCKET || "agu-library";
 
 function esc(v) {
-  return String(v ?? "").replace(/[&<>"']/g, c => ({
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    '"': "&quot;",
-    "'": "&#39;"
-  }[c]));
+return String(v ?? "").replace(/[&<>"']/g, c => ({
+"&": "&amp;",
+"<": "&lt;",
+">": "&gt;",
+'"': "&quot;",
+"'": "&#39;"
+}[c]));
 }
 
 function showLoginMessage(text, type = "error") {
@@ -974,11 +974,11 @@ resource.title ||
 "this resource";
 
 if (
-  !confirm(
-    `Delete "${title}"?\n\nThis action removes the published resource from AGULIBRARY. It cannot be undone.`
-  )
+!confirm(
+`Delete "${title}"?\n\nThis action removes the published resource from AGULIBRARY. It cannot be undone.`
+)
 ) {
-  return;
+return;
 }
 
 try {
@@ -3701,728 +3701,473 @@ showMessage(
 }
 }
 
+
 /* =========================================================
-   AGULIBRARY — EXAMINATION REGISTRATION PRICE CONTROL
+AGULIBRARY — EXAMINATION REGISTRATION COUNTRY PRICES
+The live database table uses:
+  id
+  country_code
+  country_name
+  currency_code
+  amount
+  is_enabled
 
-   Database table:
-   agu_exam_country_prices
+IMPORTANT:
+Do not request currency_symbol from Supabase. Some existing
+AGULIBRARY installations do not have that database column.
+The currency symbol is derived locally from the selected country
+and displayed without requiring a currency_symbol database column.
+========================================================= */
 
-   Columns:
-   id
-   country_code
-   country_name
-   currency_code
-   currency_symbol
-   amount
-   is_enabled
-   created_at
-   updated_at
+const EXAM_COUNTRY_CURRENCIES = {
+  NG: { name: "Nigeria", code: "NG", currency: "NGN", symbol: "₦" },
+  GH: { name: "Ghana", code: "GH", currency: "GHS", symbol: "₵" },
+  KE: { name: "Kenya", code: "KE", currency: "KES", symbol: "KSh" },
+  ZA: { name: "South Africa", code: "ZA", currency: "ZAR", symbol: "R" },
+  US: { name: "United States", code: "US", currency: "USD", symbol: "$" },
+  GB: { name: "United Kingdom", code: "GB", currency: "GBP", symbol: "£" },
+  CA: { name: "Canada", code: "CA", currency: "CAD", symbol: "$" },
+  AU: { name: "Australia", code: "AU", currency: "AUD", symbol: "$" },
+  DE: { name: "Germany", code: "DE", currency: "EUR", symbol: "€" },
+  FR: { name: "France", code: "FR", currency: "EUR", symbol: "€" },
+  IT: { name: "Italy", code: "IT", currency: "EUR", symbol: "€" },
+  ES: { name: "Spain", code: "ES", currency: "EUR", symbol: "€" },
+  IN: { name: "India", code: "IN", currency: "INR", symbol: "₹" },
+  AE: { name: "United Arab Emirates", code: "AE", currency: "AED", symbol: "د.إ" },
+  SA: { name: "Saudi Arabia", code: "SA", currency: "SAR", symbol: "﷼" },
+  EG: { name: "Egypt", code: "EG", currency: "EGP", symbol: "E£" },
+  JP: { name: "Japan", code: "JP", currency: "JPY", symbol: "¥" },
+  CN: { name: "China", code: "CN", currency: "CNY", symbol: "¥" },
+  BR: { name: "Brazil", code: "BR", currency: "BRL", symbol: "R$" },
+  MX: { name: "Mexico", code: "MX", currency: "MXN", symbol: "$" }
+};
 
-   IMPORTANT:
-   This controls country-specific registration prices only.
-   It does not modify the Examination Room ON/OFF,
-   Registration ON/OFF, or other examination settings.
-   ========================================================= */
+function examCurrencyInfo(countryCode, countryName, currencyCode) {
+  const code = String(countryCode || "").trim().toUpperCase();
+  if (EXAM_COUNTRY_CURRENCIES[code]) {
+    return EXAM_COUNTRY_CURRENCIES[code];
+  }
 
-let examCountryPrices = [];
+  const currency = String(currencyCode || "").trim().toUpperCase();
+  const symbolMap = {
+    NGN: "₦", GHS: "₵", KES: "KSh", ZAR: "R", USD: "$",
+    GBP: "£", CAD: "$", AUD: "$", EUR: "€", INR: "₹",
+    AED: "د.إ", SAR: "﷼", EGP: "E£", JPY: "¥", CNY: "¥",
+    BRL: "R$", MXN: "$"
+  };
 
+  return {
+    name: String(countryName || code || "Unknown country"),
+    code: code,
+    currency: currency,
+    symbol: symbolMap[currency] || ""
+  };
+}
 
-/* ---------------- LOAD COUNTRY PRICES ---------------- */
+function setupExamCountrySelector() {
+  const countrySelect = $("examPriceCountryName");
+  const countryCode = $("examPriceCountryCode");
+  const currencyCode = $("examPriceCurrencyCode");
+  const currencySymbol = $("examPriceCurrencySymbol");
+
+  if (!countrySelect) return;
+
+  const fill = () => {
+    const option = countrySelect.options[countrySelect.selectedIndex];
+
+    if (!option || !option.value) {
+      if (countryCode) countryCode.value = "";
+      if (currencyCode) currencyCode.value = "";
+      if (currencySymbol) currencySymbol.value = "";
+      return;
+    }
+
+    const info = examCurrencyInfo(
+      option.dataset.code || "",
+      option.value || "",
+      option.dataset.currency || ""
+    );
+
+    if (countryCode) countryCode.value = info.code;
+    if (currencyCode) currencyCode.value = info.currency;
+    if (currencySymbol) currencySymbol.value = info.symbol;
+  };
+
+  countrySelect.addEventListener("change", fill);
+  fill();
+}
+
+function examPriceStatusText(enabled) {
+  return enabled
+    ? '<span class="badge">ON — Active</span>'
+    : '<span class="badge off">OFF — Disabled</span>';
+}
 
 async function loadExamPrices() {
-
-  const list =
-    $("adminExamPriceList");
-
+  const list = $("adminExamPriceList");
   if (!list) return;
 
   list.innerHTML =
     '<div class="empty">Loading examination registration prices...</div>';
 
   try {
+    /*
+      IMPORTANT:
+      currency_symbol is deliberately NOT selected here.
+      The screenshot error came from requesting a column that does
+      not exist in the live schema cache.
+    */
+    const result = await getDB()
+      .from("agu_exam_country_prices")
+      .select(
+        "id,country_code,country_name,currency_code,amount,is_enabled,created_at,updated_at"
+      )
+      .order("country_name", { ascending: true });
 
-    const result =
-      await getDB()
-        .from("agu_exam_country_prices")
-        .select(
-          "id,country_code,country_name,currency_code,currency_symbol,amount,is_enabled,created_at,updated_at"
-        )
-        .order(
-          "country_name",
-          {
-            ascending: true
-          }
-        );
+    if (result.error) throw result.error;
 
-    if (result.error) {
-      throw result.error;
+    const rows = Array.isArray(result.data) ? result.data : [];
+
+    if (!rows.length) {
+      list.innerHTML =
+        '<div class="empty">No examination registration prices have been configured yet.</div>';
+      return;
     }
 
-    examCountryPrices =
-      Array.isArray(result.data)
-        ? result.data
-        : [];
+    list.innerHTML = rows.map(row => {
+      const info = examCurrencyInfo(
+        row.country_code,
+        row.country_name,
+        row.currency_code
+      );
 
-    renderExamPrices();
+      const amount = Number(row.amount || 0);
 
-  } catch (error) {
+      return `
+        <div class="item">
+          <div class="item-main">
+            <div class="avatar">${esc(info.code || "🌍")}</div>
+            <div class="item-text">
+              <strong>${esc(row.country_name || info.name)}</strong>
 
-    console.error(
-      "AGULIBRARY examination price loading error:",
-      error
-    );
-
-    list.innerHTML =
-      `<div class="empty">
-        ❌ Unable to load examination registration prices.<br>
-        <small>${esc(
-          error.message ||
-          "Database error"
-        )}</small>
-      </div>`;
-  }
-}
-
-
-/* ---------------- RENDER COUNTRY PRICES ---------------- */
-
-function renderExamPrices() {
-
-  const list =
-    $("adminExamPriceList");
-
-  if (!list) return;
-
-  if (!examCountryPrices.length) {
-
-    list.innerHTML =
-      `<div class="empty">
-        No country registration prices have been configured yet.
-      </div>`;
-
-    return;
-  }
-
-  list.innerHTML =
-    examCountryPrices
-      .map(price => {
-
-        const enabled =
-          price.is_enabled === true;
-
-        const amount =
-          Number(price.amount || 0)
-            .toLocaleString(
-              undefined,
-              {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-              }
-            );
-
-        const currency =
-          price.currency_symbol ||
-          price.currency_code ||
-          "";
-
-        return `
-          <div class="exam-row">
-
-            <div style="
-              display:flex;
-              justify-content:space-between;
-              gap:12px;
-              align-items:flex-start;
-              flex-wrap:wrap;
-            ">
-
-              <div>
-
-                <h3>
-                  ${esc(
-                    price.country_name ||
-                    "Unnamed Country"
-                  )}
-                </h3>
-
-                <div class="small">
-
-                  Country code:
-                  <strong>
-                    ${esc(
-                      price.country_code ||
-                      "—"
-                    )}
-                  </strong>
-
-                  • Currency:
-                  <strong>
-                    ${esc(
-                      price.currency_code ||
-                      "—"
-                    )}
-                  </strong>
-
-                  ${
-                    price.currency_symbol
-                      ? ` • Symbol:
-                         <strong>
-                           ${esc(
-                             price.currency_symbol
-                           )}
-                         </strong>`
-                      : ""
-                  }
-
-                </div>
-
-                <div
-                  style="
-                    margin-top:8px;
-                    font-size:20px;
-                    font-weight:900;
-                    color:#087a4b;
-                  "
-                >
-                  ${esc(currency)}
-                  ${esc(amount)}
-                </div>
-
+              <div class="small">
+                Country Code: ${esc(info.code || "—")}
+                • Currency: ${esc(info.currency || "—")}
+                • Symbol: ${esc(info.symbol || "—")}
               </div>
 
-              <span
-                class="badge ${
-                  enabled
-                    ? ""
-                    : "off"
-                }"
-              >
-                ${
-                  enabled
-                    ? "ACTIVE"
-                    : "DISABLED"
-                }
-              </span>
+              <div class="small">
+                Registration Price:
+                <strong>${esc(info.symbol)}${esc(amount.toLocaleString(undefined, {
+                  minimumFractionDigits: 0,
+                  maximumFractionDigits: 2
+                }))}</strong>
+              </div>
 
+              <div class="exam-meta">
+                ${examPriceStatusText(!!row.is_enabled)}
+              </div>
             </div>
-
-            <div class="actions">
-
-              <button
-                class="btn light agu-edit-exam-price"
-                data-id="${esc(price.id)}"
-                type="button"
-              >
-                ✏ Edit
-              </button>
-
-              <button
-                class="btn ${
-                  enabled
-                    ? "danger"
-                    : "primary"
-                } agu-toggle-exam-price"
-                data-id="${esc(price.id)}"
-                data-enabled="${enabled}"
-                type="button"
-              >
-                ${
-                  enabled
-                    ? "Disable"
-                    : "Enable"
-                }
-              </button>
-
-              <button
-                class="btn danger agu-delete-exam-price"
-                data-id="${esc(price.id)}"
-                type="button"
-              >
-                🗑 Delete
-              </button>
-
-            </div>
-
           </div>
-        `;
-      })
-      .join("");
 
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button
+              class="btn light agu-edit-exam-price"
+              data-id="${esc(row.id)}"
+              type="button">
+              ✏️ Edit
+            </button>
 
-  /* ---------------- EDIT ---------------- */
+            <button
+              class="btn ${row.is_enabled ? "danger" : "primary"} agu-toggle-exam-price"
+              data-id="${esc(row.id)}"
+              data-enabled="${row.is_enabled ? "true" : "false"}"
+              type="button">
+              ${row.is_enabled ? "Disable" : "Enable"}
+            </button>
 
-  list
-    .querySelectorAll(
-      ".agu-edit-exam-price"
-    )
-    .forEach(button => {
+            <button
+              class="btn danger agu-delete-exam-price"
+              data-id="${esc(row.id)}"
+              data-country="${esc(row.country_name || "")}"
+              type="button">
+              🗑 Delete
+            </button>
+          </div>
+        </div>
+      `;
+    }).join("");
 
-      button.addEventListener(
-        "click",
-        () => {
+    list.querySelectorAll(".agu-edit-exam-price").forEach(button => {
+      button.onclick = () => {
+        const row = rows.find(x => String(x.id) === String(button.dataset.id));
+        if (!row) return;
 
-          const price =
-            examCountryPrices.find(
-              item =>
-                String(item.id) ===
-                String(button.dataset.id)
+        const countrySelect = $("examPriceCountryName");
+        if (countrySelect) {
+          countrySelect.value = row.country_name || "";
+
+          if (!countrySelect.value) {
+            const option = Array.from(countrySelect.options).find(
+              o => String(o.dataset.code || "").toUpperCase() ===
+                   String(row.country_code || "").toUpperCase()
             );
 
-          if (!price) return;
-
-          $("examPriceEditId").value =
-            price.id || "";
-
-          $("examPriceCountryName").value =
-            price.country_name || "";
-
-          $("examPriceCountryCode").value =
-            price.country_code || "";
-
-          $("examPriceCurrencyCode").value =
-            price.currency_code || "";
-
-          $("examPriceCurrencySymbol").value =
-            price.currency_symbol || "";
-
-          $("examPriceAmount").value =
-            price.amount ?? "";
-
-          $("examPriceEnabled").value =
-            String(
-              price.is_enabled !== false
-            );
-
-          const saveButton =
-            $("saveExamPrice");
-
-          if (saveButton) {
-
-            saveButton.textContent =
-              "💾 Save Price Changes";
+            if (option) countrySelect.value = option.value;
           }
-
-          const status =
-            $("examPriceFormStatus");
-
-          if (status) {
-
-            status.textContent =
-              "Editing " +
-              (
-                price.country_name ||
-                "country"
-              ) +
-              " registration price.";
-          }
-
-          $("examPriceCountryName")
-            ?.scrollIntoView({
-              behavior: "smooth",
-              block: "center"
-            });
-
         }
-      );
 
+        if ($("examPriceEditId")) {
+          $("examPriceEditId").value = row.id || "";
+        }
+
+        if ($("examPriceAmount")) {
+          $("examPriceAmount").value = row.amount ?? "";
+        }
+
+        if ($("examPriceEnabled")) {
+          $("examPriceEnabled").value = String(!!row.is_enabled);
+        }
+
+        setupExamCountrySelector();
+
+        if ($("saveExamPrice")) {
+          $("saveExamPrice").textContent = "💾 Update Country Price";
+        }
+
+        if ($("examPriceFormStatus")) {
+          $("examPriceFormStatus").textContent =
+            `Editing ${row.country_name || "country"} price.`;
+        }
+
+        $("examPriceAmount")?.focus();
+      };
     });
 
-
-  /* ---------------- ENABLE / DISABLE ---------------- */
-
-  list
-    .querySelectorAll(
-      ".agu-toggle-exam-price"
-    )
-    .forEach(button => {
-
-      button.addEventListener(
-        "click",
-        () => {
-
-          const id =
-            button.dataset.id;
-
-          const currentlyEnabled =
-            button.dataset.enabled ===
-            "true";
-
-          toggleExamPrice(
-            id,
-            !currentlyEnabled
-          );
-
-        }
-      );
-
+    list.querySelectorAll(".agu-toggle-exam-price").forEach(button => {
+      button.onclick = () =>
+        toggleExamPrice(
+          button.dataset.id,
+          button.dataset.enabled !== "true"
+        );
     });
 
-
-  /* ---------------- DELETE ---------------- */
-
-  list
-    .querySelectorAll(
-      ".agu-delete-exam-price"
-    )
-    .forEach(button => {
-
-      button.addEventListener(
-        "click",
-        () => {
-
-          deleteExamPrice(
-            button.dataset.id
-          );
-
-        }
-      );
-
+    list.querySelectorAll(".agu-delete-exam-price").forEach(button => {
+      button.onclick = () =>
+        deleteExamPrice(
+          button.dataset.id,
+          button.dataset.country || "this country"
+        );
     });
 
+  } catch (error) {
+    console.error("AGULIBRARY examination price loading error:", error);
+
+    list.innerHTML = `
+      <div class="empty">
+        ❌ Unable to load examination registration prices.<br>
+        <small>${esc(error.message || "Database error")}</small>
+      </div>
+    `;
+  }
 }
 
-
-/* ---------------- SAVE / UPDATE PRICE ---------------- */
-
 async function saveExamPrice() {
-
-  const status =
-    $("examPriceFormStatus");
+  const status = $("examPriceFormStatus");
 
   try {
-
-    const verified =
-      await adminMfaGate();
-
+    const verified = await adminMfaGate();
     if (!verified) return;
 
-    const id =
-      $("examPriceEditId")
-        ?.value
-        .trim() || "";
+    const editId =
+      $("examPriceEditId")?.value.trim() || "";
 
-    const countryName =
-      $("examPriceCountryName")
-        ?.value
-        .trim() || "";
+    const countrySelect = $("examPriceCountryName");
+    const selectedOption =
+      countrySelect?.options[countrySelect.selectedIndex];
 
-    const countryCode =
-      $("examPriceCountryCode")
-        ?.value
-        .trim()
-        .toUpperCase() || "";
-
-    const currencyCode =
-      $("examPriceCurrencyCode")
-        ?.value
-        .trim()
-        .toUpperCase() || "";
-
-    const currencySymbol =
-      $("examPriceCurrencySymbol")
-        ?.value
-        .trim() || "";
-
-    const amount =
-      Number(
-        $("examPriceAmount")
-          ?.value
-      );
-
-    const enabled =
-      $("examPriceEnabled")
-        ?.value === "true";
-
-
-    if (!countryName) {
-
-      throw new Error(
-        "Enter the country name."
-      );
+    if (!selectedOption || !selectedOption.value) {
+      throw new Error("Please select a country.");
     }
 
-    if (!countryCode) {
+    const info = examCurrencyInfo(
+      selectedOption.dataset.code || "",
+      selectedOption.value || "",
+      selectedOption.dataset.currency || ""
+    );
 
-      throw new Error(
-        "Enter the country code."
-      );
+    const amount = Number(
+      $("examPriceAmount")?.value
+    );
+
+    if (!Number.isFinite(amount) || amount < 0) {
+      throw new Error("Registration price must be 0 or greater.");
     }
 
-    if (!currencyCode) {
+    const isEnabled =
+      $("examPriceEnabled")?.value === "true";
 
-      throw new Error(
-        "Enter the currency code."
-      );
-    }
+    const db = getDB();
 
-    if (
-      !Number.isFinite(amount) ||
-      amount < 0
-    ) {
-
-      throw new Error(
-        "Registration price must be zero or greater."
-      );
-    }
-
-
+    /*
+      Do not send currency_symbol because the live table reported
+      that this column does not exist.
+    */
     const payload = {
-
-      country_code:
-        countryCode,
-
-      country_name:
-        countryName,
-
-      currency_code:
-        currencyCode,
-
-      currency_symbol:
-        currencySymbol ||
-        null,
-
-      amount:
-        amount,
-
-      is_enabled:
-        enabled,
-
-      updated_at:
-        new Date().toISOString()
+      country_code: info.code,
+      country_name: info.name,
+      currency_code: info.currency,
+      amount: amount,
+      is_enabled: isEnabled,
+      updated_at: new Date().toISOString()
     };
-
 
     let result;
 
-
-    if (id) {
-
-      result =
-        await getDB()
-          .from(
-            "agu_exam_country_prices"
-          )
-          .update(payload)
-          .eq(
-            "id",
-            id
-          );
+    if (editId) {
+      result = await db
+        .from("agu_exam_country_prices")
+        .update(payload)
+        .eq("id", editId);
 
     } else {
-
-      result =
-        await getDB()
-          .from(
-            "agu_exam_country_prices"
-          )
-          .insert(payload);
-    }
-
-
-    if (result.error) {
-
       /*
-       * PostgreSQL unique(country_code)
-       * protects against duplicate country
-       * configurations.
-       */
+        Because country_code is unique, first check whether this
+        country already exists. This gives a friendly edit/update
+        path instead of an opaque duplicate-key error.
+      */
+      const existing = await db
+        .from("agu_exam_country_prices")
+        .select("id")
+        .eq("country_code", info.code)
+        .maybeSingle();
 
-      throw result.error;
+      if (existing.error) throw existing.error;
+
+      if (existing.data?.id) {
+        result = await db
+          .from("agu_exam_country_prices")
+          .update(payload)
+          .eq("id", existing.data.id);
+      } else {
+        result = await db
+          .from("agu_exam_country_prices")
+          .insert(payload);
+      }
     }
 
+    if (result.error) throw result.error;
 
     if (status) {
-
       status.textContent =
-        id
-          ? "✅ Country registration price updated successfully."
-          : "✅ Country registration price added successfully.";
+        editId
+          ? "✅ Examination registration price updated successfully."
+          : "✅ Examination registration price saved successfully.";
     }
 
     showMessage(
-      id
-        ? "Country registration price updated successfully."
-        : "Country registration price added successfully.",
+      editId
+        ? "Examination registration price updated successfully."
+        : "Examination registration price saved successfully.",
       "success"
     );
 
-
     clearExamPriceForm();
-
     await loadExamPrices();
 
   } catch (error) {
-
-    console.error(
-      "AGULIBRARY examination price save error:",
-      error
-    );
+    console.error("AGULIBRARY examination price save error:", error);
 
     if (status) {
-
       status.textContent =
         "❌ " +
-        (
-          error.message ||
-          "Unable to save examination registration price."
-        );
+        (error.message || "Unable to save examination registration price.");
     }
 
     showMessage(
-      error.message ||
-      "Unable to save examination registration price.",
+      error.message || "Unable to save examination registration price.",
       "error"
     );
-
   }
-
 }
 
-
-/* ---------------- TOGGLE PRICE ---------------- */
-
-async function toggleExamPrice(
-  id,
-  enabled
-) {
+async function toggleExamPrice(id, enabled) {
+  if (!id) return;
 
   try {
-
-    const verified =
-      await adminMfaGate();
-
+    const verified = await adminMfaGate();
     if (!verified) return;
 
-    const result =
-      await getDB()
-        .from(
-          "agu_exam_country_prices"
-        )
-        .update({
+    const result = await getDB()
+      .from("agu_exam_country_prices")
+      .update({
+        is_enabled: !!enabled,
+        updated_at: new Date().toISOString()
+      })
+      .eq("id", id);
 
-          is_enabled:
-            enabled,
-
-          updated_at:
-            new Date().toISOString()
-
-        })
-        .eq(
-          "id",
-          id
-        );
-
-    if (result.error) {
-      throw result.error;
-    }
+    if (result.error) throw result.error;
 
     showMessage(
       enabled
-        ? "Country examination registration price enabled."
-        : "Country examination registration price disabled.",
+        ? "Country examination price enabled."
+        : "Country examination price disabled.",
       "success"
     );
 
     await loadExamPrices();
 
   } catch (error) {
-
-    console.error(
-      "AGULIBRARY examination price status error:",
-      error
-    );
+    console.error("AGULIBRARY examination price status error:", error);
 
     showMessage(
-      error.message ||
-      "Unable to change examination price status.",
+      error.message || "Unable to change examination price status.",
       "error"
     );
-
   }
-
 }
 
-
-/* ---------------- DELETE PRICE ---------------- */
-
-async function deleteExamPrice(id) {
-
-  const price =
-    examCountryPrices.find(
-      item =>
-        String(item.id) ===
-        String(id)
-    );
-
-  if (!price) return;
-
-  const country =
-    price.country_name ||
-    "this country";
+async function deleteExamPrice(id, countryName) {
+  if (!id) return;
 
   if (
     !confirm(
-      `Delete the examination registration price for ${country}?\n\nThis removes the country price configuration.`
+      `Delete the examination registration price for "${countryName}"?\n\nThis cannot be undone.`
     )
   ) {
-
     return;
   }
 
-
   try {
-
-    const verified =
-      await adminMfaGate();
-
+    const verified = await adminMfaGate();
     if (!verified) return;
 
-    const result =
-      await getDB()
-        .from(
-          "agu_exam_country_prices"
-        )
-        .delete()
-        .eq(
-          "id",
-          id
-        );
+    const result = await getDB()
+      .from("agu_exam_country_prices")
+      .delete()
+      .eq("id", id);
 
-    if (result.error) {
-      throw result.error;
-    }
+    if (result.error) throw result.error;
 
     showMessage(
-      `The examination registration price for ${country} was deleted.`,
+      `The examination registration price for "${countryName}" was deleted.`,
       "success"
     );
 
     clearExamPriceForm();
-
     await loadExamPrices();
 
   } catch (error) {
-
-    console.error(
-      "AGULIBRARY examination price deletion error:",
-      error
-    );
+    console.error("AGULIBRARY examination price delete error:", error);
 
     showMessage(
-      error.message ||
-      "Unable to delete examination registration price.",
+      error.message || "Unable to delete examination registration price.",
       "error"
     );
-
   }
-
 }
 
-
-/* ---------------- CLEAR PRICE FORM ---------------- */
-
 function clearExamPriceForm() {
-
   if ($("examPriceEditId")) {
     $("examPriceEditId").value = "";
   }
@@ -4448,69 +4193,19 @@ function clearExamPriceForm() {
   }
 
   if ($("examPriceEnabled")) {
-    $("examPriceEnabled").value =
-      "true";
+    $("examPriceEnabled").value = "true";
   }
 
-  const saveButton =
-    $("saveExamPrice");
-
-  if (saveButton) {
-
-    saveButton.textContent =
-      "➕ Add Country Price";
+  if ($("saveExamPrice")) {
+    $("saveExamPrice").textContent = "➕ Add Country Price";
   }
 
-  const status =
-    $("examPriceFormStatus");
-
-  if (status) {
-    status.textContent = "";
+  if ($("examPriceFormStatus")) {
+    $("examPriceFormStatus").textContent = "";
   }
-
 }
 
-function setupExamCountrySelector() {
 
-  const countrySelect =
-    document.getElementById("examPriceCountryName");
-
-  const countryCode =
-    document.getElementById("examPriceCountryCode");
-
-  const currencyCode =
-    document.getElementById("examPriceCurrencyCode");
-
-  const currencySymbol =
-    document.getElementById("examPriceCurrencySymbol");
-
-  if (!countrySelect) return;
-
-  countrySelect.addEventListener("change", () => {
-
-    const option =
-      countrySelect.options[countrySelect.selectedIndex];
-
-    if (!option || !option.value) {
-
-      countryCode.value = "";
-      currencyCode.value = "";
-      currencySymbol.value = "";
-
-      return;
-    }
-
-    countryCode.value =
-      option.dataset.code || "";
-
-    currencyCode.value =
-      option.dataset.currency || "";
-
-    currencySymbol.value =
-      option.dataset.symbol || "";
-  });
-}
-  
 /* ---------------- DASHBOARD ---------------- */
 
 async function finishAdmin() {
@@ -4538,12 +4233,12 @@ $("adminIdentity").textContent =
 }
 
 await Promise.all([
-  loadStudents(),
-  loadResources(),
-  loadNotificationCount(),
-  loadExamSettings(),
-  loadExamPrices(),
-  loadExaminations()
+loadStudents(),
+loadResources(),
+loadNotificationCount(),
+loadExamSettings(),
+loadExaminations(),
+loadExamPrices()
 ]);
 
 }
@@ -4813,28 +4508,29 @@ $("saveExamSettings")?.addEventListener(
 "click",
 saveExamSettings
 );
-setupExamCountrySelector();
+
 $("saveExamPrice")?.addEventListener(
-  "click",
-  saveExamPrice
+"click",
+saveExamPrice
 );
 
 $("clearExamPriceForm")?.addEventListener(
-  "click",
-  clearExamPriceForm
+"click",
+clearExamPriceForm
 );
 
 $("refreshExamPrices")?.addEventListener(
-  "click",
-  loadExamPrices
+"click",
+loadExamPrices
 );
+
 $("refreshExamAdmin")?.addEventListener(
-  "click",
-  async () => {
-    await loadExamSettings();
-    await loadExamPrices();
-    await loadExaminations();
-  }
+"click",
+async () => {
+await loadExamSettings();
+await loadExaminations();
+await loadExamPrices();
+}
 );
 $("saveExam")
 ?.addEventListener(

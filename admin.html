@@ -545,7 +545,7 @@ footer{
         <button
           type="button"
           data-target="adminPassword"
-        >👁</button>
+        ></button>
       </div>
 
       <div class="form-actions">
@@ -589,7 +589,7 @@ footer{
       class="btn light"
       type="button"
     >
-      ↻ Refresh
+       Refresh
     </button>
 
     <button
@@ -597,7 +597,7 @@ footer{
       class="btn danger"
       type="button"
     >
-      🚪 Sign Out
+       Sign Out
     </button>
   </div>
 
@@ -797,39 +797,39 @@ footer{
         <select id="resourceType">
 
           <option value="book">
-            📚 Book
+             Book
           </option>
 
           <option value="digital_book">
-            📘 Digital Book
+             Digital Book
           </option>
 
           <option value="pdf">
-            📄 PDF
+             PDF
           </option>
 
           <option value="video">
-            🎥 Video
+             Video
           </option>
 
           <option value="image">
-            🖼️ Image
+             Image
           </option>
 
           <option value="lesson">
-            📖 Lesson
+             Lesson
           </option>
 
           <option value="course">
-            🎓 Course
+             Course
           </option>
 
           <option value="document">
-            📄 Document
+             Document
           </option>
 
           <option value="audio">
-            🎧 Audio
+             Audio
           </option>
 
         </select>
@@ -930,7 +930,7 @@ footer{
 
     <div class="classification-note">
 
-      📌 <b>Resource classification:</b>
+       <b>Resource classification:</b>
       Subject, education level, class and term are saved
       with this resource so it can be revealed in its
       correct academic section only.
@@ -945,7 +945,7 @@ footer{
         class="btn primary"
         type="submit"
       >
-        ⬆ Upload Resource
+         Upload Resource
       </button>
 
     </div>
@@ -1010,7 +1010,7 @@ footer{
       class="btn light"
       type="button"
     >
-      ↻ Refresh Students
+       Refresh Students
     </button>
 
   </div>
@@ -1153,7 +1153,7 @@ footer{
           class="btn primary"
           type="button"
         >
-          💾 Save Examination Settings
+           Save Examination Settings
         </button>
 
         <button
@@ -1161,7 +1161,7 @@ footer{
           class="btn light"
           type="button"
         >
-          ↻ Refresh
+           Refresh
         </button>
 
       </div>
@@ -1180,7 +1180,7 @@ footer{
     <div class="exam-card">
 
       <h3>
-        💰 Examination Registration Prices
+         Examination Registration Prices
       </h3>
 
       <div class="section-note">
@@ -1216,7 +1216,7 @@ footer{
               value="Nigeria"
               data-code="NG"
               data-currency="NGN"
-              data-symbol="₦"
+              data-symbol=""
             >
               Nigeria
             </option>
@@ -1225,7 +1225,7 @@ footer{
               value="Ghana"
               data-code="GH"
               data-currency="GHS"
-              data-symbol="₵"
+              data-symbol=""
             >
               Ghana
             </option>
@@ -1324,7 +1324,7 @@ footer{
               value="India"
               data-code="IN"
               data-currency="INR"
-              data-symbol="₹"
+              data-symbol=""
             >
               India
             </option>
@@ -1333,7 +1333,7 @@ footer{
               value="United Arab Emirates"
               data-code="AE"
               data-currency="AED"
-              data-symbol="د.إ"
+              data-symbol="."
             >
               United Arab Emirates
             </option>
@@ -1342,7 +1342,7 @@ footer{
               value="Saudi Arabia"
               data-code="SA"
               data-currency="SAR"
-              data-symbol="﷼"
+              data-symbol=""
             >
               Saudi Arabia
             </option>
@@ -1503,7 +1503,7 @@ footer{
           class="btn primary"
           type="button"
         >
-          ➕ Add Country Price
+           Add Country Price
         </button>
 
         <button
@@ -1519,7 +1519,7 @@ footer{
           class="btn light"
           type="button"
         >
-          ↻ Refresh Prices
+           Refresh Prices
         </button>
 
       </div>
@@ -1600,24 +1600,55 @@ footer{
             Education level
           </label>
 
-          <input
-            id="examEducationLevel"
-            placeholder="e.g. Secondary School"
-          >
+          <select id="examEducationLevel" required>
+            <option value="">Select education level</option>
+            <option value="Early Years">Early Years</option>
+            <option value="Primary School">Primary School</option>
+            <option value="Junior Secondary School">Junior Secondary School</option>
+            <option value="Senior Secondary School">Senior Secondary School</option>
+            <option value="Tertiary / University">Tertiary / University</option>
+            <option value="Professional / Career">Professional / Career</option>
+          </select>
 
         </div>
 
+        <div>
+
+          <label for="examBoard">
+            Examination board / organization
+          </label>
+
+          <select id="examBoard" required disabled>
+            <option value="">Select education level first</option>
+          </select>
+
+        </div>
+
+      </div>
+
+      <div class="row">
+
+        <div>
+
+          <label for="examType">
+            Examination type
+          </label>
+
+          <select id="examType" required disabled>
+            <option value="">Select examination board first</option>
+          </select>
+
+        </div>
 
         <div>
 
           <label for="examClassLevel">
-            Class level
+            Class / level
           </label>
 
-          <input
-            id="examClassLevel"
-            placeholder="e.g. SSS1"
-          >
+          <select id="examClassLevel" required disabled>
+            <option value="">Select education level first</option>
+          </select>
 
         </div>
 
@@ -1723,7 +1754,7 @@ footer{
           class="btn primary"
           type="button"
         >
-          ➕ Create Examination
+           Create Examination
         </button>
 
         <button
@@ -1765,7 +1796,7 @@ footer{
           class="btn light"
           type="button"
         >
-          ↻ Refresh Examinations
+           Refresh Examinations
         </button>
 
       </div>
@@ -1970,7 +2001,7 @@ footer{
           class="btn primary"
           type="button"
         >
-          ➕ Save Question
+           Save Question
         </button>
 
         <button
@@ -2054,7 +2085,7 @@ footer{
           class="btn light"
           type="button"
         >
-          ↻ Refresh Registrations
+           Refresh Registrations
         </button>
 
       </div>
@@ -2123,7 +2154,7 @@ footer{
       class="btn light"
       type="button"
     >
-      ↻ Refresh Results
+       Refresh Results
     </button>
 
   </div>
@@ -2165,7 +2196,7 @@ footer{
       <select id="aguNotifyTarget">
 
         <option value="all">
-          👥 All students
+           All students
         </option>
 
       </select>
@@ -2206,7 +2237,7 @@ footer{
       class="btn primary"
       type="button"
     >
-      🔔 Send Notification
+       Send Notification
     </button>
 
   </div>
@@ -2245,7 +2276,7 @@ footer{
       class="btn light"
       type="button"
     >
-      ↻ Refresh Resources
+       Refresh Resources
     </button>
 
   </div>

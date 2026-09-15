@@ -4771,7 +4771,20 @@ $("saveExamSettings")?.addEventListener(
 "click",
 saveExamSettings
 );
+$("saveExamPrice")?.addEventListener(
+  "click",
+  saveExamPrice
+);
 
+$("clearExamPriceForm")?.addEventListener(
+  "click",
+  clearExamPriceForm
+);
+
+$("refreshExamPrices")?.addEventListener(
+  "click",
+  loadExamPrices
+);
 $("refreshExamAdmin")?.addEventListener(
 "click",
 async () => {

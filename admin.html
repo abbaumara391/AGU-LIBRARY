@@ -198,7 +198,151 @@ The entry file is normally <strong>index.html</strong>.
 <div class="section-note">The student Examination Room uses the permanent Supabase examination records. Each question remains fixed at <strong>5 seconds</strong>; the time is not editable here. Use this area to control access, examinations, questions, registrations and permanent results.</div>  
 <div class="exam-grid">  
 <div class="exam-card"><h3>Global Examination Settings</h3><div class="row"><div><label for="examEnabled">Examination Room</label><select id="examEnabled"><option value="true">ON — Students can enter</option><option value="false">OFF — Closed</option></select></div><div><label for="examRegistrationEnabled">Registration</label><select id="examRegistrationEnabled"><option value="true">ON — Registration allowed</option><option value="false">OFF — Registration closed</option></select></div></div><div class="row"><div><label for="examDefaultPass">Default pass percentage</label><input id="examDefaultPass" type="number" min="0" max="100" step="1"></div><div><label for="examQuestionSeconds">Question time</label><input id="examQuestionSeconds" class="readonly" value="5 seconds" readonly></div></div><div class="actions"><button id="saveExamSettings" class="btn primary" type="button">💾 Save Examination Settings</button><button id="refreshExamAdmin" class="btn light" type="button">↻ Refresh</button></div><div id="examSettingsStatus" class="small"></div></div>  
- <div class="exam-card">
+ <div class="row">
+
+  <div>
+    <label for="examPriceCountryName">Country</label>
+    <select id="examPriceCountryName">
+      <option value="">Select country</option>
+
+      <option value="Nigeria"
+        data-code="NG"
+        data-currency="NGN"
+        data-symbol="₦">Nigeria</option>
+
+      <option value="Ghana"
+        data-code="GH"
+        data-currency="GHS"
+        data-symbol="₵">Ghana</option>
+
+      <option value="Kenya"
+        data-code="KE"
+        data-currency="KES"
+        data-symbol="KSh">Kenya</option>
+
+      <option value="South Africa"
+        data-code="ZA"
+        data-currency="ZAR"
+        data-symbol="R">South Africa</option>
+
+      <option value="United States"
+        data-code="US"
+        data-currency="USD"
+        data-symbol="$">United States</option>
+
+      <option value="United Kingdom"
+        data-code="GB"
+        data-currency="GBP"
+        data-symbol="£">United Kingdom</option>
+
+      <option value="Canada"
+        data-code="CA"
+        data-currency="CAD"
+        data-symbol="$">Canada</option>
+
+      <option value="Australia"
+        data-code="AU"
+        data-currency="AUD"
+        data-symbol="$">Australia</option>
+
+      <option value="Germany"
+        data-code="DE"
+        data-currency="EUR"
+        data-symbol="€">Germany</option>
+
+      <option value="France"
+        data-code="FR"
+        data-currency="EUR"
+        data-symbol="€">France</option>
+
+      <option value="Italy"
+        data-code="IT"
+        data-currency="EUR"
+        data-symbol="€">Italy</option>
+
+      <option value="Spain"
+        data-code="ES"
+        data-currency="EUR"
+        data-symbol="€">Spain</option>
+
+      <option value="India"
+        data-code="IN"
+        data-currency="INR"
+        data-symbol="₹">India</option>
+
+      <option value="United Arab Emirates"
+        data-code="AE"
+        data-currency="AED"
+        data-symbol="د.إ">United Arab Emirates</option>
+
+      <option value="Saudi Arabia"
+        data-code="SA"
+        data-currency="SAR"
+        data-symbol="﷼">Saudi Arabia</option>
+
+      <option value="Egypt"
+        data-code="EG"
+        data-currency="EGP"
+        data-symbol="E£">Egypt</option>
+
+      <option value="Japan"
+        data-code="JP"
+        data-currency="JPY"
+        data-symbol="¥">Japan</option>
+
+      <option value="China"
+        data-code="CN"
+        data-currency="CNY"
+        data-symbol="¥">China</option>
+
+      <option value="Brazil"
+        data-code="BR"
+        data-currency="BRL"
+        data-symbol="R$">Brazil</option>
+
+      <option value="Mexico"
+        data-code="MX"
+        data-currency="MXN"
+        data-symbol="$">Mexico</option>
+    </select>
+  </div>
+
+  <div>
+    <label for="examPriceCountryCode">Country Code</label>
+    <input
+      id="examPriceCountryCode"
+      maxlength="10"
+      readonly
+      placeholder="Automatically filled"
+    >
+  </div>
+
+</div>
+
+<div class="row">
+
+  <div>
+    <label for="examPriceCurrencyCode">Currency Code</label>
+    <input
+      id="examPriceCurrencyCode"
+      maxlength="10"
+      readonly
+      placeholder="Automatically filled"
+    >
+  </div>
+
+  <div>
+    <label for="examPriceCurrencySymbol">Currency Symbol</label>
+    <input
+      id="examPriceCurrencySymbol"
+      maxlength="10"
+      readonly
+      placeholder="Automatically filled"
+    >
+  </div>
+
+</div>
+  <div class="exam-card">
   <h3>💰 Examination Registration Prices</h3>
  <div class="section-note">
     Set the examination registration price for each country.

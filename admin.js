@@ -4469,6 +4469,47 @@ function clearExamPriceForm() {
   }
 
 }
+
+function setupExamCountrySelector() {
+
+  const countrySelect =
+    document.getElementById("examPriceCountryName");
+
+  const countryCode =
+    document.getElementById("examPriceCountryCode");
+
+  const currencyCode =
+    document.getElementById("examPriceCurrencyCode");
+
+  const currencySymbol =
+    document.getElementById("examPriceCurrencySymbol");
+
+  if (!countrySelect) return;
+
+  countrySelect.addEventListener("change", () => {
+
+    const option =
+      countrySelect.options[countrySelect.selectedIndex];
+
+    if (!option || !option.value) {
+
+      countryCode.value = "";
+      currencyCode.value = "";
+      currencySymbol.value = "";
+
+      return;
+    }
+
+    countryCode.value =
+      option.dataset.code || "";
+
+    currencyCode.value =
+      option.dataset.currency || "";
+
+    currencySymbol.value =
+      option.dataset.symbol || "";
+  });
+}
   
 /* ---------------- DASHBOARD ---------------- */
 

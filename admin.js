@@ -3701,6 +3701,775 @@ showMessage(
 }
 }
 
+/* =========================================================
+   AGULIBRARY — EXAMINATION REGISTRATION PRICE CONTROL
+
+   Database table:
+   agu_exam_country_prices
+
+   Columns:
+   id
+   country_code
+   country_name
+   currency_code
+   currency_symbol
+   amount
+   is_enabled
+   created_at
+   updated_at
+
+   IMPORTANT:
+   This controls country-specific registration prices only.
+   It does not modify the Examination Room ON/OFF,
+   Registration ON/OFF, or other examination settings.
+   ========================================================= */
+
+let examCountryPrices = [];
+
+
+/* ---------------- LOAD COUNTRY PRICES ---------------- */
+
+async function loadExamPrices() {
+
+  const list =
+    $("adminExamPriceList");
+
+  if (!list) return;
+
+  list.innerHTML =
+    '<div class="empty">Loading examination registration prices...</div>';
+
+  try {
+
+    const result =
+      await getDB()
+        .from("agu_exam_country_prices")
+        .select(
+          "id,country_code,country_name,currency_code,currency_symbol,amount,is_enabled,created_at,updated_at"
+        )
+        .order(
+          "country_name",
+          {
+            ascending: true
+          }
+        );
+
+    if (result.error) {
+      throw result.error;
+    }
+
+    examCountryPrices =
+      Array.isArray(result.data)
+        ? result.data
+        : [];
+
+    renderExamPrices();
+
+  } catch (error) {
+
+    console.error(
+      "AGULIBRARY examination price loading error:",
+      error
+    );
+
+    list.innerHTML =
+      `<div class="empty">
+        ❌ Unable to load examination registration prices.<br>
+        <small>${esc(
+          error.message ||
+          "Database error"
+        )}</small>
+      </div>`;
+  }
+}
+
+
+/* ---------------- RENDER COUNTRY PRICES ---------------- */
+
+function renderExamPrices() {
+
+  const list =
+    $("adminExamPriceList");
+
+  if (!list) return;
+
+  if (!examCountryPrices.length) {
+
+    list.innerHTML =
+      `<div class="empty">
+        No country registration prices have been configured yet.
+      </div>`;
+
+    return;
+  }
+
+  list.innerHTML =
+    examCountryPrices
+      .map(price => {
+
+        const enabled =
+          price.is_enabled === true;
+
+        const amount =
+          Number(price.amount || 0)
+            .toLocaleString(
+              undefined,
+              {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+              }
+            );
+
+        const currency =
+          price.currency_symbol ||
+          price.currency_code ||
+          "";
+
+        return `
+          <div class="exam-row">
+
+            <div style="
+              display:flex;
+              justify-content:space-between;
+              gap:12px;
+              align-items:flex-start;
+              flex-wrap:wrap;
+            ">
+
+              <div>
+
+                <h3>
+                  ${esc(
+                    price.country_name ||
+                    "Unnamed Country"
+                  )}
+                </h3>
+
+                <div class="small">
+
+                  Country code:
+                  <strong>
+                    ${esc(
+                      price.country_code ||
+                      "—"
+                    )}
+                  </strong>
+
+                  • Currency:
+                  <strong>
+                    ${esc(
+                      price.currency_code ||
+                      "—"
+                    )}
+                  </strong>
+
+                  ${
+                    price.currency_symbol
+                      ? ` • Symbol:
+                         <strong>
+                           ${esc(
+                             price.currency_symbol
+                           )}
+                         </strong>`
+                      : ""
+                  }
+
+                </div>
+
+                <div
+                  style="
+                    margin-top:8px;
+                    font-size:20px;
+                    font-weight:900;
+                    color:#087a4b;
+                  "
+                >
+                  ${esc(currency)}
+                  ${esc(amount)}
+                </div>
+
+              </div>
+
+              <span
+                class="badge ${
+                  enabled
+                    ? ""
+                    : "off"
+                }"
+              >
+                ${
+                  enabled
+                    ? "ACTIVE"
+                    : "DISABLED"
+                }
+              </span>
+
+            </div>
+
+            <div class="actions">
+
+              <button
+                class="btn light agu-edit-exam-price"
+                data-id="${esc(price.id)}"
+                type="button"
+              >
+                ✏ Edit
+              </button>
+
+              <button
+                class="btn ${
+                  enabled
+                    ? "danger"
+                    : "primary"
+                } agu-toggle-exam-price"
+                data-id="${esc(price.id)}"
+                data-enabled="${enabled}"
+                type="button"
+              >
+                ${
+                  enabled
+                    ? "Disable"
+                    : "Enable"
+                }
+              </button>
+
+              <button
+                class="btn danger agu-delete-exam-price"
+                data-id="${esc(price.id)}"
+                type="button"
+              >
+                🗑 Delete
+              </button>
+
+            </div>
+
+          </div>
+        `;
+      })
+      .join("");
+
+
+  /* ---------------- EDIT ---------------- */
+
+  list
+    .querySelectorAll(
+      ".agu-edit-exam-price"
+    )
+    .forEach(button => {
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          const price =
+            examCountryPrices.find(
+              item =>
+                String(item.id) ===
+                String(button.dataset.id)
+            );
+
+          if (!price) return;
+
+          $("examPriceEditId").value =
+            price.id || "";
+
+          $("examPriceCountryName").value =
+            price.country_name || "";
+
+          $("examPriceCountryCode").value =
+            price.country_code || "";
+
+          $("examPriceCurrencyCode").value =
+            price.currency_code || "";
+
+          $("examPriceCurrencySymbol").value =
+            price.currency_symbol || "";
+
+          $("examPriceAmount").value =
+            price.amount ?? "";
+
+          $("examPriceEnabled").value =
+            String(
+              price.is_enabled !== false
+            );
+
+          const saveButton =
+            $("saveExamPrice");
+
+          if (saveButton) {
+
+            saveButton.textContent =
+              "💾 Save Price Changes";
+          }
+
+          const status =
+            $("examPriceFormStatus");
+
+          if (status) {
+
+            status.textContent =
+              "Editing " +
+              (
+                price.country_name ||
+                "country"
+              ) +
+              " registration price.";
+          }
+
+          $("examPriceCountryName")
+            ?.scrollIntoView({
+              behavior: "smooth",
+              block: "center"
+            });
+
+        }
+      );
+
+    });
+
+
+  /* ---------------- ENABLE / DISABLE ---------------- */
+
+  list
+    .querySelectorAll(
+      ".agu-toggle-exam-price"
+    )
+    .forEach(button => {
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          const id =
+            button.dataset.id;
+
+          const currentlyEnabled =
+            button.dataset.enabled ===
+            "true";
+
+          toggleExamPrice(
+            id,
+            !currentlyEnabled
+          );
+
+        }
+      );
+
+    });
+
+
+  /* ---------------- DELETE ---------------- */
+
+  list
+    .querySelectorAll(
+      ".agu-delete-exam-price"
+    )
+    .forEach(button => {
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          deleteExamPrice(
+            button.dataset.id
+          );
+
+        }
+      );
+
+    });
+
+}
+
+
+/* ---------------- SAVE / UPDATE PRICE ---------------- */
+
+async function saveExamPrice() {
+
+  const status =
+    $("examPriceFormStatus");
+
+  try {
+
+    const verified =
+      await adminMfaGate();
+
+    if (!verified) return;
+
+    const id =
+      $("examPriceEditId")
+        ?.value
+        .trim() || "";
+
+    const countryName =
+      $("examPriceCountryName")
+        ?.value
+        .trim() || "";
+
+    const countryCode =
+      $("examPriceCountryCode")
+        ?.value
+        .trim()
+        .toUpperCase() || "";
+
+    const currencyCode =
+      $("examPriceCurrencyCode")
+        ?.value
+        .trim()
+        .toUpperCase() || "";
+
+    const currencySymbol =
+      $("examPriceCurrencySymbol")
+        ?.value
+        .trim() || "";
+
+    const amount =
+      Number(
+        $("examPriceAmount")
+          ?.value
+      );
+
+    const enabled =
+      $("examPriceEnabled")
+        ?.value === "true";
+
+
+    if (!countryName) {
+
+      throw new Error(
+        "Enter the country name."
+      );
+    }
+
+    if (!countryCode) {
+
+      throw new Error(
+        "Enter the country code."
+      );
+    }
+
+    if (!currencyCode) {
+
+      throw new Error(
+        "Enter the currency code."
+      );
+    }
+
+    if (
+      !Number.isFinite(amount) ||
+      amount < 0
+    ) {
+
+      throw new Error(
+        "Registration price must be zero or greater."
+      );
+    }
+
+
+    const payload = {
+
+      country_code:
+        countryCode,
+
+      country_name:
+        countryName,
+
+      currency_code:
+        currencyCode,
+
+      currency_symbol:
+        currencySymbol ||
+        null,
+
+      amount:
+        amount,
+
+      is_enabled:
+        enabled,
+
+      updated_at:
+        new Date().toISOString()
+    };
+
+
+    let result;
+
+
+    if (id) {
+
+      result =
+        await getDB()
+          .from(
+            "agu_exam_country_prices"
+          )
+          .update(payload)
+          .eq(
+            "id",
+            id
+          );
+
+    } else {
+
+      result =
+        await getDB()
+          .from(
+            "agu_exam_country_prices"
+          )
+          .insert(payload);
+    }
+
+
+    if (result.error) {
+
+      /*
+       * PostgreSQL unique(country_code)
+       * protects against duplicate country
+       * configurations.
+       */
+
+      throw result.error;
+    }
+
+
+    if (status) {
+
+      status.textContent =
+        id
+          ? "✅ Country registration price updated successfully."
+          : "✅ Country registration price added successfully.";
+    }
+
+    showMessage(
+      id
+        ? "Country registration price updated successfully."
+        : "Country registration price added successfully.",
+      "success"
+    );
+
+
+    clearExamPriceForm();
+
+    await loadExamPrices();
+
+  } catch (error) {
+
+    console.error(
+      "AGULIBRARY examination price save error:",
+      error
+    );
+
+    if (status) {
+
+      status.textContent =
+        "❌ " +
+        (
+          error.message ||
+          "Unable to save examination registration price."
+        );
+    }
+
+    showMessage(
+      error.message ||
+      "Unable to save examination registration price.",
+      "error"
+    );
+
+  }
+
+}
+
+
+/* ---------------- TOGGLE PRICE ---------------- */
+
+async function toggleExamPrice(
+  id,
+  enabled
+) {
+
+  try {
+
+    const verified =
+      await adminMfaGate();
+
+    if (!verified) return;
+
+    const result =
+      await getDB()
+        .from(
+          "agu_exam_country_prices"
+        )
+        .update({
+
+          is_enabled:
+            enabled,
+
+          updated_at:
+            new Date().toISOString()
+
+        })
+        .eq(
+          "id",
+          id
+        );
+
+    if (result.error) {
+      throw result.error;
+    }
+
+    showMessage(
+      enabled
+        ? "Country examination registration price enabled."
+        : "Country examination registration price disabled.",
+      "success"
+    );
+
+    await loadExamPrices();
+
+  } catch (error) {
+
+    console.error(
+      "AGULIBRARY examination price status error:",
+      error
+    );
+
+    showMessage(
+      error.message ||
+      "Unable to change examination price status.",
+      "error"
+    );
+
+  }
+
+}
+
+
+/* ---------------- DELETE PRICE ---------------- */
+
+async function deleteExamPrice(id) {
+
+  const price =
+    examCountryPrices.find(
+      item =>
+        String(item.id) ===
+        String(id)
+    );
+
+  if (!price) return;
+
+  const country =
+    price.country_name ||
+    "this country";
+
+  if (
+    !confirm(
+      `Delete the examination registration price for ${country}?\n\nThis removes the country price configuration.`
+    )
+  ) {
+
+    return;
+  }
+
+
+  try {
+
+    const verified =
+      await adminMfaGate();
+
+    if (!verified) return;
+
+    const result =
+      await getDB()
+        .from(
+          "agu_exam_country_prices"
+        )
+        .delete()
+        .eq(
+          "id",
+          id
+        );
+
+    if (result.error) {
+      throw result.error;
+    }
+
+    showMessage(
+      `The examination registration price for ${country} was deleted.`,
+      "success"
+    );
+
+    clearExamPriceForm();
+
+    await loadExamPrices();
+
+  } catch (error) {
+
+    console.error(
+      "AGULIBRARY examination price deletion error:",
+      error
+    );
+
+    showMessage(
+      error.message ||
+      "Unable to delete examination registration price.",
+      "error"
+    );
+
+  }
+
+}
+
+
+/* ---------------- CLEAR PRICE FORM ---------------- */
+
+function clearExamPriceForm() {
+
+  if ($("examPriceEditId")) {
+    $("examPriceEditId").value = "";
+  }
+
+  if ($("examPriceCountryName")) {
+    $("examPriceCountryName").value = "";
+  }
+
+  if ($("examPriceCountryCode")) {
+    $("examPriceCountryCode").value = "";
+  }
+
+  if ($("examPriceCurrencyCode")) {
+    $("examPriceCurrencyCode").value = "";
+  }
+
+  if ($("examPriceCurrencySymbol")) {
+    $("examPriceCurrencySymbol").value = "";
+  }
+
+  if ($("examPriceAmount")) {
+    $("examPriceAmount").value = "";
+  }
+
+  if ($("examPriceEnabled")) {
+    $("examPriceEnabled").value =
+      "true";
+  }
+
+  const saveButton =
+    $("saveExamPrice");
+
+  if (saveButton) {
+
+    saveButton.textContent =
+      "➕ Add Country Price";
+  }
+
+  const status =
+    $("examPriceFormStatus");
+
+  if (status) {
+    status.textContent = "";
+  }
+
+}
+  
 /* ---------------- DASHBOARD ---------------- */
 
 async function finishAdmin() {

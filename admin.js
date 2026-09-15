@@ -4787,11 +4787,12 @@ $("refreshExamPrices")?.addEventListener(
   loadExamPrices
 );
 $("refreshExamAdmin")?.addEventListener(
-"click",
-async () => {
-await loadExamSettings();
-await loadExaminations();
-}
+  "click",
+  async () => {
+    await loadExamSettings();
+    await loadExamPrices();
+    await loadExaminations();
+  }
 );
 $("saveExam")
 ?.addEventListener(

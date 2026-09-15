@@ -197,8 +197,122 @@ The entry file is normally <strong>index.html</strong>.
 <section class="panel" id="examinationAdminPanel"><span class="eyebrow">EXAMINATION ROOM</span><h2>Examination Control Center</h2>  
 <div class="section-note">The student Examination Room uses the permanent Supabase examination records. Each question remains fixed at <strong>5 seconds</strong>; the time is not editable here. Use this area to control access, examinations, questions, registrations and permanent results.</div>  
 <div class="exam-grid">  
-  <div class="exam-card"><h3>Global Examination Settings</h3><div class="row"><div><label for="examEnabled">Examination Room</label><select id="examEnabled"><option value="true">ON — Students can enter</option><option value="false">OFF — Closed</option></select></div><div><label for="examRegistrationEnabled">Registration</label><select id="examRegistrationEnabled"><option value="true">ON — Registration allowed</option><option value="false">OFF — Registration closed</option></select></div></div><div class="row"><div><label for="examDefaultPass">Default pass percentage</label><input id="examDefaultPass" type="number" min="0" max="100" step="1"></div><div><label for="examQuestionSeconds">Question time</label><input id="examQuestionSeconds" class="readonly" value="5 seconds" readonly></div></div><div class="actions"><button id="saveExamSettings" class="btn primary" type="button">💾 Save Examination Settings</button><button id="refreshExamAdmin" class="btn light" type="button">↻ Refresh</button></div><div id="examSettingsStatus" class="small"></div></div>  
-  <div class="exam-card"><h3>Create / Edit Examination</h3><input id="examEditId" type="hidden"><div class="row"><div><label for="examTitle">Title</label><input id="examTitle" placeholder="e.g. SSS1 Chemistry First Term Examination"></div><div><label for="examSubject">Subject</label><input id="examSubject" placeholder="e.g. Chemistry"></div></div><div class="row"><div><label for="examEducationLevel">Education level</label><input id="examEducationLevel" placeholder="e.g. Secondary School"></div><div><label for="examClassLevel">Class level</label><input id="examClassLevel" placeholder="e.g. SSS1"></div></div><div class="row"><div><label for="examTerm">Term</label><input id="examTerm" placeholder="e.g. First Term"></div><div><label for="examPassPercentage">Pass percentage</label><input id="examPassPercentage" type="number" min="0" max="100" step="1" placeholder="50"></div></div><div class="row"><div><label for="examRegistrationRequired">Registration required</label><select id="examRegistrationRequired"><option value="true">Yes</option><option value="false">No</option></select></div><div><label for="examPublished">Published</label><select id="examPublished"><option value="false">No — Draft</option><option value="true">Yes — Published</option></select></div></div><label for="examDescription">Description</label><textarea id="examDescription" placeholder="Instructions or examination description"></textarea><div class="actions"><button id="saveExam" class="btn primary" type="button">➕ Create Examination</button><button id="clearExamForm" class="btn light" type="button">Clear</button></div><div id="examFormStatus" class="small"></div></div>  
+<div class="exam-card"><h3>Global Examination Settings</h3><div class="row"><div><label for="examEnabled">Examination Room</label><select id="examEnabled"><option value="true">ON — Students can enter</option><option value="false">OFF — Closed</option></select></div><div><label for="examRegistrationEnabled">Registration</label><select id="examRegistrationEnabled"><option value="true">ON — Registration allowed</option><option value="false">OFF — Registration closed</option></select></div></div><div class="row"><div><label for="examDefaultPass">Default pass percentage</label><input id="examDefaultPass" type="number" min="0" max="100" step="1"></div><div><label for="examQuestionSeconds">Question time</label><input id="examQuestionSeconds" class="readonly" value="5 seconds" readonly></div></div><div class="actions"><button id="saveExamSettings" class="btn primary" type="button">💾 Save Examination Settings</button><button id="refreshExamAdmin" class="btn light" type="button">↻ Refresh</button></div><div id="examSettingsStatus" class="small"></div></div>  
+ <div class="exam-card">
+  <h3>💰 Examination Registration Prices</h3>
+ <div class="section-note">
+    Set the examination registration price for each country.
+    Students will use the enabled price configured for their country.
+  </div>
+
+  <input id="examPriceEditId" type="hidden">
+
+  <div class="row">
+    <div>
+      <label for="examPriceCountryName">Country</label>
+      <input
+        id="examPriceCountryName"
+        placeholder="e.g. Nigeria"
+      >
+    </div>
+
+    <div>
+      <label for="examPriceCountryCode">Country Code</label>
+      <input
+        id="examPriceCountryCode"
+        maxlength="10"
+        placeholder="e.g. NG"
+        style="text-transform:uppercase"
+      >
+    </div>
+  </div>
+
+  <div class="row">
+    <div>
+      <label for="examPriceCurrencyCode">Currency Code</label>
+      <input
+        id="examPriceCurrencyCode"
+        maxlength="10"
+        placeholder="e.g. NGN"
+        style="text-transform:uppercase"
+      >
+    </div>
+
+    <div>
+      <label for="examPriceCurrencySymbol">Currency Symbol</label>
+      <input
+        id="examPriceCurrencySymbol"
+        maxlength="10"
+        placeholder="e.g. ₦"
+      >
+    </div>
+  </div>
+
+  <div class="row">
+    <div>
+      <label for="examPriceAmount">Registration Price</label>
+      <input
+        id="examPriceAmount"
+        type="number"
+        min="0"
+        step="0.01"
+        placeholder="e.g. 5000"
+      >
+    </div>
+
+    <div>
+      <label for="examPriceEnabled">Price Status</label>
+      <select id="examPriceEnabled">
+        <option value="true">ON — Price active</option>
+        <option value="false">OFF — Price disabled</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button
+      id="saveExamPrice"
+      class="btn primary"
+      type="button"
+    >
+      ➕ Add Country Price
+    </button>
+
+    <button
+      id="clearExamPriceForm"
+      class="btn light"
+      type="button"
+    >
+      Clear
+    </button>
+
+    <button
+      id="refreshExamPrices"
+      class="btn light"
+      type="button"
+    >
+      ↻ Refresh Prices
+    </button>
+  </div>
+
+  <div
+    id="examPriceFormStatus"
+    class="small"
+    style="margin-top:10px"
+  ></div>
+
+  <div
+    id="adminExamPriceList"
+    class="list"
+    style="margin-top:15px"
+  >
+    <div class="empty">
+      Loading examination registration prices...
+    </div>
+  </div>
+</div>
+  
+<div class="exam-card"><h3>Create / Edit Examination</h3><input id="examEditId" type="hidden"><div class="row"><div><label for="examTitle">Title</label><input id="examTitle" placeholder="e.g. SSS1 Chemistry First Term Examination"></div><div><label for="examSubject">Subject</label><input id="examSubject" placeholder="e.g. Chemistry"></div></div><div class="row"><div><label for="examEducationLevel">Education level</label><input id="examEducationLevel" placeholder="e.g. Secondary School"></div><div><label for="examClassLevel">Class level</label><input id="examClassLevel" placeholder="e.g. SSS1"></div></div><div class="row"><div><label for="examTerm">Term</label><input id="examTerm" placeholder="e.g. First Term"></div><div><label for="examPassPercentage">Pass percentage</label><input id="examPassPercentage" type="number" min="0" max="100" step="1" placeholder="50"></div></div><div class="row"><div><label for="examRegistrationRequired">Registration required</label><select id="examRegistrationRequired"><option value="true">Yes</option><option value="false">No</option></select></div><div><label for="examPublished">Published</label><select id="examPublished"><option value="false">No — Draft</option><option value="true">Yes — Published</option></select></div></div><label for="examDescription">Description</label><textarea id="examDescription" placeholder="Instructions or examination description"></textarea><div class="actions"><button id="saveExam" class="btn primary" type="button">➕ Create Examination</button><button id="clearExamForm" class="btn light" type="button">Clear</button></div><div id="examFormStatus" class="small"></div></div>  
   <div class="exam-card wide"><h3>Published / Draft Examinations</h3><div class="toolbar"><input id="adminExamSearch" placeholder="Search examinations..."><button id="refreshExams" class="btn light" type="button">↻ Refresh Examinations</button></div><div id="adminExamList" class="list"><div class="empty">Loading examinations...</div></div></div>  
   <div class="exam-card wide"><h3>Question Manager</h3><div class="row"><div><label for="questionExamSelect">Examination</label><select id="questionExamSelect"><option value="">Select an examination</option></select></div><div><label for="questionEditId">Editing question</label><input id="questionEditId" class="readonly" readonly placeholder="New question"></div></div><div class="row"><div><label for="questionPosition">Position</label><input id="questionPosition" type="number" min="1" step="1" placeholder="1"></div><div><label for="questionMarks">Marks</label><input id="questionMarks" type="number" min="0" step="1" value="1"></div></div><label for="questionText">Question</label><textarea id="questionText" placeholder="Enter the examination question"></textarea><div class="row"><div><label for="optionA">Option A</label><input id="optionA"></div><div><label for="optionB">Option B</label><input id="optionB"></div></div><div class="row"><div><label for="optionC">Option C</label><input id="optionC"></div><div><label for="optionD">Option D</label><input id="optionD"></div></div><div class="row"><div><label for="optionE">Option E</label><input id="optionE"></div><div><label for="correctOption">Correct option</label><select id="correctOption"><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option></select></div></div><div class="actions"><button id="saveQuestion" class="btn primary" type="button">➕ Save Question</button><button id="clearQuestionForm" class="btn light" type="button">Clear</button></div><div id="questionFormStatus" class="small"></div><div id="adminQuestionList" class="list" style="margin-top:15px"><div class="empty">Select an examination to manage its questions.</div></div></div>  
   <div class="exam-card wide"><h3>Examination Registrations</h3><div class="toolbar"><select id="registrationExamFilter"><option value="">All examinations</option></select><select id="registrationStatusFilter"><option value="">All statuses</option><option value="registered">Registered</option><option value="approved">Approved</option><option value="rejected">Rejected</option><option value="cancelled">Cancelled</option></select><button id="refreshRegistrations" class="btn light" type="button">↻ Refresh Registrations</button></div><div id="adminRegistrationList" class="scroll-box"><div class="empty">Loading registrations...</div></div></div>  

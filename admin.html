@@ -1198,6 +1198,131 @@ footer{
       >
 
 
+      <!-- EXAMINATION PRICE HIERARCHY
+           Education Level → Board / Organization → Examination Type
+           → Class / Level → Subject → Examination Details → Country
+      -->
+
+      <div class="row">
+
+        <div>
+
+          <label for="examPriceEducationLevel">
+            Education level
+          </label>
+
+          <select id="examPriceEducationLevel">
+            <option value="">
+              Select education level
+            </option>
+            <option value="Early Years">
+              Early Years
+            </option>
+            <option value="Primary School">
+              Primary School
+            </option>
+            <option value="Junior Secondary School">
+              Junior Secondary School
+            </option>
+            <option value="Senior Secondary School">
+              Senior Secondary School
+            </option>
+            <option value="Tertiary / University">
+              Tertiary / University
+            </option>
+            <option value="Professional / Career">
+              Professional / Career
+            </option>
+          </select>
+
+        </div>
+
+
+        <div>
+
+          <label for="examPriceBoard">
+            Examination board / organization
+          </label>
+
+          <select id="examPriceBoard" disabled>
+            <option value="">
+              Select education level first
+            </option>
+          </select>
+
+        </div>
+
+      </div>
+
+
+      <div class="row">
+
+        <div>
+
+          <label for="examPriceType">
+            Examination type
+          </label>
+
+          <select id="examPriceType" disabled>
+            <option value="">
+              Select examination board first
+            </option>
+          </select>
+
+        </div>
+
+
+        <div>
+
+          <label for="examPriceClassLevel">
+            Class / level
+          </label>
+
+          <select id="examPriceClassLevel" disabled>
+            <option value="">
+              Select education level first
+            </option>
+          </select>
+
+        </div>
+
+      </div>
+
+
+      <div class="row">
+
+        <div>
+
+          <label for="examPriceSubject">
+            Subject
+          </label>
+
+          <select id="examPriceSubject" disabled>
+            <option value="">
+              Select examination path first
+            </option>
+          </select>
+
+        </div>
+
+
+        <div>
+
+          <label for="examPriceExamination">
+            Examination details
+          </label>
+
+          <select id="examPriceExamination" disabled>
+            <option value="">
+              Select examination path first
+            </option>
+          </select>
+
+        </div>
+
+      </div>
+
+
       <div class="row">
 
         <div>
@@ -2322,4 +2447,4 @@ footer{
 <script src="admin.js"></script>
 
 </body>
-  </html>
+            </html>

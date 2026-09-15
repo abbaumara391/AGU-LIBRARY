@@ -1646,7 +1646,13 @@ const payload = {
     level,  
 
   class_level:  
-    classLevel,  
+    classLevel,
+
+  examination_board:
+    examinationBoard,
+
+  examination_type:
+    examinationType,
 
   term:  
     term,  
@@ -2191,6 +2197,51 @@ if (
 } catch (_) {}
 }
 
+/* ---------------- EXAMINATION HIERARCHY ---------------- */
+const ADMIN_EXAM_HIERARCHY={
+  "Early Years":{"School Assessment":["Term Assessment","Progress Assessment","Final Assessment"],"International Early Years":["Early Years Assessment","International Progress Assessment"],"Other":["General Assessment"]},
+  "Primary School":{"School Examination":["First Term Examination","Second Term Examination","Third Term Examination","Mock Examination","Final Examination"],"Common Entrance":["Common Entrance Examination","Common Entrance Mock Examination"],"Primary Leaving Examination":["Primary Leaving Examination","Primary Leaving Mock Examination"],"International Primary":["Primary Progress Test","International Primary Examination"],"Other":["General Assessment"]},
+  "Junior Secondary School":{"BECE":["Basic Education Certificate Examination","BECE Mock Examination"],"School Examination":["First Term Examination","Second Term Examination","Third Term Examination","Mock Examination","Final Examination"],"Cambridge Lower Secondary":["Checkpoint Examination","Lower Secondary Assessment"],"International Examination":["International Lower Secondary Examination","Mock Examination"],"Other":["General Assessment"]},
+  "Senior Secondary School":{"WAEC":["SSCE","GCE","Mock Examination"],"NECO":["SSCE","GCE","BECE","Mock Examination"],"NABTEB":["NBC/NTC","ANBC/ANTC","GCE","Mock Examination"],"Cambridge":["IGCSE","O Level","AS Level","A Level"],"School Examination":["First Term Examination","Second Term Examination","Third Term Examination","Mock Examination","Final Examination"],"International Examination":["International Secondary Examination","Mock Examination"],"Other":["General Examination"]},
+  "Tertiary / University":{"University":["Semester Examination","Mid-Semester Test","Final Examination","Entrance Examination","Mock Examination"],"Polytechnic":["Semester Examination","Mid-Semester Test","Final Examination","Entrance Examination"],"College":["Semester Examination","Mid-Semester Test","Final Examination","Entrance Examination"],"Professional Examination":["Professional Certification Examination","Licensing Examination","Entrance Examination"],"Other":["General Examination"]},
+  "Professional / Career":{"Professional Certification":["Certification Examination","Mock Examination"],"Licensing Board":["Licensing Examination","Renewal Examination","Mock Examination"],"Entrance Examination":["Entrance Examination","Aptitude Test","Mock Examination"],"Career Assessment":["Career Assessment","Professional Aptitude Test"],"Other":["General Assessment"]}
+};
+const ADMIN_EXAM_CLASSES={"Early Years":["Early Years 1","Early Years 2","Early Years 3"],"Primary School":["Primary 1","Primary 2","Primary 3","Primary 4","Primary 5","Primary 6"],"Junior Secondary School":["JSS 1","JSS 2","JSS 3"],"Senior Secondary School":["SSS 1","SSS 2","SSS 3"],"Tertiary / University":["100 Level","200 Level","300 Level","400 Level","500 Level","Postgraduate"],"Professional / Career":[]};
+function adminExamSetOptions(id,items,placeholder,disabled=false,value=""){
+  const el=$(id);if(!el)return;
+  const unique=[...new Set(items.filter(Boolean).map(x=>String(x).trim()))];
+  el.innerHTML=`<option value="">${esc(placeholder)}</option>`+unique.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join("");
+  el.disabled=disabled||!unique.length;
+  if(value&&unique.includes(value))el.value=value;
+}
+function setupAdminExamHierarchy(){
+  const level=$("examEducationLevel"),board=$("examBoard"),type=$("examType"),cls=$("examClassLevel");
+  if(!level)return;
+  const refreshBoards=()=>{
+    const v=level.value;adminExamSetOptions("examBoard",Object.keys(ADMIN_EXAM_HIERARCHY[v]||{}),"Select examination board / organization",!v,board?.value||"");
+    adminExamSetOptions("examType",v&&board?.value?(ADMIN_EXAM_HIERARCHY[v]?.[board.value]||[]):[],"Select examination type",!board?.value,type?.value||"");
+    adminExamSetOptions("examClassLevel",ADMIN_EXAM_CLASSES[v]||[],"Select class / level",!v,cls?.value||"");
+  };
+  if(!level.dataset.aguHierarchyBound){
+    level.addEventListener("change",()=>{adminExamSetOptions("examBoard",Object.keys(ADMIN_EXAM_HIERARCHY[level.value]||{}),"Select examination board / organization",!level.value);adminExamSetOptions("examType",[],"Select examination type",true);adminExamSetOptions("examClassLevel",ADMIN_EXAM_CLASSES[level.value]||[],"Select class / level",!level.value);});
+    board?.addEventListener("change",()=>adminExamSetOptions("examType",ADMIN_EXAM_HIERARCHY[level.value]?.[board.value]||[],"Select examination type",!board.value));
+    level.dataset.aguHierarchyBound="true";
+  }
+  refreshBoards();
+}
+function clearExamForm(){
+  $("examEditId") && ($("examEditId").value="");
+  ["examTitle","examSubject","examEducationLevel","examTerm","examDescription"].forEach(id=>{if($(id))$(id).value="";});
+  adminExamSetOptions("examBoard",[],"Select education level first",true);
+  adminExamSetOptions("examType",[],"Select examination board first",true);
+  adminExamSetOptions("examClassLevel",[],"Select education level first",true);
+  $("examPassPercentage") && ($("examPassPercentage").value="");
+  $("examRegistrationRequired") && ($("examRegistrationRequired").value="true");
+  $("examPublished") && ($("examPublished").value="false");
+  $("saveExam") && ($("saveExam").textContent="➕ Create Examination");
+  if($("examFormStatus"))$("examFormStatus").textContent="";
+}
+
 /* ---------------- CREATE / SAVE EXAMINATION ---------------- */
 
 /* ---------------- POPULATE EXAMINATION SELECTS ---------------- */
@@ -2625,7 +2676,17 @@ if (result.error) {
 }  
 
 examinations =  
-  result.data || [];  
+  result.data || [];
+
+populateExamPriceExamSelect();  
+
+function populateExamPriceExamSelect(){
+  const select=$("examPriceExamination");
+  if(!select)return;
+  const current=select.value;
+  select.innerHTML='<option value="">Select an examination</option>'+examinations.map(exam=>`<option value="${esc(exam.id)}">${esc(exam.title||"Untitled Examination")}</option>`).join("");
+  if(current&&examinations.some(exam=>String(exam.id)===String(current)))select.value=current;
+}
 
 /*  
  * ------------------------------------------------------  
@@ -3539,6 +3600,14 @@ const educationLevel =
 
 const classLevel =  
   $("examClassLevel")?.value.trim() ||  
+  "";
+
+const examinationBoard =
+  $("examBoard")?.value.trim() ||
+  "";
+
+const examinationType =
+  $("examType")?.value.trim() ||
   "";  
 
 const term =  
@@ -3559,11 +3628,13 @@ if (
   !subject ||  
   !educationLevel ||  
   !classLevel ||  
+  !examinationBoard ||
+  !examinationType ||
   !term  
 ) {  
 
   throw new Error(  
-    "Title, subject, education level, class / level and term are required."  
+    "Title, subject, education level, examination board, examination type, class / level and term are required."  
   );  
 }  
 
@@ -3863,13 +3934,15 @@ async function loadExamPrices() {
     const result = await getDB()
       .from("agu_exam_country_prices")
       .select(
-        "id,country_code,country_name,currency_code,amount,is_enabled,created_at,updated_at"
+        "id,examination_id,country_code,country_name,currency_code,amount,is_enabled,created_at,updated_at"
       )
       .order("country_name", { ascending: true });
 
     if (result.error) throw result.error;
 
     const rows = Array.isArray(result.data) ? result.data : [];
+
+    populateExamPriceExamSelect();
 
     if (!rows.length) {
       list.innerHTML =
@@ -3891,7 +3964,9 @@ async function loadExamPrices() {
           <div class="item-main">
             <div class="avatar">${esc(info.code || "🌍")}</div>
             <div class="item-text">
-              <strong>${esc(row.country_name || info.name)}</strong>
+              <strong>${esc(examinations.find(exam => String(exam.id) === String(row.examination_id))?.title || "Unassigned Examination")}</strong>
+
+              <div class="small">Country: ${esc(row.country_name || info.name)}</div>
 
               <div class="small">
                 Country Code: ${esc(info.code || "—")}
@@ -3946,6 +4021,9 @@ async function loadExamPrices() {
         const row = rows.find(x => String(x.id) === String(button.dataset.id));
         if (!row) return;
 
+        const examSelect = $("examPriceExamination");
+        if (examSelect) examSelect.value = row.examination_id || "";
+
         const countrySelect = $("examPriceCountryName");
         if (countrySelect) {
           countrySelect.value = row.country_name || "";
@@ -3973,6 +4051,7 @@ async function loadExamPrices() {
         }
 
         setupExamCountrySelector();
+setupAdminExamHierarchy();
 
         if ($("saveExamPrice")) {
           $("saveExamPrice").textContent = "💾 Update Country Price";
@@ -4025,6 +4104,13 @@ async function saveExamPrice() {
     const editId =
       $("examPriceEditId")?.value.trim() || "";
 
+    const examinationId =
+      $("examPriceExamination")?.value.trim() || "";
+
+    if (!examinationId) {
+      throw new Error("Please select an examination for this price.");
+    }
+
     const countrySelect = $("examPriceCountryName");
     const selectedOption =
       countrySelect?.options[countrySelect.selectedIndex];
@@ -4057,6 +4143,7 @@ async function saveExamPrice() {
       that this column does not exist.
     */
     const payload = {
+      examination_id: examinationId,
       country_code: info.code,
       country_name: info.name,
       currency_code: info.currency,
@@ -4082,6 +4169,7 @@ async function saveExamPrice() {
       const existing = await db
         .from("agu_exam_country_prices")
         .select("id")
+        .eq("examination_id", examinationId)
         .eq("country_code", info.code)
         .maybeSingle();
 
@@ -4213,6 +4301,10 @@ async function deleteExamPrice(id, countryName) {
 function clearExamPriceForm() {
   if ($("examPriceEditId")) {
     $("examPriceEditId").value = "";
+  }
+
+  if ($("examPriceExamination")) {
+    $("examPriceExamination").value = "";
   }
 
   if ($("examPriceCountryName")) {
@@ -4584,6 +4676,11 @@ $("saveExam")
 "click",
 saveExam
 );
+
+$("clearExamForm")?.addEventListener("click",clearExamForm);
+$("clearExamPriceForm")?.addEventListener("click",clearExamPriceForm);
+$("saveExamPrice")?.addEventListener("click",saveExamPrice);
+$("refreshExamPrices")?.addEventListener("click",loadExamPrices);
 
 $("saveQuestion")
 ?.addEventListener(

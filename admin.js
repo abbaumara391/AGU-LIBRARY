@@ -2911,8 +2911,10 @@ function setupExamPriceHierarchy(){
   if(!level)return;
 
   if(!level.dataset.aguPriceHierarchyBound){
-    level.addEventListener("change",()=>{refreshExamPriceHierarchy("education");});
-    board?.addEventListener("change",()=>{refreshExamPriceHierarchy("board");});
+    level.addEventListener("change",()=>{
+  refreshExamPriceHierarchy();
+});
+      board?.addEventListener("change",()=>{refreshExamPriceHierarchy("board");});
     type?.addEventListener("change",()=>{refreshExamPriceHierarchy("type");});
     cls?.addEventListener("change",()=>{refreshExamPriceHierarchy("class");});
     subject?.addEventListener("change",()=>{refreshExamPriceHierarchy("subject");});

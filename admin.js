@@ -2699,12 +2699,11 @@ function populateExamPriceExamSelect(keepValue=""){
 }
 
 function refreshExamPriceHierarchy(resetFrom=""){
-  const education=$("examPriceEducationLevel")?.value||"";
-  const board=$("examPriceBoard")?.value||"";
-  const type=$("examPriceType")?.value||"";
-  const cls=$("examPriceClassLevel")?.value||"";
-  const subject=$("examPriceSubject")?.value||"";
-
+const selectedEducation = education;
+const selectedBoard = resetFrom === "education" ? "" : board;
+const selectedType = ["education","board"].includes(resetFrom) ? "" : type;
+const selectedClass = ["education","board","type"].includes(resetFrom) ? "" : cls;
+const selectedSubject = resetFrom ? "" : subject;
   const selectedEducation=resetFrom==="education"?"":education;
   const selectedBoard=["education","board"].includes(resetFrom)?"":board;
   const selectedType=["education","board","type"].includes(resetFrom)?"":type;

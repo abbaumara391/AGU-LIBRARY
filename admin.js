@@ -2704,12 +2704,11 @@ const selectedBoard = resetFrom === "education" ? "" : board;
 const selectedType = ["education","board"].includes(resetFrom) ? "" : type;
 const selectedClass = ["education","board","type"].includes(resetFrom) ? "" : cls;
 const selectedSubject = resetFrom ? "" : subject;
-  const selectedEducation=resetFrom==="education"?"":education;
-  const selectedBoard=["education","board"].includes(resetFrom)?"":board;
-  const selectedType=["education","board","type"].includes(resetFrom)?"":type;
-  const selectedClass=["education","board","type","class"].includes(resetFrom)?"":cls;
-  const selectedSubject=resetFrom?"":subject;
-
+const selectedEducation=resetFrom==="education"?"":education;
+const selectedBoard=["education","board"].includes(resetFrom)?"":board;
+const selectedType=["education","board","type"].includes(resetFrom)?"":type;
+const selectedClass=["education","board","type","class"].includes(resetFrom)?"":cls;
+const selectedSubject=resetFrom?"":subject;  
   if($("examPriceEducationLevel"))$("examPriceEducationLevel").value=selectedEducation;
 
   const boards=selectedEducation

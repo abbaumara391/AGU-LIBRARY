@@ -2698,54 +2698,99 @@ function populateExamPriceExamSelect(keepValue=""){
   }
 }
 
-function refreshExamPriceHierarchy(resetFrom="") {
+function refreshExamPriceHierarchy(resetFrom=""){
 
-  const educationEl = $("examPriceEducationLevel");
-  const boardEl = $("examPriceBoard");
-  const typeEl = $("examPriceType");
-  const classEl = $("examPriceClassLevel");
-  const subjectEl = $("examPriceSubject");
-  const examEl = $("examPriceExamination");
+  const education =
+    $("examPriceEducationLevel")?.value || "";
 
-  if (!educationEl) return;
+  const board =
+    $("examPriceBoard")?.value || "";
 
-  /* KEEP THE CURRENT EDUCATION LEVEL */
-  const education = educationEl.value || "";
+  const type =
+    $("examPriceType")?.value || "";
 
-  /* Keep lower selections only when they still belong to
-     the selected education level */
-  const oldBoard = boardEl?.value || "";
-  const oldType = typeEl?.value || "";
-  const oldClass = classEl?.value || "";
-  const oldSubject = subjectEl?.value || "";
-  const oldExam = examEl?.value || "";
+  const cls =
+    $("examPriceClassLevel")?.value || "";
 
-  /* -----------------------------------------
+  const subject =
+    $("examPriceSubject")?.value || "";
+
+
+  /*
+   * IMPORTANT:
+   * Keep the field the administrator just selected.
+   * Only reset fields that come AFTER it.
+   */
+
+  const selectedEducation =
+    education;
+
+  const selectedBoard =
+    resetFrom === "education"
+      ? ""
+      : board;
+
+  const selectedType =
+    resetFrom === "education" ||
+    resetFrom === "board"
+      ? ""
+      : type;
+
+  const selectedClass =
+    resetFrom === "education" ||
+    resetFrom === "board" ||
+    resetFrom === "type"
+      ? ""
+      : cls;
+
+  const selectedSubject =
+    resetFrom === "education" ||
+    resetFrom === "board" ||
+    resetFrom === "type" ||
+    resetFrom === "class"
+      ? ""
+      : subject;
+
+
+  /* ---------------------------------------
+     EDUCATION LEVEL
+     --------------------------------------- */
+
+  if ($("examPriceEducationLevel")) {
+    $("examPriceEducationLevel").value =
+      selectedEducation;
+  }
+
+
+  /* ---------------------------------------
      EXAMINATION BOARD / ORGANIZATION
-     ----------------------------------------- */
+     --------------------------------------- */
 
-  const boards = education
-    ? Object.keys(ADMIN_EXAM_HIERARCHY[education] || {})
-    : [];
+  const boards =
+    selectedEducation
+      ? Object.keys(
+          ADMIN_EXAM_HIERARCHY[selectedEducation] || {}
+        )
+      : [];
 
   examPriceSetOptions(
     "examPriceBoard",
     boards,
     "Select examination board / organization",
-    !education,
-    oldBoard
+    !selectedEducation,
+    selectedBoard
   );
 
-  /* -----------------------------------------
-     EXAMINATION TYPE
-     ----------------------------------------- */
 
-  const board = boardEl?.value || "";
+  /* ---------------------------------------
+     EXAMINATION TYPE
+     --------------------------------------- */
 
   const types =
-    education && board
+    selectedEducation && selectedBoard
       ? (
-          ADMIN_EXAM_HIERARCHY[education]?.[board] || []
+          ADMIN_EXAM_HIERARCHY[selectedEducation]
+            ?. [selectedBoard] || []
         )
       : [];
 
@@ -2753,154 +2798,158 @@ function refreshExamPriceHierarchy(resetFrom="") {
     "examPriceType",
     types,
     "Select examination type",
-    !board,
-    oldType
+    !selectedBoard,
+    selectedType
   );
 
-  /* -----------------------------------------
+
+  /* ---------------------------------------
      CLASS / LEVEL
-     ----------------------------------------- */
+     --------------------------------------- */
 
-  const classLevels = ADMIN_EXAM_CLASSES[education] || [];
+  const classLevels =
+    ADMIN_EXAM_CLASSES[selectedEducation] || [];
 
-  const databaseClassLevels = examinations
-    .filter(exam => {
-      return (
-        !education ||
-        normalizeExamPriceEducation(
-          exam.education_level
-        ) === education
-      );
-    })
-    .map(exam => exam.class_level);
+  const examClassLevels =
+    examinations
+      .filter(
+        e =>
+          !selectedEducation ||
+          normalizeExamPriceEducation(
+            e.education_level
+          ) === selectedEducation
+      )
+      .map(e => e.class_level);
+
 
   examPriceSetOptions(
     "examPriceClassLevel",
     [
       ...classLevels,
-      ...databaseClassLevels
+      ...examClassLevels
     ],
     "Select class / level",
-    !education,
-    oldClass
+    !selectedEducation,
+    selectedClass
   );
 
-  /* -----------------------------------------
+
+  /* ---------------------------------------
      FILTER EXAMINATIONS
-     ----------------------------------------- */
+     --------------------------------------- */
 
-  const selectedType = typeEl?.value || "";
-  const selectedClass = classEl?.value || "";
+  const filtered =
+    examinations.filter(exam => {
 
-  const filtered = examinations.filter(exam => {
+      if (
+        selectedEducation &&
+        normalizeExamPriceEducation(
+          exam.education_level
+        ) !== selectedEducation
+      ) {
+        return false;
+      }
 
-    if (
-      education &&
-      normalizeExamPriceEducation(
-        exam.education_level
-      ) !== education
-    ) {
-      return false;
-    }
+      if (
+        selectedBoard &&
+        String(
+          exam.examination_board || ""
+        ).trim() !== selectedBoard
+      ) {
+        return false;
+      }
 
-    if (
-      board &&
-      String(exam.examination_board || "").trim() !== board
-    ) {
-      return false;
-    }
+      if (
+        selectedType &&
+        String(
+          exam.examination_type || ""
+        ).trim() !== selectedType
+      ) {
+        return false;
+      }
 
-    if (
-      selectedType &&
-      String(exam.examination_type || "").trim() !== selectedType
-    ) {
-      return false;
-    }
+      if (
+        selectedClass &&
+        String(
+          exam.class_level || ""
+        ).trim() !== selectedClass
+      ) {
+        return false;
+      }
 
-    if (
-      selectedClass &&
-      String(exam.class_level || "").trim() !== selectedClass
-    ) {
-      return false;
-    }
+      return true;
+    });
 
-    return true;
-  });
 
-  /* -----------------------------------------
+  /* ---------------------------------------
      SUBJECT
-     ----------------------------------------- */
+     --------------------------------------- */
 
   examPriceSetOptions(
     "examPriceSubject",
-    filtered.map(exam => exam.subject),
+    filtered.map(e => e.subject),
     "Select subject",
-    !education,
-    oldSubject
+    !selectedEducation,
+    selectedSubject
   );
 
-  /* -----------------------------------------
+
+  /* ---------------------------------------
      EXAMINATION DETAILS
-     ----------------------------------------- */
+     --------------------------------------- */
 
-  if (examEl) {
+  const selectedExam =
+    $("examPriceExamination");
 
-    const subject = subjectEl?.value || "";
+  if (selectedExam) {
 
-    const subjectFiltered = filtered.filter(exam => {
+    const subjectFiltered =
+      selectedSubject
+        ? filtered.filter(
+            e =>
+              String(e.subject || "").trim() ===
+              selectedSubject
+          )
+        : filtered;
 
-      if (!subject) return true;
 
-      return (
-        String(exam.subject || "").trim() === subject
-      );
+    const currentExam =
+      selectedExam.value || "";
 
-    });
 
-    examEl.innerHTML =
+    selectedExam.innerHTML =
       '<option value="">Select examination details</option>' +
-
       subjectFiltered
-        .map(exam => {
-
-          return `
-            <option value="${esc(exam.id)}">
-              ${esc(
+        .map(
+          exam =>
+            `<option value="${esc(exam.id)}">${
+              esc(
                 exam.title ||
                 "Untitled Examination"
-              )}
-            </option>
-          `;
-
-        })
+              )
+            }</option>`
+        )
         .join("");
 
-    examEl.disabled = !subjectFiltered.length;
+
+    selectedExam.disabled =
+      !subjectFiltered.length;
+
 
     if (
-      oldExam &&
+      currentExam &&
       subjectFiltered.some(
-        exam =>
-          String(exam.id) === String(oldExam)
+        e =>
+          String(e.id) ===
+          String(currentExam)
       )
     ) {
-
-      examEl.value = oldExam;
-
+      selectedExam.value =
+        currentExam;
     }
-
   }
-
-  /*
-   * IMPORTANT:
-   * Never reset examPriceEducationLevel here.
-   *
-   * The user's selected education level must remain
-   * visible after the other dropdowns are rebuilt.
-   */
-
-  educationEl.value = education;
 }
+
 
 function setupExamPriceHierarchy(){
   const level=$("examPriceEducationLevel");

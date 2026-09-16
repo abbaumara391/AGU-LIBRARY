@@ -4596,8 +4596,13 @@ updateDigitalBookFields();
 // and Currency Symbol are revealed automatically when a country is selected.
 setupExamCountrySelector();
 
-// Initialize the examination hierarchy immediately on first dashboard use.
+setupExamCountrySelector();
+
+// Initialize Create/Edit Examination hierarchy.
 setupAdminExamHierarchy();
+
+// Initialize Examination Registration Price hierarchy.
+setupExamPriceHierarchy();
 
 $("aguStudentSearch")
 ?.addEventListener(

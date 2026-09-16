@@ -333,7 +333,7 @@ button,a,[role="button"],input,select{pointer-events:auto;touch-action:manipulat
 <div class="profile-completion-field full"><label for="completionCountryCode">Country *</label><select id="completionCountryCode"></select></div>
 <div class="profile-completion-field full"><label for="completionPhone">Phone number *</label><input id="completionPhone" type="tel" inputmode="tel" autocomplete="tel"></div>
 <div class="profile-completion-field"><label for="completionEducationLevel">Education level *</label><select id="completionEducationLevel"><option value="">Select education level</option><option value="Early Years">Early Years</option><option value="Primary">Primary</option><option value="Junior Secondary">Junior Secondary</option><option value="Senior Secondary">Senior Secondary</option><option value="Tertiary">Tertiary</option></select></div>
-<div class="profile-completion-field"><label for="completionClassLevel">Class / level *</label><select id="completionClassLevel" disabled><option value="">Select education level first</option></select></div>
+<div class="profile-completion-field"><label for="completionClassLevel">Class / level *</label><select id="completionClassLevel" enabled><option value="">Select education level first</option></select></div>
 <div class="profile-completion-field full"><label>Email address</label><input id="completionEmail" type="email" readonly></div>
 </div>
 <div class="profile-completion-actions"><button id="profileCompletionSave" type="button">Save &amp; Complete Profile</button><button id="profileCompletionSignOut" type="button">Sign Out</button></div>
@@ -624,26 +624,7 @@ let studentProfileRecord=null;
 let profileCompletionRequired=false;
 function completionCountryName(code){const c=String(code||"").trim().toUpperCase();return PROFILE_COMPLETION_COUNTRIES.find(x=>x[0]===c)?.[1]||""}
 function setupProfileCompletionCountries(){const select=document.getElementById("completionCountryCode");if(!select)return;select.innerHTML='<option value="">Select country</option>'+PROFILE_COMPLETION_COUNTRIES.map(([code,name])=>`<option value="${escAttr(code)}">${esc(name)}</option>`).join("")}
-function setupProfileCompletionClasses(value=""){
-  const select=document.getElementById("completionClassLevel");
-  if(!select)return;
-
-  const options=PROFILE_COMPLETION_CLASSES[value]||[];
-
-  if(!options.length){
-    select.disabled=true;
-    select.innerHTML='<option value="">Select education level first</option>';
-    return;
-  }
-
-  select.disabled=false;
-
-  select.innerHTML=
-    '<option value="">Select class / level</option>'+
-    options.map(x=>
-      `<option value="${escAttr(x)}">${esc(x)}</option>`
-    ).join("");
-}
+function setupProfileCompletionClasses(value=""){const select=document.getElementById("completionClassLevel");if(!select)return;const options=PROFILE_COMPLETION_CLASSES[value]||[];if(!options.length){select.enabled=true;select.innerHTML='<option value="">Select education level first</option>';return}select.enabled=false;select.innerHTML='<option value="">Select class / level</option>'+options.map(x=>`<option value="${escAttr(x)}">${esc(x)}</option>`).join("")}
 function profileValue(profile,meta,...keys){for(const key of keys){const a=profile?.[key],b=meta?.[key];if(a!==undefined&&a!==null&&String(a).trim()!=="")return a;if(b!==undefined&&b!==null&&String(b).trim()!=="")return b}return ""}
 function missingStudentProfileFields(profile,meta){const fields={first_name:profileValue(profile,meta,"first_name"),last_name:profileValue(profile,meta,"last_name"),date_of_birth:profileValue(profile,meta,"date_of_birth","dob"),gender:profileValue(profile,meta,"gender"),phone:profileValue(profile,meta,"phone","phone_number")||currentUser?.phone||"",country_code:profileValue(profile,meta,"country_code","countryCode","phone_country_code"),education_level:profileValue(profile,meta,"education_level","level"),class_level:profileValue(profile,meta,"class_level","class")};return{fields,missing:Object.keys(fields).filter(k=>!String(fields[k]||"").trim())}}
 async function getStudentProfileForCompletion(){if(!client||!currentUser)return{profile:{},error:null};try{const r=await client.from("student_profiles").select("*").eq("user_id",currentUser.id).maybeSingle();if(!r.error&&r.data)return{profile:r.data,error:null};const byId=await client.from("student_profiles").select("*").eq("id",currentUser.id).maybeSingle();if(!byId.error)return{profile:byId.data||{},error:null};return{profile:{},error:r.error||byId.error}}catch(e){return{profile:{},error:e}}}
@@ -651,124 +632,20 @@ function showProfileCompletion(profile,meta,missing){setupProfileCompletionCount
 function hideProfileCompletion(){const overlay=document.getElementById("profileCompletionOverlay");if(overlay){overlay.classList.remove("show");overlay.setAttribute("aria-hidden","true")}profileCompletionRequired=false;document.documentElement.style.overflow="";document.body.style.overflow=""}
 async function enforceStudentProfileCompletion(){if(!client||!currentUser)return true;const result=await getStudentProfileForCompletion();if(result.error){console.error("AGULIBRARY profile completion check:",result.error);const status=document.getElementById("profileCompletionStatus");if(status)status.textContent="Unable to verify your student profile. Please refresh and try again.";const overlay=document.getElementById("profileCompletionOverlay");if(overlay){overlay.classList.add("show");overlay.setAttribute("aria-hidden","false")}profileCompletionRequired=true;document.documentElement.style.overflow="hidden";document.body.style.overflow="hidden";return false}studentProfileRecord=result.profile||{};const check=missingStudentProfileFields(studentProfileRecord,currentUser.user_metadata||{});if(check.missing.length){showProfileCompletion(studentProfileRecord,currentUser.user_metadata||{},check.missing);return false}hideProfileCompletion();return true}
 async function saveCompletedStudentProfile(){if(!client||!currentUser)return;const status=document.getElementById("profileCompletionStatus"),button=document.getElementById("profileCompletionSave");const first=document.getElementById("completionFirstName")?.value.trim()||"",last=document.getElementById("completionLastName")?.value.trim()||"",middle=document.getElementById("completionMiddleName")?.value.trim()||"",dob=document.getElementById("completionDob")?.value.trim()||"",gender=document.getElementById("completionGender")?.value||"",countryCode=document.getElementById("completionCountryCode")?.value||"",phone=document.getElementById("completionPhone")?.value.trim()||"",education=document.getElementById("completionEducationLevel")?.value||"",classLevel=document.getElementById("completionClassLevel")?.value||"";if(!first||!last||!dob||!gender||!countryCode||!phone||!education||!classLevel){if(status)status.textContent="Please complete every field marked with * before continuing.";return}if(button){button.disabled=true;button.textContent="Saving..."}if(status)status.textContent="Saving your completed profile...";try{const fullName=[first,middle,last].filter(Boolean).join(" "),countryName=completionCountryName(countryCode);const patch={first_name:first,last_name:last,middle_name:middle,date_of_birth:dob,gender,phone,country_code:countryCode,country_name:countryName,education_level:education,class_level:classLevel,full_name:fullName,updated_at:new Date().toISOString()};let r;if(studentProfileRecord?.user_id)r=await client.from("student_profiles").update(patch).eq("user_id",currentUser.id);else if(studentProfileRecord?.id)r=await client.from("student_profiles").update(patch).eq("id",currentUser.id);else r=await client.from("student_profiles").upsert({...patch,user_id:currentUser.id,email:currentUser.email||""},{onConflict:"user_id"});if(r.error)throw r.error;const metaPatch={first_name:first,last_name:last,middle_name:middle,date_of_birth:dob,gender,full_name:fullName,country_code:countryCode,country_name:countryName,education_level:education,class_level:classLevel};const authUpdate=await client.auth.updateUser({data:metaPatch});if(authUpdate.error)console.warn("AGULIBRARY auth profile metadata update:",authUpdate.error);currentUser={...(authUpdate.data?.user||currentUser),user_metadata:{...(authUpdate.data?.user?.user_metadata||currentUser.user_metadata||{}),...metaPatch}};const verify=await getStudentProfileForCompletion();if(verify.error)throw verify.error;studentProfileRecord=verify.profile||{};const check=missingStudentProfileFields(studentProfileRecord,currentUser.user_metadata||{});if(check.missing.length)throw new Error("Some profile information is still incomplete. Please complete all required fields.");if(status)status.textContent="Profile completed successfully.";hideProfileCompletion();setText("heroStudentName",fullName);setText("accountName",fullName);setText("profileName",fullName);setText("fullProfileName",fullName);updateStudentStats()}catch(e){console.error("AGULIBRARY profile completion save:",e);if(status)status.textContent="❌ "+(e.message||"Unable to save your profile.")}finally{if(button){button.disabled=false;button.textContent="Save & Complete Profile"}}}
-function setupProfileCompletion(){
+function setupProfileCompletion(){document.getElementById("completionEducationLevel")?.addEventListener("change",e=>setupProfileCompletionClasses(e.target.value));document.getElementById("profileCompletionSave")?.addEventListener("click",saveCompletedStudentProfile);document.getElementById("profileCompletionSignOut")?.addEventListener("click",signOut);setupProfileCompletionCountries()}
 
-  const education =
-    document.getElementById("completionEducationLevel");
-
-  const classLevel =
-    document.getElementById("completionClassLevel");
-
-  const saveButton =
-    document.getElementById("profileCompletionSave");
-
-  const signOutButton =
-    document.getElementById("profileCompletionSignOut");
-
-
-  if(education && !education.dataset.aguBound){
-
-    education.dataset.aguBound="1";
-
-    education.addEventListener("change",function(){
-
-      setupProfileCompletionClasses(
-        this.value
-      );
-
-      /*
-       * Clear an old class selection whenever
-       * the education level changes.
-       */
-      if(classLevel){
-        classLevel.value="";
-      }
-
-    });
-
-  }
-
-
-  if(saveButton && !saveButton.dataset.aguBound){
-
-    saveButton.dataset.aguBound="1";
-
-    saveButton.addEventListener(
-      "click",
-      saveCompletedStudentProfile
-    );
-
-  }
-
-
-  if(signOutButton && !signOutButton.dataset.aguBound){
-
-    signOutButton.dataset.aguBound="1";
-
-    signOutButton.addEventListener(
-      "click",
-      signOut
-    );
-
-  }
-
-
-  setupProfileCompletionCountries();
-
-  /*
-   * Start Class / Level in the correct disabled state.
-   */
-  setupProfileCompletionClasses(
-    education?.value || ""
-  );
-
-}
 async function init(){
-async function init(){
+ setText("year",new Date().getFullYear());
+ try{client=typeof getSupabase==="function"?getSupabase():null}catch(e){client=null}
 
-  setText(
-    "year",
-    new Date().getFullYear()
-  );
+ // The hard gate above runs before app.js. This second check protects
+ // against scripts/caches that bypass the preflight gate.
+ if(client && !(await enforceWebsiteLogin())) return;
 
-
-  try{
-    client =
-      typeof getSupabase==="function"
-      ? getSupabase()
-      : null;
-  }catch(e){
-    client=null;
-  }
-
-
-  /*
-   * IMPORTANT:
-   * Bind the profile-completion controls
-   * before checking/loading the student profile.
-   */
-  setupProfileCompletion();
-
-
-  if(
-    client &&
-    !(await enforceWebsiteLogin())
-  ){
-    return;
-  }
-
-
-  if(client){
-    await loadSession();
-  }
-
-
-  await loadResources();
-
-  setupHierarchy();
-
-  setupAI();
-
+ if(client) await loadSession();
+ await loadResources();
+ setupHierarchy();
+ setupAI();
 }
 
 async function loadSession(){
@@ -2068,4 +1945,4 @@ else aguBoot();
 })();
 </script>
 </body>
-</html>
+          </html>

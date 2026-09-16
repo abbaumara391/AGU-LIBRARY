@@ -4341,7 +4341,7 @@ function clearExamPriceForm() {
     $("examPriceFormStatus").textContent = "";
   }
 }
-
+setupExamPriceHierarchy();
 
 /* ---------------- DASHBOARD ---------------- */
 

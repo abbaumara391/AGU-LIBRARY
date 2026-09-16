@@ -2910,18 +2910,8 @@ function setupExamPriceHierarchy(){
   const subject=$("examPriceSubject");
   if(!level)return;
 
-  if(!level.dataset.aguPriceHierarchyBound){
-    level.addEventListener("change",()=>{
   refreshExamPriceHierarchy();
-});
-      board?.addEventListener("change",()=>{refreshExamPriceHierarchy("board");});
-    type?.addEventListener("change",()=>{refreshExamPriceHierarchy("type");});
-    cls?.addEventListener("change",()=>{refreshExamPriceHierarchy("class");});
-    subject?.addEventListener("change",()=>{refreshExamPriceHierarchy("subject");});
-    level.dataset.aguPriceHierarchyBound="true";
-  }
 
-  refreshExamPriceHierarchy();
 }
 
 function syncExamPriceHierarchyFromExamination(examinationId){

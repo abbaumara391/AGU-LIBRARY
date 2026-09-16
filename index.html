@@ -635,17 +635,51 @@ async function saveCompletedStudentProfile(){if(!client||!currentUser)return;con
 function setupProfileCompletion(){document.getElementById("completionEducationLevel")?.addEventListener("change",e=>setupProfileCompletionClasses(e.target.value));document.getElementById("profileCompletionSave")?.addEventListener("click",saveCompletedStudentProfile);document.getElementById("profileCompletionSignOut")?.addEventListener("click",signOut);setupProfileCompletionCountries()}
 
 async function init(){
- setText("year",new Date().getFullYear());
- try{client=typeof getSupabase==="function"?getSupabase():null}catch(e){client=null}
+async function init(){
 
- // The hard gate above runs before app.js. This second check protects
- // against scripts/caches that bypass the preflight gate.
- if(client && !(await enforceWebsiteLogin())) return;
+  setText(
+    "year",
+    new Date().getFullYear()
+  );
 
- if(client) await loadSession();
- await loadResources();
- setupHierarchy();
- setupAI();
+
+  try{
+    client =
+      typeof getSupabase==="function"
+      ? getSupabase()
+      : null;
+  }catch(e){
+    client=null;
+  }
+
+
+  /*
+   * IMPORTANT:
+   * Bind the profile-completion controls
+   * before checking/loading the student profile.
+   */
+  setupProfileCompletion();
+
+
+  if(
+    client &&
+    !(await enforceWebsiteLogin())
+  ){
+    return;
+  }
+
+
+  if(client){
+    await loadSession();
+  }
+
+
+  await loadResources();
+
+  setupHierarchy();
+
+  setupAI();
+
 }
 
 async function loadSession(){

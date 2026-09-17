@@ -669,7 +669,7 @@ async function init(){
  // The hard gate above runs before app.js. This second check protects
  // against scripts/caches that bypass the preflight gate.
  if(client && !(await enforceWebsiteLogin())) return;
-setupProfileCompletion();
+
  if(client) await loadSession();
  await loadResources();
  setupHierarchy();

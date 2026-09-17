@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mastery Physics — SSS 1 WAEC & NECO Textbook</title>
+<style>
+:root{
+  --ink:#0B3D2E;
+  --ink-2:#12513c;
+  --blue:#1565C0;
+  --blue-2:#0d47a1;
+  --amber:#E8A400;
+  --paper:#FFFFFF;
+  --card:#F6FAF8;
+  --card-line:#DCEAE4;
+  --text:#152420;
+  --text-soft:#4b6058;
+  --radius:18px;
+  --shadow: 0 10px 30px rgba(11,61,46,0.10), 0 2px 8px rgba(11,61,46,0.06);
+  --font-display: 'Sora', 'Segoe UI', sans-serif;
+  --font-body: 'Source Sans 3','Segoe UI', sans-serif;
+}
+[data-theme="dark"]{
+  --paper:#0A1613;
+  --card:#0F221C;
+  --card-line:#1c3a30;
+  --text:#e7f3ee;
+  --text-soft:#a9c4ba;
+  --ink:#7FE0B4;
+  --ink-2:#54c497;
+  --shadow: 0 10px 30px rgba(0,0,0,0.45), 0 2px 8px rgba(0,0,0,0.3);
+}
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Source+Sans+3:wght@400;500;600;700&display=swap');
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;height:100%;}
+body{
+  font-family:var(--font-body);
+  background:var(--paper);
+  color:var(--text);
+  overflow-x:hidden;
+  transition:background .4s ease, color .4s ease;
+}
+h1,h2,h3,h4{font-family:var(--font-display); margin:0 0 .4em 0;}
+.screen{position:fixed; inset:0; overflow-y:auto; }
+.hidden{display:none !important;}
+
+/* ---------- COVER ---------- */
+#cover{
+  background:
+    radial-gradient(circle at 20% 15%, rgba(21,101,192,0.55), transparent 45%),
+    radial-gradient(circle at 80% 80%, rgba(11,61,46,0.65), transparent 50%),
+    linear-gradient(160deg, #05140f 0%, #0B3D2E 45%, #0d3a63 100%);
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer;
+  perspective:1800px;
+}
+.cover-book{
+  width:min(88vw, 460px);
+  aspect-ratio: 3/4.2;
+  position:relative;
+  transform-style:preserve-3d;
+  transition:transform 1.1s cubic-bezier(.2,.7,.2,1);
+}
+.cover-book.opening{transform: rotateY(-140deg) translateX(-30%);}
+.cover-face{
+  position:absolute; inset:0;
+  border-radius:14px;
+  background:linear-gradient(150deg,#0f6b4a,#0a3d2c 55%, #0b3960);
+  box-shadow:0 30px 80px rgba(0,0,0,0.55), inset 0 0 0 2px rgba(255,255,255,0.08);
+  overflow:hidden;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  color:#fff; text-align:center; padding:8%;
+}
+.cover-face::before{
+  content:"";
+  position:absolute; inset:0;
+  background:
+    repeating-linear-gradient(115deg, rgba(255,255,255,0.05) 0 2px, transparent 2px 26px),
+    radial-gradient(circle at 70% 25%, rgba(255,215,110,0.25), transparent 40%);
+}
+.cover-icons{position:absolute; inset:0; opacity:0.5;}
+.cover-icons svg{position:absolute;}
+.cover-eyebrow{
+  letter-spacing:.28em; font-size:.72rem; text-transform:uppercase;
+  color:#bfe9d6; z-index:2; margin-bottom:14px; font-weight:600;
+}
+.cover-title{
+  font-size:clamp(2rem, 7vw, 2.9rem); font-weight:800; z-index:2; line-height:1.05;
+  text-shadow:0 4px 24px rgba(0,0,0,0.4);
+  background:linear-gradient(90deg,#eafff4,#bfe3ff);
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+}
+.cover-subtitle{
+  z-index:2; margin-top:14px; font-size:.95rem; color:#d7ece3; max-width:32ch; font-weight:500;
+}
+.cover-owner{
+  z-index:2; margin-top:28px; font-size:.78rem; letter-spacing:.18em; text-transform:uppercase; color:#8fd6b6;
+}
+.cover-hint{
+  z-index:2; margin-top:34px; font-size:.8rem; color:#e7fff1; opacity:.85;
+  display:flex; align-items:center; gap:8px;
+}
+.pulse-dot{width:8px; height:8px; border-radius:50%; background:#ffd76a; box-shadow:0 0 0 rgba(255,215,106,.6); animation:pulse 1.8s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(255,215,106,.6);}70%{box-shadow:0 0 0 14px rgba(255,215,106,0);}100%{box-shadow:0 0 0 0 rgba(255,215,106,0);}}
+
+/* ---------- LIBRARY (chapter list) ---------- */
+#library{background:var(--paper); padding:0 0 80px 0;}
+.lib-topbar{
+  position:sticky; top:0; z-index:10;
+  background:var(--paper);
+  border-bottom:1px solid var(--card-line);
+  padding:18px 20px;
+  display:flex; align-items:center; gap:12px; flex-wrap:wrap;
+}
+.lib-title{font-size:1.15rem; font-weight:800; color:var(--ink); flex:1;}
+.icon-btn{
+  border:1px solid var(--card-line); background:var(--card); color:var(--text);
+  border-radius:12px; padding:9px 12px; cursor:pointer; font-size:1rem;
+  display:flex; align-items:center; gap:6px;
+  transition:transform .15s ease, background .2s ease;
+}
+.icon-btn:hover{transform:translateY(-1px);}
+.icon-btn:active{transform:translateY(0);}
+#searchBox{
+  border:1px solid var(--card-line); background:var(--card); color:var(--text);
+  border-radius:12px; padding:9px 12px; font-size:.9rem; width:180px; flex:1 1 160px; max-width:260px;
+  font-family:var(--font-body);
+}
+.term-tabs{display:flex; gap:8px; padding:16px 20px 4px 20px; overflow-x:auto;}
+.term-tab{
+  border:1px solid var(--card-line); background:var(--card); color:var(--text-soft);
+  padding:8px 16px; border-radius:999px; font-weight:600; font-size:.85rem; white-space:nowrap; cursor:pointer;
+  transition:all .2s ease;
+}
+.term-tab.active{background:linear-gradient(120deg,var(--ink),var(--blue)); color:#fff; border-color:transparent;}
+
+.chapters{padding:10px 16px 40px 16px; display:flex; flex-direction:column; gap:14px; max-width:760px; margin:0 auto;}
+.chapter-card{
+  background:var(--card); border:1px solid var(--card-line); border-radius:var(--radius);
+  padding:18px 18px; box-shadow:var(--shadow); cursor:pointer;
+  display:flex; align-items:center; gap:16px;
+  transition:transform .2s ease, box-shadow .2s ease;
+}
+.chapter-card:hover{transform:translateY(-3px);}
+.chapter-num{
+  width:46px; height:46px; border-radius:12px; flex-shrink:0;
+  background:linear-gradient(140deg,var(--ink),var(--blue));
+  color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-family:var(--font-display);
+  font-size:1.05rem;
+}
+.chapter-body{flex:1; min-width:0;}
+.chapter-title{font-weight:700; font-size:1.02rem; color:var(--text);}
+.chapter-sub{font-size:.82rem; color:var(--text-soft); margin-top:2px;}
+.chapter-progress-wrap{margin-top:8px; height:6px; background:var(--card-line); border-radius:99px; overflow:hidden;}
+.chapter-progress-bar{height:100%; background:linear-gradient(90deg,var(--ink),var(--blue)); width:0%; transition:width .4s ease;}
+.chapter-icon{font-size:1.6rem; flex-shrink:0;}
+.chapter-arrow{color:var(--text-soft); flex-shrink:0;}
+
+/* ---------- LESSON READER ---------- */
+#reader{background:var(--paper);}
+.reader-topbar{
+  position:sticky; top:0; z-index:10; background:var(--paper); border-bottom:1px solid var(--card-line);
+  display:flex; align-items:center; gap:10px; padding:14px 16px;
+}
+.reader-crumb{font-size:.78rem; color:var(--text-soft); flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.lesson-track{
+  display:flex; overflow-x:auto; scroll-snap-type:x mandatory; scroll-behavior:smooth;
+  height:calc(100vh - 58px); -webkit-overflow-scrolling:touch;
+}
+.lesson-page{
+  min-width:100%; scroll-snap-align:start; overflow-y:auto; padding:26px 18px 90px 18px;
+}
+.lesson-inner{max-width:720px; margin:0 auto;}
+.lesson-kicker{color:var(--blue); font-weight:700; font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;}
+.lesson-title{font-size:1.55rem; font-weight:800; color:var(--ink); margin-top:4px;}
+.section{margin-top:26px;}
+.section h4{
+  font-size:.98rem; color:var(--ink); display:flex; align-items:center; gap:8px;
+  padding-bottom:8px; border-bottom:2px solid var(--card-line);
+}
+.section p, .section li{color:var(--text); line-height:1.65; font-size:.96rem;}
+.section ul, .section ol{padding-left:1.2em; margin:.4em 0;}
+box{}
+.box{
+  border-radius:14px; padding:14px 16px; margin:10px 0; font-size:.92rem; line-height:1.55;
+}
+.box-formula{background:var(--card); border:1.5px dashed var(--blue); color:var(--text);}
+.box-note{background:rgba(21,101,192,0.07); border-left:4px solid var(--blue);}
+.box-waec{background:rgba(232,164,0,0.10); border-left:4px solid var(--amber);}
+.box-neco{background:rgba(11,61,46,0.08); border-left:4px solid var(--ink);}
+.box-mistake{background:rgba(200,50,50,0.07); border-left:4px solid #c83232;}
+.box-lab{background:rgba(21,101,192,0.06); border:1px solid var(--card-line);}
+.box-title{font-weight:700; margin-bottom:4px; display:block; font-size:.82rem; text-transform:uppercase; letter-spacing:.04em;}
+table.ptable{width:100%; border-collapse:collapse; font-size:.88rem; margin:10px 0;}
+table.ptable th, table.ptable td{border:1px solid var(--card-line); padding:8px 10px; text-align:left;}
+table.ptable th{background:var(--card); color:var(--ink); font-family:var(--font-display);}
+.diagram{
+  border:1px solid var(--card-line); border-radius:14px; background:var(--card);
+  padding:14px; margin:12px 0; display:flex; align-items:center; justify-content:center;
+}
+.diagram svg{max-width:100%; height:auto;}
+.mcq{background:var(--card); border:1px solid var(--card-line); border-radius:12px; padding:12px 14px; margin:10px 0;}
+.mcq-q{font-weight:600; margin-bottom:8px;}
+.mcq-opt{
+  display:block; padding:8px 10px; border-radius:8px; margin:4px 0; cursor:pointer;
+  border:1px solid var(--card-line); font-size:.9rem; transition:background .15s ease;
+}
+.mcq-opt:hover{background:rgba(21,101,192,0.08);}
+.mcq-opt.correct{background:rgba(30,160,90,0.22); border-color:#1ea05a; font-weight:600;}
+.mcq-opt.wrong{background:rgba(200,50,50,0.16); border-color:#c83232;}
+.lesson-nav{
+  display:flex; justify-content:space-between; align-items:center; margin-top:34px; gap:10px;
+}
+.nav-btn{
+  background:linear-gradient(120deg,var(--ink),var(--blue)); color:#fff; border:none; border-radius:12px;
+  padding:12px 18px; font-weight:700; cursor:pointer; font-size:.9rem; font-family:var(--font-body);
+}
+.nav-btn.ghost{background:var(--card); color:var(--text); border:1px solid var(--card-line);}
+.dots{display:flex; gap:6px; align-items:center; justify-content:center; padding:10px 0;}
+.dot{width:7px; height:7px; border-radius:50%; background:var(--card-line);}
+.dot.active{background:var(--ink); width:20px; border-radius:5px; transition:all .25s ease;}
+
+/* Search results overlay */
+#searchResults{
+  position:fixed; inset:0; background:var(--paper); z-index:50; padding:20px; overflow-y:auto;
+}
+.search-result{
+  background:var(--card); border:1px solid var(--card-line); border-radius:12px; padding:14px; margin-bottom:10px; cursor:pointer;
+}
+.search-result b{color:var(--ink);}
+
+::-webkit-scrollbar{width:8px; height:8px;}
+::-webkit-scrollbar-thumb{background:var(--card-line); border-radius:99px;}
+
+@media (min-width:820px){
+  .lesson-inner{font-size:1.02rem;}
+}
+
+/* ---------- RESOURCES ---------- */
+#resources{background:var(--paper); padding:0 0 80px 0;}
+.res-intro{padding:14px 20px 4px 20px; color:var(--text-soft); font-size:.86rem; max-width:760px; margin:0 auto;}
+.resource-card{
+  background:var(--card); border:1px solid var(--card-line); border-radius:var(--radius);
+  padding:18px 18px; box-shadow:var(--shadow); cursor:pointer;
+  display:flex; align-items:center; gap:16px;
+  transition:transform .2s ease, box-shadow .2s ease;
+}
+.resource-card:hover{transform:translateY(-3px);}
+.resource-icon{
+  width:46px; height:46px; border-radius:12px; flex-shrink:0; font-size:1.35rem;
+  background:linear-gradient(140deg,var(--ink),var(--blue));
+  display:flex; align-items:center; justify-content:center;
+}
+.resource-body{flex:1; min-width:0;}
+.resource-title{font-weight:700; font-size:1.02rem; color:var(--text);}
+.resource-sub{font-size:.82rem; color:var(--text-soft); margin-top:2px;}
+.resource-arrow{color:var(--text-soft); flex-shrink:0;}
+
+/* ---------- RESOURCE READER (single scrolling page) ---------- */
+#resourceReader{background:var(--paper);}
+.res-page{max-width:720px; margin:0 auto; padding:26px 18px 90px 18px;}
+.res-kicker{color:var(--blue); font-weight:700; font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;}
+.res-title{font-size:1.5rem; font-weight:800; color:var(--ink); margin-top:4px; margin-bottom:18px;}
+
+.formula-group{margin:18px 0;}
+.formula-group h4{font-size:.95rem; color:var(--ink); display:flex; align-items:center; gap:8px; padding-bottom:6px; border-bottom:2px solid var(--card-line);}
+.formula-row{
+  display:flex; justify-content:space-between; align-items:center; gap:12px;
+  background:var(--card); border:1px dashed var(--blue); border-radius:12px;
+  padding:10px 14px; margin:8px 0; font-size:.92rem;
+}
+.formula-name{color:var(--text-soft); font-size:.82rem;}
+.formula-expr{font-family:var(--font-display); font-weight:700; color:var(--ink); font-size:1.02rem;}
+.formula-note{font-size:.78rem; color:var(--text-soft); margin-top:2px;}
+
+.safety-list{padding-left:0; list-style:none; margin:0;}
+.safety-list li{
+  background:rgba(232,164,0,0.09); border-left:4px solid var(--amber);
+  border-radius:10px; padding:10px 14px; margin:8px 0; font-size:.92rem; line-height:1.5;
+}
+
+.glossary-letter{
+  position:sticky; top:0; background:var(--paper); color:var(--ink); font-family:var(--font-display);
+  font-weight:800; font-size:1rem; padding:8px 0 4px 0; z-index:1;
+}
+.glossary-item{
+  background:var(--card); border:1px solid var(--card-line); border-radius:12px;
+  padding:10px 14px; margin:6px 0; cursor:pointer; font-size:.92rem;
+}
+.glossary-item b{color:var(--ink);}
+.glossary-item .glossary-def{color:var(--text-soft); font-size:.86rem; margin-top:3px;}
+.glossary-item .glossary-link{font-size:.76rem; color:var(--blue); margin-top:5px; font-weight:600;}
+
+/* ---------- MOCK EXAMS ---------- */
+.exam-meta{font-size:.82rem; color:var(--text-soft); margin:2px 0 18px 0;}
+.mcq-opt.selected{background:rgba(21,101,192,0.16); border-color:var(--blue); font-weight:600;}
+.exam-submit-bar{
+  position:sticky; bottom:0; background:var(--paper); border-top:1px solid var(--card-line);
+  padding:12px 0; margin-top:20px; display:flex; justify-content:center;
+}
+.exam-score-banner{
+  border-radius:14px; padding:16px 18px; margin:0 0 20px 0; text-align:center;
+  background:linear-gradient(120deg,var(--ink),var(--blue)); color:#fff;
+}
+.exam-score-banner .score-num{font-size:1.8rem; font-weight:800; font-family:var(--font-display);}
+.theory-item{background:var(--card); border:1px solid var(--card-line); border-radius:12px; padding:12px 14px; margin:10px 0;}
+.theory-q{font-weight:600; margin-bottom:8px; font-size:.94rem;}
+.reveal-btn{
+  background:var(--card); border:1px solid var(--blue); color:var(--blue); border-radius:10px;
+  padding:6px 12px; font-size:.82rem; font-weight:600; cursor:pointer; font-family:var(--font-body);
+}
+.theory-guide{
+  margin-top:10px; padding:10px 12px; border-radius:10px; font-size:.88rem; line-height:1.5;
+  background:rgba(30,160,90,0.12); border-left:4px solid #1ea05a;
+}
+</style>
+</head>
+<body>
+
+<!-- ============ COVER ============ -->
+<div id="cover" class="screen">
+  <div class="cover-book" id="coverBook">
+    <div class="cover-face">
+      <svg class="cover-icons" viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="330" cy="80" r="34" fill="none" stroke="#ffd76a" stroke-width="2"/>
+        <circle cx="330" cy="80" r="3" fill="#ffd76a"/>
+        <ellipse cx="330" cy="80" rx="55" ry="18" fill="none" stroke="#ffd76a" stroke-width="1.5" transform="rotate(20 330 80)"/>
+        <circle cx="60" cy="120" r="10" fill="#7fe0b4" opacity=".6"/>
+        <circle cx="90" cy="150" r="6" fill="#7fe0b4" opacity=".5"/>
+        <path d="M40 420 L60 380 L80 420 L100 380 L120 420" stroke="#8fd6ff" stroke-width="2" fill="none" opacity=".5"/>
+        <rect x="250" y="380" width="26" height="14" rx="2" fill="none" stroke="#8fd6ff" stroke-width="1.5" opacity=".6"/>
+      </svg>
+      <div class="cover-eyebrow">WAEC &amp; NECO · SSS 1</div>
+      <div class="cover-title">MASTERY<br>PHYSICS</div>
+      <div class="cover-subtitle">A Complete WAEC &amp; NECO Physics Textbook — SSS 1</div>
+      <div class="cover-owner">Owner: AGU</div>
+      <div class="cover-hint"><span class="pulse-dot"></span> Tap to open the book</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ LIBRARY ============ -->
+<div id="library" class="screen hidden">
+  <div class="lib-topbar">
+    <div class="lib-title">Mastery Physics</div>
+    <input id="searchBox" placeholder="Search topics…" />
+    <button class="icon-btn" id="resourcesBtn" title="Study Resources">🧰</button>
+    <button class="icon-btn" id="darkBtn" title="Toggle dark mode">🌓</button>
+  </div>
+  <div class="term-tabs" id="termTabs"></div>
+  <div class="chapters" id="chapterList"></div>
+</div>
+
+<!-- ============ SEARCH RESULTS ============ -->
+<div id="searchResults" class="screen hidden">
+  <div class="lib-topbar" style="position:static; border:none; padding:0 0 14px 0;">
+    <div class="lib-title">Search results</div>
+    <button class="icon-btn" id="closeSearch">✕ Close</button>
+  </div>
+  <div id="searchResultsList"></div>
+</div>
+
+<!-- ============ READER ============ -->
+<div id="reader" class="screen hidden">
+  <div class="reader-topbar">
+    <button class="icon-btn" id="backBtn">← Chapters</button>
+    <div class="reader-crumb" id="crumb"></div>
+    <button class="icon-btn" id="resourcesBtn2" title="Study Resources">🧰</button>
+    <button class="icon-btn" id="darkBtn2">🌓</button>
+  </div>
+  <div class="dots" id="dots"></div>
+  <div class="lesson-track" id="lessonTrack"></div>
+</div>
+
+<!-- ============ RESOURCES (Formula Sheet, Glossary, Mock Exams, etc.) ============ -->
+<div id="resources" class="screen hidden">
+  <div class="lib-topbar">
+    <button class="icon-btn" id="resourcesBackBtn">← Library</button>
+    <div class="lib-title">Study Resources</div>
+    <button class="icon-btn" id="darkBtn3">🌓</button>
+  </div>
+  <div class="res-intro">Everything you need beyond the lessons — formulas, reference tables, revision guides and full mock exams with answer keys.</div>
+  <div class="chapters" id="resourceList"></div>
+</div>
+
+<!-- ============ RESOURCE READER (single-page reference content) ============ -->
+<div id="resourceReader" class="screen hidden">
+  <div class="reader-topbar">
+    <button class="icon-btn" id="resourceReaderBackBtn">← Resources</button>
+    <div class="reader-crumb" id="resourceCrumb"></div>
+    <button class="icon-btn" id="darkBtn4">🌓</button>
+  </div>
+  <div class="res-page" id="resourceContent"></div>
+</div>
+
+<!-- ============ EXAM (mock exam taking screen) ============ -->
+<div id="examScreen" class="screen hidden">
+  <div class="reader-topbar">
+    <button class="icon-btn" id="examBackBtn">← Resources</button>
+    <div class="reader-crumb" id="examCrumb"></div>
+    <button class="icon-btn" id="darkBtn5">🌓</button>
+  </div>
+  <div class="res-page" id="examContent"></div>
+</div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

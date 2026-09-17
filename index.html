@@ -656,7 +656,7 @@ function setupProfileCompletion(){document.getElementById("completionEducationLe
 async function init(){
  setText("year",new Date().getFullYear());
  try{client=typeof getSupabase==="function"?getSupabase():null}catch(e){client=null}
-
+setupProfileCompletion();
  // The hard gate above runs before app.js. This second check protects
  // against scripts/caches that bypass the preflight gate.
  if(client && !(await enforceWebsiteLogin())) return;

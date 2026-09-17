@@ -624,7 +624,26 @@ let studentProfileRecord=null;
 let profileCompletionRequired=false;
 function completionCountryName(code){const c=String(code||"").trim().toUpperCase();return PROFILE_COMPLETION_COUNTRIES.find(x=>x[0]===c)?.[1]||""}
 function setupProfileCompletionCountries(){const select=document.getElementById("completionCountryCode");if(!select)return;select.innerHTML='<option value="">Select country</option>'+PROFILE_COMPLETION_COUNTRIES.map(([code,name])=>`<option value="${escAttr(code)}">${esc(name)}</option>`).join("")}
-function setupProfileCompletionClasses(value=""){const select=document.getElementById("completionClassLevel");if(!select)return;const options=PROFILE_COMPLETION_CLASSES[value]||[];if(!options.length){select.enabled=true;select.innerHTML='<option value="">Select education level first</option>';return}select.disabled=false;select.innerHTML='<option value="">Select class / level</option>'+options.map(x=>`<option value="${escAttr(x)}">${esc(x)}</option>`).join("")}
+function setupProfileCompletionClasses(value=""){
+  const select=document.getElementById("completionClassLevel");
+  if(!select)return;
+
+  const options=PROFILE_COMPLETION_CLASSES[value]||[];
+
+  if(!options.length){
+    select.disabled=true;
+    select.innerHTML='<option value="">Select education level first</option>';
+    return;
+  }
+
+  select.disabled=false;
+
+  select.innerHTML=
+    '<option value="">Select class / level</option>'+
+    options.map(x =>
+      `<option value="${escAttr(x)}">${esc(x)}</option>`
+    ).join("");
+}
 function profileValue(profile,meta,...keys){for(const key of keys){const a=profile?.[key],b=meta?.[key];if(a!==undefined&&a!==null&&String(a).trim()!=="")return a;if(b!==undefined&&b!==null&&String(b).trim()!=="")return b}return ""}
 function missingStudentProfileFields(profile,meta){const fields={first_name:profileValue(profile,meta,"first_name"),last_name:profileValue(profile,meta,"last_name"),date_of_birth:profileValue(profile,meta,"date_of_birth","dob"),gender:profileValue(profile,meta,"gender"),phone:profileValue(profile,meta,"phone","phone_number")||currentUser?.phone||"",country_code:profileValue(profile,meta,"country_code","countryCode","phone_country_code"),education_level:profileValue(profile,meta,"education_level","level"),class_level:profileValue(profile,meta,"class_level","class")};return{fields,missing:Object.keys(fields).filter(k=>!String(fields[k]||"").trim())}}
 async function getStudentProfileForCompletion(){if(!client||!currentUser)return{profile:{},error:null};try{const r=await client.from("student_profiles").select("*").eq("user_id",currentUser.id).maybeSingle();if(!r.error&&r.data)return{profile:r.data,error:null};const byId=await client.from("student_profiles").select("*").eq("id",currentUser.id).maybeSingle();if(!byId.error)return{profile:byId.data||{},error:null};return{profile:{},error:r.error||byId.error}}catch(e){return{profile:{},error:e}}}

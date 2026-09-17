@@ -631,7 +631,7 @@ function setupProfileCompletionClasses(value=""){
   const options=PROFILE_COMPLETION_CLASSES[value]||[];
 
   if(!options.length){
-    selects.enabled=true;
+    select.enabled=true;
     select.innerHTML='<option value="">Select education level first</option>';
     return;
   }

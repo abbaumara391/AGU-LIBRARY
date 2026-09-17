@@ -649,7 +649,7 @@ function missingStudentProfileFields(profile,meta){const fields={first_name:prof
 async function getStudentProfileForCompletion(){if(!client||!currentUser)return{profile:{},error:null};try{const r=await client.from("student_profiles").select("*").eq("user_id",currentUser.id).maybeSingle();if(!r.error&&r.data)return{profile:r.data,error:null};const byId=await client.from("student_profiles").select("*").eq("id",currentUser.id).maybeSingle();if(!byId.error)return{profile:byId.data||{},error:null};return{profile:{},error:r.error||byId.error}}catch(e){return{profile:{},error:e}}}
 function showProfileCompletion(profile,meta,missing){setupProfileCompletionCountries();const values=missingStudentProfileFields(profile,meta).fields;const set=(id,v)=>{const x=document.getElementById(id);if(x)x.value=v||""};set("completionFirstName",values.first_name);set("completionLastName",values.last_name);set("completionMiddleName",profileValue(profile,meta,"middle_name","middleName"));set("completionDob",values.date_of_birth);set("completionGender",values.gender);set("completionCountryCode",values.country_code);const countrySelect=document.getElementById("completionCountryCode");
 if(countrySelect){
-  countrySelect.disabled=true;
+  countrySelect.enabled=true;
   }set("completionPhone",values.phone);set("completionEducationLevel",values.education_level);
 
 const educationSelect=document.getElementById("completionEducationLevel");

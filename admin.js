@@ -2780,8 +2780,7 @@ const firstOption =
 firstOption.value = "";  
 
 firstOption.textContent =  
-  select.id ===  
-  "questionExamSelect"  
+  select.id === "adminQuestionExamSelect"
     ? "Select an examination"  
     : "All examinations";  
 

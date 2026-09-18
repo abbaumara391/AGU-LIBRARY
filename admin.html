@@ -1677,25 +1677,333 @@ footer{
     Create / Edit Examination
   </h3>
 
-        id="questionFormStatus"
-        class="small"
-      ></div>
+  <div class="section-note">
+    Create an examination using the same hierarchy used by the
+    student Examination Room:
+    <strong>Education Level → Board / Organization → Examination Type
+    → Class / Level → Subject</strong>.
+  </div>
 
+  <input
+    id="examEditId"
+    type="hidden"
+  >
 
-      <div
-        id="adminQuestionList"
-        class="list"
-        style="margin-top:15px"
+  <div class="row">
+
+    <div>
+
+      <label for="examTitle">
+        Examination title
+      </label>
+
+      <input
+        id="examTitle"
+        placeholder="e.g. WAEC Mathematics Examination"
+        required
       >
-
-        <div class="empty">
-          Select an examination to manage its questions.
-        </div>
-
-      </div>
 
     </div>
 
+    <div>
+
+      <label for="examSubject">
+        Subject
+      </label>
+
+      <input
+        id="examSubject"
+        placeholder="e.g. Mathematics"
+        required
+      >
+
+    </div>
+
+  </div>
+
+
+  <div class="row">
+
+    <div>
+
+      <label for="examEducationLevel">
+        Education level
+      </label>
+
+      <select id="examEducationLevel" required>
+
+        <option value="">
+          Select education level
+        </option>
+
+        <option value="Early Years">
+          Early Years
+        </option>
+
+        <option value="Primary School">
+          Primary School
+        </option>
+
+        <option value="Junior Secondary School">
+          Junior Secondary School
+        </option>
+
+        <option value="Senior Secondary School">
+          Senior Secondary School
+        </option>
+
+        <option value="Tertiary / University">
+          Tertiary / University
+        </option>
+
+        <option value="Professional / Career">
+          Professional / Career
+        </option>
+
+      </select>
+
+    </div>
+
+
+    <div>
+
+      <label for="examBoard">
+        Examination board / organization
+      </label>
+
+      <select
+        id="examBoard"
+        disabled
+        required
+      >
+
+        <option value="">
+          Select education level first
+        </option>
+
+      </select>
+
+    </div>
+
+  </div>
+
+
+  <div class="row">
+
+    <div>
+
+      <label for="examType">
+        Examination type
+      </label>
+
+      <select
+        id="examType"
+        disabled
+        required
+      >
+
+        <option value="">
+          Select examination board first
+        </option>
+
+      </select>
+
+    </div>
+
+
+    <div>
+
+      <label for="examClassLevel">
+        Class / level
+      </label>
+
+      <select
+        id="examClassLevel"
+        disabled
+        required
+      >
+
+        <option value="">
+          Select education level first
+        </option>
+
+      </select>
+
+    </div>
+
+  </div>
+
+
+  <div class="row">
+
+    <div>
+
+      <label for="examTerm">
+        Term / semester
+      </label>
+
+      <input
+        id="examTerm"
+        placeholder="e.g. First Term"
+        required
+      >
+
+    </div>
+
+
+    <div>
+
+      <label for="examPassPercentage">
+        Pass percentage
+      </label>
+
+      <input
+        id="examPassPercentage"
+        type="number"
+        min="0"
+        max="100"
+        step="1"
+        value="50"
+        required
+      >
+
+    </div>
+
+  </div>
+
+
+  <div class="row">
+
+    <div>
+
+      <label for="examRegistrationRequired">
+        Registration
+      </label>
+
+      <select id="examRegistrationRequired">
+
+        <option value="true">
+          Required
+        </option>
+
+        <option value="false">
+          Not required
+        </option>
+
+      </select>
+
+    </div>
+
+
+    <div>
+
+      <label for="examPublished">
+        Publication status
+      </label>
+
+      <select id="examPublished">
+
+        <option value="false">
+          Draft — Not published
+        </option>
+
+        <option value="true">
+          Published — Students can see it
+        </option>
+
+      </select>
+
+    </div>
+
+  </div>
+
+
+  <label for="examDescription">
+    Examination description
+  </label>
+
+  <textarea
+    id="examDescription"
+    placeholder="Enter a description of this examination..."
+  ></textarea>
+
+
+  <div class="actions">
+
+    <button
+      id="saveExam"
+      class="btn primary"
+      type="button"
+    >
+      Save Examination
+    </button>
+
+    <button
+      id="clearExamForm"
+      class="btn light"
+      type="button"
+    >
+      Clear
+    </button>
+
+  </div>
+
+
+  <div
+    id="examFormStatus"
+    class="small"
+    style="margin-top:10px"
+  ></div>
+
+</div>
+
+
+<!-- QUESTION MANAGER -->
+
+<div class="exam-card">
+
+  <h3>
+    Question Manager
+  </h3>
+
+  <div class="section-note">
+    Select an examination to add, edit and manage its questions.
+  </div>
+
+
+  <label for="adminQuestionExamSelect">
+    Examination
+  </label>
+
+  <select id="adminQuestionExamSelect">
+
+    <option value="">
+      Select an examination
+    </option>
+
+  </select>
+
+
+  <div
+    id="questionFormStatus"
+    class="small"
+    style="margin-top:10px"
+  ></div>
+
+
+  <div
+    id="adminQuestionList"
+    class="list"
+    style="margin-top:15px"
+  >
+
+    <div class="empty">
+      Select an examination to manage its questions.
+    </div>
+
+  </div>
+
+</div>
 
     <!-- EXAMINATION REGISTRATIONS -->
 

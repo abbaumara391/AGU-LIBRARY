@@ -3300,7 +3300,7 @@ const list =
 $("adminQuestionList");
 
 const examinationId =
-$("questionExamSelect")?.value?.trim() || "";
+$("adminQuestionExamSelect")?.value?.trim() || "";
 
 if (!list) {
 

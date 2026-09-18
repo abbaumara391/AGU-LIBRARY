@@ -3149,9 +3149,10 @@ showMessage(
 
 }
 }
+    
 /* ---------------- LOAD EXAMINATIONS ---------------- */
 
-async function loadExaminations() {
+async function loadExaminations();
 
 const list =
 $("adminExamList");

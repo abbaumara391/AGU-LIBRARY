@@ -2755,7 +2755,7 @@ function populateExamSelects() {
 
 const selects = [
 
-$("questionExamSelect"),  
+$("adminQuestionExamSelect"),  
 
 $("registrationExamFilter"),  
 

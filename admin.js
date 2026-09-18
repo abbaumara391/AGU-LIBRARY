@@ -3737,9 +3737,8 @@ const verified =
 
 if (!verified) return;  
 
-const examinationId =  
-  $("questionExamSelect")?.value || "";  
-
+const examinationId =
+  $("adminQuestionExamSelect")?.value || "";
 const id =  
   $("questionEditId")?.value.trim() || "";  
 

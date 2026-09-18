@@ -5209,9 +5209,9 @@ CORRECT QUESTION SELECT LISTENER
 
 Selecting an examination loads its questions.
 */
-$("questionExamSelect")?.addEventListener(
-"change",
-loadQuestionsForSelectedExam
+$("adminQuestionExamSelect")?.addEventListener(
+  "change",
+  loadQuestionsForSelectedExam
 );
 $("registrationExamFilter")?.addEventListener(
 "change",

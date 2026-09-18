@@ -1991,9 +1991,12 @@ footer{
   </h3>
 
   <div class="section-note">
-    Select an examination to add, edit and manage its questions.
+    Select an examination, then create and manage its questions.
+    Each question can contain five answer options and one correct answer.
   </div>
 
+
+  <!-- SELECT EXAMINATION -->
 
   <label for="adminQuestionExamSelect">
     Examination
@@ -2008,12 +2011,211 @@ footer{
   </select>
 
 
+  <!-- ADD / EDIT QUESTION FORM -->
+
+  <div
+    class="section-note"
+    style="margin-top:15px"
+  >
+    <strong>Add / Edit Question</strong><br>
+    Enter the question, five answer options, marks and the correct option.
+  </div>
+
+
+  <input
+    id="questionEditId"
+    type="hidden"
+  >
+
+
+  <div class="row">
+
+    <div>
+
+      <label for="questionPosition">
+        Question number
+      </label>
+
+      <input
+        id="questionPosition"
+        type="number"
+        min="1"
+        step="1"
+        placeholder="e.g. 1"
+      >
+
+    </div>
+
+
+    <div>
+
+      <label for="questionMarks">
+        Marks
+      </label>
+
+      <input
+        id="questionMarks"
+        type="number"
+        min="0"
+        step="1"
+        value="1"
+        placeholder="e.g. 1"
+      >
+
+    </div>
+
+  </div>
+
+
+  <label for="questionText">
+    Question
+  </label>
+
+  <textarea
+    id="questionText"
+    placeholder="Enter the examination question..."
+  ></textarea>
+
+
+  <div class="row">
+
+    <div>
+
+      <label for="optionA">
+        Option A
+      </label>
+
+      <input
+        id="optionA"
+        type="text"
+        placeholder="Enter option A"
+      >
+
+    </div>
+
+
+    <div>
+
+      <label for="optionB">
+        Option B
+      </label>
+
+      <input
+        id="optionB"
+        type="text"
+        placeholder="Enter option B"
+      >
+
+    </div>
+
+  </div>
+
+
+  <div class="row">
+
+    <div>
+
+      <label for="optionC">
+        Option C
+      </label>
+
+      <input
+        id="optionC"
+        type="text"
+        placeholder="Enter option C"
+      >
+
+    </div>
+
+
+    <div>
+
+      <label for="optionD">
+        Option D
+      </label>
+
+      <input
+        id="optionD"
+        type="text"
+        placeholder="Enter option D"
+      >
+
+    </div>
+
+  </div>
+
+
+  <label for="optionE">
+    Option E
+  </label>
+
+  <input
+    id="optionE"
+    type="text"
+    placeholder="Enter option E"
+  >
+
+
+  <label for="correctOption">
+    Correct option
+  </label>
+
+  <select id="correctOption">
+
+    <option value="A">
+      A
+    </option>
+
+    <option value="B">
+      B
+    </option>
+
+    <option value="C">
+      C
+    </option>
+
+    <option value="D">
+      D
+    </option>
+
+    <option value="E">
+      E
+    </option>
+
+  </select>
+
+
+  <div class="actions">
+
+    <button
+      id="saveQuestion"
+      class="btn primary"
+      type="button"
+    >
+      ➕ Save Question
+    </button>
+
+    <button
+      id="clearQuestionForm"
+      class="btn light"
+      type="button"
+    >
+      Clear
+    </button>
+
+  </div>
+
+
   <div
     id="questionFormStatus"
     class="small"
     style="margin-top:10px"
-  ></div>
+  >
+    Ready to add a new question.
+  </div>
 
+
+  <!-- EXISTING QUESTIONS -->
 
   <div
     id="adminQuestionList"

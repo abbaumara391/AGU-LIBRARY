@@ -950,7 +950,7 @@ function setExamSelectOptions(id,items,placeholder,enabled=false,keepValue=""){
   const select=document.getElementById(id);if(!select)return "";
   const unique=[...new Set(items.filter(Boolean).map(x=>String(x).trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b));
   select.innerHTML='<option value="">'+esc(placeholder)+'</option>'+unique.map(x=>'<option value="'+escAttr(x)+'">'+esc(x)+'</option>').join("");
-  select.enabled=enabled||!unique.length;
+  select.disabled=disabled||!unique.length;
   if(keepValue&&unique.includes(keepValue))select.value=keepValue;
   return select.value;
 }

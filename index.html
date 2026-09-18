@@ -1128,7 +1128,7 @@ async function loadExaminations(){
     const [examRes,regRes,accessRes]=await Promise.all([
       client.from("agu_examinations")
         .select("*")
-        .eq("published",true)
+        .eq("is_published",true)
         .order("created_at",{ascending:false}),
       client.from("agu_exam_registrations")
         .select("id,examination_id,country_code,country_name,price_snapshot,currency_snapshot,payment_required,payment_status,registration_status,payment_reference,registered_at,paid_at,approved_at")

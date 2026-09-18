@@ -956,27 +956,113 @@ function setExamSelectOptions(id,items,placeholder,enabled=false,keepValue=""){
 }
 function refreshStudentExamHierarchy(resetBelow=""){
   const current=selectedExamHierarchy();
-  const education=resetBelow==="education"?"":current.education;
-  const board=resetBelow==="education"||resetBelow==="board"?"":current.board;
-  const type=resetBelow==="education"||resetBelow==="board"||resetBelow==="type"?"":current.type;
-  const classLevel=resetBelow!==""&&["education","board","type","class"].includes(resetBelow)?"":current.classLevel;
-  const subject=resetBelow!==""?"":current.subject;
-  setExamSelectOptions("examEducationFilter",Object.keys(STUDENT_EXAM_HIERARCHY),"Select education level",false,education);
-  const boards=education?Object.keys(STUDENT_EXAM_HIERARCHY[education]||{}):[];
-  setExamSelectOptions("examBoardFilter",boards,"Select examination board / organization",!education,board);
-  const types=education&&board?(STUDENT_EXAM_HIERARCHY[education]?.[board]||[]):[];
-  setExamSelectOptions("examTypeFilter",types,"Select examination type",!board,type);
+
+  /*
+   * Keep the value the student just selected.
+   * Only clear the selectors BELOW it.
+   */
+  let education=current.education;
+  let board=current.board;
+  let type=current.type;
+  let classLevel=current.classLevel;
+  let subject=current.subject;
+
+  if(resetBelow==="education"){
+    board="";
+    type="";
+    classLevel="";
+    subject="";
+  }else if(resetBelow==="board"){
+    type="";
+    classLevel="";
+    subject="";
+  }else if(resetBelow==="type"){
+    classLevel="";
+    subject="";
+  }else if(resetBelow==="class"){
+    subject="";
+  }
+
+  setExamSelectOptions(
+    "examEducationFilter",
+    Object.keys(STUDENT_EXAM_HIERARCHY),
+    "Select education level",
+    false,
+    education
+  );
+
+  const boards=education
+    ? Object.keys(STUDENT_EXAM_HIERARCHY[education]||{})
+    : [];
+
+  setExamSelectOptions(
+    "examBoardFilter",
+    boards,
+    "Select examination board / organization",
+    !education,
+    board
+  );
+
+  const types=education&&board
+    ? (STUDENT_EXAM_HIERARCHY[education]?.[board]||[])
+    : [];
+
+  setExamSelectOptions(
+    "examTypeFilter",
+    types,
+    "Select examination type",
+    !board,
+    type
+  );
+
   const classDefaults=STUDENT_EXAM_CLASSES[education]||[];
-  const examClassValues=availableExams.filter(e=>!education||normalizeExamEducation(e.education_level)===education).map(e=>e.class_level);
-  setExamSelectOptions("examClassFilter",[...classDefaults,...examClassValues],"Select class / level",!education,classLevel);
+
+  const examClassValues=availableExams
+    .filter(e=>
+      !education ||
+      normalizeExamEducation(e.education_level)===education
+    )
+    .map(e=>e.class_level);
+
+  setExamSelectOptions(
+    "examClassFilter",
+    [...classDefaults,...examClassValues],
+    "Select class / level",
+    !education,
+    classLevel
+  );
+
   const matchingForSubject=availableExams.filter(e=>{
-    if(education&&normalizeExamEducation(e.education_level)!==education)return false;
-    if(board&&String(e.examination_board||"").trim()!==board)return false;
-    if(type&&String(e.examination_type||"").trim()!==type)return false;
-    if(classLevel&&String(e.class_level||"").trim()!==classLevel)return false;
+    if(
+      education &&
+      normalizeExamEducation(e.education_level)!==education
+    )return false;
+
+    if(
+      board &&
+      String(e.examination_board||"").trim()!==board
+    )return false;
+
+    if(
+      type &&
+      String(e.examination_type||"").trim()!==type
+    )return false;
+
+    if(
+      classLevel &&
+      String(e.class_level||"").trim()!==classLevel
+    )return false;
+
     return true;
   });
-  setExamSelectOptions("examSubjectFilter",matchingForSubject.map(e=>e.subject),"Select subject",!education,subject);
+
+  setExamSelectOptions(
+    "examSubjectFilter",
+    matchingForSubject.map(e=>e.subject),
+    "Select subject",
+    !education,
+    subject
+  );
 }
 function setupStudentExamHierarchy(){
   ["examEducationFilter","examBoardFilter","examTypeFilter","examClassFilter","examSubjectFilter"].forEach(id=>{

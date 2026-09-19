@@ -1124,9 +1124,39 @@ function setupStudentExamHierarchy(){
     const el=document.getElementById(id);
     if(el&&!el.dataset.aguExamHierarchyBound){
       el.addEventListener("change",()=>{
-        const reset=id==="examEducationFilter"?"education":id==="examBoardFilter"?"board":id==="examTypeFilter"?"type":id==="examClassFilter"?"class":"subject";
-        refreshStudentExamHierarchy(reset);
-        renderExamList(null);
+  if(id==="examSubjectFilter"){
+    const selectedSubjects=Array.from(el.selectedOptions)
+      .map(option=>String(option.value||"").trim())
+      .filter(Boolean);
+
+    if(selectedSubjects.length>9){
+      Array.from(el.options).forEach(option=>{
+        option.selected=selectedSubjects
+          .slice(0,9)
+          .includes(option.value);
+      });
+
+      alert("You can select a maximum of 9 subjects.");
+    }
+
+    renderExamList(null);
+    return;
+  }
+
+  const reset=
+    id==="examEducationFilter"
+      ?"education"
+      :id==="examBoardFilter"
+      ?"board"
+      :id==="examTypeFilter"
+      ?"type"
+      :id==="examClassFilter"
+      ?"class"
+      :"subject";
+
+  refreshStudentExamHierarchy(reset);
+  renderExamList(null);
+});
       });
       el.dataset.aguExamHierarchyBound="true";
     }

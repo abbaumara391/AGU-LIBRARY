@@ -1021,7 +1021,7 @@ function refreshStudentExamHierarchy(resetBelow=""){
   let board=current.board;
   let type=current.type;
   let classLevel=current.classLevel;
-  let subject=current.subject;
+  let subjects=current.subjects||[];
 
   if(resetBelow==="education"){
     board="";

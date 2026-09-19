@@ -476,7 +476,7 @@ button,a,[role="button"],input,select{pointer-events:auto;touch-action:manipulat
         <select id="examBoardFilter" enabled><option value="">Select examination board / organization</option></select>
         <select id="examTypeFilter" enabled><option value="">Select examination type</option></select>
         <select id="examClassFilter" enabled><option value="">Select class / level</option></select>
-        <select id="examSubjectFilter" enabled><option value="">Select subject</option></select>
+        <select id="examSubjectFilter" multiple size="6" aria-label="Select 1 to 9 subjects"></select>
         <input id="examSearch" type="search" placeholder="Search examinations..." autocomplete="off">
       </div>
       <div id="examStatus" class="service-status">Loading examinations...</div>

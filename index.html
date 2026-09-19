@@ -937,12 +937,18 @@ function normalizeExamEducation(value){
   return String(value||"").trim();
 }
 function selectedExamHierarchy(){
+  const subjectSelect=document.getElementById("examSubjectFilter");
+
   return {
     education:document.getElementById("examEducationFilter")?.value||"",
     board:document.getElementById("examBoardFilter")?.value||"",
     type:document.getElementById("examTypeFilter")?.value||"",
     classLevel:document.getElementById("examClassFilter")?.value||"",
-    subject:document.getElementById("examSubjectFilter")?.value||"",
+    subjects:subjectSelect
+      ? Array.from(subjectSelect.selectedOptions)
+          .map(option=>String(option.value||"").trim())
+          .filter(Boolean)
+      : [],
     search:document.getElementById("examSearch")?.value?.toLowerCase().trim()||""
   };
 }

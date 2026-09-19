@@ -1264,7 +1264,10 @@ function renderExamList(dailyAccess){
     const boardOK=!selected.board||boardValue===selected.board;
     const typeOK=!selected.type||typeValue===selected.type;
     const classOK=!selected.classLevel||String(e.class_level||"").trim()===selected.classLevel;
-    const subjectOK=!selected.subject||String(e.subject||"").trim()===selected.subject;
+    const examSubject=String(e.subject||"").trim();
+const subjectOK=
+  !selected.subjects.length ||
+  selected.subjects.includes(examSubject);
     const searchable=`${e.title||""} ${e.subject||""} ${e.education_level||""} ${e.examination_board||""} ${e.examination_type||""} ${e.class_level||""}`.toLowerCase();
     return educationOK&&boardOK&&typeOK&&classOK&&subjectOK&&(!selected.search||searchable.includes(selected.search));
   });

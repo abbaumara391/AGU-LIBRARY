@@ -1110,14 +1110,14 @@ function refreshStudentExamHierarchy(resetBelow=""){
 
     return true;
   });
-
-  setExamSelectOptions(
-    "examSubjectFilter",
-    matchingForSubject.map(e=>e.subject),
-    "Select subject",
-    !education,
-    subject
-  );
+setExamSelectOptions(
+  "examSubjectFilter",
+  matchingForSubject.map(e=>e.subject),
+  "Select 1 to 9 subjects",
+  !education,
+  subjects
+);
+  
 }
 function setupStudentExamHierarchy(){
   ["examEducationFilter","examBoardFilter","examTypeFilter","examClassFilter","examSubjectFilter"].forEach(id=>{

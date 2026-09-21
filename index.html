@@ -1023,18 +1023,18 @@ function refreshStudentExamHierarchy(resetBelow=""){
   let classLevel=current.classLevel;
   let subjects=current.subjects||[];
 
-  if(resetBelow==="education"){
-    board="";
-    type="";
-    classLevel="";
-    subject="";
-  }else if(resetBelow==="board"){
-    type="";
-    classLevel="";
-    subject="";
-  }else if(resetBelow==="type"){
-    classLevel="";
-    subject="";
+if(resetBelow==="education"){
+  board="";
+  type="";
+  classLevel="";
+  subjects=[];
+}else if(resetBelow==="board"){
+  type="";
+  classLevel="";
+  subjects=[];
+}else if(resetBelow==="type"){
+  classLevel="";
+  subjects=[];
 }else if(resetBelow==="class"){
   subjects=[];
 }

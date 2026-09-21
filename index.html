@@ -207,7 +207,11 @@ button,a,[role="button"],input,select{pointer-events:auto;touch-action:manipulat
 #menuShade:not([hidden]){pointer-events:auto}
 .account-menu{pointer-events:none}
 .account-menu.open{pointer-events:auto}
-.full-panel.open{pointer-events:auto}
+.full-panel.open{
+  display:flex;
+  flex-direction:column;
+  pointer-events:auto;
+}
 .profile-completion-overlay.show{pointer-events:auto}
 .main-subject,.flow-card,.account-card button,.security-card,.menu-item,.setting-toggle,.back,.btn{position:relative;z-index:1}
 .menu-button{pointer-events:auto!important;-webkit-tap-highlight-color:transparent}

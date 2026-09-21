@@ -300,6 +300,8 @@ overflow:hidden;
 .exam-subject-choice{display:flex;align-items:center;gap:9px;min-height:48px;padding:10px 12px;border:1px solid #cfe5da;border-radius:12px;background:#fff;cursor:pointer;font-weight:750;color:#173b2d;transition:.15s}
 .exam-subject-choice:hover{border-color:#087a4b}.exam-subject-choice.selected{background:#e9f8f0;border-color:#087a4b;box-shadow:0 0 0 2px rgba(8,122,75,.08)}
 .exam-subject-choice input{width:18px;height:18px;accent-color:#087a4b;flex:0 0 auto}.exam-subject-choice.disabled{opacity:.48;cursor:not-allowed}
+
+.exam-registration-hierarchy{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:0 0 16px}.exam-registration-field{display:flex;flex-direction:column;gap:7px}.exam-registration-field label{font-size:.86rem;font-weight:900;color:#173b2d}.exam-registration-field select{width:100%;min-height:50px;border:1px solid #cfe5da;border-radius:14px;background:#fff;color:#173b2d;padding:11px 12px;font:inherit;font-weight:700;outline:none}.exam-registration-field select:focus{border-color:#087a4b;box-shadow:0 0 0 3px rgba(8,122,75,.10)}.exam-registration-field select:disabled{background:#f1f6f3;color:#8a9b93;cursor:not-allowed}.exam-hierarchy-status{margin:-4px 0 14px;padding:10px 12px;border-radius:12px;background:#f6faf8;color:#60766c;font-size:.84rem;line-height:1.45}.exam-hierarchy-status.err{background:#fff3f3;color:#a12626;font-weight:800}@media(max-width:700px){.exam-registration-hierarchy{grid-template-columns:1fr}}
 .exam-subject-count{font-size:.88rem;color:#60766c;margin:5px 0 14px}.exam-register-main{width:100%;margin-top:6px}.exam-id-box{margin-top:12px;padding:15px;border:1px solid #d7e4de;border-radius:16px;background:#fff;display:none}.exam-id-box.show{display:block}.exam-id-box label{display:block;font-weight:900;margin-bottom:7px;color:#173b2d}.exam-id-row{display:flex;gap:9px}.exam-id-row input{flex:1;min-width:0}.exam-guideline-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:15px 0}.exam-guideline-sample{border:1px solid #d7e4de;border-radius:16px;padding:10px;background:#fff;text-align:center}.exam-guideline-sample .sample-box{height:150px;border-radius:12px;display:grid;place-items:center;background:#eef7f2;font-size:3rem}.exam-guideline-sample.bad .sample-box{background:#fff1f1}.exam-guideline-sample strong{display:block;margin-top:8px}.exam-photo-rules{margin:12px 0;padding:14px;border-radius:14px;background:#f6faf8;line-height:1.65}.exam-registration-overlay{position:fixed;inset:0;z-index:2400;background:rgba(12,35,26,.62);display:grid;place-items:center;padding:16px}.exam-registration-modal{width:min(700px,100%);max-height:92vh;overflow:auto;background:#fff;border-radius:24px;padding:22px;box-shadow:0 25px 90px rgba(0,0,0,.25)}.exam-registration-modal h2{margin:0 0 8px;color:#173b2d}.exam-registration-modal .modal-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}.exam-photo-preview{width:130px;height:160px;object-fit:cover;border-radius:14px;border:1px solid #cfe5da;background:#f3f7f5;display:none}.exam-upload-label{display:inline-flex;align-items:center;gap:8px}.exam-upload-status{margin-top:9px;font-size:.9rem;color:#60766c}.exam-upload-status.ok{color:#087a4b;font-weight:800}.exam-upload-status.err{color:#b42323;font-weight:800}
 @media(max-width:700px){.exam-subject-picker{grid-template-columns:1fr 1fr}.exam-guideline-grid{grid-template-columns:1fr}.exam-id-row{flex-direction:column}.exam-registration-modal{padding:17px}}
 @media(max-width:430px){.exam-subject-picker{grid-template-columns:1fr}}
@@ -538,6 +540,27 @@ overflow:hidden;
       </div>  
       <div class="exam-registration-summary" id="examRegistrationSummary">
         <div class="selected-count" id="examSelectedCount">Selected Subjects: 0</div>
+        <div class="exam-registration-hierarchy" id="examRegistrationHierarchy">
+          <div class="exam-registration-field">
+            <label for="examRegistrationEducationLevel">Education Level</label>
+            <select id="examRegistrationEducationLevel" aria-label="Select education level">
+              <option value="">Select education level</option>
+            </select>
+          </div>
+          <div class="exam-registration-field">
+            <label for="examRegistrationBoard">Examination Board / Organization</label>
+            <select id="examRegistrationBoard" aria-label="Select examination board or organization" disabled>
+              <option value="">Select education level first</option>
+            </select>
+          </div>
+          <div class="exam-registration-field">
+            <label for="examRegistrationClassLevel">Class / Level</label>
+            <select id="examRegistrationClassLevel" aria-label="Select class or level" disabled>
+              <option value="">Select education level first</option>
+            </select>
+          </div>
+        </div>
+        <div id="examHierarchyStatus" class="exam-hierarchy-status">Select your education level, examination board / organization and class / level before choosing subjects.</div>
         <div class="fee-label">Registration Fee</div>
         <div class="fee-value" id="examRegistrationFee">Select 1–9 subjects</div>
         <div id="examSubjectPicker" class="exam-subject-picker" aria-label="Select 1 to 9 subjects"></div>
@@ -970,6 +993,7 @@ if(regRes.error)throw regRes.error;
 availableExams=examRes.data||[];  
 examRegistrations=regRes.data||[];  
   
+setupExamRegistrationHierarchy();
 renderExamSubjectPicker();
 renderExamList(accessRes.data||null);  
   }catch(e){  
@@ -980,12 +1004,98 @@ renderExamList(accessRes.data||null);
   
 
 let examSelectedSubjects=[];
+let examRegistrationEducationLevel="";
+let examRegistrationBoard="";
+let examRegistrationClassLevel="";
 let examRegistrationPhotoFile=null;
+
+/* The registration hierarchy mirrors the examination hierarchy used by the administrator. */
+const STUDENT_EXAM_HIERARCHY={
+  "Early Years":{"School Assessment":["Term Assessment","Progress Assessment","Final Assessment"],"International Early Years":["Early Years Assessment","International Progress Assessment"],"Other":["General Assessment"]},
+  "Primary School":{"School Examination":["First Term Examination","Second Term Examination","Third Term Examination","Mock Examination","Final Examination"],"Common Entrance":["Common Entrance Examination","Common Entrance Mock Examination"],"Primary Leaving Examination":["Primary Leaving Examination","Primary Leaving Mock Examination"],"International Primary":["Primary Progress Test","International Primary Examination"],"Other":["General Assessment"]},
+  "Junior Secondary School":{"BECE":["Basic Education Certificate Examination","BECE Mock Examination"],"School Examination":["First Term Examination","Second Term Examination","Third Term Examination","Mock Examination","Final Examination"],"Cambridge Lower Secondary":["Checkpoint Examination","Lower Secondary Assessment"],"International Examination":["International Lower Secondary Examination","Mock Examination"],"Other":["General Assessment"]},
+  "Senior Secondary School":{"WAEC":["SSCE","GCE","Mock Examination"],"NECO":["SSCE","GCE","BECE","Mock Examination"],"NABTEB":["NBC/NTC","ANBC/ANTC","GCE","Mock Examination"],"Cambridge":["IGCSE","O Level","AS Level","A Level"],"School Examination":["First Term Examination","Second Term Examination","Third Term Examination","Mock Examination","Final Examination"],"International Examination":["International Secondary Examination","Mock Examination"],"Other":["General Examination"]},
+  "Tertiary / University":{"University":["Semester Examination","Mid-Semester Test","Final Examination","Entrance Examination","Mock Examination"],"Polytechnic":["Semester Examination","Mid-Semester Test","Final Examination","Entrance Examination"],"College":["Semester Examination","Mid-Semester Test","Final Examination","Entrance Examination"],"Professional Examination":["Professional Certification Examination","Licensing Examination","Entrance Examination"],"Other":["General Examination"]},
+  "Professional / Career":{"Professional Certification":["Certification Examination","Mock Examination"],"Licensing Board":["Licensing Examination","Renewal Examination","Mock Examination"],"Entrance Examination":["Entrance Examination","Aptitude Test","Mock Examination"],"Career Assessment":["Career Assessment","Professional Aptitude Test"],"Other":["General Assessment"]}
+};
+const STUDENT_EXAM_CLASSES={"Early Years":["Early Years 1","Early Years 2","Early Years 3"],"Primary School":["Primary 1","Primary 2","Primary 3","Primary 4","Primary 5","Primary 6"],"Junior Secondary School":["JSS 1","JSS 2","JSS 3"],"Senior Secondary School":["SSS 1","SSS 2","SSS 3"],"Tertiary / University":["100 Level","200 Level","300 Level","400 Level","500 Level","Postgraduate"],"Professional / Career":[]};
+
+function examRegistrationSetOptions(id,items,placeholder,disabled=false,value=""){
+  const el=document.getElementById(id);if(!el)return;
+  const unique=[...new Set((items||[]).filter(Boolean).map(x=>String(x).trim()))];
+  el.innerHTML=`<option value="">${esc(placeholder)}</option>`+unique.map(x=>`<option value="${escapeForAttr(x)}">${esc(x)}</option>`).join("");
+  el.disabled=disabled||!unique.length;
+  if(value&&unique.includes(value))el.value=value;
+}
+function examRegistrationMatchesHierarchy(exam){
+  const level=String(exam?.education_level||"").trim();
+  const board=String(exam?.examination_board||"").trim();
+  const cls=String(exam?.class_level||"").trim();
+  if(level&&examRegistrationEducationLevel&&level!==examRegistrationEducationLevel)return false;
+  if(board&&examRegistrationBoard&&board!==examRegistrationBoard)return false;
+  if(cls&&examRegistrationClassLevel&&cls!==examRegistrationClassLevel)return false;
+  return true;
+}
+function updateExamRegistrationHierarchy(){
+  const level=document.getElementById("examRegistrationEducationLevel");
+  const board=document.getElementById("examRegistrationBoard");
+  const cls=document.getElementById("examRegistrationClassLevel");
+  const status=document.getElementById("examHierarchyStatus");
+  if(!level||!board||!cls)return;
+  const levels=Object.keys(STUDENT_EXAM_HIERARCHY);
+  if(!level.options.length||level.options.length===1)examRegistrationSetOptions("examRegistrationEducationLevel",levels,"Select education level",false,examRegistrationEducationLevel);
+  const boards=Object.keys(STUDENT_EXAM_HIERARCHY[examRegistrationEducationLevel]||{});
+  examRegistrationSetOptions("examRegistrationBoard",boards,"Select examination board / organization",!examRegistrationEducationLevel,examRegistrationBoard);
+  const classes=STUDENT_EXAM_CLASSES[examRegistrationEducationLevel]||[];
+  examRegistrationSetOptions("examRegistrationClassLevel",classes,"Select class / level",!examRegistrationEducationLevel,examRegistrationClassLevel);
+  if(!examRegistrationEducationLevel){
+    examRegistrationBoard="";examRegistrationClassLevel="";
+  }
+  const matching=availableExams.filter(exam=>examRegistrationMatchesHierarchy(exam));
+  if(status){
+    if(!examRegistrationEducationLevel){
+      status.className="exam-hierarchy-status";status.textContent="Select your education level, examination board / organization and class / level before choosing subjects.";
+    }else if(!examRegistrationBoard||!examRegistrationClassLevel){
+      status.className="exam-hierarchy-status";status.textContent="Now select the examination board / organization and class / level.";
+    }else if(!matching.length){
+      status.className="exam-hierarchy-status err";status.textContent="No published examination records currently match this education level, board / organization and class / level.";
+    }else{
+      status.className="exam-hierarchy-status";status.textContent=`${matching.length} examination record${matching.length===1?"":"s"} match your selected level and class.`;
+    }
+  }
+  const allowed=new Set(matching.map(e=>String(e.subject||"").trim()).filter(Boolean));
+  examSelectedSubjects=examSelectedSubjects.filter(s=>allowed.has(String(s).trim()));
+  renderExamSubjectPicker();
+}
+function setupExamRegistrationHierarchy(){
+  const level=document.getElementById("examRegistrationEducationLevel");
+  const board=document.getElementById("examRegistrationBoard");
+  const cls=document.getElementById("examRegistrationClassLevel");
+  if(!level||level.dataset.aguHierarchyBound)return;
+  examRegistrationSetOptions("examRegistrationEducationLevel",Object.keys(STUDENT_EXAM_HIERARCHY),"Select education level",false,examRegistrationEducationLevel);
+  level.addEventListener("change",()=>{
+    examRegistrationEducationLevel=level.value;
+    examRegistrationBoard="";
+    examRegistrationClassLevel="";
+    updateExamRegistrationHierarchy();
+  });
+  board?.addEventListener("change",()=>{
+    examRegistrationBoard=board.value;
+    updateExamRegistrationHierarchy();
+  });
+  cls?.addEventListener("change",()=>{
+    examRegistrationClassLevel=cls.value;
+    updateExamRegistrationHierarchy();
+  });
+  level.dataset.aguHierarchyBound="true";
+  updateExamRegistrationHierarchy();
+}
+
 let examRegistrationPhotoPath="";
 
 function examSubjectCatalog(){
   const set=new Set();
-  availableExams.forEach(e=>{if(e.subject)set.add(String(e.subject).trim())});
+  availableExams.filter(examRegistrationMatchesHierarchy).forEach(e=>{if(e.subject)set.add(String(e.subject).trim())});
   return [...set].filter(Boolean).sort((a,b)=>a.localeCompare(b));
 }
 function examMoney(value,currency="NGN"){
@@ -1069,6 +1179,7 @@ function showExamRegistrationPage(){
   const overlay=document.createElement("div");overlay.id="examRegistrationOverlay";overlay.className="exam-registration-overlay";
   overlay.innerHTML=`<div class="exam-registration-modal" role="dialog" aria-modal="true" aria-labelledby="examRegTitle">
     <h2 id="examRegTitle">EXAMINATION REGISTRATION</h2>
+    <p><strong>Education Level:</strong> ${esc(examRegistrationEducationLevel||"Not selected")}<br><strong>Examination Board / Organization:</strong> ${esc(examRegistrationBoard||"Not selected")}<br><strong>Class / Level:</strong> ${esc(examRegistrationClassLevel||"Not selected")}</p>
     <p><strong>Selected Subjects: ${examSelectedSubjects.length}</strong></p>
     <p>Registration Fee</p><div class="fee-value">${fee===null?"Fee not configured":examMoney(fee,"NGN")}</div>
     <label class="exam-upload-label btn outline" for="examPhotoInput">📷 UPLOAD PHOTO</label>
@@ -1126,6 +1237,7 @@ function setupExamRegistrationFlow(){
   renderExamSubjectPicker();
   document.getElementById("examRegisterMain")?.addEventListener("click",()=>{
     if(studentAlreadyRegisteredThisSeason()){showExamIdBox();return}
+    if(!examRegistrationEducationLevel||!examRegistrationBoard||!examRegistrationClassLevel){alert("Please select your Education Level, Examination Board / Organization and Class / Level before registration.");return}
     if(!examSelectedSubjects.length){alert("Select 1 to 9 subjects before registration.");return}
     showExamRegistrationGuideline();
   });
@@ -1373,6 +1485,7 @@ function printCertificate(){
   w.document.write(`<!doctype html><html><head><title>AGULIBRARY Certificate</title><style>body{font-family:system-ui,-apple-system,Segoe UI,sans-serif;padding:40px;color:#17352a}.certificate{border:7px double #087a4b;border-radius:4px;padding:60px 40px;text-align:center;max-width:850px;margin:auto}.eyebrow{color:#087a4b;font-size:12px;font-weight:900;letter-spacing:3px}.certificate h2{color:#087a4b;font-size:34px}.certificate h3{font-size:25px}.certificate p{line-height:1.7;color:#526a60}@media print{body{padding:0}}</style></head><body><div class="certificate">${area.innerHTML}</div><script>window.onload=()=>window.print()<\/script></body></html>`);w.document.close();  }
 
 function setupExamUI(){
+setupExamRegistrationHierarchy();
 setupExamRegistrationFlow();
 document.getElementById("examSearch")?.addEventListener("input",()=>renderExamList(null));
 }

@@ -942,7 +942,7 @@ function setExamSelectOptions(id,items,placeholder,enabled=false,keepValue=""){
       '<option value="'+escAttr(x)+'">'+esc(x)+'</option>'
     ).join("");
 
-  select.disabled=disabled||!unique.length;
+  select.disabled=enabled||!unique.length;
 
   if(keepValue&&unique.includes(keepValue)){
     select.value=keepValue;

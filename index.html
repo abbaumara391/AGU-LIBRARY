@@ -915,34 +915,65 @@ function setExamSelectOptions(id,items,placeholder,disabled=false,keepValue=""){
   if(keepValue&&unique.includes(keepValue))select.value=keepValue;
   return select.value;
 }
+const EXAM_SUBJECT_CATALOG={
+  "Early Years":["General Learning","Language Development","Numeracy","Science Discovery","Creative Arts","Social Development"],
+  "Primary School":["English Language","Mathematics","Basic Science","Basic Technology","Social Studies","Civic Education","Computer Studies","Agricultural Science","Physical & Health Education","Creative Arts","Religious Studies","French Language","Home Economics"],
+  "Junior Secondary School":["English Language","Mathematics","Basic Science","Basic Technology","Computer Studies","Business Studies","Social Studies","Civic Education","Agricultural Science","Home Economics","French Language","Physical & Health Education","Christian Religious Studies","Islamic Religious Studies","Cultural & Creative Arts","Geography","History"],
+  "Senior Secondary School":["English Language","Mathematics","Biology","Chemistry","Physics","Economics","Government","Civic Education","Literature in English","Geography","Agricultural Science","Commerce","Financial Accounting","Marketing","Computer Science","Further Mathematics","Technical Drawing","Food & Nutrition","Christian Religious Studies","Islamic Religious Studies","French Language","Data Processing","Physical Education"],
+  "Tertiary / University":["Mathematics","English Language","Computer Science","Information Technology","Physics","Chemistry","Biology","Economics","Accounting","Business Administration","Engineering","Medicine","Law","Education","Agriculture","Mass Communication","Political Science","Sociology","Psychology","Statistics","Public Administration","Architecture","Pharmacy","Nursing"],
+  "Professional / Career":["General Aptitude","Numerical Reasoning","Verbal Reasoning","Logical Reasoning","Professional Knowledge","Computer Skills","Business Skills","Career Assessment"]
+};
+
 function refreshStudentExamHierarchy(resetBelow=""){
   const current=selectedExamHierarchy();
 
   /* Keep the value the student just selected. Only clear fields that depend
-     on that selection. The previous version cleared Education itself when
-     the Education selector changed, which made the native mobile selector
-     appear to accept the choice but immediately return to the placeholder. */
+     on that selection. */
   const education=current.education;
   const board=resetBelow==="education"?"":current.board;
   const type=(resetBelow==="education"||resetBelow==="board")?"":current.type;
   const classLevel=(resetBelow==="education"||resetBelow==="board"||resetBelow==="type")?"":current.classLevel;
   const subject=(resetBelow==="education"||resetBelow==="board"||resetBelow==="type"||resetBelow==="class")?"":current.subject;
+
   setExamSelectOptions("examEducationFilter",Object.keys(STUDENT_EXAM_HIERARCHY),"Select education level",false,education);
+
   const boards=education?Object.keys(STUDENT_EXAM_HIERARCHY[education]||{}):[];
   setExamSelectOptions("examBoardFilter",boards,"Select examination board / organization",!education,board);
+
   const types=education&&board?(STUDENT_EXAM_HIERARCHY[education]?.[board]||[]):[];
   setExamSelectOptions("examTypeFilter",types,"Select examination type",!board,type);
+
   const classDefaults=STUDENT_EXAM_CLASSES[education]||[];
-  const examClassValues=availableExams.filter(e=>!education||normalizeExamEducation(e.education_level)===education).map(e=>e.class_level);
+  const examClassValues=availableExams
+    .filter(e=>!education||normalizeExamEducation(e.education_level)===education)
+    .map(e=>e.class_level);
   setExamSelectOptions("examClassFilter",[...classDefaults,...examClassValues],"Select class / level",!education,classLevel);
-  const matchingForSubject=availableExams.filter(e=>{
+
+  /*
+     IMPORTANT:
+     The Subject selector must remain usable even when there are currently
+     zero published examinations. Previously its options came only from
+     availableExams, so a new/empty examination database made the subject
+     selector disabled and impossible to open.
+
+     We therefore combine published-exam subjects with the appropriate
+     education-level subject catalogue. Published examinations still control
+     what appears in the results list; the catalogue only keeps the selector
+     usable and ready for future administrator-published examinations.
+  */
+  const publishedSubjects=availableExams.filter(e=>{
     if(education&&normalizeExamEducation(e.education_level)!==education)return false;
     if(board&&String(e.examination_board||"").trim()!==board)return false;
     if(type&&String(e.examination_type||"").trim()!==type)return false;
     if(classLevel&&String(e.class_level||"").trim()!==classLevel)return false;
     return true;
-  });
-  setExamSelectOptions("examSubjectFilter",matchingForSubject.map(e=>e.subject),"Select subject",!education,subject);
+  }).map(e=>e.subject);
+
+  const catalogSubjects=EXAM_SUBJECT_CATALOG[education]||[];
+  const subjectOptions=[...new Set([...publishedSubjects,...catalogSubjects])];
+
+  /* Enable Subject as soon as Education Level is selected. */
+  setExamSelectOptions("examSubjectFilter",subjectOptions,"Select subject",!education,subject);
 }
 function setupStudentExamHierarchy(){
   ["examEducationFilter","examBoardFilter","examTypeFilter","examClassFilter","examSubjectFilter"].forEach(id=>{

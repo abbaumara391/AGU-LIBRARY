@@ -979,10 +979,9 @@ function refreshStudentExamHierarchy(resetBelow=""){
   }else if(resetBelow==="type"){  
     classLevel="";  
     subject="";  
-  }else if(resetBelow==="class"){  
-    subject="";  
-  }  
-  
+ }else if(resetBelow==="class"){
+  subjects=[];
+  } 
   setExamSelectOptions(  
     "examEducationFilter",  
     Object.keys(STUDENT_EXAM_HIERARCHY),  

@@ -1814,8 +1814,14 @@ menuButton.addEventListener("click",openMenu);
 shade.addEventListener("click",closeMenu);
 close.addEventListener("click",closeMenu);
 
-document.querySelectorAll(".menu-item").forEach(item=>{
-item.addEventListener("click",()=>openAccountPanel(item.dataset.panel));
+document.querySelectorAll(".menu-item[data-panel]").forEach(item=>{
+  item.addEventListener("click",function(e){
+    e.preventDefault();
+    e.stopPropagation();
+
+    const panelId=this.getAttribute("data-panel");
+    if(panelId)openAccountPanel(panelId);
+  });
 });
 
 document.querySelectorAll("[data-close-panel]").forEach(btn=>{

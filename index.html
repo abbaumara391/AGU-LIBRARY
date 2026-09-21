@@ -1796,14 +1796,17 @@ function openAccountPanel(id){
 
   populateAccountPanels();
 }
-
 function closeAccountPanel(id){
-const panel = document.getElementById(id);
-if(panel){
-panel.classList.remove("open");
-panel.setAttribute("aria-hidden","true");
+  const panel=document.getElementById(id);
+
+  if(panel){
+    panel.classList.remove("open");
+    panel.setAttribute("aria-hidden","true");
+  }
+  document.documentElement.style.overflow="";
+  document.body.style.overflow="";
 }
-}
+
 
 function setupAccountMenu(){
 const menuButton = document.getElementById("menuButton");

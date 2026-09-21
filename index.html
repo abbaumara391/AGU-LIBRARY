@@ -892,14 +892,64 @@ function selectedExamHierarchy(){
     search:document.getElementById("examSearch")?.value?.toLowerCase().trim()||""
   };
 }
-function setExamSelectOptions(id,items,placeholder,enabled=false,keepValue=""){  
-  const select=document.getElementById(id);if(!select)return "";  
-  const unique=[...new Set(items.filter(Boolean).map(x=>String(x).trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b));  
-  select.innerHTML='<option value="">'+esc(placeholder)+'</option>'+unique.map(x=>'<option value="'+escAttr(x)+'">'+esc(x)+'</option>').join("");  
-  select.enabled=enabled||!unique.length;  
-  if(keepValue&&unique.includes(keepValue))select.value=keepValue;  
-  return select.value;  
-}  
+function setExamSelectOptions(id,items,placeholder,enabled=false,keepValue=""){
+  const select=document.getElementById(id);
+  if(!select)return "";
+
+  const unique=[
+    ...new Set(
+      items
+        .filter(Boolean)
+        .map(x=>String(x).trim())
+        .filter(Boolean)
+    )
+  ].sort((a,b)=>a.localeCompare(b));
+
+  const isSubjectSelector=id==="examSubjectFilter";
+
+  if(isSubjectSelector){
+    select.multiple=true;
+    select.size=Math.min(Math.max(unique.length,4),9);
+
+    select.innerHTML=unique.map(x=>
+      '<option value="'+escAttr(x)+'">'+esc(x)+'</option>'
+    ).join("");
+
+    select.disabled=disabled||!unique.length;
+
+    const values=Array.isArray(keepValue)
+      ? keepValue
+      : String(keepValue||"")
+          .split(",")
+          .map(x=>x.trim())
+          .filter(Boolean);
+
+    values.slice(0,9).forEach(value=>{
+      const option=Array.from(select.options)
+        .find(o=>o.value===value);
+
+      if(option)option.selected=true;
+    });
+
+    return Array.from(select.selectedOptions)
+      .map(o=>o.value);
+  }
+
+  select.multiple=false;
+  select.innerHTML=
+    '<option value="">'+esc(placeholder)+'</option>'+
+    unique.map(x=>
+      '<option value="'+escAttr(x)+'">'+esc(x)+'</option>'
+    ).join("");
+
+  select.disabled=disabled||!unique.length;
+
+  if(keepValue&&unique.includes(keepValue)){
+    select.value=keepValue;
+  }
+
+  return select.value;
+}
 function refreshStudentExamHierarchy(resetBelow=""){  
   const current=selectedExamHierarchy();  
   

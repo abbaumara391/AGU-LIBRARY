@@ -917,11 +917,16 @@ function setExamSelectOptions(id,items,placeholder,disabled=false,keepValue=""){
 }
 function refreshStudentExamHierarchy(resetBelow=""){
   const current=selectedExamHierarchy();
-  const education=resetBelow==="education"?"":current.education;
-  const board=resetBelow==="education"||resetBelow==="board"?"":current.board;
-  const type=resetBelow==="education"||resetBelow==="board"||resetBelow==="type"?"":current.type;
-  const classLevel=resetBelow!==""&&["education","board","type","class"].includes(resetBelow)?"":current.classLevel;
-  const subject=resetBelow!==""?"":current.subject;
+
+  /* Keep the value the student just selected. Only clear fields that depend
+     on that selection. The previous version cleared Education itself when
+     the Education selector changed, which made the native mobile selector
+     appear to accept the choice but immediately return to the placeholder. */
+  const education=current.education;
+  const board=resetBelow==="education"?"":current.board;
+  const type=(resetBelow==="education"||resetBelow==="board")?"":current.type;
+  const classLevel=(resetBelow==="education"||resetBelow==="board"||resetBelow==="type")?"":current.classLevel;
+  const subject=(resetBelow==="education"||resetBelow==="board"||resetBelow==="type"||resetBelow==="class")?"":current.subject;
   setExamSelectOptions("examEducationFilter",Object.keys(STUDENT_EXAM_HIERARCHY),"Select education level",false,education);
   const boards=education?Object.keys(STUDENT_EXAM_HIERARCHY[education]||{}):[];
   setExamSelectOptions("examBoardFilter",boards,"Select examination board / organization",!education,board);

@@ -169,6 +169,12 @@ footer{text-align:center;padding:30px;background:#fff;border-top:1px solid #dcee
 .service-icon{font-size:38px;margin-bottom:8px}
 .service-toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:15px}
 .service-toolbar input,.service-toolbar select{padding:12px;border:1px solid #cfe5da;border-radius:11px;background:#fff;color:#17352a;min-width:180px;flex:1}.exam-selector-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.exam-selector-grid input{min-width:0}.exam-selector-grid select:disabled{background:#f1f5f3;color:#8a9992;cursor:not-allowed}
+.exam-subject-multi{min-width:0;min-height:190px;padding:10px 8px;background:#fff;border:1px solid #cfe5da;border-radius:12px;color:#17352a;line-height:1.35}
+.exam-subject-multi option{padding:9px 8px;min-height:34px}
+.exam-subject-multi:focus{outline:2px solid #087a4b;outline-offset:1px}
+.exam-subject-multi:disabled{background:#f1f5f3;color:#8a9992;cursor:not-allowed}
+.exam-subject-help{grid-column:1/-1;margin-top:-3px;color:#71847b;font-size:12px;line-height:1.45}
+@media(max-width:620px){.exam-subject-multi{min-height:220px}}
 .service-status{padding:12px 14px;border-radius:12px;background:#edf8f3;color:#35574a;margin:10px 0;line-height:1.5}
 .service-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
 .exam-card,.result-card{background:#fff;border:1px solid #dceee6;border-radius:18px;padding:18px;box-shadow:0 7px 20px rgba(8,122,75,.04)}
@@ -476,7 +482,8 @@ button,a,[role="button"],input,select{pointer-events:auto;touch-action:manipulat
         <select id="examBoardFilter" disabled><option value="">Select examination board / organization</option></select>
         <select id="examTypeFilter" disabled><option value="">Select examination type</option></select>
         <select id="examClassFilter" disabled><option value="">Select class / level</option></select>
-        <select id="examSubjectFilter" disabled><option value="">Select subject</option></select>
+        <select id="examSubjectFilter" class="exam-subject-multi" multiple size="9" disabled aria-label="Select 1 to 9 subjects"><option value="">Select subject(s)</option></select>
+        <div class="exam-subject-help">Select <strong>1 to 9 subjects</strong>. On phones, tap subjects to select multiple; do not select more than 9.</div>
         <input id="examSearch" type="search" placeholder="Search examinations..." autocomplete="off">
       </div>
       <div id="examStatus" class="service-status">Loading examinations...</div>
@@ -898,23 +905,40 @@ function normalizeExamEducation(value){
   return String(value||"").trim();
 }
 function selectedExamHierarchy(){
+  const subjectSelect=document.getElementById("examSubjectFilter");
+  const subjects=subjectSelect
+    ? Array.from(subjectSelect.selectedOptions||[])
+        .map(o=>String(o.value||"").trim())
+        .filter(Boolean)
+        .slice(0,9)
+    : [];
   return {
     education:document.getElementById("examEducationFilter")?.value||"",
     board:document.getElementById("examBoardFilter")?.value||"",
     type:document.getElementById("examTypeFilter")?.value||"",
     classLevel:document.getElementById("examClassFilter")?.value||"",
-    subject:document.getElementById("examSubjectFilter")?.value||"",
+    subjects,
     search:document.getElementById("examSearch")?.value?.toLowerCase().trim()||""
   };
 }
 function setExamSelectOptions(id,items,placeholder,disabled=false,keepValue=""){
   const select=document.getElementById(id);if(!select)return "";
-  const unique=[...new Set(items.filter(Boolean).map(x=>String(x).trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b));
-  select.innerHTML='<option value="">'+esc(placeholder)+'</option>'+unique.map(x=>'<option value="'+escAttr(x)+'">'+esc(x)+'</option>').join("");
+  const unique=[...new Set((items||[]).filter(Boolean).map(x=>String(x).trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b));
+  const isMulti=select.multiple;
+  select.innerHTML=(isMulti?"":'<option value="">'+esc(placeholder)+'</option>')+
+    unique.map(x=>'<option value="'+escAttr(x)+'">'+esc(x)+'</option>').join("");
   select.disabled=disabled||!unique.length;
-  if(keepValue&&unique.includes(keepValue))select.value=keepValue;
-  return select.value;
+  if(isMulti){
+    const keep=Array.isArray(keepValue)?keepValue.map(String):String(keepValue||"").split(",").map(x=>x.trim()).filter(Boolean);
+    Array.from(select.options).forEach(o=>o.selected=keep.includes(String(o.value)));
+  }else if(keepValue&&unique.includes(String(keepValue))){
+    select.value=String(keepValue);
+  }
+  return isMulti
+    ? Array.from(select.selectedOptions||[]).map(o=>o.value).join(",")
+    : select.value;
 }
+
 const EXAM_SUBJECT_CATALOG={
   "Early Years":["General Learning","Language Development","Numeracy","Science Discovery","Creative Arts","Social Development"],
   "Primary School":["English Language","Mathematics","Basic Science","Basic Technology","Social Studies","Civic Education","Computer Studies","Agricultural Science","Physical & Health Education","Creative Arts","Religious Studies","French Language","Home Economics"],
@@ -933,7 +957,7 @@ function refreshStudentExamHierarchy(resetBelow=""){
   const board=resetBelow==="education"?"":current.board;
   const type=(resetBelow==="education"||resetBelow==="board")?"":current.type;
   const classLevel=(resetBelow==="education"||resetBelow==="board"||resetBelow==="type")?"":current.classLevel;
-  const subject=(resetBelow==="education"||resetBelow==="board"||resetBelow==="type"||resetBelow==="class")?"":current.subject;
+  const subjects=(resetBelow==="education"||resetBelow==="board"||resetBelow==="type"||resetBelow==="class")?[]:current.subjects;
 
   setExamSelectOptions("examEducationFilter",Object.keys(STUDENT_EXAM_HIERARCHY),"Select education level",false,education);
 
@@ -973,14 +997,24 @@ function refreshStudentExamHierarchy(resetBelow=""){
   const subjectOptions=[...new Set([...publishedSubjects,...catalogSubjects])];
 
   /* Enable Subject as soon as Education Level is selected. */
-  setExamSelectOptions("examSubjectFilter",subjectOptions,"Select subject",!education,subject);
+  setExamSelectOptions("examSubjectFilter",subjectOptions,"Select 1 to 9 subjects",!education,subjects);
 }
 function setupStudentExamHierarchy(){
   ["examEducationFilter","examBoardFilter","examTypeFilter","examClassFilter","examSubjectFilter"].forEach(id=>{
     const el=document.getElementById(id);
     if(el&&!el.dataset.aguExamHierarchyBound){
       el.addEventListener("change",()=>{
-        const reset=id==="examEducationFilter"?"education":id==="examBoardFilter"?"board":id==="examTypeFilter"?"type":id==="examClassFilter"?"class":"subject";
+        if(id==="examSubjectFilter"){
+          const chosen=Array.from(el.selectedOptions||[]);
+          if(chosen.length>9){
+            chosen.slice(9).forEach(option=>option.selected=false);
+            const status=document.getElementById("examStatus");
+            if(status)status.innerHTML="⚠️ You can select a maximum of <strong>9 subjects</strong>.";
+          }
+          renderExamList(null);
+          return;
+        }
+        const reset=id==="examEducationFilter"?"education":id==="examBoardFilter"?"board":id==="examTypeFilter"?"type":"class";
         refreshStudentExamHierarchy(reset);
         renderExamList(null);
       });
@@ -1120,7 +1154,8 @@ function renderExamList(dailyAccess){
     const boardOK=!selected.board||boardValue===selected.board;
     const typeOK=!selected.type||typeValue===selected.type;
     const classOK=!selected.classLevel||String(e.class_level||"").trim()===selected.classLevel;
-    const subjectOK=!selected.subject||String(e.subject||"").trim()===selected.subject;
+    const examSubject=String(e.subject||"").trim();
+    const subjectOK=!selected.subjects.length||selected.subjects.includes(examSubject);
     const searchable=`${e.title||""} ${e.subject||""} ${e.education_level||""} ${e.examination_board||""} ${e.examination_type||""} ${e.class_level||""}`.toLowerCase();
     return educationOK&&boardOK&&typeOK&&classOK&&subjectOK&&(!selected.search||searchable.includes(selected.search));
   });

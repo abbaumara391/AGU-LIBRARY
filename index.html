@@ -1772,23 +1772,29 @@ menu.setAttribute("aria-hidden","true");
 shade.hidden = true;
 document.getElementById("menuButton").setAttribute("aria-expanded","false");
 }
-
 function openAccountPanel(id){
-if(!currentUser){
-window.location.href = "auth.html";
-return;
-}
-closeMenu();
-document.querySelectorAll(".full-panel").forEach(p=>{
-p.classList.remove("open");
-p.setAttribute("aria-hidden","true");
-});
-const panel = document.getElementById(id);
-if(panel){
-panel.classList.add("open");
-panel.setAttribute("aria-hidden","false");
-populateAccountPanels();
-}
+  if(!currentUser){
+    window.location.href="auth.html";
+    return;
+  }
+
+  const panel=document.getElementById(id);
+  if(!panel)return;
+
+  closeMenu();
+
+  document.querySelectorAll(".full-panel").forEach(p=>{
+    p.classList.remove("open");
+    p.setAttribute("aria-hidden","true");
+  });
+
+  panel.classList.add("open");
+  panel.setAttribute("aria-hidden","false");
+
+  document.documentElement.style.overflow="hidden";
+  document.body.style.overflow="hidden";
+
+  populateAccountPanels();
 }
 
 function closeAccountPanel(id){

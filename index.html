@@ -1459,7 +1459,19 @@ async function completeSeasonRegistration(){
     if(up.error)throw up.error;
     examRegistrationPhotoPath=path;
     const rpc=await client.rpc("agu_register_exam_season",{p_subjects:examSelectedSubjects,p_photo_path:path});
-    if(rpc.error)throw new Error("The registration service needs the season-registration database function (agu_register_exam_season) before this registration can be completed.");
+    if (rpc.error) {
+  console.error("AGULIBRARY EXAM REGISTRATION RPC ERROR:", rpc.error);
+
+  const realError =
+    rpc.error.message ||
+    rpc.error.details ||
+    rpc.error.hint ||
+    "Unknown Supabase registration error.";
+
+  throw new Error(
+    "Examination registration failed:\n\n" + realError
+  );
+    }
     const assigned=await resolveAndAssignExamRegistrationId(rpc.data);
     document.getElementById("examRegistrationOverlay")?.remove();
     if(assigned) showExamRegistrationId(assigned.registration_id);

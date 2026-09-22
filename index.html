@@ -1317,7 +1317,7 @@ async function verifyExamRegistrationId(){
   const id=input?.value?.trim();if(!id){if(status){status.className="exam-upload-status err";status.textContent="Enter your ID."}return}
   if(!client||!currentUser)return;
   try{
-    const r=await client.from("agu_exam_registrations").select("id,student_id,registration_code,status,registration_status,exam_id,examination_id").eq("registration_code",id).eq("student_id",currentUser.id).maybeSingle();
+    const r=await client.from("agu_exam_registrations").select("id,student_id,registration_code,registration_status,examination_id").eq("registration_code",id).eq("student_id",currentUser.id).maybeSingle();
     if(r.error)throw r.error;
     if(!r.data){if(status){status.className="exam-upload-status err";status.textContent="ID could not be verified."}return}
     if(status){status.className="exam-upload-status ok";status.textContent="ID verified. Your examination registration is confirmed."}

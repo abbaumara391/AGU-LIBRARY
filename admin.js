@@ -3208,71 +3208,120 @@ if (!examinations.length) {
   return;  
 }  
 
-list.innerHTML =  
-  examinations  
-    .map(exam => {  
+list.innerHTML =
+  examinations
+    .map(exam => {
 
-      const published =  
-        exam.is_published === true;  
+      const published =
+        exam.is_published === true;
 
-      const registration =  
-        exam.registration_required !== false;  
+      const registration =
+        exam.registration_required !== false;
 
-      return `  
-        <div class="exam-card">  
+      return `
+        <div class="exam-card">
 
-          <div class="exam-card-title">  
-            ${exam.title || "Untitled Examination"}  
-          </div>  
+          <div class="exam-card-title">
+            ${esc(exam.title || "Untitled Examination")}
+          </div>
 
-          <div class="exam-card-info">  
-            <strong>Subject:</strong>  
-            ${exam.subject || "—"}  
-          </div>  
+          <div class="exam-card-info">
+            <strong>Subject:</strong>
+            ${esc(exam.subject || "—")}
+          </div>
 
-          <div class="exam-card-info">  
-            <strong>Education Level:</strong>  
-            ${exam.education_level || "—"}  
-          </div>  
+          <div class="exam-card-info">
+            <strong>Education Level:</strong>
+            ${esc(exam.education_level || "—")}
+          </div>
 
-          <div class="exam-card-info">  
-            <strong>Class / Level:</strong>  
-            ${exam.class_level || "—"}  
-          </div>  
+          <div class="exam-card-info">
+            <strong>Class / Level:</strong>
+            ${esc(exam.class_level || "—")}
+          </div>
 
-          <div class="exam-card-info">  
-            <strong>Term:</strong>  
-            ${exam.term || "—"}  
-          </div>  
+          <div class="exam-card-info">
+            <strong>Term:</strong>
+            ${esc(exam.term || "—")}
+          </div>
 
-          <div class="exam-card-info">  
-            <strong>Pass Percentage:</strong>  
-            ${exam.pass_percentage ?? 0}%  
-          </div>  
+          <div class="exam-card-info">
+            <strong>Pass Percentage:</strong>
+            ${exam.pass_percentage ?? 0}%
+          </div>
 
-          <div class="exam-card-info">  
-            <strong>Registration:</strong>  
-            ${  
-              registration  
-                ? "Required"  
-                : "Not Required"  
-            }  
-          </div>  
+          <div class="exam-card-info">
+            <strong>Registration:</strong>
+            ${
+              registration
+                ? "Required"
+                : "Not Required"
+            }
+          </div>
 
-          <div class="exam-card-info">  
-            <strong>Status:</strong>  
-            ${  
-              published  
-                ? "Published"  
-                : "Draft"  
-            }  
-          </div>  
+          <div class="exam-card-info">
+            <strong>Status:</strong>
+            ${
+              published
+                ? "Published"
+                : "Draft"
+            }
+          </div>
 
-        </div>  
-      `;  
 
-    })  
+          ${
+            published
+              ? `
+                <div
+                  class="actions"
+                  style="
+                    display:flex;
+                    gap:8px;
+                    flex-wrap:wrap;
+                    margin-top:15px;
+                  "
+                >
+
+                  <button
+                    class="btn danger agu-delete-examination"
+                    data-id="${esc(exam.id)}"
+                    data-title="${esc(exam.title || "Untitled Examination")}"
+                    type="button"
+                  >
+                    🗑 Delete Published Examination
+                  </button>
+
+                </div>
+              `
+              : ""
+          }
+
+        </div>
+      `;
+
+    })
     .join("");
+
+
+/* ---------------- DELETE PUBLISHED EXAMINATION ---------------- */
+
+list
+  .querySelectorAll(".agu-delete-examination")
+  .forEach(button => {
+
+    button.addEventListener(
+      "click",
+      () => {
+
+        deleteExamination(
+          button.dataset.id,
+          button.dataset.title
+        );
+
+      }
+    );
+
+  });
 
 } catch (error) {
 

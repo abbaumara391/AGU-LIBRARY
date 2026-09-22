@@ -5133,46 +5133,91 @@ async function deleteExamPrice(id, countryName) {
 }
 
 function clearExamPriceForm() {
+
   if ($("examPriceEditId")) {
     $("examPriceEditId").value = "";
   }
 
-  if ($("examPriceExamination")) {
-    $("examPriceExamination").value = "";
+
+  if ($("examPriceEducationLevel")) {
+    $("examPriceEducationLevel").value = "";
   }
+
+
+  if ($("examPriceBoard")) {
+
+    $("examPriceBoard").innerHTML =
+      '<option value="">Select education level first</option>';
+
+    $("examPriceBoard").disabled = true;
+
+  }
+
+
+  if ($("examPriceType")) {
+
+    $("examPriceType").innerHTML =
+      '<option value="">Select examination board / organization first</option>';
+
+    $("examPriceType").disabled = true;
+
+  }
+
+
+  if ($("examPriceClassLevel")) {
+
+    $("examPriceClassLevel").innerHTML =
+      '<option value="">Select education level first</option>';
+
+    $("examPriceClassLevel").disabled = true;
+
+  }
+
 
   if ($("examPriceCountryName")) {
     $("examPriceCountryName").value = "";
   }
 
+
   if ($("examPriceCountryCode")) {
     $("examPriceCountryCode").value = "";
   }
+
 
   if ($("examPriceCurrencyCode")) {
     $("examPriceCurrencyCode").value = "";
   }
 
+
   if ($("examPriceCurrencySymbol")) {
     $("examPriceCurrencySymbol").value = "";
   }
+
 
   if ($("examPriceAmount")) {
     $("examPriceAmount").value = "";
   }
 
+
   if ($("examPriceEnabled")) {
     $("examPriceEnabled").value = "true";
   }
 
+
   if ($("saveExamPrice")) {
-    $("saveExamPrice").textContent = "➕ Add Country Price";
+
+    $("saveExamPrice").textContent =
+      "➕ Add Examination Type Price";
+
   }
+
 
   if ($("examPriceFormStatus")) {
     $("examPriceFormStatus").textContent = "";
   }
+
 }
+    
 setupExamPriceHierarchy();
 
 /* ---------------- DASHBOARD ---------------- */

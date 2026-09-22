@@ -4,7 +4,7 @@
 <head>  
 <meta charset="utf-8">  
 <meta name="viewport" content="width=device-width,initial-scale=1">  
-<meta name="agu-ai-render-version" content="20260922-education-level-fix">  
+<meta name="agu-ai-render-version" content="20260922-education-level-exam-type-fix">  
 <title>AGULIBRARY — Global Learning Library</title>  
 <link rel="stylesheet" href="style.css">  
 <script>  
@@ -555,13 +555,19 @@ overflow:hidden;
             </select>
           </div>
           <div class="exam-registration-field">
+            <label for="examRegistrationType">Exam Type</label>
+            <select id="examRegistrationType" aria-label="Select examination type" disabled>
+              <option value="">Select examination board / organization first</option>
+            </select>
+          </div>
+          <div class="exam-registration-field">
             <label for="examRegistrationClassLevel">Class / Level</label>
             <select id="examRegistrationClassLevel" aria-label="Select class or level" disabled>
               <option value="">Select education level first</option>
             </select>
           </div>
         </div>
-        <div id="examHierarchyStatus" class="exam-hierarchy-status">Select your education level, examination board / organization and class / level before choosing subjects.</div>
+        <div id="examHierarchyStatus" class="exam-hierarchy-status">Select your education level, examination board / organization, exam type and class / level before choosing subjects.</div>
         <div class="fee-label">Registration Fee</div>
         <div class="fee-value" id="examRegistrationFee">Select 1–9 subjects</div>
         <div id="examSubjectPicker" class="exam-subject-picker" aria-label="Select 1 to 9 subjects"></div>
@@ -1009,6 +1015,7 @@ renderExamList(accessRes.data||null);
 let examSelectedSubjects=[];
 let examRegistrationEducationLevel="";
 let examRegistrationBoard="";
+let examRegistrationType="";
 let examRegistrationClassLevel="";
 let examRegistrationPhotoFile=null;
 
@@ -1046,12 +1053,36 @@ function examBoardValue(exam){
 function examClassValue(exam){
   return examFieldValue(exam,["class_level","classLevel","class","level_name","grade"]);
 }
+function examTypeValue(exam){
+  return examFieldValue(exam,[
+    "examination_type",
+    "examinationType",
+    "exam_type",
+    "examType",
+    "type"
+  ]);
+}
+
 function examRegistrationMatchesHierarchy(exam){
   const level=examEducationValue(exam);
   const board=examBoardValue(exam);
+  const type=examTypeValue(exam);
   const cls=examClassValue(exam);
+
   if(examRegistrationEducationLevel && level!==examRegistrationEducationLevel)return false;
   if(examRegistrationBoard && board!==examRegistrationBoard)return false;
+
+  /*
+   * Some existing examination records do not yet expose an
+   * examination_type column. In that case the restored student
+   * Exam Type selector must not hide all subjects.
+   */
+  if(
+    examRegistrationType &&
+    type &&
+    type!==examRegistrationType
+  )return false;
+
   if(examRegistrationClassLevel && cls!==examRegistrationClassLevel)return false;
   return true;
 }
@@ -1061,9 +1092,10 @@ function examAvailableValues(fieldFn){
 function updateExamRegistrationHierarchy(){
   const level=document.getElementById("examRegistrationEducationLevel");
   const board=document.getElementById("examRegistrationBoard");
+  const type=document.getElementById("examRegistrationType");
   const cls=document.getElementById("examRegistrationClassLevel");
   const status=document.getElementById("examHierarchyStatus");
-  if(!level||!board||!cls)return;
+  if(!level||!board||!type||!cls)return;
 
   /*
    * IMPORTANT:
@@ -1139,9 +1171,55 @@ function updateExamRegistrationHierarchy(){
     examRegistrationBoard="";
   }
 
+  /*
+   * Exam Type is the third level of the administrator's
+   * Education → Board / Organization → Exam Type hierarchy.
+   */
+  const boardTypes=(
+    STUDENT_EXAM_HIERARCHY[
+      examRegistrationEducationLevel
+    ]?.[examRegistrationBoard]||[]
+  );
+
+  const dbTypes=[
+    ...new Set(
+      matchingLevel
+        .filter(e =>
+          !examRegistrationBoard ||
+          !examBoardValue(e) ||
+          examBoardValue(e)===examRegistrationBoard
+        )
+        .map(examTypeValue)
+        .filter(Boolean)
+    )
+  ].sort((a,b)=>a.localeCompare(b));
+
+  const types=[
+    ...new Set([
+      ...boardTypes,
+      ...dbTypes
+    ])
+  ];
+
+  examRegistrationSetOptions(
+    "examRegistrationType",
+    types,
+    "Select exam type",
+    !examRegistrationBoard,
+    examRegistrationType
+  );
+
+  if(
+    examRegistrationType &&
+    !types.includes(examRegistrationType)
+  ){
+    examRegistrationType="";
+  }
+
   const matchingBoard=matchingLevel.filter(
     e =>
       !examRegistrationBoard ||
+      !examBoardValue(e) ||
       examBoardValue(e)===examRegistrationBoard
   );
 
@@ -1214,8 +1292,9 @@ function updateExamRegistrationHierarchy(){
 function setupExamRegistrationHierarchy(){
   const level=document.getElementById("examRegistrationEducationLevel");
   const board=document.getElementById("examRegistrationBoard");
+  const type=document.getElementById("examRegistrationType");
   const cls=document.getElementById("examRegistrationClassLevel");
-  if(!level||level.dataset.aguHierarchyBound)return;
+  if(!level||!type||level.dataset.aguHierarchyBound)return;
 
   // Always show the complete AGULIBRARY education-level hierarchy.
   // Do not derive this list from currently published examinations.
@@ -1231,12 +1310,20 @@ function setupExamRegistrationHierarchy(){
   level.addEventListener("change",()=>{
     examRegistrationEducationLevel=level.value;
     examRegistrationBoard="";
+    examRegistrationType="";
     examRegistrationClassLevel="";
     examSelectedSubjects=[];
     updateExamRegistrationHierarchy();
   });
   board?.addEventListener("change",()=>{
     examRegistrationBoard=board.value;
+    examRegistrationType="";
+    examRegistrationClassLevel="";
+    examSelectedSubjects=[];
+    updateExamRegistrationHierarchy();
+  });
+  type?.addEventListener("change",()=>{
+    examRegistrationType=type.value;
     examRegistrationClassLevel="";
     examSelectedSubjects=[];
     updateExamRegistrationHierarchy();
@@ -1337,7 +1424,7 @@ function showExamRegistrationPage(){
   const overlay=document.createElement("div");overlay.id="examRegistrationOverlay";overlay.className="exam-registration-overlay";
   overlay.innerHTML=`<div class="exam-registration-modal" role="dialog" aria-modal="true" aria-labelledby="examRegTitle">
     <h2 id="examRegTitle">EXAMINATION REGISTRATION</h2>
-    <p><strong>Education Level:</strong> ${esc(examRegistrationEducationLevel||"Not selected")}<br><strong>Examination Board / Organization:</strong> ${esc(examRegistrationBoard||"Not selected")}<br><strong>Class / Level:</strong> ${esc(examRegistrationClassLevel||"Not selected")}</p>
+    <p><strong>Education Level:</strong> ${esc(examRegistrationEducationLevel||"Not selected")}<br><strong>Examination Board / Organization:</strong> ${esc(examRegistrationBoard||"Not selected")}<br><strong>Exam Type:</strong> ${esc(examRegistrationType||"Not selected")}<br><strong>Class / Level:</strong> ${esc(examRegistrationClassLevel||"Not selected")}</p>
     <p><strong>Selected Subjects: ${examSelectedSubjects.length}</strong></p>
     <p>Registration Fee</p><div class="fee-value">${fee===null?"Fee not configured":examMoney(fee,"NGN")}</div>
     <label class="exam-upload-label btn outline" for="examPhotoInput">📷 UPLOAD PHOTO</label>
@@ -1432,7 +1519,10 @@ function setupExamRegistrationFlow(){
   renderExamSubjectPicker();
   document.getElementById("examRegisterMain")?.addEventListener("click",()=>{
     if(studentAlreadyRegisteredThisSeason()){loadMyExamRegistrationId(true).catch(e=>alert(e.message||"Unable to load your examination ID."));return}
-    if(!examRegistrationEducationLevel||!examRegistrationBoard||!examRegistrationClassLevel){alert("Please select your Education Level, Examination Board / Organization and Class / Level before registration.");return}
+    if(!examRegistrationEducationLevel||!examRegistrationBoard||!examRegistrationType||!examRegistrationClassLevel){
+      alert("Please select your Education Level, Examination Board / Organization, Exam Type and Class / Level before registration.");
+      return;
+    }
     if(!examSelectedSubjects.length){alert("Select 1 to 9 subjects before registration.");return}
     showExamRegistrationGuideline();
   });

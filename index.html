@@ -568,7 +568,8 @@ overflow:hidden;
         <div id="examSubjectCount" class="exam-subject-count">Select 1 to 9 subjects.</div>
         <button id="examRegisterMain" class="btn primary exam-register-main" type="button">REGISTER / ENTER YOUR ID</button>
         <div id="examIdBox" class="exam-id-box">
-          <label for="examRegistrationId">ID</label>
+          <label for="examRegistrationId">EXAMINATION REGISTRATION ID</label>
+          <div id="examGeneratedId" style="display:none;margin:10px 0;padding:14px;border-radius:12px;background:rgba(20,120,90,.10);font-size:1.25rem;font-weight:800;letter-spacing:1px;text-align:center"></div>
           <div class="exam-id-row">
             <input id="examRegistrationId" type="text" inputmode="text" autocomplete="off" placeholder="Enter your ID">
             <button id="examVerifyId" class="btn primary" type="button">VERIFY</button>
@@ -1256,7 +1257,7 @@ function showExamRegistrationPage(){
 async function completeSeasonRegistration(){
   if(!currentUser){alert("Please sign in first.");return}
   if(!examSelectedSubjects.length||examSelectedSubjects.length>9){alert("Select between 1 and 9 subjects.");return}
-  if(studentAlreadyRegisteredThisSeason()){showExamIdBox();document.getElementById("examRegistrationOverlay")?.remove();return}
+  if(studentAlreadyRegisteredThisSeason()){await loadMyExamRegistrationId(true);document.getElementById("examRegistrationOverlay")?.remove();return}
   if(!examRegistrationPhotoFile){alert("Please upload your photo first.");return}
   const submit=document.getElementById("examRegSubmit");if(submit)submit.disabled=true;
   try{
@@ -1265,21 +1266,58 @@ async function completeSeasonRegistration(){
     const up=await client.storage.from("agu-library").upload(path,examRegistrationPhotoFile,{upsert:false,contentType:examRegistrationPhotoFile.type});
     if(up.error)throw up.error;
     examRegistrationPhotoPath=path;
-    // Preferred season-level RPC. This keeps the one-registration-per-season rule server-side.
     const rpc=await client.rpc("agu_register_exam_season",{p_subjects:examSelectedSubjects,p_photo_path:path});
     if(rpc.error)throw new Error("The registration service needs the season-registration database function (agu_register_exam_season) before this registration can be completed.");
+    const assigned=await resolveAndAssignExamRegistrationId(rpc.data);
     document.getElementById("examRegistrationOverlay")?.remove();
-    alert("Registration completed successfully. Your registration ID is ready in your account.");
+    if(assigned) showExamRegistrationId(assigned.registration_id);
+    else alert("Registration completed, but the examination ID could not yet be displayed. Please reopen the Examination Room.");
     await loadExaminations();
   }catch(e){console.error("Season registration:",e);alert(e.message||"Unable to complete registration.");}
   finally{if(submit)submit.disabled=false;}
 }
+async function resolveAndAssignExamRegistrationId(rpcData){
+  let registrationId=null;
+  const pick=(v)=>{
+    if(!v)return null;
+    if(typeof v==='string' && /^[0-9a-f]{8}-[0-9a-f-]{27,}$/i.test(v))return v;
+    if(typeof v==='object'){
+      return v.id||v.registration_id||v.registrationId||v.registration?.id||v.data?.id||v.data?.registration_id||null;
+    }
+    return null;
+  };
+  registrationId=pick(rpcData);
+  if(!registrationId){
+    const latest=await client.from("agu_exam_registrations").select("id").eq("student_id",currentUser.id).order("registered_at",{ascending:false}).limit(1).maybeSingle();
+    if(latest.error)throw latest.error;
+    registrationId=latest.data?.id||null;
+  }
+  if(!registrationId) return null;
+  const assigned=await client.rpc("agu_assign_exam_registration_id",{p_registration_id:registrationId});
+  if(assigned.error)throw assigned.error;
+  return assigned.data?.registration_id?assigned.data:null;
+}
+async function loadMyExamRegistrationId(showBox=false){
+  if(!currentUser||!client)return null;
+  const r=await client.rpc("agu_get_my_exam_registration_id");
+  if(r.error)throw r.error;
+  if(r.data?.registration_id){showExamRegistrationId(r.data.registration_id);return r.data}
+  if(showBox)showExamIdBox();
+  return null;
+}
+function showExamRegistrationId(id){
+  const box=document.getElementById("examIdBox"),display=document.getElementById("examGeneratedId"),input=document.getElementById("examRegistrationId");
+  if(box)box.classList.add("show");
+  if(display&&id){display.textContent=id;display.style.display="block"}
+  if(input&&id)input.value=id;
+}
+
 async function verifyExamRegistrationId(){
   const input=document.getElementById("examRegistrationId"),status=document.getElementById("examIdStatus");
   const id=input?.value?.trim();if(!id){if(status){status.className="exam-upload-status err";status.textContent="Enter your ID."}return}
   if(!client||!currentUser)return;
   try{
-    const r=await client.from("agu_exam_registrations").select("id,student_id,registration_status,examination_id").eq("id",id).eq("student_id",currentUser.id).maybeSingle();
+    const r=await client.from("agu_exam_registrations").select("id,student_id,registration_code,status,registration_status,exam_id,examination_id").eq("registration_code",id).eq("student_id",currentUser.id).maybeSingle();
     if(r.error)throw r.error;
     if(!r.data){if(status){status.className="exam-upload-status err";status.textContent="ID could not be verified."}return}
     if(status){status.className="exam-upload-status ok";status.textContent="ID verified. Your examination registration is confirmed."}
@@ -1288,12 +1326,13 @@ async function verifyExamRegistrationId(){
 function setupExamRegistrationFlow(){
   renderExamSubjectPicker();
   document.getElementById("examRegisterMain")?.addEventListener("click",()=>{
-    if(studentAlreadyRegisteredThisSeason()){showExamIdBox();return}
+    if(studentAlreadyRegisteredThisSeason()){loadMyExamRegistrationId(true).catch(e=>alert(e.message||"Unable to load your examination ID."));return}
     if(!examRegistrationEducationLevel||!examRegistrationBoard||!examRegistrationClassLevel){alert("Please select your Education Level, Examination Board / Organization and Class / Level before registration.");return}
     if(!examSelectedSubjects.length){alert("Select 1 to 9 subjects before registration.");return}
     showExamRegistrationGuideline();
   });
   document.getElementById("examVerifyId")?.addEventListener("click",verifyExamRegistrationId);
+  loadMyExamRegistrationId(false).catch(e=>console.warn("Exam registration ID:",e));
 }
 
 function registrationFor(exam){return examRegistrations.find(x=>String(x.examination_id)===String(exam.id))||null}  

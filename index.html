@@ -4,7 +4,7 @@
 <head>  
 <meta charset="utf-8">  
 <meta name="viewport" content="width=device-width,initial-scale=1">  
-<meta name="agu-ai-render-version" content="20260905">  
+<meta name="agu-ai-render-version" content="20260922-education-level-fix">  
 <title>AGULIBRARY — Global Learning Library</title>  
 <link rel="stylesheet" href="style.css">  
 <script>  
@@ -1065,31 +1065,128 @@ function updateExamRegistrationHierarchy(){
   const status=document.getElementById("examHierarchyStatus");
   if(!level||!board||!cls)return;
 
-  const dbLevels=examAvailableValues(examEducationValue);
-  const levels=dbLevels.length?dbLevels:Object.keys(STUDENT_EXAM_HIERARCHY);
-  examRegistrationSetOptions("examRegistrationEducationLevel",levels,"Select education level",false,examRegistrationEducationLevel);
+  /*
+   * IMPORTANT:
+   * Education Level is a fixed AGULIBRARY category list.
+   * It must NOT be reduced to only the education levels that
+   * happen to have published examinations in the database.
+   *
+   * This prevents the student Examination Room from showing
+   * only "Secondary school" and "Senior Secondary School".
+   */
+  const levels=Object.keys(STUDENT_EXAM_HIERARCHY);
+  examRegistrationSetOptions(
+    "examRegistrationEducationLevel",
+    levels,
+    "Select education level",
+    false,
+    examRegistrationEducationLevel
+  );
 
-  if(examRegistrationEducationLevel && !levels.includes(examRegistrationEducationLevel)){
+  if(
+    examRegistrationEducationLevel &&
+    !levels.includes(examRegistrationEducationLevel)
+  ){
     examRegistrationEducationLevel="";
     examRegistrationBoard="";
     examRegistrationClassLevel="";
   }
 
-  const matchingLevel=(availableExams||[]).filter(e=>!examRegistrationEducationLevel||examEducationValue(e)===examRegistrationEducationLevel);
-  const dbBoards=[...new Set(matchingLevel.map(examBoardValue).filter(Boolean))].sort((a,b)=>a.localeCompare(b));
-  const fallbackBoards=Object.keys(STUDENT_EXAM_HIERARCHY[examRegistrationEducationLevel]||{});
-  const boards=dbBoards.length?dbBoards:fallbackBoards;
-  examRegistrationSetOptions("examRegistrationBoard",boards,"Select examination board / organization",!examRegistrationEducationLevel,examRegistrationBoard);
+  const matchingLevel=(availableExams||[]).filter(
+    e =>
+      !examRegistrationEducationLevel ||
+      examEducationValue(e)===examRegistrationEducationLevel
+  );
 
-  if(examRegistrationBoard && !boards.includes(examRegistrationBoard))examRegistrationBoard="";
+  /*
+   * Keep the administrator-defined examination organizations
+   * available even when there are currently no published
+   * examination records for the selected level.
+   */
+  const dbBoards=[
+    ...new Set(
+      matchingLevel
+        .map(examBoardValue)
+        .filter(Boolean)
+    )
+  ].sort((a,b)=>a.localeCompare(b));
 
-  const matchingBoard=matchingLevel.filter(e=>!examRegistrationBoard||examBoardValue(e)===examRegistrationBoard);
-  const dbClasses=[...new Set(matchingBoard.map(examClassValue).filter(Boolean))].sort((a,b)=>a.localeCompare(b));
-  const fallbackClasses=STUDENT_EXAM_CLASSES[examRegistrationEducationLevel]||[];
-  const classes=dbClasses.length?dbClasses:fallbackClasses;
-  examRegistrationSetOptions("examRegistrationClassLevel",classes,"Select class / level",!examRegistrationEducationLevel,examRegistrationClassLevel);
+  const fallbackBoards=Object.keys(
+    STUDENT_EXAM_HIERARCHY[
+      examRegistrationEducationLevel
+    ]||{}
+  );
 
-  if(examRegistrationClassLevel && !classes.includes(examRegistrationClassLevel))examRegistrationClassLevel="";
+  const boards=[
+    ...new Set([
+      ...fallbackBoards,
+      ...dbBoards
+    ])
+  ];
+
+  examRegistrationSetOptions(
+    "examRegistrationBoard",
+    boards,
+    "Select examination board / organization",
+    !examRegistrationEducationLevel,
+    examRegistrationBoard
+  );
+
+  if(
+    examRegistrationBoard &&
+    !boards.includes(examRegistrationBoard)
+  ){
+    examRegistrationBoard="";
+  }
+
+  const matchingBoard=matchingLevel.filter(
+    e =>
+      !examRegistrationBoard ||
+      examBoardValue(e)===examRegistrationBoard
+  );
+
+  /*
+   * Class / Level uses the fixed AGULIBRARY education hierarchy.
+   * Database values are merged in, rather than replacing the
+   * standard choices.
+   *
+   * Therefore Senior Secondary School always contains:
+   * SSS 1, SSS 2, SSS 3.
+   */
+  const dbClasses=[
+    ...new Set(
+      matchingBoard
+        .map(examClassValue)
+        .filter(Boolean)
+    )
+  ].sort((a,b)=>a.localeCompare(b));
+
+  const fallbackClasses=
+    STUDENT_EXAM_CLASSES[
+      examRegistrationEducationLevel
+    ]||[];
+
+  const classes=[
+    ...new Set([
+      ...fallbackClasses,
+      ...dbClasses
+    ])
+  ];
+
+  examRegistrationSetOptions(
+    "examRegistrationClassLevel",
+    classes,
+    "Select class / level",
+    !examRegistrationEducationLevel,
+    examRegistrationClassLevel
+  );
+
+  if(
+    examRegistrationClassLevel &&
+    !classes.includes(examRegistrationClassLevel)
+  ){
+    examRegistrationClassLevel="";
+  }
 
   const matching=(availableExams||[]).filter(examRegistrationMatchesHierarchy);
   if(status){
@@ -1120,8 +1217,16 @@ function setupExamRegistrationHierarchy(){
   const cls=document.getElementById("examRegistrationClassLevel");
   if(!level||level.dataset.aguHierarchyBound)return;
 
-  const initialLevels=examAvailableValues(examEducationValue);
-  examRegistrationSetOptions("examRegistrationEducationLevel",initialLevels.length?initialLevels:Object.keys(STUDENT_EXAM_HIERARCHY),"Select education level",false,examRegistrationEducationLevel);
+  // Always show the complete AGULIBRARY education-level hierarchy.
+  // Do not derive this list from currently published examinations.
+  const initialLevels=Object.keys(STUDENT_EXAM_HIERARCHY);
+  examRegistrationSetOptions(
+    "examRegistrationEducationLevel",
+    initialLevels,
+    "Select education level",
+    false,
+    examRegistrationEducationLevel
+  );
 
   level.addEventListener("change",()=>{
     examRegistrationEducationLevel=level.value;

@@ -3292,6 +3292,104 @@ list.innerHTML =
 }
 }
 
+/* ---------------- DELETE PUBLISHED EXAMINATION ---------------- */
+
+async function deleteExamination(id, title) {
+
+  if (!id) {
+    showMessage(
+      "Examination ID is missing.",
+      "error"
+    );
+    return;
+  }
+
+
+  const confirmed =
+    confirm(
+      `Delete "${title || "this examination"}"?\n\n` +
+      `This will permanently delete the published examination.\n\n` +
+      `This action cannot be undone.`
+    );
+
+  if (!confirmed) {
+    return;
+  }
+
+
+  try {
+
+    /* -----------------------------------------
+       REQUIRE ADMIN MFA
+    ----------------------------------------- */
+
+    const verified =
+      await adminMfaGate();
+
+    if (!verified) {
+      return;
+    }
+
+
+    showMessage(
+      `Deleting "${title || "examination"}"...`,
+      "success"
+    );
+
+
+    /* -----------------------------------------
+       DELETE EXAMINATION
+    ----------------------------------------- */
+
+    const result =
+      await getDB()
+        .from("agu_examinations")
+        .delete()
+        .eq(
+          "id",
+          id
+        );
+
+
+    if (result.error) {
+      throw result.error;
+    }
+
+
+    /* -----------------------------------------
+       SUCCESS
+    ----------------------------------------- */
+
+    showMessage(
+      `"${title || "Examination"}" deleted successfully.`,
+      "success"
+    );
+
+
+    /* -----------------------------------------
+       RELOAD EXAMINATION LIST
+    ----------------------------------------- */
+
+    await loadExaminations();
+
+
+  } catch (error) {
+
+    console.error(
+      "AGULIBRARY published examination deletion error:",
+      error
+    );
+
+
+    showMessage(
+      error.message ||
+      "Unable to delete the published examination.",
+      "error"
+    );
+
+  }
+}
+    
 /* ---------------- LOAD QUESTIONS FOR SELECTED EXAM ---------------- */
 
 async function loadQuestionsForSelectedExam() {

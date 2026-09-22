@@ -2200,23 +2200,36 @@ const ADMIN_EXAM_HIERARCHY={
   "Professional / Career":{"Professional Certification":["Certification Examination","Mock Examination"],"Licensing Board":["Licensing Examination","Renewal Examination","Mock Examination"],"Entrance Examination":["Entrance Examination","Aptitude Test","Mock Examination"],"Career Assessment":["Career Assessment","Professional Aptitude Test"],"Other":["General Assessment"]}
 };
 const ADMIN_EXAM_CLASSES={"Early Years":["Early Years 1","Early Years 2","Early Years 3"],"Primary School":["Primary 1","Primary 2","Primary 3","Primary 4","Primary 5","Primary 6"],"Junior Secondary School":["JSS 1","JSS 2","JSS 3"],"Senior Secondary School":["SSS 1","SSS 2","SSS 3"],"Tertiary / University":["100 Level","200 Level","300 Level","400 Level","500 Level","Postgraduate"],"Professional / Career":[]};
+     
 /* =========================================================
 AGULIBRARY — EXAMINATION REGISTRATION PRICE HIERARCHY
 
-These controls belong to the Examination Registration Prices
-section and use the examPrice* IDs.
+PRICE IS BASED ON:
 
-Every dropdown remains independently clickable.
-
-Hierarchy:
 Education Level
 → Examination Board / Organization
 → Examination Type
 → Class / Level
-→ Subject
-→ Examination Details
+→ Country
+→ Registration Price
 
-Country remains completely independent.
+IMPORTANT:
+Subject is NOT part of examination registration pricing.
+
+Individual examinations/subjects do NOT determine the
+registration price.
+
+Example:
+
+Senior Secondary School
+→ WAEC
+→ SSCE
+→ SSS 1
+→ Nigeria
+→ ₦5,000
+
+The student may select 1 subject or 9 subjects.
+The registration price remains ₦5,000.
 ========================================================= */
 
 function setupExamPriceHierarchy() {
@@ -2233,18 +2246,8 @@ function setupExamPriceHierarchy() {
   const classLevel =
     $("examPriceClassLevel");
 
-  const subject =
-    $("examPriceSubject");
-
-  const examination =
-    $("examPriceExamination");
-
   if (!education) return;
 
-
-  /* -------------------------------------------------------
-     OPTION HELPER
-  ------------------------------------------------------- */
 
   function fillSelect(
     select,
@@ -2272,22 +2275,18 @@ function setupExamPriceHierarchy() {
         )
         .join("");
 
-    /*
-     * IMPORTANT:
-     * Never disable these registration-price dropdowns.
-     */
     select.disabled = false;
   }
 
 
   /* -------------------------------------------------------
-     BOARD
+     EDUCATION LEVEL → BOARD
   ------------------------------------------------------- */
 
   function updateBoards() {
 
     const level =
-      education.value;
+      education.value || "";
 
     const boards =
       Object.keys(
@@ -2297,26 +2296,40 @@ function setupExamPriceHierarchy() {
     fillSelect(
       board,
       boards,
-      level
-        ? "Select examination board / organization"
-        : "Select examination board / organization"
+      "Select examination board / organization"
     );
 
-    updateTypes();
-    updateClasses();
-    updateSubjects();
-    updateExaminations();
+    fillSelect(
+      type,
+      [],
+      "Select examination board / organization"
+    );
+
+    fillSelect(
+      classLevel,
+      ADMIN_EXAM_CLASSES[level] || [],
+      "Select class / level"
+    );
+
+    if (type) {
+      type.disabled = true;
+    }
+
+    if (classLevel) {
+      classLevel.disabled =
+        !(ADMIN_EXAM_CLASSES[level] || []).length;
+    }
   }
 
 
   /* -------------------------------------------------------
-     EXAMINATION TYPE
+     BOARD → EXAM TYPE
   ------------------------------------------------------- */
 
   function updateTypes() {
 
     const level =
-      education.value;
+      education.value || "";
 
     const selectedBoard =
       board?.value || "";
@@ -2336,290 +2349,11 @@ function setupExamPriceHierarchy() {
       "Select examination type"
     );
 
-    updateSubjects();
-    updateExaminations();
-  }
-
-
-  /* -------------------------------------------------------
-     CLASS / LEVEL
-  ------------------------------------------------------- */
-
-  function updateClasses() {
-
-    const level =
-      education.value;
-
-    fillSelect(
-      classLevel,
-      ADMIN_EXAM_CLASSES[level] || [],
-      "Select class / level"
-    );
-  }
-
-
-  /* -------------------------------------------------------
-     SUBJECT
-     
-     Subjects come from the examinations already stored
-     in Supabase. If no path has been selected yet, all
-     available examination subjects are shown.
-  ------------------------------------------------------- */
-
-  function updateSubjects() {
-
-    if (!subject) return;
-
-    const level =
-      education.value || "";
-
-    const selectedBoard =
-      board?.value || "";
-
-    const selectedType =
-      type?.value || "";
-
-    let source =
-      Array.isArray(examinations)
-        ? examinations
-        : [];
-
-    source =
-      source.filter(exam => {
-
-        if (
-          level &&
-          String(
-            exam.education_level || ""
-          ).trim() !== level
-        ) {
-          return false;
-        }
-
-        if (
-          selectedBoard &&
-          String(
-            exam.examination_board || ""
-          ).trim() !== selectedBoard
-        ) {
-          return false;
-        }
-
-        if (
-          selectedType &&
-          String(
-            exam.examination_type || ""
-          ).trim() !== selectedType
-        ) {
-          return false;
-        }
-
-        return true;
-      });
-
-    const subjects =
-      source
-        .map(
-          exam =>
-            exam.subject ||
-            ""
-        )
-        .filter(Boolean);
-
-    /*
-     * Fallback subjects ensure that the Subject position
-     * is still usable even before examinations have been
-     * created.
-     */
-    const fallbackSubjects = [
-      "English Language",
-      "Mathematics",
-      "Physics",
-      "Chemistry",
-      "Biology",
-      "Agricultural Science",
-      "Economics",
-      "Government",
-      "Civic Education",
-      "Geography",
-      "Literature in English",
-      "Computer Science",
-      "Information Technology",
-      "Basic Science",
-      "Basic Technology",
-      "Social Studies",
-      "Business Studies",
-      "Financial Accounting",
-      "Commerce",
-      "French",
-      "Further Mathematics",
-      "Technical Drawing",
-      "Art",
-      "Music",
-      "Physical and Health Education",
-      "Other"
-    ];
-
-    const finalSubjects =
-      subjects.length
-        ? subjects
-        : fallbackSubjects;
-
-    fillSelect(
-      subject,
-      finalSubjects,
-      "Select subject"
-    );
-
-    updateExaminations();
-  }
-
-
-  /* -------------------------------------------------------
-     EXAMINATION DETAILS
-  ------------------------------------------------------- */
-
-  function updateExaminations() {
-
-    if (!examination) return;
-
-    const level =
-      education.value || "";
-
-    const selectedBoard =
-      board?.value || "";
-
-    const selectedType =
-      type?.value || "";
-
-    const selectedClass =
-      classLevel?.value || "";
-
-    const selectedSubject =
-      subject?.value || "";
-
-    let source =
-      Array.isArray(examinations)
-        ? examinations
-        : [];
-
-    source =
-      source.filter(exam => {
-
-        if (
-          level &&
-          String(
-            exam.education_level || ""
-          ).trim() !== level
-        ) {
-          return false;
-        }
-
-        if (
-          selectedBoard &&
-          String(
-            exam.examination_board || ""
-          ).trim() !== selectedBoard
-        ) {
-          return false;
-        }
-
-        if (
-          selectedType &&
-          String(
-            exam.examination_type || ""
-          ).trim() !== selectedType
-        ) {
-          return false;
-        }
-
-        if (
-          selectedClass &&
-          String(
-            exam.class_level || ""
-          ).trim() !== selectedClass
-        ) {
-          return false;
-        }
-
-        if (
-          selectedSubject &&
-          String(
-            exam.subject || ""
-          ).trim() !== selectedSubject
-        ) {
-          return false;
-        }
-
-        return true;
-      });
-
-
-    /*
-     * If there is no exact path selected, show all
-     * examinations so the dropdown is still clickable.
-     */
-    if (!source.length) {
-
-      source =
-        Array.isArray(examinations)
-          ? examinations
-          : [];
+    if (type) {
+      type.disabled =
+        !selectedBoard ||
+        !types.length;
     }
-
-
-    const options =
-      source.map(
-        exam => ({
-          value:
-            String(
-              exam.id || ""
-            ),
-
-          label:
-            String(
-              exam.title ||
-              "Untitled Examination"
-            )
-        })
-      );
-
-
-    const unique =
-      [];
-
-    const seen =
-      new Set();
-
-    options.forEach(item => {
-
-      if (
-        !item.value ||
-        seen.has(item.value)
-      ) {
-        return;
-      }
-
-      seen.add(item.value);
-      unique.push(item);
-
-    });
-
-
-    examination.innerHTML =
-      '<option value="">Select an examination</option>' +
-      unique
-        .map(
-          item =>
-            `<option value="${esc(item.value)}">${esc(item.label)}</option>`
-        )
-        .join("");
-
-
-    /*
-     * Never disable Examination Details.
-     */
-    examination.disabled = false;
   }
 
 
@@ -2636,9 +2370,6 @@ function setupExamPriceHierarchy() {
       () => {
 
         updateBoards();
-        updateClasses();
-        updateSubjects();
-        updateExaminations();
 
       }
     );
@@ -2649,33 +2380,8 @@ function setupExamPriceHierarchy() {
       () => {
 
         updateTypes();
-        updateSubjects();
-        updateExaminations();
 
       }
-    );
-
-
-    type?.addEventListener(
-      "change",
-      () => {
-
-        updateSubjects();
-        updateExaminations();
-
-      }
-    );
-
-
-    classLevel?.addEventListener(
-      "change",
-      updateExaminations
-    );
-
-
-    subject?.addEventListener(
-      "change",
-      updateExaminations
     );
 
 
@@ -2684,34 +2390,14 @@ function setupExamPriceHierarchy() {
   }
 
 
-  /*
-   * Make absolutely sure the controls are enabled.
-   */
-  [
-    board,
-    type,
-    classLevel,
-    subject,
-    examination
-  ].forEach(
-    select => {
+  /* -------------------------------------------------------
+     INITIAL STATE
+  ------------------------------------------------------- */
 
-      if (select) {
-        select.disabled = false;
-      }
-
-    }
-  );
-
-
-  /*
-   * Initial population.
-   */
   updateBoards();
-  updateClasses();
-  updateSubjects();
-  updateExaminations();
-}
+
+}    
+
 function adminExamSetOptions(id,items,placeholder,disabled=false,value=""){
   const el=$(id);if(!el)return;
   const unique=[...new Set(items.filter(Boolean).map(x=>String(x).trim()))];

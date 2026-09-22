@@ -4720,131 +4720,340 @@ function examPriceStatusText(enabled) {
 }   
 
 async function saveExamPrice() {
-  const status = $("examPriceFormStatus");
+
+  const status =
+    $("examPriceFormStatus");
 
   try {
-    const verified = await adminMfaGate();
+
+    const verified =
+      await adminMfaGate();
+
     if (!verified) return;
 
+
     const editId =
-      $("examPriceEditId")?.value.trim() || "";
+      $("examPriceEditId")?.value.trim() ||
+      "";
 
-    const examinationId =
-      $("examPriceExamination")?.value.trim() || "";
 
-    if (!examinationId) {
-      throw new Error("Please select an examination for this price.");
+    /* ---------------- HIERARCHY ---------------- */
+
+    const educationLevel =
+      $("examPriceEducationLevel")?.value.trim() ||
+      "";
+
+    const examinationBoard =
+      $("examPriceBoard")?.value.trim() ||
+      "";
+
+    const examinationType =
+      $("examPriceType")?.value.trim() ||
+      "";
+
+    const classLevel =
+      $("examPriceClassLevel")?.value.trim() ||
+      "";
+
+
+    if (!educationLevel) {
+
+      throw new Error(
+        "Please select an education level."
+      );
+
     }
 
-    const countrySelect = $("examPriceCountryName");
+
+    if (!examinationBoard) {
+
+      throw new Error(
+        "Please select an examination board / organization."
+      );
+
+    }
+
+
+    if (!examinationType) {
+
+      throw new Error(
+        "Please select an examination type."
+      );
+
+    }
+
+
+    if (!classLevel) {
+
+      throw new Error(
+        "Please select a class / level."
+      );
+
+    }
+
+
+    /* ---------------- COUNTRY ---------------- */
+
+    const countrySelect =
+      $("examPriceCountryName");
+
     const selectedOption =
-      countrySelect?.options[countrySelect.selectedIndex];
+      countrySelect?.options[
+        countrySelect.selectedIndex
+      ];
 
-    if (!selectedOption || !selectedOption.value) {
-      throw new Error("Please select a country.");
+
+    if (
+      !selectedOption ||
+      !selectedOption.value
+    ) {
+
+      throw new Error(
+        "Please select a country."
+      );
+
     }
 
-    const info = getExamCountryInfoFromOption(selectedOption);
 
-    if (!info || !info.code || !info.currency) {
-      throw new Error("The selected country does not have a valid country/currency configuration.");
+    const info =
+      getExamCountryInfoFromOption(
+        selectedOption
+      );
+
+
+    if (
+      !info ||
+      !info.code ||
+      !info.currency
+    ) {
+
+      throw new Error(
+        "The selected country does not have a valid country/currency configuration."
+      );
+
     }
 
-    const amount = Number(
-      $("examPriceAmount")?.value
-    );
 
-    if (!Number.isFinite(amount) || amount < 0) {
-      throw new Error("Registration price must be 0 or greater.");
+    /* ---------------- PRICE ---------------- */
+
+    const amount =
+      Number(
+        $("examPriceAmount")?.value
+      );
+
+
+    if (
+      !Number.isFinite(amount) ||
+      amount < 0
+    ) {
+
+      throw new Error(
+        "Registration price must be 0 or greater."
+      );
+
     }
+
 
     const isEnabled =
-      $("examPriceEnabled")?.value === "true";
+      $("examPriceEnabled")?.value ===
+      "true";
 
-    const db = getDB();
+
+    const database =
+      getDB();
+
 
     /*
-      Do not send currency_symbol because the live table reported
-      that this column does not exist.
-    */
+     * IMPORTANT:
+     *
+     * There is NO:
+     *
+     * subject
+     * examination_id
+     *
+     * in this price record.
+     *
+     * The price belongs to the
+     * examination type hierarchy.
+     */
+
     const payload = {
-      examination_id: examinationId,
-      country_code: info.code,
-      country_name: info.name,
-      currency_code: info.currency,
-      amount: amount,
-      is_enabled: isEnabled,
-      updated_at: new Date().toISOString()
+
+      education_level:
+        educationLevel,
+
+      examination_board:
+        examinationBoard,
+
+      examination_type:
+        examinationType,
+
+      class_level:
+        classLevel,
+
+      country_code:
+        info.code,
+
+      country_name:
+        info.name,
+
+      currency_code:
+        info.currency,
+
+      amount:
+        amount,
+
+      is_enabled:
+        isEnabled,
+
+      updated_at:
+        new Date().toISOString()
+
     };
+
 
     let result;
 
+
+    /* ---------------- UPDATE ---------------- */
+
     if (editId) {
-      result = await db
-        .from("agu_exam_country_prices")
-        .update(payload)
-        .eq("id", editId);
 
-    } else {
-      /*
-        Because country_code is unique, first check whether this
-        country already exists. This gives a friendly edit/update
-        path instead of an opaque duplicate-key error.
-      */
-      const existing = await db
-        .from("agu_exam_country_prices")
-        .select("id")
-        .eq("examination_id", examinationId)
-        .eq("country_code", info.code)
-        .maybeSingle();
+      result =
+        await database
+          .from(
+            "agu_exam_country_prices"
+          )
+          .update(payload)
+          .eq(
+            "id",
+            editId
+          );
 
-      if (existing.error) throw existing.error;
+    }
+
+
+    /* ---------------- CREATE / UPSERT ---------------- */
+
+    else {
+
+      const existing =
+        await database
+          .from(
+            "agu_exam_country_prices"
+          )
+          .select("id")
+          .eq(
+            "education_level",
+            educationLevel
+          )
+          .eq(
+            "examination_board",
+            examinationBoard
+          )
+          .eq(
+            "examination_type",
+            examinationType
+          )
+          .eq(
+            "class_level",
+            classLevel
+          )
+          .eq(
+            "country_code",
+            info.code
+          )
+          .maybeSingle();
+
+
+      if (existing.error) {
+        throw existing.error;
+      }
+
 
       if (existing.data?.id) {
-        result = await db
-          .from("agu_exam_country_prices")
-          .update(payload)
-          .eq("id", existing.data.id);
+
+        result =
+          await database
+            .from(
+              "agu_exam_country_prices"
+            )
+            .update(payload)
+            .eq(
+              "id",
+              existing.data.id
+            );
+
       } else {
-        result = await db
-          .from("agu_exam_country_prices")
-          .insert(payload);
+
+        result =
+          await database
+            .from(
+              "agu_exam_country_prices"
+            )
+            .insert(payload);
+
       }
+
     }
 
-    if (result.error) throw result.error;
+
+    if (result.error) {
+      throw result.error;
+    }
+
 
     if (status) {
+
       status.textContent =
         editId
-          ? "✅ Examination registration price updated successfully."
-          : "✅ Examination registration price saved successfully.";
+          ? "✅ Examination type registration price updated successfully."
+          : "✅ Examination type registration price saved successfully.";
+
     }
+
 
     showMessage(
       editId
-        ? "Examination registration price updated successfully."
-        : "Examination registration price saved successfully.",
+        ? "Examination type registration price updated successfully."
+        : "Examination type registration price saved successfully.",
       "success"
     );
 
+
     clearExamPriceForm();
+
     await loadExamPrices();
 
+
   } catch (error) {
-    console.error("AGULIBRARY examination price save error:", error);
+
+    console.error(
+      "AGULIBRARY examination type price save error:",
+      error
+    );
+
 
     if (status) {
+
       status.textContent =
         "❌ " +
-        (error.message || "Unable to save examination registration price.");
+        (
+          error.message ||
+          "Unable to save examination registration price."
+        );
+
     }
 
+
     showMessage(
-      error.message || "Unable to save examination registration price.",
+      error.message ||
+      "Unable to save examination registration price.",
       "error"
     );
+
   }
+
 }
 
 async function toggleExamPrice(id, enabled) {

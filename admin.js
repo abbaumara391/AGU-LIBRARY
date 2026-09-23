@@ -5309,6 +5309,705 @@ function clearExamPriceForm() {
     
 setupExamPriceHierarchy();
 
+/* =========================================================
+   AGULIBRARY — PERMANENT EXAMINATION RESULTS
+   =========================================================
+
+async function loadResults() {
+
+  const list = $("adminResultList");
+
+  if (!list) return;
+
+  list.innerHTML =
+    '<div class="empty">Loading results...</div>';
+
+  try {
+
+    /*
+     * ------------------------------------------------------
+     * LOAD COMPLETED EXAMINATION RECORDS
+     * ------------------------------------------------------
+     */
+
+    const resultQuery =
+      await getDB()
+        .from("student_examinations")
+        .select(`
+          id,
+          student_id,
+          examination_title,
+          education_level,
+          subject,
+          score,
+          total_marks,
+          percentage,
+          grade,
+          passed,
+          examination_date,
+          completed,
+          created_at
+        `)
+        .eq("completed", true)
+        .order(
+          "created_at",
+          {
+            ascending: false
+          }
+        );
+
+    if (resultQuery.error) {
+      throw resultQuery.error;
+    }
+
+    const resultRows =
+      Array.isArray(resultQuery.data)
+        ? resultQuery.data
+        : [];
+
+
+    /*
+     * ------------------------------------------------------
+     * LOAD CERTIFICATES
+     * ------------------------------------------------------
+     */
+
+    let certificateRows = [];
+
+    const certificateQuery =
+      await getDB()
+        .from("student_certificates")
+        .select(`
+          id,
+          student_id,
+          examination_id,
+          certificate_number,
+          student_name
+        `);
+
+    if (!certificateQuery.error) {
+
+      certificateRows =
+        Array.isArray(certificateQuery.data)
+          ? certificateQuery.data
+          : [];
+
+    } else {
+
+      /*
+       * Certificate records are supplementary.
+       * A certificate-table problem must not prevent
+       * examination results from being displayed.
+       */
+
+      console.warn(
+        "AGULIBRARY certificate records could not be loaded:",
+        certificateQuery.error
+      );
+
+    }
+
+
+    /*
+     * ------------------------------------------------------
+     * BUILD RESULT RECORDS
+     * ------------------------------------------------------
+     */
+
+    examinations =
+      Array.isArray(examinations)
+        ? examinations
+        : [];
+
+    const records =
+      resultRows.map(result => {
+
+        const student =
+          students.find(
+            student =>
+              String(
+                getId(student)
+              ) ===
+              String(
+                result.student_id
+              )
+          );
+
+        /*
+         * Try to connect a certificate using:
+         *
+         * 1. examination ID
+         * 2. student ID
+         */
+
+        let certificate =
+          certificateRows.find(
+            cert =>
+              String(cert.student_id) ===
+              String(result.student_id) &&
+              result.id &&
+              String(cert.examination_id || "") ===
+              String(result.id)
+          );
+
+        if (!certificate) {
+
+          certificate =
+            certificateRows.find(
+              cert =>
+                String(cert.student_id) ===
+                String(result.student_id)
+            );
+
+        }
+
+        /*
+         * Student examination records currently store
+         * examination_title rather than necessarily storing
+         * agu_examinations.id.
+         */
+
+        const exam =
+          examinations.find(
+            exam =>
+              String(
+                exam.title || ""
+              ).trim().toLowerCase() ===
+              String(
+                result.examination_title || ""
+              ).trim().toLowerCase()
+          );
+
+        return {
+          ...result,
+
+          studentName:
+            student
+              ? profileName(student)
+              : (
+                  certificate?.student_name ||
+                  "Student"
+                ),
+
+          studentEmail:
+            student
+              ? profileEmail(student)
+              : "",
+
+          examinationName:
+            result.examination_title ||
+            exam?.title ||
+            "Examination",
+
+          certificateNumber:
+            certificate?.certificate_number ||
+            "",
+
+          certificateId:
+            certificate?.id ||
+            "",
+
+          examId:
+            exam?.id ||
+            ""
+        };
+
+      });
+
+
+    /*
+     * ------------------------------------------------------
+     * SAVE TO GLOBAL VARIABLE
+     * ------------------------------------------------------
+     */
+
+    window.AGU_ADMIN_RESULTS =
+      records;
+
+
+    /*
+     * ------------------------------------------------------
+     * RENDER
+     * ------------------------------------------------------
+ */
+
+    renderResults();
+
+
+  } catch (error) {
+
+    console.error(
+      "AGULIBRARY permanent examination result loading error:",
+      error
+    );
+
+    list.innerHTML =
+      `
+      <div class="empty">
+
+        ❌ Unable to load permanent examination records.
+
+        <br>
+
+        <small>
+          ${esc(
+            error.message ||
+            "Database error"
+          )}
+        </small>
+
+      </div>
+      `;
+
+  }
+
+}
+
+
+/* =========================================================
+   RENDER RESULTS
+   ========================================================= */
+
+function renderResults() {
+
+  const list =
+    $("adminResultList");
+
+  if (!list) return;
+
+  const records =
+    Array.isArray(
+      window.AGU_ADMIN_RESULTS
+    )
+      ? window.AGU_ADMIN_RESULTS
+      : [];
+
+
+  /*
+   * ------------------------------------------------------
+   * FILTER BY EXAMINATION
+   * ------------------------------------------------------
+   */
+
+  const examFilter =
+    String(
+      $("resultExamFilter")?.value ||
+      ""
+    ).trim();
+
+
+  /*
+   * ------------------------------------------------------
+   * SEARCH
+   * ------------------------------------------------------
+   */
+
+  const search =
+    String(
+      $("adminResultSearch")?.value ||
+      ""
+    )
+      .toLowerCase()
+      .trim();
+
+
+  const filtered =
+    records.filter(record => {
+
+      if (
+        examFilter &&
+        String(
+          record.examId || ""
+        ) !==
+        String(examFilter)
+      ) {
+
+        /*
+         * The existing select uses agu_examinations.id.
+         *
+         * Some older permanent records may not have a
+         * matching examination ID, so also compare title.
+         */
+
+        const selectedExam =
+          examinations.find(
+            exam =>
+              String(exam.id) ===
+              String(examFilter)
+          );
+
+        if (
+          !selectedExam ||
+          String(
+            record.examinationName || ""
+          ).trim().toLowerCase() !==
+          String(
+            selectedExam.title || ""
+          ).trim().toLowerCase()
+        ) {
+
+          return false;
+
+        }
+
+      }
+
+
+      if (!search) {
+        return true;
+      }
+
+
+      const searchable =
+        [
+
+          record.studentName,
+
+          record.studentEmail,
+
+          record.examinationName,
+
+          record.subject,
+
+          record.education_level,
+
+          record.grade,
+
+          record.certificateNumber,
+
+          record.student_id,
+
+          record.score,
+
+          record.percentage
+
+        ]
+          .filter(
+            value =>
+              value !== null &&
+              value !== undefined
+          )
+          .join(" ")
+          .toLowerCase();
+
+
+      return searchable.includes(search);
+
+    });
+
+
+  /*
+   * ------------------------------------------------------
+   * EMPTY STATE
+   * ------------------------------------------------------
+   */
+
+  if (!filtered.length) {
+
+    list.innerHTML =
+      `
+      <div class="empty">
+
+        No completed examination records found.
+
+      </div>
+      `;
+
+    return;
+
+  }
+
+
+  /*
+   * ------------------------------------------------------
+   * RESULT CARDS
+   * ------------------------------------------------------
+   */
+
+  list.innerHTML =
+    filtered
+      .map(record => {
+
+        const percentage =
+          Number(
+            record.percentage
+          );
+
+
+        const score =
+          record.score ??
+          0;
+
+
+        const totalMarks =
+          record.total_marks ??
+          0;
+
+
+        const passed =
+          record.passed === true;
+
+
+        const statusClass =
+          passed
+            ? "badge"
+            : "badge off";
+
+
+        const statusText =
+          passed
+            ? "PASSED"
+            : "NOT PASSED";
+
+
+        const date =
+          record.examination_date ||
+          record.created_at;
+
+
+        const formattedDate =
+          date
+            ? new Date(date)
+                .toLocaleString()
+            : "—";
+
+
+        return `
+
+          <div
+            class="result-row"
+          >
+
+            <h3>
+              ${esc(
+                record.examinationName
+              )}
+            </h3>
+
+
+            <div class="exam-meta">
+
+              <span
+                class="${statusClass}"
+              >
+                ${statusText}
+              </span>
+
+
+              ${
+                record.grade
+                  ? `
+                    <span class="badge blue">
+                      Grade:
+                      ${esc(
+                        record.grade
+                      )}
+                    </span>
+                  `
+                  : ""
+              }
+
+
+              ${
+                Number.isFinite(
+                  percentage
+                )
+                  ? `
+                    <span class="badge blue">
+                      ${esc(
+                        percentage
+                      )}%
+                    </span>
+                  `
+                  : ""
+              }
+
+            </div>
+
+
+            <div
+              class="small"
+            >
+
+              <strong>
+                Student:
+              </strong>
+
+              ${esc(
+                record.studentName ||
+                "Student"
+              )}
+
+            </div>
+
+
+            ${
+              record.studentEmail
+                ? `
+                  <div
+                    class="small"
+                  >
+
+                    Email:
+                    ${esc(
+                      record.studentEmail
+                    )}
+
+                  </div>
+                `
+                : ""
+            }
+
+
+            <div
+              class="small"
+            >
+
+              Subject:
+              ${esc(
+                record.subject ||
+                "—"
+              )}
+
+              ${
+                record.education_level
+                  ? `
+                    • Education Level:
+                    ${esc(
+                      record.education_level
+                    )}
+                  `
+                  : ""
+              }
+
+            </div>
+
+
+            <div
+              class="small"
+            >
+
+              Score:
+              <strong>
+                ${esc(score)}
+              </strong>
+
+              /
+              ${esc(totalMarks)}
+
+            </div>
+
+
+            <div
+              class="small"
+            >
+
+              Examination Date:
+              ${esc(
+                formattedDate
+              )}
+
+            </div>
+
+
+            <div
+              class="small"
+            >
+
+              Student ID:
+              ${esc(
+                record.student_id ||
+                "—"
+              )}
+
+            </div>
+
+
+            ${
+              record.certificateNumber
+                ? `
+                  <div
+                    class="small"
+                  >
+
+                    Certificate Number:
+                    <strong>
+                      ${esc(
+                        record.certificateNumber
+                      )}
+                    </strong>
+
+                  </div>
+                `
+                : `
+                  <div
+                    class="small"
+                  >
+
+                    Certificate:
+                    No certificate record found.
+
+                  </div>
+                `
+            }
+
+
+            <div
+              class="actions"
+            >
+
+              ${
+                record.certificateNumber
+                  ? `
+                    <span
+                      class="badge"
+                    >
+                      ✓ Certificate Issued
+                    </span>
+                  `
+                  : ""
+              }
+
+            </div>
+
+          </div>
+
+        `;
+
+      })
+      .join("");
+
+}
+
+
+/* =========================================================
+   RESULT FILTER EVENTS
+   ========================================================= */
+
+function setupResultControls() {
+
+  $("resultExamFilter")
+    ?.addEventListener(
+      "change",
+      renderResults
+    );
+
+
+  $("adminResultSearch")
+    ?.addEventListener(
+      "input",
+      renderResults
+    );
+
+
+  $("refreshResults")
+    ?.addEventListener(
+      "click",
+      loadResults
+    );
+
+}
+    
 /* ---------------- DASHBOARD ---------------- */
 
 async function finishAdmin() {

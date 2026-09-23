@@ -2554,81 +2554,138 @@ function populateExamSelects() {
 
 async function loadRegistrations() {
 
-const list =
-$("adminRegistrationList");
+  const list =
+    $("adminRegistrationList");
 
-if (!list) return;
+  if (!list) return;
 
-list.innerHTML =
-'<div class="empty">Loading registrations...</div>';
+  list.innerHTML =
+    '<div class="empty">Loading registrations...</div>';
 
-try {
+  try {
 
-let query =  
-  getDB()  
-    .from("agu_exam_registrations")  
-    .select("*")  
-    .order(  
-      "registered_at",  
-      { ascending: false }  
-    );  
+    /* -------------------------------------------------------
+       LOAD REGISTRATIONS
+    ------------------------------------------------------- */
 
-const examId =  
-  $("registrationExamFilter")?.value ||  
-  "";  
+    let query =
+      getDB()
+        .from("agu_exam_registrations")
+        .select("*")
+        .order(
+          "registered_at",
+          {
+            ascending: false
+          }
+        );
 
-const status =  
-  $("registrationStatusFilter")?.value ||  
-  "";
 
-if (examId) {
-query =
-query.eq(
-"examination_id",
-examId
-);
+    const examinationType =
+      $("registrationExamFilter")?.value ||
+      "";
+
+    const status =
+      $("registrationStatusFilter")?.value ||
+      "";
+
+
+    /* -------------------------------------------------------
+       STATUS FILTER
+    ------------------------------------------------------- */
+
+    if (status) {
+
+      query =
+        query.eq(
+          "status",
+          status
+        );
+
+    }
+
+
+    const result =
+      await query;
+
+    if (result.error) {
+      throw result.error;
+    }
+
+
+    let rows =
+      Array.isArray(result.data)
+        ? result.data
+        : [];
+
+
+    /* -------------------------------------------------------
+       EXAMINATION TYPE FILTER
+       
+       Find examinations belonging to the selected
+       examination type, then keep registrations for
+       those examinations.
+    ------------------------------------------------------- */
+
+    if (examinationType) {
+
+      const matchingExamIds =
+        examinations
+          .filter(
+            exam =>
+              String(
+                exam.examination_type ||
+                ""
+              ).trim() ===
+              String(
+                examinationType
+              ).trim()
+          )
+          .map(
+            exam =>
+              String(exam.id)
+          );
+
+
+      rows =
+        rows.filter(
+          registration =>
+            matchingExamIds.includes(
+              String(
+                registration.examination_id
+              )
+            )
+        );
+
+    }
+
+
+    examRegistrations =
+      rows;
+
+
+    renderRegistrations();
+
+
+  } catch (error) {
+
+    console.error(
+      "AGULIBRARY registration loading error:",
+      error
+    );
+
+    list.innerHTML =
+      `<div class="empty">
+        ❌ Unable to load registrations.<br>
+        <small>${esc(
+          error.message ||
+          "Database error"
+        )}</small>
+      </div>`;
+
+  }
+
 }
 
-if (status) {  
-  query =  
-    query.eq(  
-      "status",  
-      status  
-    );  
-}  
-
-const result =  
-  await query;  
-
-if (result.error) {  
-  throw result.error;  
-}  
-
-examRegistrations =  
-  Array.isArray(result.data)  
-    ? result.data  
-    : [];  
-
-renderRegistrations();
-
-} catch (error) {
-
-console.error(  
-  "AGULIBRARY registration loading error:",  
-  error  
-);  
-
-list.innerHTML =  
-  `<div class="empty">  
-    ❌ Unable to load registrations.<br>  
-    <small>${esc(  
-      error.message ||  
-      "Database error"  
-    )}</small>  
-  </div>`;
-
-}
-}
 function renderRegistrations() {
 
 const list =

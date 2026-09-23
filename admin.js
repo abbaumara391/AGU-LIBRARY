@@ -18,6 +18,8 @@ The upload system therefore writes folder_path.
 const $ = id => document.getElementById(id);
 const cfg = window.AGU_CONFIG || {};
 
+let db = null;    
+    
 let students = [];
 let resources = [];
 let examinations = [];

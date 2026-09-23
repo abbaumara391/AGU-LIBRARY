@@ -6035,12 +6035,14 @@ $("adminIdentity").textContent =
 }
 
 await Promise.all([
-loadStudents(),
-loadResources(),
-loadNotificationCount(),
-loadExamSettings(),
-loadExaminations(),
-loadExamPrices()
+  loadStudents(),
+  loadResources(),
+  loadNotificationCount(),
+  loadExamSettings(),
+  loadExaminations(),
+  loadExamPrices(),
+  loadResults(),
+  loadRegistrations()
 ]);
 
 }

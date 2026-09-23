@@ -5691,8 +5691,57 @@ $("refreshRegistrations")?.addEventListener(
 "click",
 loadRegistrations
 );
-/*
+/* =========================================================
+   RESULT & CERTIFICATION EVENTS
+========================================================= */
 
+$("resultExamFilter")
+?.addEventListener(
+  "change",
+  loadResults
+);
+
+$("adminResultSearch")
+?.addEventListener(
+  "input",
+  () => {
+    renderResults();
+  }
+);
+
+$("refreshResults")
+?.addEventListener(
+  "click",
+  loadResults
+);
+
+
+/* Optional separate Result hierarchy filters */
+
+$("resultEducationLevel")
+?.addEventListener(
+  "change",
+  loadResults
+);
+
+$("resultExamBoard")
+?.addEventListener(
+  "change",
+  loadResults
+);
+
+$("resultClassLevel")
+?.addEventListener(
+  "change",
+  loadResults
+);
+
+$("resultExamType")
+?.addEventListener(
+  "change",
+  loadResults
+);
+/*
 The incorrect populateExamSelects()
 
 change listeners have intentionally been removed.

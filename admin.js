@@ -2435,27 +2435,16 @@ function clearExamForm(){
 
 /* ---------------- CREATE / SAVE EXAMINATION ---------------- */
 
-/* =========================================================
-   AGULIBRARY — POPULATE EXAMINATION SELECTS
-
-   QUESTION MANAGEMENT
-   → Individual examinations
-
-   PERMANENT RESULTS FILTER
-   → Education Level
-   → Examination Board / Organization
-   → Examination Type
-
-   EXAMINATION REGISTRATION FILTER
-   → Examination Type
-========================================================= */
+/* ---------------- POPULATE EXAMINATION SELECTS ---------------- */
 
 function populateExamSelects() {
 
   /* -------------------------------------------------------
      QUESTION MANAGEMENT
-     
-     This MUST continue using individual examinations.
+
+     Question Manager still works with individual
+     examinations because questions belong to a specific
+     examination.
   ------------------------------------------------------- */
 
   const questionSelect =
@@ -2467,23 +2456,18 @@ function populateExamSelects() {
       questionSelect.value;
 
     questionSelect.innerHTML =
-      '<option value="">Select an examination</option>';
+      '<option value="">Select an examination</option>' +
 
-    examinations.forEach(exam => {
-
-      const option =
-        document.createElement("option");
-
-      option.value =
-        exam.id;
-
-      option.textContent =
-        exam.title ||
-        "Untitled Examination";
-
-      questionSelect.appendChild(option);
-
-    });
+      examinations
+        .map(exam => `
+          <option value="${esc(exam.id)}">
+            ${esc(
+              exam.title ||
+              "Untitled Examination"
+            )}
+          </option>
+        `)
+        .join("");
 
     if (
       currentValue &&
@@ -2503,410 +2487,364 @@ function populateExamSelects() {
 
 
   /* -------------------------------------------------------
-     PERMANENT EXAMINATION RECORDS
+   RESULT & CERTIFICATION
 
-     Group by:
+   GROUP EXAMINATION TYPES BY:
 
-     Education Level
-       ↓
-     Examination Board / Organization
-       ↓
-     Examination Type
+   Education Level
+   → Examination Board / Organization
+   → Examination Type
 
-     IMPORTANT:
-     The VALUE remains the actual examination ID.
+   Example:
 
-     This means the existing result system can continue
-     finding the correct examination record.
-  ------------------------------------------------------- */
+   Senior Secondary School
+      WAEC
+         SSCE
+         GCE
+         Mock Examination
 
-  const resultSelect =
-    $("resultExamFilter");
+      NECO
+         SSCE
+         GCE
+         BECE
+         Mock Examination
 
-  if (resultSelect) {
+   The option VALUE remains the examination type so the
+   existing result filtering continues to work.
+------------------------------------------------------- */
 
-    const currentValue =
-      resultSelect.value;
+const resultSelect =
+  $("resultExamFilter");
 
-    resultSelect.innerHTML =
-      '<option value="">All examination types</option>';
+if (resultSelect) {
 
-
-    /* -----------------------------------------------------
-       GROUP EXAMINATIONS
-    ----------------------------------------------------- */
-
-    const groups = {};
-
-
-    examinations.forEach(exam => {
-
-      const educationLevel =
-        String(
-          exam.education_level ||
-          "Other"
-        ).trim();
-
-      const board =
-        String(
-          exam.examination_board ||
-          "Other"
-        ).trim();
-
-      const type =
-        String(
-          exam.examination_type ||
-          "Other"
-        ).trim();
+  const currentType =
+    resultSelect.value;
 
 
-      if (!groups[educationLevel]) {
+  /* -----------------------------------------------------
+     CLEAR CURRENT OPTIONS
+  ----------------------------------------------------- */
 
-        groups[educationLevel] = {};
-
-      }
-
-
-      if (!groups[educationLevel][board]) {
-
-        groups[educationLevel][board] = {};
-
-      }
+  resultSelect.innerHTML = "";
 
 
-      if (
-        !groups[educationLevel][board][type]
-      ) {
+  /* -----------------------------------------------------
+     ALL EXAMINATIONS OPTION
+  ----------------------------------------------------- */
 
-        groups[educationLevel][board][type] =
-          [];
+  const allOption =
+    document.createElement("option");
 
-      }
+  allOption.value = "";
 
+  allOption.textContent =
+    "All examination types";
 
-      groups
-        [educationLevel]
-        [board]
-        [type]
-        .push(exam);
-
-    });
+  resultSelect.appendChild(
+    allOption
+  );
 
 
-    /* -----------------------------------------------------
-       EDUCATION LEVEL ORDER
+  /* -----------------------------------------------------
+     CREATE GROUPS FROM ADMIN_EXAM_HIERARCHY
+  ----------------------------------------------------- */
 
-       Keeps the hierarchy organized instead of
-       alphabetical chaos.
-    ----------------------------------------------------- */
+  Object.entries(
+    ADMIN_EXAM_HIERARCHY
+  ).forEach(
+    ([educationLevel, boards]) => {
 
-    const educationOrder = [
-      "Early Years",
-      "Primary School",
-      "Junior Secondary School",
-      "Senior Secondary School",
-      "Tertiary / University",
-      "Professional / Career",
-      "Other"
-    ];
+      Object.entries(
+        boards || {}
+      ).forEach(
+        ([boardName, examinationTypes]) => {
 
+          const types =
+            [
+              ...new Set(
+                (examinationTypes || [])
+                  .map(
+                    type =>
+                      String(
+                        type || ""
+                      ).trim()
+                  )
+                  .filter(Boolean)
+              )
+            ];
 
-    const sortedEducationLevels =
-      Object.keys(groups).sort(
-        (a, b) => {
-
-          const ai =
-            educationOrder.indexOf(a);
-
-          const bi =
-            educationOrder.indexOf(b);
-
-          if (ai === -1 && bi === -1) {
-
-            return a.localeCompare(b);
-
+          if (!types.length) {
+            return;
           }
 
-          if (ai === -1) return 1;
 
-          if (bi === -1) return -1;
+          /* ---------------------------------------------
+             CREATE EDUCATION + BOARD GROUP
+          --------------------------------------------- */
 
-          return ai - bi;
+          const group =
+            document.createElement(
+              "optgroup"
+            );
+
+          group.label =
+            `${educationLevel} — ${boardName}`;
+
+
+          /* ---------------------------------------------
+             ADD EXAMINATION TYPES
+          --------------------------------------------- */
+
+          types.forEach(
+            examinationType => {
+
+              const option =
+                document.createElement(
+                  "option"
+                );
+
+              option.value =
+                examinationType;
+
+              option.textContent =
+                examinationType;
+
+              group.appendChild(
+                option
+              );
+
+            }
+          );
+
+
+          resultSelect.appendChild(
+            group
+          );
 
         }
       );
 
-
-    /* -----------------------------------------------------
-       BUILD HIERARCHICAL OPTIONS
-    ----------------------------------------------------- */
-
-    sortedEducationLevels.forEach(
-      educationLevel => {
-
-        const educationGroup =
-          document.createElement(
-            "optgroup"
-          );
-
-        educationGroup.label =
-          educationLevel;
+    }
+  );
 
 
-        const boards =
-          groups[educationLevel];
+  /* -----------------------------------------------------
+     ALSO INCLUDE CUSTOM TYPES ALREADY IN DATABASE
+
+     This protects existing examinations whose type is
+     not currently listed inside ADMIN_EXAM_HIERARCHY.
+  ----------------------------------------------------- */
+
+  const hierarchyTypes =
+    new Set();
 
 
-        Object.keys(boards)
-          .sort((a, b) => {
+  Object.values(
+    ADMIN_EXAM_HIERARCHY
+  ).forEach(
+    boards => {
 
-            /*
-             * Preserve the board order from
-             * ADMIN_EXAM_HIERARCHY where possible.
-             */
+      Object.values(
+        boards || {}
+      ).forEach(
+        types => {
 
-            const boardOrder =
-              Object.keys(
-                ADMIN_EXAM_HIERARCHY[
-                  educationLevel
-                ] || {}
-              );
+          (types || []).forEach(
+            type => {
 
+              const clean =
+                String(
+                  type || ""
+                ).trim();
 
-            const ai =
-              boardOrder.indexOf(a);
-
-            const bi =
-              boardOrder.indexOf(b);
-
-
-            if (
-              ai !== -1 &&
-              bi !== -1
-            ) {
-
-              return ai - bi;
+              if (clean) {
+                hierarchyTypes.add(
+                  clean
+                );
+              }
 
             }
+          );
+
+        }
+      );
+
+    }
+  );
 
 
-            if (ai !== -1) return -1;
-
-            if (bi !== -1) return 1;
-
-            return a.localeCompare(b);
-
-          })
-          .forEach(board => {
-
-            const types =
-              boards[board];
-
-
-            /*
-             * Add a disabled visual separator
-             * showing the examination board.
-             */
-
-            const boardHeader =
-              document.createElement(
-                "option"
-              );
-
-            boardHeader.value = "";
-
-            boardHeader.textContent =
-              `— ${educationLevel} → ${board} —`;
-
-            boardHeader.disabled =
-              true;
-
-            educationGroup.appendChild(
-              boardHeader
-            );
+  const customTypes =
+    [
+      ...new Set(
+        examinations
+          .map(
+            exam =>
+              String(
+                exam.examination_type ||
+                ""
+              ).trim()
+          )
+          .filter(Boolean)
+      )
+    ]
+      .filter(
+        type =>
+          !hierarchyTypes.has(type)
+      )
+      .sort(
+        (a, b) =>
+          a.localeCompare(
+            b,
+            undefined,
+            {
+              sensitivity: "base"
+            }
+          )
+      );
 
 
-            const hierarchyTypes =
-              ADMIN_EXAM_HIERARCHY[
-                educationLevel
-              ]?.[board] || [];
+  /* -----------------------------------------------------
+     CUSTOM / DATABASE EXAM TYPES
+  ----------------------------------------------------- */
+
+  if (customTypes.length) {
+
+    const customGroup =
+      document.createElement(
+        "optgroup"
+      );
+
+    customGroup.label =
+      "Other / Custom Examination Types";
 
 
-            const sortedTypes =
-              Object.keys(types)
-                .sort((a, b) => {
+    customTypes.forEach(
+      examinationType => {
 
-                  const ai =
-                    hierarchyTypes.indexOf(a);
+        const option =
+          document.createElement(
+            "option"
+          );
 
-                  const bi =
-                    hierarchyTypes.indexOf(b);
+        option.value =
+          examinationType;
 
+        option.textContent =
+          examinationType;
 
-                  if (
-                    ai !== -1 &&
-                    bi !== -1
-                  ) {
-
-                    return ai - bi;
-
-                  }
-
-
-                  if (ai !== -1) return -1;
-
-                  if (bi !== -1) return 1;
-
-                  return a.localeCompare(b);
-
-                });
-
-
-            sortedTypes.forEach(type => {
-
-              const exams =
-                types[type];
-
-
-              exams.forEach(exam => {
-
-                const option =
-                  document.createElement(
-                    "option"
-                  );
-
-
-                /*
-                 * KEEP ACTUAL EXAMINATION ID
-                 *
-                 * This is important because the
-                 * Permanent Examination Records
-                 * system can still identify the
-                 * exact examination.
-                 */
-
-                option.value =
-                  exam.id;
-
-
-                /*
-                 * Display the complete hierarchy.
-                 */
-
-                option.textContent =
-                  `${educationLevel} → ${board} → ${type}` +
-                  (
-                    exam.title
-                      ? ` — ${exam.title}`
-                      : ""
-                  );
-
-
-                /*
-                 * Store hierarchy information
-                 * for future filtering.
-                 */
-
-                option.dataset.educationLevel =
-                  educationLevel;
-
-                option.dataset.examinationBoard =
-                  board;
-
-                option.dataset.examinationType =
-                  type;
-
-                educationGroup.appendChild(
-                  option
-                );
-
-              });
-
-            });
-
-          });
-
-
-        resultSelect.appendChild(
-          educationGroup
+        customGroup.appendChild(
+          option
         );
 
-      });
+      }
+    );
 
 
-    if (
-      currentValue &&
+    resultSelect.appendChild(
+      customGroup
+    );
+
+  }
+
+
+  /* -----------------------------------------------------
+     RESTORE PREVIOUS SELECTION
+  ----------------------------------------------------- */
+
+  if (currentType) {
+
+    const matchingOption =
       Array.from(
         resultSelect.options
-      ).some(
+      ).find(
         option =>
-          String(option.value) ===
-          String(currentValue)
-      )
-    ) {
+          String(
+            option.value
+          ) ===
+          String(
+            currentType
+          )
+      );
+
+    if (matchingOption) {
 
       resultSelect.value =
-        currentValue;
+        currentType;
 
     }
 
   }
 
+}
+
 
   /* -------------------------------------------------------
      EXAMINATION REGISTRATIONS
 
-     Registration filter remains based on
-     Examination Type.
-
-     This is separate from Permanent Results.
+     Registration filter is also based on
+     EXAMINATION TYPE, not examination title.
   ------------------------------------------------------- */
 
   const registrationSelect =
     $("registrationExamFilter");
 
-  if (!registrationSelect) {
-    return;
-  }
+  if (registrationSelect) {
+
+    const currentType =
+      registrationSelect.value;
 
 
-  const currentType =
-    registrationSelect.value;
+    const registrationTypes = [
+      ...new Set(
 
+        examinations
+          .map(
+            exam =>
+              String(
+                exam.examination_type ||
+                ""
+              ).trim()
+          )
+          .filter(Boolean)
 
-  const types = [
-    ...new Set(
-      examinations
-        .map(
-          exam =>
-            String(
-              exam.examination_type ||
-              ""
-            ).trim()
-        )
-        .filter(Boolean)
-    )
-  ];
-
-
-  registrationSelect.innerHTML =
-    '<option value="">All examination types</option>' +
-
-    types
-      .map(
-        type =>
-          `<option value="${esc(type)}">${esc(type)}</option>`
       )
-      .join("");
+    ].sort(
+      (a, b) =>
+        a.localeCompare(
+          b,
+          undefined,
+          {
+            sensitivity: "base"
+          }
+        )
+    );
 
 
-  if (
-    currentType &&
-    types.includes(currentType)
-  ) {
+    registrationSelect.innerHTML =
+      '<option value="">All examination types</option>' +
 
-    registrationSelect.value =
-      currentType;
+      registrationTypes
+        .map(
+          type =>
+            `<option value="${esc(type)}">
+              ${esc(type)}
+            </option>`
+        )
+        .join("");
+
+
+    if (
+      currentType &&
+      registrationTypes.includes(
+        currentType
+      )
+    ) {
+
+      registrationSelect.value =
+        currentType;
+
+    }
 
   }
 

@@ -2440,49 +2440,34 @@ function clearExamForm(){
 function populateExamSelects() {
 
   /* -------------------------------------------------------
-     QUESTION MANAGEMENT + RESULT FILTER
-     These still use individual examinations.
+     QUESTION MANAGEMENT
+
+     Question Manager still works with individual
+     examinations because questions belong to a specific
+     examination.
   ------------------------------------------------------- */
 
-  const individualExamSelects = [
-    $("adminQuestionExamSelect"),
-    $("resultExamFilter")
-  ];
+  const questionSelect =
+    $("adminQuestionExamSelect");
 
-  individualExamSelects.forEach(select => {
+  if (questionSelect) {
 
-    if (!select) return;
+    const currentValue =
+      questionSelect.value;
 
-    const currentValue = select.value;
+    questionSelect.innerHTML =
+      '<option value="">Select an examination</option>' +
 
-    select.innerHTML = "";
-
-    const firstOption =
-      document.createElement("option");
-
-    firstOption.value = "";
-
-    firstOption.textContent =
-      select.id === "adminQuestionExamSelect"
-        ? "Select an examination"
-        : "All examinations";
-
-    select.appendChild(firstOption);
-
-    examinations.forEach(exam => {
-
-      const option =
-        document.createElement("option");
-
-      option.value = exam.id;
-
-      option.textContent =
-        exam.title ||
-        "Untitled Examination";
-
-      select.appendChild(option);
-
-    });
+      examinations
+        .map(exam => `
+          <option value="${esc(exam.id)}">
+            ${esc(
+              exam.title ||
+              "Untitled Examination"
+            )}
+          </option>
+        `)
+        .join("");
 
     if (
       currentValue &&
@@ -2493,64 +2478,239 @@ function populateExamSelects() {
       )
     ) {
 
-      select.value = currentValue;
+      questionSelect.value =
+        currentValue;
 
     }
 
-  });
+  }
+
+
+  /* -------------------------------------------------------
+     RESULT & CERTIFICATION
+
+     IMPORTANT:
+
+     Results are filtered by EXAMINATION TYPE.
+
+     They are NOT filtered by:
+     - examination title
+     - subject
+     - individual examination
+
+     Example:
+
+     SSCE
+     GCE
+     Mock Examination
+     First Term Examination
+     Second Term Examination
+     Third Term Examination
+     Final Examination
+     IGCSE
+     O Level
+     A Level
+     BECE
+     etc.
+
+     Every examination type in
+     ADMIN_EXAM_HIERARCHY is included.
+
+     Duplicate examination types are removed.
+  ------------------------------------------------------- */
+
+  const resultSelect =
+    $("resultExamFilter");
+
+  if (resultSelect) {
+
+    const currentType =
+      resultSelect.value;
+
+
+    /* -----------------------------------------------
+       COLLECT EVERY EXAMINATION TYPE
+       FROM THE COMPLETE EXAMINATION HIERARCHY
+    ----------------------------------------------- */
+
+    const allTypes = [];
+
+
+    Object.values(
+      ADMIN_EXAM_HIERARCHY
+    ).forEach(boardCollection => {
+
+      Object.values(
+        boardCollection || {}
+      ).forEach(typeList => {
+
+        (typeList || []).forEach(
+          examinationType => {
+
+            const type =
+              String(
+                examinationType || ""
+              ).trim();
+
+            if (type) {
+              allTypes.push(type);
+            }
+
+          }
+        );
+
+      });
+
+    });
+
+
+    /* -----------------------------------------------
+       ALSO INCLUDE TYPES ALREADY USED BY EXISTING
+       EXAMINATIONS.
+
+       This protects the system if an administrator
+       has created a custom examination type that is
+       present in the database but not yet added to
+       ADMIN_EXAM_HIERARCHY.
+    ----------------------------------------------- */
+
+    examinations.forEach(exam => {
+
+      const type =
+        String(
+          exam.examination_type ||
+          ""
+        ).trim();
+
+      if (type) {
+        allTypes.push(type);
+      }
+
+    });
+
+
+    /* -----------------------------------------------
+       REMOVE DUPLICATES
+    ----------------------------------------------- */
+
+    const uniqueTypes = [
+      ...new Set(allTypes)
+    ].sort(
+      (a, b) =>
+        a.localeCompare(
+          b,
+          undefined,
+          {
+            sensitivity: "base"
+          }
+        )
+    );
+
+
+    /* -----------------------------------------------
+       BUILD RESULT FILTER
+    ----------------------------------------------- */
+
+    resultSelect.innerHTML =
+      '<option value="">All examination types</option>' +
+
+      uniqueTypes
+        .map(
+          type =>
+            `<option value="${esc(type)}">
+              ${esc(type)}
+            </option>`
+        )
+        .join("");
+
+
+    /* -----------------------------------------------
+       RESTORE PREVIOUS SELECTION
+    ----------------------------------------------- */
+
+    if (
+      currentType &&
+      uniqueTypes.includes(currentType)
+    ) {
+
+      resultSelect.value =
+        currentType;
+
+    }
+
+  }
 
 
   /* -------------------------------------------------------
      EXAMINATION REGISTRATIONS
-     
-     IMPORTANT:
-     Registration filter is based on EXAMINATION TYPE,
-     not individual examination title.
+
+     Registration filter is also based on
+     EXAMINATION TYPE, not examination title.
   ------------------------------------------------------- */
 
   const registrationSelect =
     $("registrationExamFilter");
 
-  if (!registrationSelect) return;
+  if (registrationSelect) {
 
-  const currentType =
-    registrationSelect.value;
+    const currentType =
+      registrationSelect.value;
 
-  const types = [
-    ...new Set(
-      examinations
-        .map(
-          exam =>
-            String(
-              exam.examination_type ||
-              ""
-            ).trim()
-        )
-        .filter(Boolean)
-    )
-  ];
 
-  registrationSelect.innerHTML =
-    '<option value="">All examination types</option>' +
+    const registrationTypes = [
+      ...new Set(
 
-    types
-      .map(
-        type =>
-          `<option value="${esc(type)}">${esc(type)}</option>`
+        examinations
+          .map(
+            exam =>
+              String(
+                exam.examination_type ||
+                ""
+              ).trim()
+          )
+          .filter(Boolean)
+
       )
-      .join("");
+    ].sort(
+      (a, b) =>
+        a.localeCompare(
+          b,
+          undefined,
+          {
+            sensitivity: "base"
+          }
+        )
+    );
 
-  if (
-    currentType &&
-    types.includes(currentType)
-  ) {
 
-    registrationSelect.value =
-      currentType;
+    registrationSelect.innerHTML =
+      '<option value="">All examination types</option>' +
+
+      registrationTypes
+        .map(
+          type =>
+            `<option value="${esc(type)}">
+              ${esc(type)}
+            </option>`
+        )
+        .join("");
+
+
+    if (
+      currentType &&
+      registrationTypes.includes(
+        currentType
+      )
+    ) {
+
+      registrationSelect.value =
+        currentType;
+
+    }
 
   }
 
-}  
+}
 
 async function loadRegistrations() {
 

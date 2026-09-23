@@ -24,7 +24,74 @@ let students = [];
 let resources = [];
 let examinations = [];
 let examRegistrations = [];
+let examResults = [];
+let examCertificates = [];
 let mfaOpen = false;
+
+/* =========================================================
+   AGULIBRARY EXAMINATION HIERARCHY
+
+   Registration PRICE hierarchy:
+   Education Level → Board / Organization → Examination Type
+   → Class / Level → Country → Registration Price
+
+   Subject and individual examination IDs are deliberately NOT
+   part of registration pricing.
+========================================================= */
+
+const ADMIN_EXAM_HIERARCHY = {
+  "Early Years": {
+    "School Assessment": ["Term Assessment", "Progress Assessment", "Final Assessment"],
+    "International Early Years": ["Early Years Assessment", "International Progress Assessment"],
+    "Other": ["General Assessment"]
+  },
+  "Primary School": {
+    "School Examination": ["First Term Examination", "Second Term Examination", "Third Term Examination", "Mock Examination", "Final Examination"],
+    "Common Entrance": ["Common Entrance Examination", "Common Entrance Mock Examination"],
+    "Primary Leaving Examination": ["Primary Leaving Examination", "Primary Leaving Mock Examination"],
+    "International Primary": ["Primary Progress Test", "International Primary Examination"],
+    "Other": ["General Assessment"]
+  },
+  "Junior Secondary School": {
+    "BECE": ["Basic Education Certificate Examination", "BECE Mock Examination"],
+    "School Examination": ["First Term Examination", "Second Term Examination", "Third Term Examination", "Mock Examination", "Final Examination"],
+    "Cambridge Lower Secondary": ["Checkpoint Examination", "Lower Secondary Assessment"],
+    "International Examination": ["International Lower Secondary Examination", "Mock Examination"],
+    "Other": ["General Assessment"]
+  },
+  "Senior Secondary School": {
+    "WAEC": ["SSCE", "GCE", "Mock Examination"],
+    "NECO": ["SSCE", "GCE", "BECE", "Mock Examination"],
+    "NABTEB": ["NBC/NTC", "ANBC/ANTC", "GCE", "Mock Examination"],
+    "Cambridge": ["IGCSE", "O Level", "AS Level", "A Level"],
+    "School Examination": ["First Term Examination", "Second Term Examination", "Third Term Examination", "Mock Examination", "Final Examination"],
+    "International Examination": ["International Secondary Examination", "Mock Examination"],
+    "Other": ["General Examination"]
+  },
+  "Tertiary / University": {
+    "University": ["Semester Examination", "Mid-Semester Test", "Final Examination", "Entrance Examination", "Mock Examination"],
+    "Polytechnic": ["Semester Examination", "Mid-Semester Test", "Final Examination", "Entrance Examination"],
+    "College": ["Semester Examination", "Mid-Semester Test", "Final Examination", "Entrance Examination"],
+    "Professional Examination": ["Professional Certification Examination", "Licensing Examination", "Entrance Examination", "Mock Examination"],
+    "Other": ["General Examination"]
+  },
+  "Professional / Career": {
+    "Professional Certification": ["Certification Examination", "Mock Examination"],
+    "Licensing Board": ["Licensing Examination", "Renewal Examination", "Mock Examination"],
+    "Entrance Examination": ["Entrance Examination", "Aptitude Test", "Mock Examination"],
+    "Career Assessment": ["Career Assessment", "Professional Aptitude Test"],
+    "Other": ["General Assessment"]
+  }
+};
+
+const ADMIN_EXAM_CLASSES = {
+  "Early Years": ["Early Years 1", "Early Years 2", "Early Years 3"],
+  "Primary School": ["Primary 1", "Primary 2", "Primary 3", "Primary 4", "Primary 5", "Primary 6"],
+  "Junior Secondary School": ["JSS 1", "JSS 2", "JSS 3"],
+  "Senior Secondary School": ["SSS 1", "SSS 2", "SSS 3"],
+  "Tertiary / University": ["100 Level", "200 Level", "300 Level", "400 Level", "500 Level", "Postgraduate"],
+  "Professional / Career": []
+};
 
 const TABLE = window.AGU_RESOURCE_TABLE || "resources";
 const BUCKET = window.AGU_BUCKET || window.BUCKET || "agu-library";
@@ -1646,7 +1713,8 @@ const payload = {
     level,  
 
   class_level:  
-    classLevel,
+    classLevel,  
+
   term:  
     term,  
 
@@ -2190,509 +2258,175 @@ if (
 } catch (_) {}
 }
 
-/* ---------------- EXAMINATION HIERARCHY ---------------- */
-const ADMIN_EXAM_HIERARCHY={
-  "Early Years":{"School Assessment":["Term Assessment","Progress Assessment","Final Assessment"],"International Early Years":["Early Years Assessment","International Progress Assessment"],"Other":["General Assessment"]},
-  "Primary School":{"School Examination":["First Term Examination","Second Term Examination","Third Term Examination","Mock Examination","Final Examination"],"Common Entrance":["Common Entrance Examination","Common Entrance Mock Examination"],"Primary Leaving Examination":["Primary Leaving Examination","Primary Leaving Mock Examination"],"International Primary":["Primary Progress Test","International Primary Examination"],"Other":["General Assessment"]},
-  "Junior Secondary School":{"BECE":["Basic Education Certificate Examination","BECE Mock Examination"],"School Examination":["First Term Examination","Second Term Examination","Third Term Examination","Mock Examination","Final Examination"],"Cambridge Lower Secondary":["Checkpoint Examination","Lower Secondary Assessment"],"International Examination":["International Lower Secondary Examination","Mock Examination"],"Other":["General Assessment"]},
-  "Senior Secondary School":{"WAEC":["SSCE","GCE","Mock Examination"],"NECO":["SSCE","GCE","BECE","Mock Examination"],"NABTEB":["NBC/NTC","ANBC/ANTC","GCE","Mock Examination"],"Cambridge":["IGCSE","O Level","AS Level","A Level"],"School Examination":["First Term Examination","Second Term Examination","Third Term Examination","Mock Examination","Final Examination"],"International Examination":["International Secondary Examination","Mock Examination"],"Other":["General Examination"]},
-  "Tertiary / University":{"University":["Semester Examination","Mid-Semester Test","Final Examination","Entrance Examination","Mock Examination"],"Polytechnic":["Semester Examination","Mid-Semester Test","Final Examination","Entrance Examination"],"College":["Semester Examination","Mid-Semester Test","Final Examination","Entrance Examination"],"Professional Examination":["Professional Certification Examination","Licensing Examination","Entrance Examination"],"Other":["General Examination"]},
-  "Professional / Career":{"Professional Certification":["Certification Examination","Mock Examination"],"Licensing Board":["Licensing Examination","Renewal Examination","Mock Examination"],"Entrance Examination":["Entrance Examination","Aptitude Test","Mock Examination"],"Career Assessment":["Career Assessment","Professional Aptitude Test"],"Other":["General Assessment"]}
-};
-const ADMIN_EXAM_CLASSES={"Early Years":["Early Years 1","Early Years 2","Early Years 3"],"Primary School":["Primary 1","Primary 2","Primary 3","Primary 4","Primary 5","Primary 6"],"Junior Secondary School":["JSS 1","JSS 2","JSS 3"],"Senior Secondary School":["SSS 1","SSS 2","SSS 3"],"Tertiary / University":["100 Level","200 Level","300 Level","400 Level","500 Level","Postgraduate"],"Professional / Career":[]};
-     
-/* =========================================================
-AGULIBRARY — EXAMINATION REGISTRATION PRICE HIERARCHY
-
-PRICE IS BASED ON:
-
-Education Level
-→ Examination Board / Organization
-→ Examination Type
-→ Class / Level
-→ Country
-→ Registration Price
-
-IMPORTANT:
-Subject is NOT part of examination registration pricing.
-
-Individual examinations/subjects do NOT determine the
-registration price.
-
-Example:
-
-Senior Secondary School
-→ WAEC
-→ SSCE
-→ SSS 1
-→ Nigeria
-→ ₦5,000
-
-The student may select 1 subject or 9 subjects.
-The registration price remains ₦5,000.
-========================================================= */
-
-function setupExamPriceHierarchy() {
-
-  const education =
-    $("examPriceEducationLevel");
-
-  const board =
-    $("examPriceBoard");
-
-  const type =
-    $("examPriceType");
-
-  const classLevel =
-    $("examPriceClassLevel");
-
-  if (!education) return;
-
-
-  function fillSelect(
-    select,
-    items,
-    placeholder
-  ) {
-
-    if (!select) return;
-
-    const values = [
-      ...new Set(
-        (items || [])
-          .filter(Boolean)
-          .map(x => String(x).trim())
-          .filter(Boolean)
-      )
-    ];
-
-    select.innerHTML =
-      `<option value="">${esc(placeholder)}</option>` +
-      values
-        .map(
-          value =>
-            `<option value="${esc(value)}">${esc(value)}</option>`
-        )
-        .join("");
-
-    select.disabled = false;
-  }
-
-
-  /* -------------------------------------------------------
-     EDUCATION LEVEL → BOARD
-  ------------------------------------------------------- */
-
-  function updateBoards() {
-
-    const level =
-      education.value || "";
-
-    const boards =
-      Object.keys(
-        ADMIN_EXAM_HIERARCHY[level] || {}
-      );
-
-    fillSelect(
-      board,
-      boards,
-      "Select examination board / organization"
-    );
-
-    fillSelect(
-      type,
-      [],
-      "Select examination board / organization"
-    );
-
-    fillSelect(
-      classLevel,
-      ADMIN_EXAM_CLASSES[level] || [],
-      "Select class / level"
-    );
-
-    if (type) {
-      type.disabled = true;
-    }
-
-    if (classLevel) {
-      classLevel.disabled =
-        !(ADMIN_EXAM_CLASSES[level] || []).length;
-    }
-  }
-
-
-  /* -------------------------------------------------------
-     BOARD → EXAM TYPE
-  ------------------------------------------------------- */
-
-  function updateTypes() {
-
-    const level =
-      education.value || "";
-
-    const selectedBoard =
-      board?.value || "";
-
-    const types =
-      selectedBoard
-        ? (
-            ADMIN_EXAM_HIERARCHY[level]?.[
-              selectedBoard
-            ] || []
-          )
-        : [];
-
-    fillSelect(
-      type,
-      types,
-      "Select examination type"
-    );
-
-    if (type) {
-      type.disabled =
-        !selectedBoard ||
-        !types.length;
-    }
-  }
-
-
-  /* -------------------------------------------------------
-     EVENTS
-  ------------------------------------------------------- */
-
-  if (
-    !education.dataset.aguPriceHierarchyBound
-  ) {
-
-    education.addEventListener(
-      "change",
-      () => {
-
-        updateBoards();
-
-      }
-    );
-
-
-    board?.addEventListener(
-      "change",
-      () => {
-
-        updateTypes();
-
-      }
-    );
-
-
-    education.dataset.aguPriceHierarchyBound =
-      "true";
-  }
-
-
-  /* -------------------------------------------------------
-     INITIAL STATE
-  ------------------------------------------------------- */
-
-  updateBoards();
-
-}    
-
-function adminExamSetOptions(id,items,placeholder,disabled=false,value=""){
-  const el=$(id);if(!el)return;
-  const unique=[...new Set(items.filter(Boolean).map(x=>String(x).trim()))];
-  el.innerHTML=`<option value="">${esc(placeholder)}</option>`+unique.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join("");
-  el.disabled=disabled||!unique.length;
-  if(value&&unique.includes(value))el.value=value;
-}
-function setupAdminExamHierarchy(){
-  const level=$("examEducationLevel"),board=$("examBoard"),type=$("examType"),cls=$("examClassLevel");
-  if(!level)return;
-  const refreshBoards=()=>{
-    const v=level.value;adminExamSetOptions("examBoard",Object.keys(ADMIN_EXAM_HIERARCHY[v]||{}),"Select examination board / organization",!v,board?.value||"");
-    adminExamSetOptions("examType",v&&board?.value?(ADMIN_EXAM_HIERARCHY[v]?.[board.value]||[]):[],"Select examination type",!board?.value,type?.value||"");
-    adminExamSetOptions("examClassLevel",ADMIN_EXAM_CLASSES[v]||[],"Select class / level",!v,cls?.value||"");
-  };
-  if(!level.dataset.aguHierarchyBound){
-    level.addEventListener("change",()=>{adminExamSetOptions("examBoard",Object.keys(ADMIN_EXAM_HIERARCHY[level.value]||{}),"Select examination board / organization",!level.value);adminExamSetOptions("examType",[],"Select examination type",true);adminExamSetOptions("examClassLevel",ADMIN_EXAM_CLASSES[level.value]||[],"Select class / level",!level.value);});
-    board?.addEventListener("change",()=>adminExamSetOptions("examType",ADMIN_EXAM_HIERARCHY[level.value]?.[board.value]||[],"Select examination type",!board.value));
-    level.dataset.aguHierarchyBound="true";
-  }
-  refreshBoards();
-}
-function clearExamForm(){
-  $("examEditId") && ($("examEditId").value="");
-  ["examTitle","examSubject","examEducationLevel","examTerm","examDescription"].forEach(id=>{if($(id))$(id).value="";});
-  adminExamSetOptions("examBoard",[],"Select education level first",true);
-  adminExamSetOptions("examType",[],"Select examination board first",true);
-  adminExamSetOptions("examClassLevel",[],"Select education level first",true);
-  $("examPassPercentage") && ($("examPassPercentage").value="");
-  $("examRegistrationRequired") && ($("examRegistrationRequired").value="true");
-  $("examPublished") && ($("examPublished").value="false");
-  $("saveExam") && ($("saveExam").textContent="➕ Create Examination");
-  if($("examFormStatus"))$("examFormStatus").textContent="";
-}
-
 /* ---------------- CREATE / SAVE EXAMINATION ---------------- */
 
 /* ---------------- POPULATE EXAMINATION SELECTS ---------------- */
 
 function populateExamSelects() {
-
-  /* -------------------------------------------------------
-     QUESTION MANAGEMENT
-
-     Question Manager still works with individual
-     examinations because questions belong to a specific
-     examination.
-  ------------------------------------------------------- */
-
-  const questionSelect =
-    $("adminQuestionExamSelect");
-
-  if (questionSelect) {
-
-    const currentValue =
-      questionSelect.value;
-
-    questionSelect.innerHTML =
-      '<option value="">Select an examination</option>' +
-
-      examinations
-        .map(exam => `
-          <option value="${esc(exam.id)}">
-            ${esc(
-              exam.title ||
-              "Untitled Examination"
-            )}
-          </option>
-        `)
-        .join("");
-
-    if (
-      currentValue &&
-      examinations.some(
-        exam =>
-          String(exam.id) ===
-          String(currentValue)
-      )
-    ) {
-
-      questionSelect.value =
-        currentValue;
-
+  /* Question and registration filters remain tied to actual examinations. */
+  [$("questionExamSelect"), $("registrationExamFilter")].forEach(select => {
+    if (!select) return;
+    const currentValue = select.value || "";
+    select.innerHTML = "";
+    const first = document.createElement("option");
+    first.value = "";
+    first.textContent = select.id === "questionExamSelect" ? "Select an examination" : "All examinations";
+    select.appendChild(first);
+    examinations.forEach(exam => {
+      const option = document.createElement("option");
+      option.value = exam.id;
+      option.textContent = exam.title || "Untitled Examination";
+      select.appendChild(option);
+    });
+    if (currentValue && examinations.some(exam => String(exam.id) === String(currentValue))) {
+      select.value = currentValue;
     }
+  });
 
-  }
+  setupResultExamHierarchy();
+}
 
-/* -------------------------------------------------------
-   EXAMINATION REGISTRATIONS
+function setupResultExamHierarchy() {
+  const select = $("resultExamFilter");
+  if (!select) return;
+  const currentValue = select.value || "";
+  select.innerHTML = "";
+  const all = document.createElement("option");
+  all.value = "";
+  all.textContent = "All examination groups";
+  select.appendChild(all);
 
-  /* -------------------------------------------------------
-     EXAMINATION REGISTRATIONS
+  const groups = new Map();
+  examinations.forEach(exam => {
+    const educationLevel = String(exam.education_level || "").trim();
+    const board = String(exam.examination_board || "").trim();
+    const classLevel = String(exam.class_level || "").trim();
+    const type = String(exam.examination_type || "").trim();
+    if (!educationLevel || !board || !classLevel || !type) return;
+    const key = [educationLevel, board, classLevel].join("|||");
+    if (!groups.has(key)) groups.set(key, { educationLevel, board, classLevel, types: [] });
+    if (!groups.get(key).types.includes(type)) groups.get(key).types.push(type);
+  });
 
-     Registration filter is also based on
-     EXAMINATION TYPE, not examination title.
-  ------------------------------------------------------- */
+  Object.entries(ADMIN_EXAM_HIERARCHY).forEach(([educationLevel, boards]) => {
+    const classes = ADMIN_EXAM_CLASSES[educationLevel] || [];
+    Object.entries(boards).forEach(([board, types]) => {
+      classes.forEach(classLevel => {
+        const key = [educationLevel, board, classLevel].join("|||");
+        if (!groups.has(key)) groups.set(key, { educationLevel, board, classLevel, types: [] });
+        types.forEach(type => {
+          if (!groups.get(key).types.includes(type)) groups.get(key).types.push(type);
+        });
+      });
+    });
+  });
 
-  const registrationSelect =
-    $("registrationExamFilter");
+  [...groups.values()]
+    .sort((a,b) => `${a.educationLevel} ${a.board} ${a.classLevel}`.localeCompare(`${b.educationLevel} ${b.board} ${b.classLevel}`))
+    .forEach(group => {
+      if (!group.types.length) return;
+      const optgroup = document.createElement("optgroup");
+      optgroup.label = `${group.educationLevel} — ${group.board} — ${group.classLevel}`;
+      [...new Set(group.types)].sort((a,b)=>a.localeCompare(b)).forEach(type => {
+        const option = document.createElement("option");
+        option.value = JSON.stringify({
+          education_level: group.educationLevel,
+          examination_board: group.board,
+          class_level: group.classLevel,
+          examination_type: type
+        });
+        option.textContent = type;
+        optgroup.appendChild(option);
+      });
+      select.appendChild(optgroup);
+    });
 
-  if (registrationSelect) {
+  if (currentValue && [...select.options].some(o => o.value === currentValue)) select.value = currentValue;
+}
 
-    const currentType =
-      registrationSelect.value;
-
-
-    const registrationTypes = [
-      ...new Set(
-
-        examinations
-          .map(
-            exam =>
-              String(
-                exam.examination_type ||
-                ""
-              ).trim()
-          )
-          .filter(Boolean)
-
-      )
-    ].sort(
-      (a, b) =>
-        a.localeCompare(
-          b,
-          undefined,
-          {
-            sensitivity: "base"
-          }
-        )
-    );
-
-
-    registrationSelect.innerHTML =
-      '<option value="">All examination types</option>' +
-
-      registrationTypes
-        .map(
-          type =>
-            `<option value="${esc(type)}">
-              ${esc(type)}
-            </option>`
-        )
-        .join("");
-
-
-    if (
-      currentType &&
-      registrationTypes.includes(
-        currentType
-      )
-    ) {
-
-      registrationSelect.value =
-        currentType;
-
-    }
-
-  }
-
+function selectedResultHierarchy() {
+  const value = $("resultExamFilter")?.value || "";
+  if (!value) return null;
+  try { return JSON.parse(value); } catch (_) { return null; }
 }
 
 async function loadRegistrations() {
 
-  const list =
-    $("adminRegistrationList");
+const list =
+$("adminRegistrationList");
 
-  if (!list) return;
+if (!list) return;
 
-  list.innerHTML =
-    '<div class="empty">Loading registrations...</div>';
+list.innerHTML =
+'<div class="empty">Loading registrations...</div>';
 
-  try {
+try {
 
-    /* -------------------------------------------------------
-       LOAD REGISTRATIONS
-    ------------------------------------------------------- */
+let query =  
+  getDB()  
+    .from("agu_exam_registrations")  
+    .select("*")  
+    .order(  
+      "registered_at",  
+      { ascending: false }  
+    );  
 
-    let query =
-      getDB()
-        .from("agu_exam_registrations")
-        .select("*")
-        .order(
-          "registered_at",
-          {
-            ascending: false
-          }
-        );
+const examId =  
+  $("registrationExamFilter")?.value ||  
+  "";  
 
+const status =  
+  $("registrationStatusFilter")?.value ||  
+  "";
 
-    const examinationType =
-      $("registrationExamFilter")?.value ||
-      "";
-
-    const status =
-      $("registrationStatusFilter")?.value ||
-      "";
-
-
-    /* -------------------------------------------------------
-       STATUS FILTER
-    ------------------------------------------------------- */
-
-    if (status) {
-
-      query =
-        query.eq(
-          "status",
-          status
-        );
-
-    }
-
-
-    const result =
-      await query;
-
-    if (result.error) {
-      throw result.error;
-    }
-
-
-    let rows =
-      Array.isArray(result.data)
-        ? result.data
-        : [];
-
-
-    /* -------------------------------------------------------
-       EXAMINATION TYPE FILTER
-       
-       Find examinations belonging to the selected
-       examination type, then keep registrations for
-       those examinations.
-    ------------------------------------------------------- */
-
-    if (examinationType) {
-
-      const matchingExamIds =
-        examinations
-          .filter(
-            exam =>
-              String(
-                exam.examination_type ||
-                ""
-              ).trim() ===
-              String(
-                examinationType
-              ).trim()
-          )
-          .map(
-            exam =>
-              String(exam.id)
-          );
-
-
-      rows =
-        rows.filter(
-          registration =>
-            matchingExamIds.includes(
-              String(
-                registration.examination_id
-              )
-            )
-        );
-
-    }
-
-
-    examRegistrations =
-      rows;
-
-
-    renderRegistrations();
-
-
-  } catch (error) {
-
-    console.error(
-      "AGULIBRARY registration loading error:",
-      error
-    );
-
-    list.innerHTML =
-      `<div class="empty">
-        ❌ Unable to load registrations.<br>
-        <small>${esc(
-          error.message ||
-          "Database error"
-        )}</small>
-      </div>`;
-
-  }
-
+if (examId) {
+query =
+query.eq(
+"examination_id",
+examId
+);
 }
 
+if (status) {  
+  query =  
+    query.eq(  
+      "status",  
+      status  
+    );  
+}  
+
+const result =  
+  await query;  
+
+if (result.error) {  
+  throw result.error;  
+}  
+
+examRegistrations =  
+  Array.isArray(result.data)  
+    ? result.data  
+    : [];  
+
+renderRegistrations();
+
+} catch (error) {
+
+console.error(  
+  "AGULIBRARY registration loading error:",  
+  error  
+);  
+
+list.innerHTML =  
+  `<div class="empty">  
+    ❌ Unable to load registrations.<br>  
+    <small>${esc(  
+      error.message ||  
+      "Database error"  
+    )}</small>  
+  </div>`;
+
+}
+}
 function renderRegistrations() {
 
 const list =
@@ -2972,7 +2706,7 @@ if (result.error) {
 }  
 
 examinations =  
-  result.data || [];
+  result.data || [];  
 
 /*  
  * ------------------------------------------------------  
@@ -2990,120 +2724,71 @@ if (!examinations.length) {
   return;  
 }  
 
-list.innerHTML =
-  examinations
-    .map(exam => {
+list.innerHTML =  
+  examinations  
+    .map(exam => {  
 
-      const published =
-        exam.is_published === true;
+      const published =  
+        exam.is_published === true;  
 
-      const registration =
-        exam.registration_required !== false;
+      const registration =  
+        exam.registration_required !== false;  
 
-      return `
-        <div class="exam-card">
+      return `  
+        <div class="exam-card">  
 
-          <div class="exam-card-title">
-            ${esc(exam.title || "Untitled Examination")}
-          </div>
+          <div class="exam-card-title">  
+            ${exam.title || "Untitled Examination"}  
+          </div>  
 
-          <div class="exam-card-info">
-            <strong>Subject:</strong>
-            ${esc(exam.subject || "—")}
-          </div>
+          <div class="exam-card-info">  
+            <strong>Subject:</strong>  
+            ${exam.subject || "—"}  
+          </div>  
 
-          <div class="exam-card-info">
-            <strong>Education Level:</strong>
-            ${esc(exam.education_level || "—")}
-          </div>
+          <div class="exam-card-info">  
+            <strong>Education Level:</strong>  
+            ${exam.education_level || "—"}  
+          </div>  
 
-          <div class="exam-card-info">
-            <strong>Class / Level:</strong>
-            ${esc(exam.class_level || "—")}
-          </div>
+          <div class="exam-card-info">  
+            <strong>Class / Level:</strong>  
+            ${exam.class_level || "—"}  
+          </div>  
 
-          <div class="exam-card-info">
-            <strong>Term:</strong>
-            ${esc(exam.term || "—")}
-          </div>
+          <div class="exam-card-info">  
+            <strong>Term:</strong>  
+            ${exam.term || "—"}  
+          </div>  
 
-          <div class="exam-card-info">
-            <strong>Pass Percentage:</strong>
-            ${exam.pass_percentage ?? 0}%
-          </div>
+          <div class="exam-card-info">  
+            <strong>Pass Percentage:</strong>  
+            ${exam.pass_percentage ?? 0}%  
+          </div>  
 
-          <div class="exam-card-info">
-            <strong>Registration:</strong>
-            ${
-              registration
-                ? "Required"
-                : "Not Required"
-            }
-          </div>
+          <div class="exam-card-info">  
+            <strong>Registration:</strong>  
+            ${  
+              registration  
+                ? "Required"  
+                : "Not Required"  
+            }  
+          </div>  
 
-          <div class="exam-card-info">
-            <strong>Status:</strong>
-            ${
-              published
-                ? "Published"
-                : "Draft"
-            }
-          </div>
+          <div class="exam-card-info">  
+            <strong>Status:</strong>  
+            ${  
+              published  
+                ? "Published"  
+                : "Draft"  
+            }  
+          </div>  
 
+        </div>  
+      `;  
 
-          ${
-            published
-              ? `
-                <div
-                  class="actions"
-                  style="
-                    display:flex;
-                    gap:8px;
-                    flex-wrap:wrap;
-                    margin-top:15px;
-                  "
-                >
-
-                  <button
-                    class="btn danger agu-delete-examination"
-                    data-id="${esc(exam.id)}"
-                    data-title="${esc(exam.title || "Untitled Examination")}"
-                    type="button"
-                  >
-                    🗑 Delete Published Examination
-                  </button>
-
-                </div>
-              `
-              : ""
-          }
-
-        </div>
-      `;
-
-    })
+    })  
     .join("");
-
-
-/* ---------------- DELETE PUBLISHED EXAMINATION ---------------- */
-
-list
-  .querySelectorAll(".agu-delete-examination")
-  .forEach(button => {
-
-    button.addEventListener(
-      "click",
-      () => {
-
-        deleteExamination(
-          button.dataset.id,
-          button.dataset.title
-        );
-
-      }
-    );
-
-  });
 
 } catch (error) {
 
@@ -3123,104 +2808,6 @@ list.innerHTML =
 }
 }
 
-/* ---------------- DELETE PUBLISHED EXAMINATION ---------------- */
-
-async function deleteExamination(id, title) {
-
-  if (!id) {
-    showMessage(
-      "Examination ID is missing.",
-      "error"
-    );
-    return;
-  }
-
-
-  const confirmed =
-    confirm(
-      `Delete "${title || "this examination"}"?\n\n` +
-      `This will permanently delete the published examination.\n\n` +
-      `This action cannot be undone.`
-    );
-
-  if (!confirmed) {
-    return;
-  }
-
-
-  try {
-
-    /* -----------------------------------------
-       REQUIRE ADMIN MFA
-    ----------------------------------------- */
-
-    const verified =
-      await adminMfaGate();
-
-    if (!verified) {
-      return;
-    }
-
-
-    showMessage(
-      `Deleting "${title || "examination"}"...`,
-      "success"
-    );
-
-
-    /* -----------------------------------------
-       DELETE EXAMINATION
-    ----------------------------------------- */
-
-    const result =
-      await getDB()
-        .from("agu_examinations")
-        .delete()
-        .eq(
-          "id",
-          id
-        );
-
-
-    if (result.error) {
-      throw result.error;
-    }
-
-
-    /* -----------------------------------------
-       SUCCESS
-    ----------------------------------------- */
-
-    showMessage(
-      `"${title || "Examination"}" deleted successfully.`,
-      "success"
-    );
-
-
-    /* -----------------------------------------
-       RELOAD EXAMINATION LIST
-    ----------------------------------------- */
-
-    await loadExaminations();
-
-
-  } catch (error) {
-
-    console.error(
-      "AGULIBRARY published examination deletion error:",
-      error
-    );
-
-
-    showMessage(
-      error.message ||
-      "Unable to delete the published examination.",
-      "error"
-    );
-
-  }
-}
-    
 /* ---------------- LOAD QUESTIONS FOR SELECTED EXAM ---------------- */
 
 async function loadQuestionsForSelectedExam() {
@@ -3229,7 +2816,7 @@ const list =
 $("adminQuestionList");
 
 const examinationId =
-$("adminQuestionExamSelect")?.value?.trim() || "";
+$("questionExamSelect")?.value?.trim() || "";
 
 if (!list) {
 
@@ -3666,8 +3253,9 @@ const verified =
 
 if (!verified) return;  
 
-const examinationId =
-  $("adminQuestionExamSelect")?.value || "";
+const examinationId =  
+  $("questionExamSelect")?.value || "";  
+
 const id =  
   $("questionEditId")?.value.trim() || "";  
 
@@ -4032,14 +3620,6 @@ const educationLevel =
 
 const classLevel =  
   $("examClassLevel")?.value.trim() ||  
-  "";
-
-const examinationBoard =
-  $("examBoard")?.value.trim() ||
-  "";
-
-const examinationType =
-  $("examType")?.value.trim() ||
   "";  
 
 const term =  
@@ -4060,13 +3640,11 @@ if (
   !subject ||  
   !educationLevel ||  
   !classLevel ||  
-  !examinationBoard ||
-  !examinationType ||
   !term  
 ) {  
 
   throw new Error(  
-    "Title, subject, education level, examination board, examination type, class / level and term are required."  
+    "Title, subject, education level, class / level and term are required."  
   );  
 }  
 
@@ -4094,13 +3672,6 @@ const payload = {
 
   education_level:  
     educationLevel,  
-
-
-  examination_board:
-    examinationBoard,
-
-  examination_type:
-    examinationType,  
 
   class_level:  
     classLevel,  
@@ -4177,9 +3748,7 @@ if (!id) {
   $("examTitle").value = "";  
   $("examSubject").value = "";  
   $("examEducationLevel").value = "";  
-  adminExamSetOptions("examBoard", [], "Select education level first", true);
-  adminExamSetOptions("examType", [], "Select examination board first", true);
-  adminExamSetOptions("examClassLevel", [], "Select education level first", true);  
+  $("examClassLevel").value = "";  
   $("examTerm").value = "";  
   $("examPassPercentage").value = "";  
   $("examRegistrationRequired").value = "true";  
@@ -4231,6 +3800,46 @@ The currency symbol is derived locally from the selected country
 and displayed without requiring a currency_symbol database column.
 ========================================================= */
 
+/* =========================================================
+   EXAMINATION REGISTRATION PRICE HIERARCHY UI
+========================================================= */
+function setupExamPriceHierarchy() {
+  const education = $("examPriceEducationLevel");
+  const board = $("examPriceBoard");
+  const type = $("examPriceType");
+  const classLevel = $("examPriceClassLevel");
+  if (!education) return;
+
+  const fill = (el, items, placeholder, disabled = false) => {
+    if (!el) return;
+    const values = [...new Set((items || []).map(x => String(x || "").trim()).filter(Boolean))];
+    el.innerHTML = `<option value="">${esc(placeholder)}</option>` + values.map(v => `<option value="${esc(v)}">${esc(v)}</option>`).join("");
+    el.disabled = disabled || !values.length;
+  };
+
+  const updateBoards = () => {
+    const level = education.value || "";
+    const boards = Object.keys(ADMIN_EXAM_HIERARCHY[level] || {});
+    fill(board, boards, "Select examination board / organization", !level);
+    fill(type, [], "Select examination board / organization", true);
+    fill(classLevel, ADMIN_EXAM_CLASSES[level] || [], "Select class / level", !level);
+  };
+
+  const updateTypes = () => {
+    const level = education.value || "";
+    const selectedBoard = board?.value || "";
+    const types = ADMIN_EXAM_HIERARCHY[level]?.[selectedBoard] || [];
+    fill(type, types, "Select examination type", !selectedBoard);
+  };
+
+  if (!education.dataset.aguPriceHierarchyBound) {
+    education.addEventListener("change", updateBoards);
+    board?.addEventListener("change", updateTypes);
+    education.dataset.aguPriceHierarchyBound = "true";
+  }
+  updateBoards();
+}
+
 const EXAM_COUNTRY_CURRENCIES = {
   NG: { name: "Nigeria", code: "NG", currency: "NGN", symbol: "₦" },
   GH: { name: "Ghana", code: "GH", currency: "GHS", symbol: "₵" },
@@ -4276,43 +3885,6 @@ function examCurrencyInfo(countryCode, countryName, currencyCode) {
   };
 }
 
-function getExamCountryInfoFromOption(option) {
-  if (!option || !option.value) return null;
-
-  const rawValue = String(option.value || "").trim();
-  const rawText = String(option.textContent || "").trim();
-  const dataCode = String(option.dataset?.code || "").trim().toUpperCase();
-  const dataCurrency = String(option.dataset?.currency || "").trim().toUpperCase();
-
-  // First use explicit data attributes when the HTML provides them.
-  if (dataCode && EXAM_COUNTRY_CURRENCIES[dataCode]) {
-    return EXAM_COUNTRY_CURRENCIES[dataCode];
-  }
-
-  // Also accept an option whose value is the ISO country code.
-  const valueUpper = rawValue.toUpperCase();
-  if (EXAM_COUNTRY_CURRENCIES[valueUpper]) {
-    return EXAM_COUNTRY_CURRENCIES[valueUpper];
-  }
-
-  // Accept the country name as the option value or visible text.
-  const countryName = rawValue || rawText;
-  const foundByName = Object.values(EXAM_COUNTRY_CURRENCIES).find(
-    item => String(item.name).toLowerCase() === countryName.toLowerCase()
-  );
-
-  if (foundByName) {
-    return foundByName;
-  }
-
-  // Final fallback for future countries added to the HTML.
-  return examCurrencyInfo(
-    dataCode,
-    rawValue || rawText,
-    dataCurrency
-  );
-}
-
 function setupExamCountrySelector() {
   const countrySelect = $("examPriceCountryName");
   const countryCode = $("examPriceCountryCode");
@@ -4321,34 +3893,28 @@ function setupExamCountrySelector() {
 
   if (!countrySelect) return;
 
-  // Prevent duplicate listeners if this function is called again while editing.
-  if (countrySelect.dataset.aguCurrencySelectorBound === "true") {
-    const option = countrySelect.options[countrySelect.selectedIndex];
-    const info = getExamCountryInfoFromOption(option);
-    if (countryCode) countryCode.value = info?.code || "";
-    if (currencyCode) currencyCode.value = info?.currency || "";
-    if (currencySymbol) currencySymbol.value = info?.symbol || "";
-    return;
-  }
-
   const fill = () => {
     const option = countrySelect.options[countrySelect.selectedIndex];
-    const info = getExamCountryInfoFromOption(option);
 
-    if (!info) {
+    if (!option || !option.value) {
       if (countryCode) countryCode.value = "";
       if (currencyCode) currencyCode.value = "";
       if (currencySymbol) currencySymbol.value = "";
       return;
     }
 
-    if (countryCode) countryCode.value = info.code || "";
-    if (currencyCode) currencyCode.value = info.currency || "";
-    if (currencySymbol) currencySymbol.value = info.symbol || "";
+    const info = examCurrencyInfo(
+      option.dataset.code || "",
+      option.value || "",
+      option.dataset.currency || ""
+    );
+
+    if (countryCode) countryCode.value = info.code;
+    if (currencyCode) currencyCode.value = info.currency;
+    if (currencySymbol) currencySymbol.value = info.symbol;
   };
 
   countrySelect.addEventListener("change", fill);
-  countrySelect.dataset.aguCurrencySelectorBound = "true";
   fill();
 }
 
@@ -4358,798 +3924,140 @@ function examPriceStatusText(enabled) {
     : '<span class="badge off">OFF — Disabled</span>';
 }
 
- async function loadExamPrices() {
-
-  const list =
-    $("adminExamPriceList");
-
+async function loadExamPrices() {
+  const list = $("adminExamPriceList");
   if (!list) return;
-
-  list.innerHTML =
-    '<div class="empty">Loading examination registration prices...</div>';
-
+  list.innerHTML = '<div class="empty">Loading examination registration prices...</div>';
   try {
-
-    const result =
-      await getDB()
-        .from("agu_exam_country_prices")
-        .select(
-          "id,education_level,examination_board,examination_type,class_level,country_code,country_name,currency_code,amount,is_enabled,created_at,updated_at"
-        )
-        .order(
-          "country_name",
-          {
-            ascending: true
-          }
-        );
-
-    if (result.error) {
-      throw result.error;
-    }
-
-    const rows =
-      Array.isArray(result.data)
-        ? result.data
-        : [];
-
+    const result = await getDB()
+      .from("agu_exam_country_prices")
+      .select("id,education_level,examination_board,examination_type,class_level,country_code,country_name,currency_code,amount,is_enabled,created_at,updated_at")
+      .order("country_name", {ascending:true});
+    if (result.error) throw result.error;
+    const rows = Array.isArray(result.data) ? result.data : [];
     if (!rows.length) {
-
-      list.innerHTML =
-        '<div class="empty">No examination registration prices have been configured yet.</div>';
-
+      list.innerHTML = '<div class="empty">No examination registration prices have been configured yet.</div>';
       return;
     }
-
-
-    list.innerHTML =
-      rows.map(row => {
-
-        const info =
-          examCurrencyInfo(
-            row.country_code,
-            row.country_name,
-            row.currency_code
-          );
-
-        const amount =
-          Number(row.amount || 0);
-
-        return `
-          <div class="item">
-
-            <div class="item-main">
-
-              <div class="avatar">
-                ${esc(info.code || "🌍")}
-              </div>
-
-              <div class="item-text">
-
-                <strong>
-                  ${esc(
-                    row.examination_type ||
-                    "Examination Type"
-                  )}
-                </strong>
-
-                <div class="small">
-                  Education Level:
-                  ${esc(
-                    row.education_level || "—"
-                  )}
-                </div>
-
-                <div class="small">
-                  Board / Organization:
-                  ${esc(
-                    row.examination_board || "—"
-                  )}
-                </div>
-
-                <div class="small">
-                  Exam Type:
-                  ${esc(
-                    row.examination_type || "—"
-                  )}
-                </div>
-
-                <div class="small">
-                  Class / Level:
-                  ${esc(
-                    row.class_level || "—"
-                  )}
-                </div>
-
-                <div class="small">
-                  Country:
-                  ${esc(
-                    row.country_name ||
-                    info.name
-                  )}
-                </div>
-
-                <div class="small">
-                  Currency:
-                  ${esc(
-                    info.currency || "—"
-                  )}
-                </div>
-
-                <div class="small">
-
-                  Registration Price:
-
-                  <strong>
-                    ${esc(info.symbol)}
-                    ${esc(
-                      amount.toLocaleString(
-                        undefined,
-                        {
-                          minimumFractionDigits: 0,
-                          maximumFractionDigits: 2
-                        }
-                      )
-                    )}
-                  </strong>
-
-                </div>
-
-                <div class="exam-meta">
-
-                  ${examPriceStatusText(
-                    !!row.is_enabled
-                  )}
-
-                </div>
-
-              </div>
-
-            </div>
-
-
-            <div
-              style="
-                display:flex;
-                gap:8px;
-                flex-wrap:wrap
-              "
-            >
-
-              <button
-                class="btn light agu-edit-exam-price"
-                data-id="${esc(row.id)}"
-                type="button"
-              >
-                ✏️ Edit
-              </button>
-
-
-              <button
-                class="btn ${
-                  row.is_enabled
-                    ? "danger"
-                    : "primary"
-                } agu-toggle-exam-price"
-                data-id="${esc(row.id)}"
-                data-enabled="${
-                  row.is_enabled
-                    ? "true"
-                    : "false"
-                }"
-                type="button"
-              >
-                ${
-                  row.is_enabled
-                    ? "Disable"
-                    : "Enable"
-                }
-              </button>
-
-
-              <button
-                class="btn danger agu-delete-exam-price"
-                data-id="${esc(row.id)}"
-                data-country="${esc(
-                  row.country_name || ""
-                )}"
-                type="button"
-              >
-                🗑 Delete
-              </button>
-
-            </div>
-
+    list.innerHTML = rows.map(row => {
+      const info = examCurrencyInfo(row.country_code,row.country_name,row.currency_code);
+      const amount = Number(row.amount || 0);
+      return `<div class="item">
+        <div class="item-main">
+          <div class="avatar">${esc(info.code || "🌍")}</div>
+          <div class="item-text">
+            <strong>${esc(row.education_level || "—")}</strong>
+            <div class="small">Board / Organization: ${esc(row.examination_board || "—")}</div>
+            <div class="small">Examination Type: ${esc(row.examination_type || "—")}</div>
+            <div class="small">Class / Level: ${esc(row.class_level || "—")}</div>
+            <div class="small">Country: ${esc(row.country_name || info.name)} • Currency: ${esc(info.currency || "—")}</div>
+            <div class="small">Registration Price: <strong>${esc(info.symbol)}${esc(amount.toLocaleString(undefined,{minimumFractionDigits:0,maximumFractionDigits:2}))}</strong></div>
+            <div class="exam-meta">${examPriceStatusText(!!row.is_enabled)}</div>
           </div>
-        `;
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn light agu-edit-exam-price" data-id="${esc(row.id)}" type="button">✏️ Edit</button>
+          <button class="btn ${row.is_enabled ? "danger" : "primary"} agu-toggle-exam-price" data-id="${esc(row.id)}" data-enabled="${row.is_enabled ? "true" : "false"}" type="button">${row.is_enabled ? "Disable" : "Enable"}</button>
+          <button class="btn danger agu-delete-exam-price" data-id="${esc(row.id)}" data-country="${esc(row.country_name || "")}" type="button">🗑 Delete</button>
+        </div>
+      </div>`;
+    }).join("");
 
-      })
-      .join("");
-
-
-    /* ---------------- EDIT ---------------- */
-
-    list
-      .querySelectorAll(
-        ".agu-edit-exam-price"
-      )
-      .forEach(button => {
-
-        button.onclick = () => {
-
-          const row =
-            rows.find(
-              x =>
-                String(x.id) ===
-                String(button.dataset.id)
-            );
-
-          if (!row) return;
-
-
-          if ($("examPriceEditId")) {
-
-            $("examPriceEditId").value =
-              row.id || "";
-
+    list.querySelectorAll(".agu-edit-exam-price").forEach(button => {
+      button.onclick = () => {
+        const row = rows.find(x => String(x.id) === String(button.dataset.id));
+        if (!row) return;
+        if ($("examPriceEditId")) $("examPriceEditId").value = row.id || "";
+        if ($("examPriceEducationLevel")) $("examPriceEducationLevel").value = row.education_level || "";
+        setupExamPriceHierarchy();
+        if ($("examPriceBoard")) $("examPriceBoard").value = row.examination_board || "";
+        if ($("examPriceType")) {
+          const types = ADMIN_EXAM_HIERARCHY[row.education_level]?.[row.examination_board] || [];
+          const el = $("examPriceType");
+          el.innerHTML = `<option value="">Select examination type</option>` + types.map(v => `<option value="${esc(v)}">${esc(v)}</option>`).join("");
+          el.disabled = !types.length;
+          el.value = row.examination_type || "";
+        }
+        if ($("examPriceClassLevel")) $("examPriceClassLevel").value = row.class_level || "";
+        const countrySelect = $("examPriceCountryName");
+        if (countrySelect) {
+          countrySelect.value = row.country_name || "";
+          if (!countrySelect.value) {
+            const option = [...countrySelect.options].find(o => String(o.dataset.code || "").toUpperCase() === String(row.country_code || "").toUpperCase());
+            if (option) countrySelect.value = option.value;
           }
-
-
-          if ($("examPriceEducationLevel")) {
-
-            $("examPriceEducationLevel").value =
-              row.education_level || "";
-
-          }
-
-
-          setupExamPriceHierarchy();
-
-
-          if ($("examPriceBoard")) {
-
-            $("examPriceBoard").value =
-              row.examination_board || "";
-
-          }
-
-
-          /* Refresh Exam Type after Board */
-
-          const level =
-            $("examPriceEducationLevel")?.value ||
-            "";
-
-          const selectedBoard =
-            $("examPriceBoard")?.value ||
-            "";
-
-          const types =
-            ADMIN_EXAM_HIERARCHY[level]?.[
-              selectedBoard
-            ] || [];
-
-          const typeSelect =
-            $("examPriceType");
-
-          if (typeSelect) {
-
-            typeSelect.innerHTML =
-              '<option value="">Select examination type</option>' +
-              types
-                .map(
-                  value =>
-                    `<option value="${esc(value)}">${esc(value)}</option>`
-                )
-                .join("");
-
-            typeSelect.disabled =
-              !selectedBoard;
-
-            typeSelect.value =
-              row.examination_type || "";
-          }
-
-
-          const classSelect =
-            $("examPriceClassLevel");
-
-          if (classSelect) {
-
-            const classes =
-              ADMIN_EXAM_CLASSES[level] || [];
-
-            classSelect.innerHTML =
-              '<option value="">Select class / level</option>' +
-              classes
-                .map(
-                  value =>
-                    `<option value="${esc(value)}">${esc(value)}</option>`
-                )
-                .join("");
-
-            classSelect.disabled =
-              !classes.length;
-
-            classSelect.value =
-              row.class_level || "";
-          }
-
-
-          const countrySelect =
-            $("examPriceCountryName");
-
-          if (countrySelect) {
-
-            countrySelect.value =
-              row.country_name || "";
-
-            if (!countrySelect.value) {
-
-              const option =
-                Array.from(
-                  countrySelect.options
-                ).find(
-                  o =>
-                    String(
-                      o.dataset.code || ""
-                    ).toUpperCase() ===
-                    String(
-                      row.country_code || ""
-                    ).toUpperCase()
-                );
-
-              if (option) {
-                countrySelect.value =
-                  option.value;
-              }
-
-            }
-
-          }
-
-
-          if ($("examPriceAmount")) {
-
-            $("examPriceAmount").value =
-              row.amount ?? "";
-
-          }
-
-
-          if ($("examPriceEnabled")) {
-
-            $("examPriceEnabled").value =
-              String(
-                !!row.is_enabled
-              );
-
-          }
-
-
-          setupExamCountrySelector();
-
-
-          if ($("saveExamPrice")) {
-
-            $("saveExamPrice").textContent =
-              "💾 Update Examination Type Price";
-
-          }
-
-
-          if ($("examPriceFormStatus")) {
-
-            $("examPriceFormStatus").textContent =
-              `Editing ${row.examination_type || "examination type"} price.`;
-
-          }
-
-
-          $("examPriceAmount")?.focus();
-
-        };
-
-      });
-
-
-    /* ---------------- ENABLE / DISABLE ---------------- */
-
-    list
-      .querySelectorAll(
-        ".agu-toggle-exam-price"
-      )
-      .forEach(button => {
-
-        button.onclick = () =>
-          toggleExamPrice(
-            button.dataset.id,
-            button.dataset.enabled !== "true"
-          );
-
-      });
-
-
-    /* ---------------- DELETE ---------------- */
-
-    list
-      .querySelectorAll(
-        ".agu-delete-exam-price"
-      )
-      .forEach(button => {
-
-        button.onclick = () =>
-          deleteExamPrice(
-            button.dataset.id,
-            button.dataset.country ||
-            "this country"
-          );
-
-      });
-
-
+        }
+        if ($("examPriceAmount")) $("examPriceAmount").value = row.amount ?? "";
+        if ($("examPriceEnabled")) $("examPriceEnabled").value = String(!!row.is_enabled);
+        setupExamCountrySelector();
+        if ($("saveExamPrice")) $("saveExamPrice").textContent = "💾 Update Registration Price";
+        if ($("examPriceFormStatus")) $("examPriceFormStatus").textContent = `Editing ${row.education_level || "examination"} / ${row.examination_type || "type"} / ${row.class_level || "class"} / ${row.country_name || "country"}.`;
+        $("examPriceAmount")?.focus();
+      };
+    });
+    list.querySelectorAll(".agu-toggle-exam-price").forEach(button => button.onclick = () => toggleExamPrice(button.dataset.id, button.dataset.enabled !== "true"));
+    list.querySelectorAll(".agu-delete-exam-price").forEach(button => button.onclick = () => deleteExamPrice(button.dataset.id, button.dataset.country || "this country"));
   } catch (error) {
-
-    console.error(
-      "AGULIBRARY examination price loading error:",
-      error
-    );
-
-    list.innerHTML = `
-      <div class="empty">
-
-        ❌ Unable to load examination registration prices.
-
-        <br>
-
-        <small>
-          ${esc(
-            error.message ||
-            "Database error"
-          )}
-        </small>
-
-      </div>
-    `;
-
+    console.error("AGULIBRARY examination price loading error:", error);
+    list.innerHTML = `<div class="empty">❌ Unable to load examination registration prices.<br><small>${esc(error.message || "Database error")}</small></div>`;
   }
-
-}   
+}
 
 async function saveExamPrice() {
-
-  const status =
-    $("examPriceFormStatus");
-
+  const status = $("examPriceFormStatus");
   try {
-
-    const verified =
-      await adminMfaGate();
-
+    const verified = await adminMfaGate();
     if (!verified) return;
-
-
-    const editId =
-      $("examPriceEditId")?.value.trim() ||
-      "";
-
-
-    /* ---------------- HIERARCHY ---------------- */
-
-    const educationLevel =
-      $("examPriceEducationLevel")?.value.trim() ||
-      "";
-
-    const examinationBoard =
-      $("examPriceBoard")?.value.trim() ||
-      "";
-
-    const examinationType =
-      $("examPriceType")?.value.trim() ||
-      "";
-
-    const classLevel =
-      $("examPriceClassLevel")?.value.trim() ||
-      "";
-
-
-    if (!educationLevel) {
-
-      throw new Error(
-        "Please select an education level."
-      );
-
-    }
-
-
-    if (!examinationBoard) {
-
-      throw new Error(
-        "Please select an examination board / organization."
-      );
-
-    }
-
-
-    if (!examinationType) {
-
-      throw new Error(
-        "Please select an examination type."
-      );
-
-    }
-
-
-    if (!classLevel) {
-
-      throw new Error(
-        "Please select a class / level."
-      );
-
-    }
-
-
-    /* ---------------- COUNTRY ---------------- */
-
-    const countrySelect =
-      $("examPriceCountryName");
-
-    const selectedOption =
-      countrySelect?.options[
-        countrySelect.selectedIndex
-      ];
-
-
-    if (
-      !selectedOption ||
-      !selectedOption.value
-    ) {
-
-      throw new Error(
-        "Please select a country."
-      );
-
-    }
-
-
-    const info =
-      getExamCountryInfoFromOption(
-        selectedOption
-      );
-
-
-    if (
-      !info ||
-      !info.code ||
-      !info.currency
-    ) {
-
-      throw new Error(
-        "The selected country does not have a valid country/currency configuration."
-      );
-
-    }
-
-
-    /* ---------------- PRICE ---------------- */
-
-    const amount =
-      Number(
-        $("examPriceAmount")?.value
-      );
-
-
-    if (
-      !Number.isFinite(amount) ||
-      amount < 0
-    ) {
-
-      throw new Error(
-        "Registration price must be 0 or greater."
-      );
-
-    }
-
-
-    const isEnabled =
-      $("examPriceEnabled")?.value ===
-      "true";
-
-
-    const database =
-      getDB();
-
-
-    /*
-     * IMPORTANT:
-     *
-     * There is NO:
-     *
-     * subject
-     * examination_id
-     *
-     * in this price record.
-     *
-     * The price belongs to the
-     * examination type hierarchy.
-     */
-
+    const editId = $("examPriceEditId")?.value.trim() || "";
+    const educationLevel = $("examPriceEducationLevel")?.value.trim() || "";
+    const examinationBoard = $("examPriceBoard")?.value.trim() || "";
+    const examinationType = $("examPriceType")?.value.trim() || "";
+    const classLevel = $("examPriceClassLevel")?.value.trim() || "";
+    if (!educationLevel) throw new Error("Please select an education level.");
+    if (!examinationBoard) throw new Error("Please select an examination board / organization.");
+    if (!examinationType) throw new Error("Please select an examination type.");
+    if (!classLevel) throw new Error("Please select a class / level.");
+    const countrySelect = $("examPriceCountryName");
+    const selectedOption = countrySelect?.options[countrySelect.selectedIndex];
+    if (!selectedOption || !selectedOption.value) throw new Error("Please select a country.");
+    const info = examCurrencyInfo(selectedOption.dataset.code || "", selectedOption.value || "", selectedOption.dataset.currency || "");
+    if (!info.code || !info.currency) throw new Error("The selected country does not have a valid country/currency configuration.");
+    const amount = Number($("examPriceAmount")?.value);
+    if (!Number.isFinite(amount) || amount < 0) throw new Error("Registration price must be 0 or greater.");
+    const isEnabled = $("examPriceEnabled")?.value === "true";
     const payload = {
-
-      education_level:
-        educationLevel,
-
-      examination_board:
-        examinationBoard,
-
-      examination_type:
-        examinationType,
-
-      class_level:
-        classLevel,
-
-      country_code:
-        info.code,
-
-      country_name:
-        info.name,
-
-      currency_code:
-        info.currency,
-
-      amount:
-        amount,
-
-      is_enabled:
-        isEnabled,
-
-      updated_at:
-        new Date().toISOString()
-
+      education_level: educationLevel,
+      examination_board: examinationBoard,
+      examination_type: examinationType,
+      class_level: classLevel,
+      country_code: info.code,
+      country_name: info.name,
+      currency_code: info.currency,
+      amount,
+      is_enabled: isEnabled,
+      updated_at: new Date().toISOString()
     };
-
-
+    const db = getDB();
     let result;
-
-
-    /* ---------------- UPDATE ---------------- */
-
     if (editId) {
-
-      result =
-        await database
-          .from(
-            "agu_exam_country_prices"
-          )
-          .update(payload)
-          .eq(
-            "id",
-            editId
-          );
-
+      result = await db.from("agu_exam_country_prices").update(payload).eq("id", editId);
+    } else {
+      const existing = await db.from("agu_exam_country_prices").select("id").eq("education_level",educationLevel).eq("examination_board",examinationBoard).eq("examination_type",examinationType).eq("class_level",classLevel).eq("country_code",info.code).maybeSingle();
+      if (existing.error) throw existing.error;
+      result = existing.data?.id
+        ? await db.from("agu_exam_country_prices").update(payload).eq("id", existing.data.id)
+        : await db.from("agu_exam_country_prices").insert(payload);
     }
-
-
-    /* ---------------- CREATE / UPSERT ---------------- */
-
-    else {
-
-      const existing =
-        await database
-          .from(
-            "agu_exam_country_prices"
-          )
-          .select("id")
-          .eq(
-            "education_level",
-            educationLevel
-          )
-          .eq(
-            "examination_board",
-            examinationBoard
-          )
-          .eq(
-            "examination_type",
-            examinationType
-          )
-          .eq(
-            "class_level",
-            classLevel
-          )
-          .eq(
-            "country_code",
-            info.code
-          )
-          .maybeSingle();
-
-
-      if (existing.error) {
-        throw existing.error;
-      }
-
-
-      if (existing.data?.id) {
-
-        result =
-          await database
-            .from(
-              "agu_exam_country_prices"
-            )
-            .update(payload)
-            .eq(
-              "id",
-              existing.data.id
-            );
-
-      } else {
-
-        result =
-          await database
-            .from(
-              "agu_exam_country_prices"
-            )
-            .insert(payload);
-
-      }
-
-    }
-
-
-    if (result.error) {
-      throw result.error;
-    }
-
-
-    if (status) {
-
-      status.textContent =
-        editId
-          ? "✅ Examination type registration price updated successfully."
-          : "✅ Examination type registration price saved successfully.";
-
-    }
-
-
-    showMessage(
-      editId
-        ? "Examination type registration price updated successfully."
-        : "Examination type registration price saved successfully.",
-      "success"
-    );
-
-
+    if (result.error) throw result.error;
+    if (status) status.textContent = editId ? "✅ Examination registration price updated successfully." : "✅ Examination registration price saved successfully.";
+    showMessage(editId ? "Examination registration price updated successfully." : "Examination registration price saved successfully.", "success");
     clearExamPriceForm();
-
     await loadExamPrices();
-
-
   } catch (error) {
-
-    console.error(
-      "AGULIBRARY examination type price save error:",
-      error
-    );
-
-
-    if (status) {
-
-      status.textContent =
-        "❌ " +
-        (
-          error.message ||
-          "Unable to save examination registration price."
-        );
-
-    }
-
-
-    showMessage(
-      error.message ||
-      "Unable to save examination registration price.",
-      "error"
-    );
-
+    console.error("AGULIBRARY examination price save error:", error);
+    if (status) status.textContent = "❌ " + (error.message || "Unable to save examination registration price.");
+    showMessage(error.message || "Unable to save examination registration price.", "error");
   }
-
 }
 
 async function toggleExamPrice(id, enabled) {
@@ -5229,92 +4137,99 @@ async function deleteExamPrice(id, countryName) {
 }
 
 function clearExamPriceForm() {
-
-  if ($("examPriceEditId")) {
-    $("examPriceEditId").value = "";
-  }
-
-
-  if ($("examPriceEducationLevel")) {
-    $("examPriceEducationLevel").value = "";
-  }
-
-
-  if ($("examPriceBoard")) {
-
-    $("examPriceBoard").innerHTML =
-      '<option value="">Select education level first</option>';
-
-    $("examPriceBoard").disabled = true;
-
-  }
-
-
-  if ($("examPriceType")) {
-
-    $("examPriceType").innerHTML =
-      '<option value="">Select examination board / organization first</option>';
-
-    $("examPriceType").disabled = true;
-
-  }
-
-
-  if ($("examPriceClassLevel")) {
-
-    $("examPriceClassLevel").innerHTML =
-      '<option value="">Select education level first</option>';
-
-    $("examPriceClassLevel").disabled = true;
-
-  }
-
-
-  if ($("examPriceCountryName")) {
-    $("examPriceCountryName").value = "";
-  }
-
-
-  if ($("examPriceCountryCode")) {
-    $("examPriceCountryCode").value = "";
-  }
-
-
-  if ($("examPriceCurrencyCode")) {
-    $("examPriceCurrencyCode").value = "";
-  }
-
-
-  if ($("examPriceCurrencySymbol")) {
-    $("examPriceCurrencySymbol").value = "";
-  }
-
-
-  if ($("examPriceAmount")) {
-    $("examPriceAmount").value = "";
-  }
-
-
-  if ($("examPriceEnabled")) {
-    $("examPriceEnabled").value = "true";
-  }
-
-
-  if ($("saveExamPrice")) {
-
-    $("saveExamPrice").textContent =
-      "➕ Add Examination Type Price";
-
-  }
-
-
-  if ($("examPriceFormStatus")) {
-    $("examPriceFormStatus").textContent = "";
-  }
-
+  if ($("examPriceEditId")) $("examPriceEditId").value = "";
+  if ($("examPriceEducationLevel")) $("examPriceEducationLevel").value = "";
+  if ($("examPriceBoard")) { $("examPriceBoard").innerHTML = '<option value="">Select education level first</option>'; $("examPriceBoard").disabled = true; }
+  if ($("examPriceType")) { $("examPriceType").innerHTML = '<option value="">Select examination board / organization first</option>'; $("examPriceType").disabled = true; }
+  if ($("examPriceClassLevel")) { $("examPriceClassLevel").innerHTML = '<option value="">Select education level first</option>'; $("examPriceClassLevel").disabled = true; }
+  if ($("examPriceCountryName")) $("examPriceCountryName").value = "";
+  if ($("examPriceCountryCode")) $("examPriceCountryCode").value = "";
+  if ($("examPriceCurrencyCode")) $("examPriceCurrencyCode").value = "";
+  if ($("examPriceCurrencySymbol")) $("examPriceCurrencySymbol").value = "";
+  if ($("examPriceAmount")) $("examPriceAmount").value = "";
+  if ($("examPriceEnabled")) $("examPriceEnabled").value = "true";
+  if ($("saveExamPrice")) $("saveExamPrice").textContent = "➕ Add Registration Price";
+  if ($("examPriceFormStatus")) $("examPriceFormStatus").textContent = "";
 }
-    
-setupExamPriceHierarchy();
+
+/* ---------------- RESULTS & CERTIFICATES ---------------- */
+
+function examTitle(examId) {
+  return examinations.find(x => String(x.id) === String(examId))?.title || "Examination";
+}
+
+function studentById(id) {
+  return students.find(p => String(getId(p)) === String(id)) || null;
+}
+
+function studentLabel(id) {
+  const p = studentById(id);
+  if (!p) return String(id || "Student");
+  const name = profileName(p);
+  const email = profileEmail(p);
+  return email ? `${name} — ${email}` : name;
+}
+
+function resultStatus(result) {
+  if (result.status === "completed") return result.passed ? "PASSED" : "FAILED";
+  if (result.status === "in_progress") return "IN PROGRESS";
+  if (result.status === "abandoned") return "ABANDONED";
+  return String(result.status || "UNKNOWN").toUpperCase();
+}
+
+async function loadResults() {
+  const list = $("adminResultList");
+  if (!list) return;
+  list.innerHTML = '<div class="empty">Loading permanent examination records...</div>';
+  try {
+    const selected = selectedResultHierarchy();
+    let query = getDB().from("agu_exam_attempts").select("*").order("created_at", {ascending:false});
+    const r = await query;
+    if (r.error) throw r.error;
+    examResults = Array.isArray(r.data) ? r.data : [];
+    const cert = await getDB().from("agu_exam_certificates").select("*").order("issued_at", {ascending:false});
+    if (cert.error) throw cert.error;
+    examCertificates = Array.isArray(cert.data) ? cert.data : [];
+    renderResults(selected);
+  } catch (e) {
+    console.error(e);
+    list.innerHTML = `<div class="empty">❌ Unable to load examination results.<br><small>${esc(e.message || "Database error")}</small></div>`;
+  }
+}
+
+function renderResults(selected = selectedResultHierarchy()) {
+  const list = $("adminResultList");
+  if (!list) return;
+  const q = ($("adminResultSearch")?.value || "").toLowerCase().trim();
+  const rows = examResults.filter(r => {
+    const exam = examinations.find(x => String(x.id) === String(r.exam_id)) || {};
+    if (selected) {
+      if (String(exam.education_level || "") !== String(selected.education_level || "")) return false;
+      if (String(exam.examination_board || "") !== String(selected.examination_board || "")) return false;
+      if (String(exam.class_level || "") !== String(selected.class_level || "")) return false;
+      if (String(exam.examination_type || "") !== String(selected.examination_type || "")) return false;
+    }
+    const cert = examCertificates.find(c => String(c.attempt_id) === String(r.id));
+    const text = [studentLabel(r.student_id), exam.title, exam.subject, exam.examination_type, cert?.certificate_number, r.status, r.passed ? "passed" : "failed"].filter(Boolean).join(" ").toLowerCase();
+    return text.includes(q);
+  });
+  if (!rows.length) { list.innerHTML = '<div class="empty">No examination results found for the selected group.</div>'; return; }
+  list.innerHTML = rows.map(r => {
+    const cert = examCertificates.find(c => String(c.attempt_id) === String(r.id));
+    const exam = examinations.find(x => String(x.id) === String(r.exam_id)) || {};
+    const passed = r.passed === true;
+    return `<div class="result-row">
+      <h3>${esc(exam.title || examTitle(r.exam_id))}</h3>
+      <div class="small"><strong>Student:</strong> ${esc(studentLabel(r.student_id))}</div>
+      <div class="small"><strong>Education Level:</strong> ${esc(exam.education_level || "—")} • <strong>Board:</strong> ${esc(exam.examination_board || "—")}</div>
+      <div class="small"><strong>Examination Type:</strong> ${esc(exam.examination_type || "—")} • <strong>Class / Level:</strong> ${esc(exam.class_level || "—")}</div>
+      <div class="exam-meta"><span class="${r.status === "completed" && !passed ? "badge off" : "badge"}">${esc(resultStatus(r))}</span><span>Score: ${esc(r.score ?? 0)}</span><span>Percentage: ${esc(r.percentage ?? 0)}%</span><span>Questions: ${esc(r.total_questions ?? 0)}</span></div>
+      <div class="small">Correct: ${esc(r.correct_count ?? 0)} • Wrong: ${esc(r.wrong_count ?? 0)} • Unanswered: ${esc(r.unanswered_count ?? 0)}</div>
+      <div class="small">Started: ${esc(r.started_at ? new Date(r.started_at).toLocaleString() : "—")} • Finished: ${esc(r.finished_at ? new Date(r.finished_at).toLocaleString() : "—")}</div>
+      ${cert ? `<div class="small" style="margin-top:8px"><strong>Certificate:</strong> ${esc(cert.certificate_number || "—")} • Issued: ${esc(cert.issued_at ? new Date(cert.issued_at).toLocaleString() : "—")}</div>` : `<div class="small" style="margin-top:8px">Certificate: ${passed ? "Not found" : "Not issued — student did not pass"}</div>`}
+    </div>`;
+  }).join("");
+}
 
 /* ---------------- DASHBOARD ---------------- */
 
@@ -5350,6 +4265,9 @@ loadExamSettings(),
 loadExaminations(),
 loadExamPrices()
 ]);
+
+/* Results depend on the examination hierarchy loaded above. */
+await loadResults();
 
 }
 
@@ -5565,16 +4483,6 @@ updateClassLevels();
 
 updateDigitalBookFields();
 
-// Initialize the examination country selector so Country Code, Currency Code
-// and Currency Symbol are revealed automatically when a country is selected.
-setupExamCountrySelector();
-
-// Initialize Create/Edit Examination hierarchy.
-setupAdminExamHierarchy();
-
-// Initialize Examination Registration Price hierarchy.
-setupExamPriceHierarchy();
-
 $("aguStudentSearch")
 ?.addEventListener(
 "input",
@@ -5634,6 +4542,13 @@ $("saveExamPrice")?.addEventListener(
 saveExamPrice
 );
 
+setupExamPriceHierarchy();
+setupExamCountrySelector();
+
+$("resultExamFilter")?.addEventListener("change", loadResults);
+$("adminResultSearch")?.addEventListener("input", () => renderResults());
+$("refreshResults")?.addEventListener("click", loadResults);
+
 $("clearExamPriceForm")?.addEventListener(
 "click",
 clearExamPriceForm
@@ -5670,9 +4585,9 @@ CORRECT QUESTION SELECT LISTENER
 
 Selecting an examination loads its questions.
 */
-$("adminQuestionExamSelect")?.addEventListener(
-  "change",
-  loadQuestionsForSelectedExam
+$("questionExamSelect")?.addEventListener(
+"change",
+loadQuestionsForSelectedExam
 );
 $("registrationExamFilter")?.addEventListener(
 "change",

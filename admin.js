@@ -6269,6 +6269,9 @@ setupAdminExamHierarchy();
 // Initialize Examination Registration Price hierarchy.
 setupExamPriceHierarchy();
 
+// Initialize Permanent Examination Results controls.
+setupResultControls();
+
 $("aguStudentSearch")
 ?.addEventListener(
 "input",

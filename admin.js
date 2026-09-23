@@ -18,12 +18,14 @@ The upload system therefore writes folder_path.
 const $ = id => document.getElementById(id);
 const cfg = window.AGU_CONFIG || {};
 
-let db = null;
-let currentSession = null;
 let students = [];
 let resources = [];
 let examinations = [];
 let examRegistrations = [];
+
+let examResults = [];
+let examCertificates = [];
+
 let mfaOpen = false;
 
 const TABLE = window.AGU_RESOURCE_TABLE || "resources";

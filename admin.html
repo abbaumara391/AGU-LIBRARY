@@ -496,15 +496,15 @@ footer{
   .item-main{
     width:100%
   }
-/* ADMIN MENU - KEEP EVERYTHING IN ONE ROW */
+
+/* ADMIN MENU - VERTICAL SERIES */
 
 .admin-menu{
   display:flex;
-  flex-wrap:nowrap;
+  flex-direction:column;
   gap:8px;
-  overflow-x:auto;
-  white-space:nowrap;
-  padding:10px;
+  width:100%;
+  padding:12px;
   margin-bottom:20px;
   background:#fff;
   border:1px solid #dce8e2;
@@ -513,21 +513,23 @@ footer{
 }
 
 .admin-menu button{
-  flex:0 0 auto;
-  white-space:nowrap;
+  width:100%;
   border:1px solid #cfe5da;
   border-radius:10px;
-  padding:10px 14px;
+  padding:12px 14px;
   background:#edf7f2;
   color:#17352a;
   font-weight:800;
+  text-align:left;
   cursor:pointer;
 }
 
 .admin-menu button:hover{
   background:#087a4b;
   color:#fff;
+
 }
+
 </style>
 
 </head>

@@ -2558,6 +2558,18 @@ footer{
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
 <script src="supabase.js"></script>
+<script>
+document.querySelectorAll('.admin-menu button').forEach(button => {
+  button.addEventListener('click', () => {
+    document.querySelectorAll('.admin-menu button')
+      .forEach(b => b.classList.remove('active'));
+
+    button.classList.add('active');
+  });
+});
+</script>
+
+<script src="admin.js"></script>
 <script src="admin.js"></script>
 
 </body>

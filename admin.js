@@ -2485,9 +2485,6 @@ function populateExamSelects() {
 
   }
 
-/* -------------------------------------------------------
-   EXAMINATION REGISTRATIONS
-
   /* -------------------------------------------------------
      EXAMINATION REGISTRATIONS
 

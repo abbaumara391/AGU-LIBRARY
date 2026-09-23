@@ -2487,151 +2487,287 @@ function populateExamSelects() {
 
 
   /* -------------------------------------------------------
-     RESULT & CERTIFICATION
+   RESULT & CERTIFICATION
 
-     IMPORTANT:
+   GROUP EXAMINATION TYPES BY:
 
-     Results are filtered by EXAMINATION TYPE.
+   Education Level
+   → Examination Board / Organization
+   → Examination Type
 
-     They are NOT filtered by:
-     - examination title
-     - subject
-     - individual examination
+   Example:
 
-     Example:
+   Senior Secondary School
+      WAEC
+         SSCE
+         GCE
+         Mock Examination
 
-     SSCE
-     GCE
-     Mock Examination
-     First Term Examination
-     Second Term Examination
-     Third Term Examination
-     Final Examination
-     IGCSE
-     O Level
-     A Level
-     BECE
-     etc.
+      NECO
+         SSCE
+         GCE
+         BECE
+         Mock Examination
 
-     Every examination type in
-     ADMIN_EXAM_HIERARCHY is included.
+   The option VALUE remains the examination type so the
+   existing result filtering continues to work.
+------------------------------------------------------- */
 
-     Duplicate examination types are removed.
-  ------------------------------------------------------- */
+const resultSelect =
+  $("resultExamFilter");
 
-  const resultSelect =
-    $("resultExamFilter");
+if (resultSelect) {
 
-  if (resultSelect) {
-
-    const currentType =
-      resultSelect.value;
+  const currentType =
+    resultSelect.value;
 
 
-    /* -----------------------------------------------
-       COLLECT EVERY EXAMINATION TYPE
-       FROM THE COMPLETE EXAMINATION HIERARCHY
-    ----------------------------------------------- */
+  /* -----------------------------------------------------
+     CLEAR CURRENT OPTIONS
+  ----------------------------------------------------- */
 
-    const allTypes = [];
+  resultSelect.innerHTML = "";
 
 
-    Object.values(
-      ADMIN_EXAM_HIERARCHY
-    ).forEach(boardCollection => {
+  /* -----------------------------------------------------
+     ALL EXAMINATIONS OPTION
+  ----------------------------------------------------- */
+
+  const allOption =
+    document.createElement("option");
+
+  allOption.value = "";
+
+  allOption.textContent =
+    "All examination types";
+
+  resultSelect.appendChild(
+    allOption
+  );
+
+
+  /* -----------------------------------------------------
+     CREATE GROUPS FROM ADMIN_EXAM_HIERARCHY
+  ----------------------------------------------------- */
+
+  Object.entries(
+    ADMIN_EXAM_HIERARCHY
+  ).forEach(
+    ([educationLevel, boards]) => {
+
+      Object.entries(
+        boards || {}
+      ).forEach(
+        ([boardName, examinationTypes]) => {
+
+          const types =
+            [
+              ...new Set(
+                (examinationTypes || [])
+                  .map(
+                    type =>
+                      String(
+                        type || ""
+                      ).trim()
+                  )
+                  .filter(Boolean)
+              )
+            ];
+
+          if (!types.length) {
+            return;
+          }
+
+
+          /* ---------------------------------------------
+             CREATE EDUCATION + BOARD GROUP
+          --------------------------------------------- */
+
+          const group =
+            document.createElement(
+              "optgroup"
+            );
+
+          group.label =
+            `${educationLevel} — ${boardName}`;
+
+
+          /* ---------------------------------------------
+             ADD EXAMINATION TYPES
+          --------------------------------------------- */
+
+          types.forEach(
+            examinationType => {
+
+              const option =
+                document.createElement(
+                  "option"
+                );
+
+              option.value =
+                examinationType;
+
+              option.textContent =
+                examinationType;
+
+              group.appendChild(
+                option
+              );
+
+            }
+          );
+
+
+          resultSelect.appendChild(
+            group
+          );
+
+        }
+      );
+
+    }
+  );
+
+
+  /* -----------------------------------------------------
+     ALSO INCLUDE CUSTOM TYPES ALREADY IN DATABASE
+
+     This protects existing examinations whose type is
+     not currently listed inside ADMIN_EXAM_HIERARCHY.
+  ----------------------------------------------------- */
+
+  const hierarchyTypes =
+    new Set();
+
+
+  Object.values(
+    ADMIN_EXAM_HIERARCHY
+  ).forEach(
+    boards => {
 
       Object.values(
-        boardCollection || {}
-      ).forEach(typeList => {
+        boards || {}
+      ).forEach(
+        types => {
 
-        (typeList || []).forEach(
-          examinationType => {
+          (types || []).forEach(
+            type => {
 
-            const type =
-              String(
-                examinationType || ""
-              ).trim();
+              const clean =
+                String(
+                  type || ""
+                ).trim();
 
-            if (type) {
-              allTypes.push(type);
+              if (clean) {
+                hierarchyTypes.add(
+                  clean
+                );
+              }
+
             }
+          );
 
-          }
+        }
+      );
+
+    }
+  );
+
+
+  const customTypes =
+    [
+      ...new Set(
+        examinations
+          .map(
+            exam =>
+              String(
+                exam.examination_type ||
+                ""
+              ).trim()
+          )
+          .filter(Boolean)
+      )
+    ]
+      .filter(
+        type =>
+          !hierarchyTypes.has(type)
+      )
+      .sort(
+        (a, b) =>
+          a.localeCompare(
+            b,
+            undefined,
+            {
+              sensitivity: "base"
+            }
+          )
+      );
+
+
+  /* -----------------------------------------------------
+     CUSTOM / DATABASE EXAM TYPES
+  ----------------------------------------------------- */
+
+  if (customTypes.length) {
+
+    const customGroup =
+      document.createElement(
+        "optgroup"
+      );
+
+    customGroup.label =
+      "Other / Custom Examination Types";
+
+
+    customTypes.forEach(
+      examinationType => {
+
+        const option =
+          document.createElement(
+            "option"
+          );
+
+        option.value =
+          examinationType;
+
+        option.textContent =
+          examinationType;
+
+        customGroup.appendChild(
+          option
         );
 
-      });
-
-    });
-
-
-    /* -----------------------------------------------
-       ALSO INCLUDE TYPES ALREADY USED BY EXISTING
-       EXAMINATIONS.
-
-       This protects the system if an administrator
-       has created a custom examination type that is
-       present in the database but not yet added to
-       ADMIN_EXAM_HIERARCHY.
-    ----------------------------------------------- */
-
-    examinations.forEach(exam => {
-
-      const type =
-        String(
-          exam.examination_type ||
-          ""
-        ).trim();
-
-      if (type) {
-        allTypes.push(type);
       }
-
-    });
-
-
-    /* -----------------------------------------------
-       REMOVE DUPLICATES
-    ----------------------------------------------- */
-
-    const uniqueTypes = [
-      ...new Set(allTypes)
-    ].sort(
-      (a, b) =>
-        a.localeCompare(
-          b,
-          undefined,
-          {
-            sensitivity: "base"
-          }
-        )
     );
 
 
-    /* -----------------------------------------------
-       BUILD RESULT FILTER
-    ----------------------------------------------- */
+    resultSelect.appendChild(
+      customGroup
+    );
 
-    resultSelect.innerHTML =
-      '<option value="">All examination types</option>' +
-
-      uniqueTypes
-        .map(
-          type =>
-            `<option value="${esc(type)}">
-              ${esc(type)}
-            </option>`
-        )
-        .join("");
+  }
 
 
-    /* -----------------------------------------------
-       RESTORE PREVIOUS SELECTION
-    ----------------------------------------------- */
+  /* -----------------------------------------------------
+     RESTORE PREVIOUS SELECTION
+  ----------------------------------------------------- */
 
-    if (
-      currentType &&
-      uniqueTypes.includes(currentType)
-    ) {
+  if (currentType) {
+
+    const matchingOption =
+      Array.from(
+        resultSelect.options
+      ).find(
+        option =>
+          String(
+            option.value
+          ) ===
+          String(
+            currentType
+          )
+      );
+
+    if (matchingOption) {
 
       resultSelect.value =
         currentType;
@@ -2639,6 +2775,8 @@ function populateExamSelects() {
     }
 
   }
+
+}
 
 
   /* -------------------------------------------------------

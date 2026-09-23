@@ -2868,16 +2868,6 @@ if (result.error) {
 examinations =  
   result.data || [];
 
-populateExamPriceExamSelect();  
-
-function populateExamPriceExamSelect(){
-  const select=$("examPriceExamination");
-  if(!select)return;
-  const current=select.value;
-  select.innerHTML='<option value="">Select an examination</option>'+examinations.map(exam=>`<option value="${esc(exam.id)}">${esc(exam.title||"Untitled Examination")}</option>`).join("");
-  if(current&&examinations.some(exam=>String(exam.id)===String(current)))select.value=current;
-}
-
 /*  
  * ------------------------------------------------------  
  * POPULATE EXAMINATION SELECT MENUS  

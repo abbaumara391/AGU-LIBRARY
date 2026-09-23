@@ -2439,77 +2439,119 @@ function clearExamForm(){
 
 function populateExamSelects() {
 
-const selects = [
+  /* -------------------------------------------------------
+     QUESTION MANAGEMENT + RESULT FILTER
+     These still use individual examinations.
+  ------------------------------------------------------- */
 
-$("adminQuestionExamSelect"),  
+  const individualExamSelects = [
+    $("adminQuestionExamSelect"),
+    $("resultExamFilter")
+  ];
 
-$("registrationExamFilter"),  
+  individualExamSelects.forEach(select => {
 
-$("resultExamFilter")
+    if (!select) return;
 
-];
+    const currentValue = select.value;
 
-selects.forEach(select => {
+    select.innerHTML = "";
 
-if (!select) return;  
+    const firstOption =
+      document.createElement("option");
 
-const currentValue =  
-  select.value;  
+    firstOption.value = "";
 
-select.innerHTML = "";  
+    firstOption.textContent =
+      select.id === "adminQuestionExamSelect"
+        ? "Select an examination"
+        : "All examinations";
 
-const firstOption =  
-  document.createElement(  
-    "option"  
-  );  
+    select.appendChild(firstOption);
 
-firstOption.value = "";  
+    examinations.forEach(exam => {
 
-firstOption.textContent =  
-  select.id === "adminQuestionExamSelect"
-    ? "Select an examination"  
-    : "All examinations";  
+      const option =
+        document.createElement("option");
 
-select.appendChild(  
-  firstOption  
-);  
+      option.value = exam.id;
 
-examinations.forEach(  
-  exam => {  
+      option.textContent =
+        exam.title ||
+        "Untitled Examination";
 
-    const option =  
-      document.createElement(  
-        "option"  
-      );  
+      select.appendChild(option);
 
-    option.value =  
-      exam.id;  
+    });
 
-    option.textContent =  
-      exam.title ||  
-      "Untitled Examination";  
+    if (
+      currentValue &&
+      examinations.some(
+        exam =>
+          String(exam.id) ===
+          String(currentValue)
+      )
+    ) {
 
-    select.appendChild(  
-      option  
-    );  
-  }  
-);  
+      select.value = currentValue;
 
-if (  
-  currentValue &&  
-  examinations.some(  
-    exam =>  
-      String(exam.id) ===  
-      String(currentValue)  
-  )  
-) {  
+    }
 
-  select.value =  
-    currentValue;  
-}
+  });
 
-});
-}
+
+  /* -------------------------------------------------------
+     EXAMINATION REGISTRATIONS
+     
+     IMPORTANT:
+     Registration filter is based on EXAMINATION TYPE,
+     not individual examination title.
+  ------------------------------------------------------- */
+
+  const registrationSelect =
+    $("registrationExamFilter");
+
+  if (!registrationSelect) return;
+
+  const currentType =
+    registrationSelect.value;
+
+  const types = [
+    ...new Set(
+      examinations
+        .map(
+          exam =>
+            String(
+              exam.examination_type ||
+              ""
+            ).trim()
+        )
+        .filter(Boolean)
+    )
+  ];
+
+  registrationSelect.innerHTML =
+    '<option value="">All examination types</option>' +
+
+    types
+      .map(
+        type =>
+          `<option value="${esc(type)}">${esc(type)}</option>`
+      )
+      .join("");
+
+  if (
+    currentType &&
+    types.includes(currentType)
+  ) {
+
+    registrationSelect.value =
+      currentType;
+
+  }
+
+}  
+
 async function loadRegistrations() {
 
 const list =

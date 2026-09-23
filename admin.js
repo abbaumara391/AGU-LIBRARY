@@ -5463,8 +5463,6 @@ updateDigitalBookFields();
 // and Currency Symbol are revealed automatically when a country is selected.
 setupExamCountrySelector();
 
-setupExamCountrySelector();
-
 // Initialize Create/Edit Examination hierarchy.
 setupAdminExamHierarchy();
 

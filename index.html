@@ -1,7 +1,8 @@
 <!doctype html>
 
 <html lang="en">  
-<head>  
+<head>
+<meta name="agu-exam-registration-fix" content="20260924-existing-id-bypass-v1">  
 <meta charset="utf-8">  
 <meta name="viewport" content="width=device-width,initial-scale=1">  
 <meta name="agu-ai-render-version" content="20260922-education-level-exam-type-fix">  
@@ -1396,7 +1397,11 @@ function renderExamSubjectPicker(){
   updateExamRegistrationSummary();
 }
 function studentAlreadyRegisteredThisSeason(){
-  return examRegistrations.some(r=>["registered","approved","paid","completed"].includes(String(r.status||r.registration_status||"").toLowerCase()));
+  return examRegistrations.some(r=>{
+    const status=String(r.status||r.registration_status||"").toLowerCase().trim();
+    const registrationCode=String(r.registration_code||r.registration_id||"").trim();
+    return !!registrationCode || ["registered","approved","paid","completed","active","confirmed"].includes(status);
+  });
 }
 function showExamIdBox(){
   const box=document.getElementById("examIdBox");
@@ -1529,8 +1534,28 @@ async function verifyExamRegistrationId(){
 }
 function setupExamRegistrationFlow(){
   renderExamSubjectPicker();
-  document.getElementById("examRegisterMain")?.addEventListener("click",()=>{
-    if(studentAlreadyRegisteredThisSeason()){loadMyExamRegistrationId(true).catch(e=>alert(e.message||"Unable to load your examination ID."));return}
+  document.getElementById("examRegisterMain")?.addEventListener("click",async()=>{
+    /*
+     * Existing students who already have an AGULIBRARY examination
+     * registration ID must NOT be sent through the new-registration
+     * hierarchy again. Check the existing registration/ID first.
+     */
+    try{
+      if(studentAlreadyRegisteredThisSeason()){
+        await loadMyExamRegistrationId(true);
+        return;
+      }
+
+      const existingId=await loadMyExamRegistrationId(false);
+      if(existingId?.registration_id){
+        showExamRegistrationId(existingId.registration_id);
+        return;
+      }
+    }catch(e){
+      console.warn("Existing examination registration check:",e);
+      /* If the ID lookup fails, continue with normal registration flow. */
+    }
+
     if(!examRegistrationEducationLevel||!examRegistrationBoard||!examRegistrationType||!examRegistrationClassLevel){
       alert("Please select your Education Level, Examination Board / Organization, Exam Type and Class / Level before registration.");
       return;
@@ -1746,11 +1771,7 @@ async function loadResults(){
   if(!currentUser){status.textContent="Please sign in to view your results.";return}  
   status.textContent="Loading permanent examination records...";list.innerHTML="";  
   try{  
-    const r=await client.from("agu_exam_attempts")
-      .select("id,examination_id,status,started_at,completed_at,score,total_marks,percentage,grade,passed,certificate_id,agu_examinations(title,subject,education_level,pass_mark)")
-      .eq("student_id",currentUser.id)
-      .eq("status","completed")
-      .order("completed_at",{ascending:false});  
+    const r=await client.from("agu_exam_attempts").select("id,exam_id,status,started_at,finished_at,score,percentage,correct_count,wrong_count,unanswered_count,total_questions,passed,certificate_id,agu_examinations(title,subject,class_level,term)").eq("student_id",currentUser.id).eq("status","completed").order("finished_at",{ascending:false});  
     if(r.error)throw r.error;  
     studentResults=r.data||[];  
     if(!studentResults.length){status.textContent="No examination results are available yet. Complete an examination to create your permanent result record.";return}  
@@ -1772,7 +1793,7 @@ async function showPermanentResult(result){
   if(result.certificate_id){  
     try{const c=await client.from("agu_exam_certificates").select("certificate_number,issued_at").eq("id",result.certificate_id).maybeSingle();if(!c.error)cert=c.data}catch(e){}  
   }  
-  resultsView.innerHTML=`<div class="service-toolbar"><button class="btn outline" id="backPermanentResults" type="button">← Results</button></div><div class="exam-result"><div class="service-icon">${result.passed?"🏆":"📊"}</div><h2>${esc(examTitle)}</h2><div class="exam-score">${score}%</div><p><strong>${Number(result.correct_count||0)}</strong> correct • <strong>${Number(result.wrong_count||0)}</strong> wrong • <strong>${Number(result.unanswered_count||0)}</strong> empty</p><p>Completed: ${esc(formatDate(result.completed_at))}</p>${cert?`<p><strong>Certificate No:</strong> ${esc(cert.certificate_number)}</p><button class="btn primary" id="showPermanentCertificate" type="button">🏆 View Certificate</button>`:`<p class="panel-note">This attempt did not qualify for certification.</p>`}</div>`;  
+  resultsView.innerHTML=`<div class="service-toolbar"><button class="btn outline" id="backPermanentResults" type="button">← Results</button></div><div class="exam-result"><div class="service-icon">${result.passed?"🏆":"📊"}</div><h2>${esc(examTitle)}</h2><div class="exam-score">${score}%</div><p><strong>${Number(result.correct_count||0)}</strong> correct • <strong>${Number(result.wrong_count||0)}</strong> wrong • <strong>${Number(result.unanswered_count||0)}</strong> empty</p><p>Completed: ${esc(formatDate(result.finished_at))}</p>${cert?`<p><strong>Certificate No:</strong> ${esc(cert.certificate_number)}</p><button class="btn primary" id="showPermanentCertificate" type="button">🏆 View Certificate</button>`:`<p class="panel-note">This attempt did not qualify for certification.</p>`}</div>`;  
   document.getElementById("backPermanentResults").addEventListener("click",back);  
   if(cert)document.getElementById("showPermanentCertificate").addEventListener("click",()=>showPermanentCertificate(name,examTitle,result,cert));  
 }  

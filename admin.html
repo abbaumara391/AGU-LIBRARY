@@ -2559,17 +2559,79 @@ footer{
 <script src="config.js"></script>
 <script src="supabase.js"></script>
 <script>
+<script>
 document.querySelectorAll('.admin-menu button').forEach(button => {
-  button.addEventListener('click', () => {
+
+  button.addEventListener('click', function () {
+
+    const name = this.textContent
+      .trim()
+      .replace(/\s+/g, ' ')
+      .toUpperCase();
+
+    let target = null;
+
+    const sections = document.querySelectorAll(
+      'main > section, .exam-grid > .exam-card'
+    );
+
+    sections.forEach(section => {
+
+      const text = section.textContent
+        .trim()
+        .replace(/\s+/g, ' ')
+        .toUpperCase();
+
+      if (
+        text.includes(name) &&
+        !target
+      ) {
+        target = section;
+      }
+
+    });
+
+    /* Special names that are different from the menu */
+    if (name === 'EXAMINATION ROOM') {
+      target = document.getElementById('examinationAdminPanel');
+    }
+
+    if (name === 'PUBLISHED EXAMINATIONS') {
+      target = [...document.querySelectorAll('.exam-card')]
+        .find(el =>
+          el.textContent
+            .toUpperCase()
+            .includes('PUBLISHED / DRAFT EXAMINATIONS')
+        );
+    }
+
+    if (name === 'CREATE/EDIT EXAMINATION') {
+      target = [...document.querySelectorAll('.exam-card')]
+        .find(el =>
+          el.textContent
+            .toUpperCase()
+            .includes('CREATE / EDIT EXAMINATION')
+        );
+    }
+
+    /* Active button */
     document.querySelectorAll('.admin-menu button')
       .forEach(b => b.classList.remove('active'));
 
-    button.classList.add('active');
+    this.classList.add('active');
+
+    /* Scroll to the existing content */
+    if (target) {
+      target.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
+
   });
+
 });
 </script>
-
-<script src="admin.js"></script>
 <script src="admin.js"></script>
 
 </body>

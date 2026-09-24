@@ -2,6 +2,7 @@
 
 <html lang="en">  
 <head>
+<meta name="agu-exam-pricing-version" content="20260924-per-exam-type-country-price-v1">
 <meta name="agu-exam-registration-fix" content="20260924-existing-id-bypass-v1">  
 <meta charset="utf-8">  
 <meta name="viewport" content="width=device-width,initial-scale=1">  
@@ -567,6 +568,12 @@ overflow:hidden;
               <option value="">Select education level first</option>
             </select>
           </div>
+          <div class="exam-registration-field">
+            <label for="examRegistrationCountry">Country</label>
+            <select id="examRegistrationCountry" aria-label="Select country for examination price" disabled>
+              <option value="">Select education level, board, exam type and class first</option>
+            </select>
+          </div>
         </div>
         <div id="examHierarchyStatus" class="exam-hierarchy-status">Select your education level, examination board / organization, exam type and class / level before choosing subjects.</div>
         <div class="fee-label">Registration Fee</div>
@@ -1001,7 +1008,20 @@ if(examRes.error)throw examRes.error;
 if(regRes.error)throw regRes.error;  
   
 availableExams=examRes.data||[];  
-examRegistrations=regRes.data||[];  
+examRegistrations=regRes.data||[];
+
+/* Load optional country-specific examination prices. This is intentionally
+   non-fatal so the Examination Room still works if the pricing table has
+   not been created/configured yet. */
+try{
+  const priceRes=await client.from("agu_exam_country_prices")
+    .select("id,examination_id,country_code,country_name,currency_code,amount,is_enabled")
+    .eq("is_enabled",true);
+  examPrices=priceRes.error?[]:(priceRes.data||[]);
+}catch(priceError){
+  console.warn("Examination country prices:",priceError);
+  examPrices=[];
+}
   
 setupExamRegistrationHierarchy();
 renderExamSubjectPicker();
@@ -1013,11 +1033,16 @@ renderExamList(accessRes.data||null);
 }  
   
 
+let examPrices=[];
 let examSelectedSubjects=[];
 let examRegistrationEducationLevel="";
 let examRegistrationBoard="";
 let examRegistrationType="";
 let examRegistrationClassLevel="";
+let examRegistrationCountryCode="";
+let examRegistrationCountryName="";
+let examRegistrationCurrency="";
+let examTypeCountryPrices=[];
 let examRegistrationPhotoFile=null;
 
 /* The registration hierarchy mirrors the examination hierarchy used by the administrator. */
@@ -1283,7 +1308,7 @@ function updateExamRegistrationHierarchy(){
       status.textContent="No published examination records currently match these selections.";
     }else{
       status.className="exam-hierarchy-status";
-      status.textContent=`${matching.length} examination record${matching.length===1?"":"s"} available for your selections.`;
+      status.textContent=`${matching.length} examination record${matching.length===1?"":"s"} available for your selections. Price is set per exam type and country.`;
     }
   }
   const allowed=new Set(matching.map(e=>String(e.subject||"").trim()).filter(Boolean));
@@ -1313,29 +1338,58 @@ function setupExamRegistrationHierarchy(){
     examRegistrationBoard="";
     examRegistrationType="";
     examRegistrationClassLevel="";
+    examRegistrationCountryCode="";
+    examRegistrationCountryName="";
+    examRegistrationCurrency="";
+    examTypeCountryPrices=[];
     examSelectedSubjects=[];
     updateExamRegistrationHierarchy();
+    loadExamTypeCountryPrices();
   });
   board?.addEventListener("change",()=>{
     examRegistrationBoard=board.value;
     examRegistrationType="";
     examRegistrationClassLevel="";
+    examRegistrationCountryCode="";
+    examRegistrationCountryName="";
+    examRegistrationCurrency="";
+    examTypeCountryPrices=[];
     examSelectedSubjects=[];
     updateExamRegistrationHierarchy();
+    loadExamTypeCountryPrices();
   });
   type?.addEventListener("change",()=>{
     examRegistrationType=type.value;
     examRegistrationClassLevel="";
+    examRegistrationCountryCode="";
+    examRegistrationCountryName="";
+    examRegistrationCurrency="";
+    examTypeCountryPrices=[];
     examSelectedSubjects=[];
     updateExamRegistrationHierarchy();
+    loadExamTypeCountryPrices();
   });
   cls?.addEventListener("change",()=>{
     examRegistrationClassLevel=cls.value;
+    examRegistrationCountryCode="";
+    examRegistrationCountryName="";
+    examRegistrationCurrency="";
+    examTypeCountryPrices=[];
     examSelectedSubjects=[];
     updateExamRegistrationHierarchy();
+    loadExamTypeCountryPrices();
+  });
+  const country=document.getElementById("examRegistrationCountry");
+  country?.addEventListener("change",()=>{
+    examRegistrationCountryCode=country.value;
+    const row=examTypeCountryPrices.find(x=>String(x.country_code)===String(country.value));
+    examRegistrationCountryName=row?.country_name||"";
+    examRegistrationCurrency=row?.currency_code||"";
+    updateExamRegistrationSummary();
   });
   level.dataset.aguHierarchyBound="true";
   updateExamRegistrationHierarchy();
+  loadExamTypeCountryPrices();
 }
 
 let examRegistrationPhotoPath="";
@@ -1350,21 +1404,68 @@ function examMoney(value,currency="NGN"){
   if(!Number.isFinite(n))return "Fee not configured";
   try{return new Intl.NumberFormat(undefined,{style:"currency",currency,maximumFractionDigits:2}).format(n)}catch(e){return `${currency} ${n.toLocaleString()}`}
 }
-function examPerSubjectFee(){
-  const candidates=availableExams.map(e=>e.registration_fee_per_subject??e.fee_per_subject??e.price_per_subject).filter(v=>v!==null&&v!==undefined&&v!=="").map(Number).filter(Number.isFinite);
-  return candidates.length?candidates[0]:null;
+async function loadExamTypeCountryPrices(){
+  examTypeCountryPrices=[];
+  const country=document.getElementById("examRegistrationCountry");
+  if(!country)return;
+  const ready=examRegistrationEducationLevel && examRegistrationBoard && examRegistrationType && examRegistrationClassLevel;
+  if(!ready){
+    country.innerHTML='<option value="">Select education level, board, exam type and class first</option>';
+    country.disabled=true;
+    examRegistrationCountryCode="";
+    examRegistrationCountryName="";
+    examRegistrationCurrency="";
+    updateExamRegistrationSummary();
+    return;
+  }
+  try{
+    const r=await client.from("agu_exam_country_prices")
+      .select("id,education_level,examination_board,examination_type,class_level,country_code,country_name,currency_code,amount,is_enabled")
+      .eq("education_level",examRegistrationEducationLevel)
+      .eq("examination_board",examRegistrationBoard)
+      .eq("examination_type",examRegistrationType)
+      .eq("class_level",examRegistrationClassLevel)
+      .eq("is_enabled",true)
+      .order("country_name",{ascending:true});
+    if(r.error)throw r.error;
+    examTypeCountryPrices=Array.isArray(r.data)?r.data:[];
+
+    const existing=examRegistrations.find(x=>String(x.country_code||"").trim());
+    const preferred=examRegistrationCountryCode || existing?.country_code || (examTypeCountryPrices.length===1?examTypeCountryPrices[0].country_code:"");
+    country.innerHTML='<option value="">Select country</option>'+examTypeCountryPrices.map(row=>
+      `<option value="${escapeForAttr(row.country_code)}">${esc(row.country_name||row.country_code)} — ${esc(row.currency_code||"")}</option>`
+    ).join("");
+    country.disabled=!examTypeCountryPrices.length;
+    if(preferred && examTypeCountryPrices.some(x=>String(x.country_code)===String(preferred)))country.value=preferred;
+    else country.value="";
+    const selected=examTypeCountryPrices.find(x=>String(x.country_code)===String(country.value));
+    examRegistrationCountryCode=selected?.country_code||"";
+    examRegistrationCountryName=selected?.country_name||"";
+    examRegistrationCurrency=selected?.currency_code||"";
+    updateExamRegistrationSummary();
+  }catch(e){
+    console.warn("Examination type country prices:",e);
+    examTypeCountryPrices=[];
+    country.innerHTML='<option value="">Fee configuration unavailable</option>';
+    country.disabled=true;
+    updateExamRegistrationSummary();
+  }
 }
+
+function examSelectedTypeCountryPrice(){
+  if(!examRegistrationCountryCode)return null;
+  return examTypeCountryPrices.find(row=>String(row.country_code)===String(examRegistrationCountryCode))||null;
+}
+
 function examRegistrationFee(){
-  const count=examSelectedSubjects.length;
-  if(!count)return null;
-  const per=examPerSubjectFee();
-  if(per!==null)return per*count;
-  const selected=availableExams.filter(e=>examSelectedSubjects.includes(String(e.subject||"")));
-  const fees=selected.map(e=>e.registration_fee??e.registration_amount??e.fee??e.price).map(Number).filter(Number.isFinite);
-  if(fees.length===count)return fees.reduce((a,b)=>a+b,0);
-  if(fees.length)return fees.reduce((a,b)=>a+b,0);
-  return null;
+  /* Registration pricing is PER EXAM TYPE, not per subject.
+     The administrator controls the amount independently for each
+     Education Level + Board/Organization + Exam Type + Class/Level + Country. */
+  const row=examSelectedTypeCountryPrice();
+  const amount=Number(row?.amount);
+  return Number.isFinite(amount)&&amount>=0?amount:null;
 }
+
 function updateExamRegistrationSummary(){
   const count=examSelectedSubjects.length;
   const fee=examRegistrationFee();
@@ -1372,7 +1473,7 @@ function updateExamRegistrationSummary(){
   const feeEl=document.getElementById("examRegistrationFee");
   const help=document.getElementById("examSubjectCount");
   if(countEl)countEl.textContent=`Selected Subjects: ${count}`;
-  if(feeEl)feeEl.textContent=fee===null?(count?"Fee not configured":"Select 1–9 subjects"):examMoney(fee,"NGN");
+  if(feeEl)feeEl.textContent=fee===null?(examRegistrationCountryCode?"Fee not configured":"Select country to view fee"):examMoney(fee,examRegistrationCurrency||"NGN");
   if(help)help.textContent=count?`${count} of 9 subjects selected.`:"Select 1 to 9 subjects.";
 }
 function renderExamSubjectPicker(){
@@ -1429,9 +1530,9 @@ function showExamRegistrationPage(){
   const overlay=document.createElement("div");overlay.id="examRegistrationOverlay";overlay.className="exam-registration-overlay";
   overlay.innerHTML=`<div class="exam-registration-modal" role="dialog" aria-modal="true" aria-labelledby="examRegTitle">
     <h2 id="examRegTitle">EXAMINATION REGISTRATION</h2>
-    <p><strong>Education Level:</strong> ${esc(examRegistrationEducationLevel||"Not selected")}<br><strong>Examination Board / Organization:</strong> ${esc(examRegistrationBoard||"Not selected")}<br><strong>Exam Type:</strong> ${esc(examRegistrationType||"Not selected")}<br><strong>Class / Level:</strong> ${esc(examRegistrationClassLevel||"Not selected")}</p>
+    <p><strong>Education Level:</strong> ${esc(examRegistrationEducationLevel||"Not selected")}<br><strong>Examination Board / Organization:</strong> ${esc(examRegistrationBoard||"Not selected")}<br><strong>Exam Type:</strong> ${esc(examRegistrationType||"Not selected")}<br><strong>Class / Level:</strong> ${esc(examRegistrationClassLevel||"Not selected")}<br><strong>Country:</strong> ${esc(examRegistrationCountryName||examRegistrationCountryCode||"Not selected")}</p>
     <p><strong>Selected Subjects: ${examSelectedSubjects.length}</strong></p>
-    <p>Registration Fee</p><div class="fee-value">${fee===null?"Fee not configured":examMoney(fee,"NGN")}</div>
+    <p>Registration Fee — <strong>per exam type</strong></p><div class="fee-value">${fee===null?"Fee not configured":examMoney(fee,examRegistrationCurrency||"NGN")}</div>
     <label class="exam-upload-label btn outline" for="examPhotoInput">📷 UPLOAD PHOTO</label>
     <input id="examPhotoInput" type="file" accept="image/jpeg,image/png,image/webp" style="display:none">
     <img id="examPhotoPreview" class="exam-photo-preview" alt="Selected student photo preview">
@@ -1560,6 +1661,8 @@ function setupExamRegistrationFlow(){
       alert("Please select your Education Level, Examination Board / Organization, Exam Type and Class / Level before registration.");
       return;
     }
+    if(!examRegistrationCountryCode){alert("Please select your country so the administrator-controlled examination price can be applied.");return}
+    if(examRegistrationFee()===null){alert("No enabled examination price is configured for this exam type, class and country.");return}
     if(!examSelectedSubjects.length){alert("Select 1 to 9 subjects before registration.");return}
     showExamRegistrationGuideline();
   });

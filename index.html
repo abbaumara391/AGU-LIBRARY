@@ -1746,12 +1746,12 @@ async function loadResults(){
   if(!currentUser){status.textContent="Please sign in to view your results.";return}  
   status.textContent="Loading permanent examination records...";list.innerHTML="";  
   try{  
-    const r=await client.from("agu_exam_attempts").select("id,exam_id,status,started_at,finished_at,score,percentage,correct_count,wrong_count,unanswered_count,total_questions,passed,certificate_id,agu_examinations(title,subject,class_level,term)").eq("student_id",currentUser.id).eq("status","completed").order("finished_at",{ascending:false});  
+    const r=await client.from("agu_exam_attempts").select("id,status,started_at,finished_at,score,percentage,correct_count,wrong_count,unanswered_count,total_questions,passed,certificate_id").eq("student_id",currentUser.id).eq("status","completed").order("finished_at",{ascending:false});  
     if(r.error)throw r.error;  
     studentResults=r.data||[];  
     if(!studentResults.length){status.textContent="No examination results are available yet. Complete an examination to create your permanent result record.";return}  
     status.textContent=`${studentResults.length} permanent result${studentResults.length===1?"":"s"} available.`;  
-    list.innerHTML=studentResults.map((r,i)=>`<article class="result-card"><div class="resource-icon">${r.passed?"🏆":"📊"}</div><h3>${esc(r.agu_examinations?.title||"AGULIBRARY Examination")}</h3><p>${r.agu_examinations?.subject?`Subject: ${esc(r.agu_examinations.subject)}<br>`:""}Completed: ${esc(formatDate(r.finished_at))}</p><div class="result-meta"><span>Score: ${Number(r.percentage||0)}%</span><span>${r.passed?"PASS":"NOT PASSED"}</span><span>${Number(r.correct_count||0)} correct</span><span>${Number(r.unanswered_count||0)} empty</span></div><div class="actions"><button class="btn primary" type="button" data-result-index="${i}">${r.passed?"View Certificate":"View Result"}</button></div></article>`).join("");  
+    list.innerHTML=studentResults.map((r,i)=>`<article class="result-card"><div class="resource-icon">${r.passed?"🏆":"📊"}</div><h3>AGULIBRARY Examination</h3><p>Completed: ${esc(formatDate(r.finished_at))}</p><div class="result-meta"><span>Score: ${Number(r.percentage||0)}%</span><span>${r.passed?"PASS":"NOT PASSED"}</span><span>${Number(r.correct_count||0)} correct</span><span>${Number(r.unanswered_count||0)} empty</span></div><div class="actions"><button class="btn primary" type="button" data-result-index="${i}">${r.passed?"View Certificate":"View Result"}</button></div></article>`).join("");  
     list.querySelectorAll("[data-result-index]").forEach(btn=>btn.addEventListener("click",()=>showPermanentResult(studentResults[Number(btn.dataset.resultIndex)])));  
   }catch(e){  
     console.error("Results:",e);  
@@ -1761,7 +1761,7 @@ async function loadResults(){
 async function showPermanentResult(result){  
   const resultsView=document.getElementById("resultsView");  
   const name=document.getElementById("fullProfileName")?.textContent||currentUser?.user_metadata?.full_name||currentUser?.email?.split("@")[0]||"Student";  
-  const examTitle=result.agu_examinations?.title||"AGULIBRARY Examination";  
+  const examTitle="AGULIBRARY Examination";  
   const score=Number(result.percentage||0);  
   const back=()=>{resultsView.innerHTML=`<div class="service-icon">🏆</div><h2>Result &amp; Certification</h2><p>Your completed AGULIBRARY examination results and certificates are shown here.</p><div id="resultsStatus" class="service-status">Loading results...</div><div id="resultsList" class="service-grid"></div>`;loadResults()};  
   let cert=null;  

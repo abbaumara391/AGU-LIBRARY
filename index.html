@@ -985,7 +985,7 @@ window.openService=openService;
    - One examination-question session per student per Lagos calendar day.  
    - Results and certificates are stored permanently in Supabase.  
    ========================================================= */  
-let examSettings={examination_enabled:true,registration_enabled:false,question_seconds:5,default_pass_percentage:50};  
+let examSettings={enabled:true,registration_enabled:false,question_seconds:5,default_pass_percentage:50};  
 let availableExams=[];  
 let examRegistrations=[];  
 let activeExamSession=null;  
@@ -1005,7 +1005,7 @@ function escapeForAttr(v){return escAttr(String(v??""))}
 async function loadExamSettings(){  
   if(!client)return;  
   try{  
-    const r=await client.from("agu_exam_settings").select("examination_enabled,registration_enabled,question_seconds,default_pass_percentage").eq("id",true).maybeSingle();  
+    const r=await client.from("agu_exam_settings").select("enabled,registration_enabled,question_seconds,default_pass_percentage").eq("id",true).maybeSingle();  
     if(!r.error&&r.data)examSettings={...examSettings,...r.data};  
   }catch(e){console.warn("Exam settings:",e)}  
 }  
@@ -1019,15 +1019,15 @@ async function loadExaminations(){
   status.textContent="Loading examination room...";list.innerHTML="";  
   if(!currentUser){status.textContent="Please sign in to use the Examination Room.";return}  
   await loadExamSettings();  
-  if(!examSettings.examination_enabled){  
+  if(!examSettings.enabled){  
     status.innerHTML="🔒 <strong>The Examination Room is currently OFF.</strong><br>The administrator has temporarily closed examination access. Please check again later.";  
     return;  
   }  
   try{  
     const [examRes,regRes,accessRes]=await Promise.all([  
-  client.from("agu_examinations").select("*"),  
+  client.from("agu_examinations").select("*").eq("is_published",true),  
   client.from("agu_exam_registrations")  
-    .select("*,status:registration_status")  
+    .select("id,exam_id,student_id,status,registered_at,approved_at")  
     .eq("student_id",currentUser.id),  
   client.from("agu_exam_daily_access")  
     .select("exam_id,accessed_at")  
@@ -1871,7 +1871,7 @@ function setupExamRegistrationFlow(){
   loadMyExamRegistrationId(false).catch(e=>console.warn("Exam registration ID:",e));
 }
 
-function registrationFor(exam){return examRegistrations.find(x=>String(x.examination_id)===String(exam.id))||null}  
+function registrationFor(exam){return examRegistrations.find(x=>String(x.exam_id)===String(exam.id))||null}  
 function renderExamList(dailyAccess){  
   const list=document.getElementById("examList"),status=document.getElementById("examStatus"),q=document.getElementById("examSearch")?.value?.toLowerCase().trim()||"";  
   if(!list||!status)return;  
@@ -1937,7 +1937,7 @@ async function registerForExam(exam){
     return;
   }  
   try{  
-    const r=await client.rpc("agu_register_for_exam",{p_examination_id:exam.id});  
+    const r=await client.rpc("agu_register_for_exam",{p_exam_id:exam.id});  
     if(r.error)throw r.error;  
     alert("You are registered for this examination. You may start it now if today's examination access is still available.");  
     await loadExaminations();  
@@ -1946,8 +1946,12 @@ async function registerForExam(exam){
   
 async function startExam(exam){  
   if(!currentUser){location.href="auth.html";return}  
+  if(exam && exam.is_published===false){  
+    alert("This examination has not been published by the administrator yet.");  
+    return;  
+  }  
   try{  
-    const r=await client.rpc("agu_start_exam",{p_examination_id:exam.id});  
+    const r=await client.rpc("agu_start_exam",{p_exam_id:exam.id});  
     if(r.error)throw r.error;  
     const data=r.data||{};  
     const q=await client.from("agu_exam_questions_public").select("id,exam_id,position,question_text,options,marks").eq("exam_id",exam.id).order("position",{ascending:true});  

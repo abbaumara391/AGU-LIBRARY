@@ -2,9 +2,8 @@
 
 <html lang="en">  
 <head>
-<meta name="agu-exam-registration-schema-fix" content="20260925-live-examination-id-registration-status-v2">
-<meta name="agu-exam-pricing-version" content="20260924-per-exam-type-country-price-v1">
-<meta name="agu-exam-registration-fix" content="20260925-profile-country-auto-v2">  
+<meta name="agu-exam-pricing-version" content="20260925-registered-country-auto-price-v2">
+<meta name="agu-exam-registration-fix" content="20260924-existing-id-bypass-v1">  
 <meta charset="utf-8">  
 <meta name="viewport" content="width=device-width,initial-scale=1">  
 <meta name="agu-ai-render-version" content="20260922-education-level-exam-type-fix">  
@@ -304,27 +303,23 @@ overflow:hidden;
 .exam-subject-choice:hover{border-color:#087a4b}.exam-subject-choice.selected{background:#e9f8f0;border-color:#087a4b;box-shadow:0 0 0 2px rgba(8,122,75,.08)}
 .exam-subject-choice input{width:18px;height:18px;accent-color:#087a4b;flex:0 0 auto}.exam-subject-choice.disabled{opacity:.48;cursor:not-allowed}
 
-.exam-registration-hierarchy{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:0 0 16px}.exam-registration-field{display:flex;flex-direction:column;gap:7px}.exam-registration-field label{font-size:.86rem;font-weight:900;color:#173b2d}.exam-registration-field select{width:100%;min-height:50px;border:1px solid #cfe5da;border-radius:14px;background:#fff;color:#173b2d;padding:11px 12px;font:inherit;font-weight:700;outline:none}.exam-registration-field select:focus{border-color:#087a4b;box-shadow:0 0 0 3px rgba(8,122,75,.10)}.exam-registration-field select:disabled{background:#f1f6f3;color:#8a9b93;cursor:not-allowed}.exam-hierarchy-status{margin:-4px 0 14px;padding:10px 12px;border-radius:12px;background:#f6faf8;color:#60766c;font-size:.84rem;line-height:1.45}.exam-hierarchy-status.err{background:#fff3f3;color:#a12626;font-weight:800}@media(max-width:700px){.exam-registration-hierarchy{grid-template-columns:1fr}}
+.exam-registration-hierarchy{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:0 0 16px}.exam-registration-field{display:flex;flex-direction:column;gap:7px}.exam-registration-field label{font-size:.86rem;font-weight:900;color:#173b2d}.exam-registration-field select{width:100%;min-height:50px;border:1px solid #cfe5da;border-radius:14px;background:#fff;color:#173b2d;padding:11px 12px;font:inherit;font-weight:700;outline:none}.exam-registration-field select:focus{border-color:#087a4b;box-shadow:0 0 0 3px rgba(8,122,75,.10)}.exam-registration-field select:disabled{background:#f1f6f3;color:#8a9b93;cursor:not-allowed}.exam-hierarchy-status{margin:-4px 0 14px;padding:10px 12px;border-radius:12px;background:#f6faf8;color:#60766c;font-size:.84rem;line-height:1.45}.exam-hierarchy-status.err{background:#fff3f3;color:#a12626;font-weight:800}@media(max-width:700px){.exam-registration-hierarchy{grid-template-columns:1fr}}
 .exam-subject-count{font-size:.88rem;color:#60766c;margin:5px 0 14px}.exam-register-main{width:100%;margin-top:6px}.exam-id-box{margin-top:12px;padding:15px;border:1px solid #d7e4de;border-radius:16px;background:#fff;display:none}.exam-id-box.show{display:block}.exam-id-box label{display:block;font-weight:900;margin-bottom:7px;color:#173b2d}.exam-id-row{display:flex;gap:9px}.exam-id-row input{flex:1;min-width:0}.exam-guideline-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:15px 0}.exam-guideline-sample{border:1px solid #d7e4de;border-radius:16px;padding:10px;background:#fff;text-align:center}.exam-guideline-sample .sample-box{height:150px;border-radius:12px;display:grid;place-items:center;background:#eef7f2;font-size:3rem}.accepted-photo-example{position:relative;overflow:hidden}.rejected-photo-example{position:relative;overflow:hidden}.accepted-photo-example .photo-head,.rejected-photo-example .photo-head{width:54px;height:54px;border-radius:50%;background:#d7b08a;position:absolute;top:20px;left:50%;transform:translateX(-50%)}.accepted-photo-example .photo-body,.rejected-photo-example .photo-body{width:92px;height:70px;border-radius:48px 48px 14px 14px;background:#087a4b;position:absolute;bottom:12px;left:50%;transform:translateX(-50%)}.rejected-photo-example span{position:absolute;right:8px;top:5px;color:#b42323;font-size:2.6rem;font-weight:950}.exam-guideline-sample.bad .sample-box{background:#fff1f1}.exam-guideline-sample strong{display:block;margin-top:8px}.exam-photo-rules{margin:12px 0;padding:14px;border-radius:14px;background:#f6faf8;line-height:1.65}.exam-registration-overlay{position:fixed;inset:0;z-index:2400;background:rgba(12,35,26,.62);display:grid;place-items:center;padding:16px}.exam-registration-modal{width:min(700px,100%);max-height:92vh;overflow:auto;background:#fff;border-radius:24px;padding:22px;box-shadow:0 25px 90px rgba(0,0,0,.25)}.exam-registration-modal h2{margin:0 0 8px;color:#173b2d}.exam-registration-modal .modal-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}.exam-photo-preview{width:130px;height:160px;object-fit:cover;border-radius:14px;border:1px solid #cfe5da;background:#f3f7f5;display:none}.exam-upload-label{display:inline-flex;align-items:center;gap:8px}.exam-upload-status{margin-top:9px;font-size:.9rem;color:#60766c}.exam-upload-status.ok{color:#087a4b;font-weight:800}.exam-upload-status.err{color:#b42323;font-weight:800}
 @media(max-width:700px){.exam-subject-picker{grid-template-columns:1fr 1fr}.exam-guideline-grid{grid-template-columns:1fr}.exam-id-row{flex-direction:column}.exam-registration-modal{padding:17px}}
 @media(max-width:430px){.exam-subject-picker{grid-template-columns:1fr}}
 .exam-guideline-real-image{width:100%;margin:15px 0;border:1px solid #d7e4de;border-radius:16px;background:#fff;overflow:hidden}.exam-guideline-real-image img{display:block;width:100%;height:auto;max-height:62vh;object-fit:contain}@media(max-width:700px){.exam-guideline-real-image{border-radius:14px}.exam-guideline-real-image img{max-height:58vh}}
+
+.ai-learning-profile{display:none;padding:12px;background:#fff;border-bottom:1px solid #dceee6}
+.ai-learning-profile.show{display:block}
+.ai-learning-profile-title{font-weight:900;color:#173b2d;margin-bottom:8px}
+.ai-learning-profile-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.ai-learning-profile-grid select{width:100%;padding:10px;border:1px solid #cfe5da;border-radius:10px;background:#fff;color:#17352a}
+.ai-learning-profile-status{margin-top:8px;color:#71847b;font-size:12px;line-height:1.4}
+.ai-learning-profile-status.ready{color:#087a4b;font-weight:800}
+@media(max-width:600px){.ai-learning-profile-grid{grid-template-columns:1fr}}
+.ai-resource-image{display:block;max-width:100%;max-height:360px;object-fit:contain;border-radius:12px;border:1px solid #dceee6;margin:10px 0;background:#fff}
 </style>
 
-<style id="agu-exam-profile-country-style">
-.exam-registration-profile-country{
-  min-height:54px;
-  display:flex;
-  align-items:center;
-  padding:0 18px;
-  border:1px solid #d5e7df;
-  border-radius:16px;
-  background:#f5faf7;
-  color:#173b2d;
-  font-weight:700;
-  box-sizing:border-box;
-}
-</style>
 </head>  
 <body>  <header class="nav">  
   <a class="brand" href="index.html"><span class="mark">AG</span><span><b>AGULIBRARY</b><small>LEARN • READ • WATCH • GROW</small></span></a>  
@@ -345,10 +340,7 @@ overflow:hidden;
   </div>    <button class="menu-item" data-panel="notificationsPanel">  
   🔔 <span>Notifications</span>  
   <span id="notificationBadge" class="notification-badge" style="display:none">0</span>  
-</button>
-<button class="menu-item" id="accountExamRegistration" type="button">📝 <span>Examination Registration</span></button>
-<button class="menu-item" id="accountExamRoom" type="button">🏆 <span>Examination Room</span></button>
-<button class="menu-item" data-panel="settingsPanel">⚙️ <span>Settings</span></button>
+</button>  <button class="menu-item" data-panel="settingsPanel">⚙️ <span>Settings</span></button>
 <button class="menu-item" data-panel="profilePanel">👤 <span>Profile</span></button>
 <button class="menu-item" data-panel="invitationPanel">🔗 <span>Invitation</span></button>
 <button class="menu-item" data-panel="securityPanel">🔐 <span>Security</span></button>
@@ -457,13 +449,36 @@ overflow:hidden;
 </button>  <section id="aiTeacherPanel" class="ai-panel" aria-hidden="true">  
   <div class="ai-head">  
     <img src="./ai-teacher.jpg" alt="AI Learning Teacher">  
-    <div><strong>AGULIBRARY AI Learning Teacher</strong><small>Teach • Explain • Practice • Guide</small></div>  
+    <div><strong>A G U LIBRARY AI Learning Teacher</strong><small>Teach • Explain • Practice • Guide</small></div>  
     <button class="ai-close" id="closeTeacher" type="button">×</button>  
   </div>  
+  <div id="aiLearningProfile" class="ai-learning-profile">
+    <div class="ai-learning-profile-title">📚 Set your learning level before asking a question</div>
+    <div class="ai-learning-profile-grid">
+      <select id="aiEducationLevel" aria-label="Education level">
+        <option value="">Education level</option>
+        <option>Primary School</option>
+        <option>Junior Secondary School</option>
+        <option>Senior Secondary School</option>
+        <option>Tertiary / University</option>
+        <option>Professional / Career</option>
+      </select>
+      <select id="aiClassLevel" aria-label="Class or level" disabled>
+        <option value="">Class / Level</option>
+      </select>
+      <select id="aiTerm" aria-label="Term">
+        <option value="">Term</option>
+        <option>First Term</option>
+        <option>Second Term</option>
+        <option>Third Term</option>
+      </select>
+    </div>
+    <div id="aiLearningProfileStatus" class="ai-learning-profile-status">Select your education level, class/level and term. Your teacher will use them to tailor explanations.</div>
+  </div>
   <div id="teacherChat" class="chat">  
-    <div class="msg">Hello! 👋 I am your AGULIBRARY AI Learning Teacher. Ask me about a subject or topic and I will teach you step by step.</div>  
+    <div class="msg">Hello! 👋 I am your A G U LIBRARY AI Learning Teacher. Before I answer your first question, I will ask for your education level, class/level, and term so I can teach at the right level.</div>  
   </div>  
-  <div class="chat-input"><input id="teacherInput" placeholder="Ask your AI Learning Teacher..." autocomplete="off"><button id="teacherSend" type="button">Send</button></div>  
+  <div class="chat-input"><input id="teacherInput" placeholder="Choose your level first, then ask your AI Learning Teacher..." autocomplete="off"><button id="teacherSend" type="button">Send</button></div>  
 </section>  <section class="hero">  
   <div>  
     <div class="hero-title-row">  
@@ -584,13 +599,6 @@ overflow:hidden;
             <label for="examRegistrationClassLevel">Class / Level</label>
             <select id="examRegistrationClassLevel" aria-label="Select class or level" disabled>
               <option value="">Select education level first</option>
-            </select>
-          </div>
-          <div class="exam-registration-field" id="examRegistrationCountryField">
-            <label for="examRegistrationCountryDisplay">Country</label>
-            <div id="examRegistrationCountryDisplay" class="exam-registration-profile-country" role="status" aria-live="polite">Loading country from your student profile…</div>
-            <select id="examRegistrationCountry" aria-hidden="true" tabindex="-1" style="display:none">
-              <option value=""></option>
             </select>
           </div>
         </div>
@@ -733,7 +741,7 @@ const HIERARCHY={
   
 let client=null,currentUser=null,allResources=[],flow={main:"",level:"",area:"",subject:""};  
 const RECENT_KEY="AGU_RECENT_RESOURCES", SAVED_KEY="AGU_SAVED_RESOURCES";  
-let teacherConversation=[],supportConversation=[];  
+let teacherConversation=[],supportConversation=[],aiLearningProfile={educationLevel:"",classLevel:"",term:""};  
   
 function esc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));}  
 function escAttr(v){return esc(v).replace(/`/g,"&#096;");}  
@@ -761,24 +769,10 @@ async function loadSession(){
   currentUser=r.data?.session?.user||null;  
   if(currentUser){  
    let name=currentUser.user_metadata?.full_name||currentUser.user_metadata?.name||currentUser.email?.split("@")[0]||"Student";  
-   try{
-    let p=await client.from("student_profiles").select("first_name,last_name,country_code,country_name,education_level,class_level").eq("user_id",currentUser.id).maybeSingle();
-    if(p.error||!p.data){
-      try{p=await client.from("student_profiles").select("first_name,last_name,country_code,country_name,education_level,class_level").eq("id",currentUser.id).maybeSingle()}catch(e){}
-    }
-    if(!p.error&&p.data){
-      const n=[p.data.first_name,p.data.last_name].filter(Boolean).join(" ").trim();
-      if(n)name=n;
-      studentProfileCountryCode=String(p.data.country_code||"").trim();
-      studentProfileCountryName=String(p.data.country_name||"").trim();
-      studentProfileEducationLevel=String(p.data.education_level||"").trim();
-      studentProfileClassLevel=String(p.data.class_level||"").trim();
-    }
-    if(!studentProfileCountryCode)studentProfileCountryCode=String(currentUser.user_metadata?.country_code||"").trim();
-    if(!studentProfileCountryName)studentProfileCountryName=String(currentUser.user_metadata?.country_name||"").trim();
-    if(!studentProfileEducationLevel)studentProfileEducationLevel=String(currentUser.user_metadata?.education_level||"").trim();
-    if(!studentProfileClassLevel)studentProfileClassLevel=String(currentUser.user_metadata?.class_level||"").trim();
-  }catch(e){}  
+   try{  
+    const p=await client.from("student_profiles").select("first_name,last_name").eq("id",currentUser.id).maybeSingle();  
+    if(!p.error&&p.data){const n=[p.data.first_name,p.data.last_name].filter(Boolean).join(" ").trim();if(n)name=n}  
+   }catch(e){}  
    setText("accountName",name);setText("accountEmail",currentUser.email||"");  
     setText("heroStudentName",name);  
    setText("profileName",name);setText("profileEmail",currentUser.email||"");  
@@ -986,7 +980,7 @@ window.openService=openService;
    - One examination-question session per student per Lagos calendar day.  
    - Results and certificates are stored permanently in Supabase.  
    ========================================================= */  
-let examSettings={enabled:true,registration_enabled:false,question_seconds:5,default_pass_percentage:50};  
+let examSettings={examination_enabled:true,registration_enabled:false,question_seconds:5,default_pass_percentage:50};  
 let availableExams=[];  
 let examRegistrations=[];  
 let activeExamSession=null;  
@@ -1006,7 +1000,7 @@ function escapeForAttr(v){return escAttr(String(v??""))}
 async function loadExamSettings(){  
   if(!client)return;  
   try{  
-    const r=await client.from("agu_exam_settings").select("enabled,registration_enabled,question_seconds,default_pass_percentage").eq("id",true).maybeSingle();  
+    const r=await client.from("agu_exam_settings").select("examination_enabled,registration_enabled,question_seconds,default_pass_percentage").eq("id",true).maybeSingle();  
     if(!r.error&&r.data)examSettings={...examSettings,...r.data};  
   }catch(e){console.warn("Exam settings:",e)}  
 }  
@@ -1020,13 +1014,13 @@ async function loadExaminations(){
   status.textContent="Loading examination room...";list.innerHTML="";  
   if(!currentUser){status.textContent="Please sign in to use the Examination Room.";return}  
   await loadExamSettings();  
-  if(!examSettings.enabled){  
+  if(!examSettings.examination_enabled){  
     status.innerHTML="🔒 <strong>The Examination Room is currently OFF.</strong><br>The administrator has temporarily closed examination access. Please check again later.";  
     return;  
   }  
   try{  
     const [examRes,regRes,accessRes]=await Promise.all([  
-  client.from("agu_examinations").select("*").eq("is_published",true),  
+  client.from("agu_examinations").select("*"),  
   client.from("agu_exam_registrations")  
     .select("*,status:registration_status")  
     .eq("student_id",currentUser.id),  
@@ -1065,11 +1059,6 @@ renderExamList(accessRes.data||null);
   }  
 }  
   
-
-let studentProfileCountryCode="";
-let studentProfileCountryName="";
-let studentProfileEducationLevel="";
-let studentProfileClassLevel="";
 
 let examPrices=[];
 let examSelectedSubjects=[];
@@ -1315,11 +1304,6 @@ function updateExamRegistrationHierarchy(){
     ])
   ];
 
-  const profileClass=profileExamClassForEducation(examRegistrationEducationLevel);
-  if(!examRegistrationClassLevel && profileClass && classes.includes(profileClass)){
-    examRegistrationClassLevel=profileClass;
-  }
-
   examRegistrationSetOptions(
     "examRegistrationClassLevel",
     classes,
@@ -1339,7 +1323,7 @@ function updateExamRegistrationHierarchy(){
   if(status){
     if(!examRegistrationEducationLevel){
       status.className="exam-hierarchy-status";
-      status.textContent="Select your examination board / organization and exam type.";
+      status.textContent="Select your education level.";
     }else if(!examRegistrationBoard){
       status.className="exam-hierarchy-status";
       status.textContent="Select your examination board / organization.";
@@ -1349,45 +1333,18 @@ function updateExamRegistrationHierarchy(){
     }else if(!matching.length){
       status.className="exam-hierarchy-status err";
       status.textContent="No published examination records currently match these selections.";
+    }else if(!examRegistrationCountryCode){
+      status.className="exam-hierarchy-status err";
+      status.textContent="Your registered country could not be found. Please complete your student profile.";
     }else{
       status.className="exam-hierarchy-status";
-      status.textContent=`${matching.length} examination record${matching.length===1?"":"s"} available for your selections. Price is set per exam type and country.`;
+      status.textContent=`${matching.length} examination record${matching.length===1?"":"s"} available for your selections. Price is automatically set from the student's registered country and the selected exam type.`;
     }
   }
   const allowed=new Set(matching.map(e=>String(e.subject||"").trim()).filter(Boolean));
   examSelectedSubjects=examSelectedSubjects.filter(s=>allowed.has(String(s).trim()));
   renderExamSubjectPicker();
 }
-function normalizeStudentExamEducation(value){
-  const raw=String(value||"").trim().toLowerCase().replace(/[_-]+/g," ").replace(/\s+/g," ");
-  const aliases={
-    "early years":"Early Years",
-    "early years school":"Early Years",
-    "primary":"Primary School",
-    "primary school":"Primary School",
-    "junior secondary":"Junior Secondary School",
-    "junior secondary school":"Junior Secondary School",
-    "jss":"Junior Secondary School",
-    "secondary":"Senior Secondary School",
-    "secondary school":"Senior Secondary School",
-    "senior secondary":"Senior Secondary School",
-    "senior secondary school":"Senior Secondary School",
-    "senior secondary / high school":"Senior Secondary School",
-    "senior secondary/high school":"Senior Secondary School",
-    "high school":"Senior Secondary School",
-    "sss":"Senior Secondary School",
-    "tertiary":"Tertiary / University",
-    "university":"Tertiary / University",
-    "university courses":"Tertiary / University"
-  };
-  return aliases[raw] || Object.keys(STUDENT_EXAM_HIERARCHY).find(k=>k.toLowerCase()===raw) || "";
-}
-function profileExamClassForEducation(education){
-  const profileEducation=normalizeStudentExamEducation(studentProfileEducationLevel);
-  if(profileEducation!==education)return "";
-  return String(studentProfileClassLevel||"").trim();
-}
-
 function setupExamRegistrationHierarchy(){
   const level=document.getElementById("examRegistrationEducationLevel");
   const board=document.getElementById("examRegistrationBoard");
@@ -1398,13 +1355,6 @@ function setupExamRegistrationHierarchy(){
   // Always show the complete AGULIBRARY education-level hierarchy.
   // Do not derive this list from currently published examinations.
   const initialLevels=Object.keys(STUDENT_EXAM_HIERARCHY);
-
-  // Education level is already stored in the student's profile.
-  // Use it automatically instead of forcing the student to select it again.
-  const profileEducation=normalizeStudentExamEducation(studentProfileEducationLevel);
-  if(!examRegistrationEducationLevel && initialLevels.includes(profileEducation)){
-    examRegistrationEducationLevel=profileEducation;
-  }
   examRegistrationSetOptions(
     "examRegistrationEducationLevel",
     initialLevels,
@@ -1417,7 +1367,7 @@ function setupExamRegistrationHierarchy(){
     examRegistrationEducationLevel=level.value;
     examRegistrationBoard="";
     examRegistrationType="";
-    examRegistrationClassLevel=profileExamClassForEducation(level.value);
+    examRegistrationClassLevel="";
     examRegistrationCountryCode="";
     examRegistrationCountryName="";
     examRegistrationCurrency="";
@@ -1429,7 +1379,7 @@ function setupExamRegistrationHierarchy(){
   board?.addEventListener("change",()=>{
     examRegistrationBoard=board.value;
     examRegistrationType="";
-    examRegistrationClassLevel=profileExamClassForEducation(examRegistrationEducationLevel);
+    examRegistrationClassLevel="";
     examRegistrationCountryCode="";
     examRegistrationCountryName="";
     examRegistrationCurrency="";
@@ -1440,7 +1390,7 @@ function setupExamRegistrationHierarchy(){
   });
   type?.addEventListener("change",()=>{
     examRegistrationType=type.value;
-    examRegistrationClassLevel=profileExamClassForEducation(examRegistrationEducationLevel);
+    examRegistrationClassLevel="";
     examRegistrationCountryCode="";
     examRegistrationCountryName="";
     examRegistrationCurrency="";
@@ -1459,16 +1409,7 @@ function setupExamRegistrationHierarchy(){
     updateExamRegistrationHierarchy();
     loadExamTypeCountryPrices();
   });
-  const country=document.getElementById("examRegistrationCountry");
-  country?.addEventListener("change",()=>{
-    examRegistrationCountryCode=country.value;
-    const row=examTypeCountryPrices.find(x=>String(x.country_code)===String(country.value));
-    examRegistrationCountryName=row?.country_name||"";
-    examRegistrationCurrency=row?.currency_code||"";
-    updateExamRegistrationSummary();
-  });
   level.dataset.aguHierarchyBound="true";
-  updateExamRegistrationCountryDisplay();
   updateExamRegistrationHierarchy();
   loadExamTypeCountryPrices();
 }
@@ -1485,42 +1426,53 @@ function examMoney(value,currency="NGN"){
   if(!Number.isFinite(n))return "Fee not configured";
   try{return new Intl.NumberFormat(undefined,{style:"currency",currency,maximumFractionDigits:2}).format(n)}catch(e){return `${currency} ${n.toLocaleString()}`}
 }
-function updateExamRegistrationCountryDisplay(){
-  const display=document.getElementById("examRegistrationCountryDisplay");
-  if(!display)return;
-  if(studentProfileCountryName||studentProfileCountryCode){
-    display.textContent=studentProfileCountryName||studentProfileCountryCode;
-    display.title="Country is taken automatically from your student profile.";
-  }else{
-    display.textContent="Country is not set in your student profile";
-    display.title="Complete your student profile before examination registration.";
+async function getStudentRegisteredCountry(){
+  const meta=currentUser?.user_metadata||{};
+  let code=String(meta.country_code||"").trim().toUpperCase();
+  let name=String(meta.country_name||"").trim();
+
+  /* The registration profile stores country_code/country_name in both
+     Supabase Auth metadata and student_profiles. Prefer the authenticated
+     profile, with student_profiles as a fallback. */
+  if(!code && client && currentUser){
+    try{
+      const r=await client.from("student_profiles")
+        .select("*")
+        .eq("user_id",currentUser.id)
+        .maybeSingle();
+      const profile=r.error?null:r.data;
+      if(profile){
+        code=String(profile.country_code||"").trim().toUpperCase();
+        name=String(profile.country_name||"").trim();
+      }
+      if(!code){
+        const byId=await client.from("student_profiles")
+          .select("*")
+          .eq("id",currentUser.id)
+          .maybeSingle();
+        if(!byId.error&&byId.data){
+          code=String(byId.data.country_code||"").trim().toUpperCase();
+          name=String(byId.data.country_name||"").trim();
+        }
+      }
+    }catch(e){
+      console.warn("Registered student country lookup:",e);
+    }
   }
+
+  if(code&&!name){
+    name=(typeof PROFILE_COMPLETION_COUNTRIES!=="undefined"
+      ? PROFILE_COMPLETION_COUNTRIES.find(x=>String(x[0]).toUpperCase()===code)?.[1]
+      : "")||"";
+  }
+
+  return code?{code,name}:null;
 }
-function normalizeExamPriceValue(value){
-  return String(value??"")
-    .trim()
-    .toLowerCase()
-    .replace(/[_-]+/g," ")
-    .replace(/\s+/g," ");
-}
-function examPriceValuesMatch(a,b){
-  return normalizeExamPriceValue(a)===normalizeExamPriceValue(b);
-}
+
 async function loadExamTypeCountryPrices(){
   examTypeCountryPrices=[];
-  const country=document.getElementById("examRegistrationCountry");
-  updateExamRegistrationCountryDisplay();
-
-  const ready=examRegistrationEducationLevel &&
-    examRegistrationBoard &&
-    examRegistrationType &&
-    examRegistrationClassLevel;
-
+  const ready=examRegistrationEducationLevel && examRegistrationBoard && examRegistrationType && examRegistrationClassLevel;
   if(!ready){
-    if(country){
-      country.innerHTML='<option value=""></option>';
-      country.disabled=true;
-    }
     examRegistrationCountryCode="";
     examRegistrationCountryName="";
     examRegistrationCurrency="";
@@ -1528,117 +1480,54 @@ async function loadExamTypeCountryPrices(){
     return;
   }
 
-  const profileCode=String(studentProfileCountryCode||"").trim();
-  const profileName=String(studentProfileCountryName||"").trim();
-
-  if(!profileCode && !profileName){
-    if(country){
-      country.innerHTML='<option value=""></option>';
-      country.disabled=true;
-    }
+  const registeredCountry=await getStudentRegisteredCountry();
+  if(!registeredCountry){
     examRegistrationCountryCode="";
     examRegistrationCountryName="";
     examRegistrationCurrency="";
-    updateExamRegistrationCountryDisplay();
+    examTypeCountryPrices=[];
     updateExamRegistrationSummary();
     return;
   }
 
+  examRegistrationCountryCode=registeredCountry.code;
+  examRegistrationCountryName=registeredCountry.name;
+  const ready=examRegistrationEducationLevel && examRegistrationBoard && examRegistrationType && examRegistrationClassLevel;
+  if(!ready){
+    country.innerHTML='<option value="">Select education level, board, exam type and class first</option>';
+    country.disabled=true;
+    examRegistrationCountryCode="";
+    examRegistrationCountryName="";
+    examRegistrationCurrency="";
+    updateExamRegistrationSummary();
+    return;
+  }
   try{
-    /*
-      Do not use exact database equality for the five hierarchy fields.
-      Administrator-created records may contain harmless differences in
-      capitalization or spacing. Load enabled prices and match the
-      student's actual selections using normalized values.
-    */
     const r=await client.from("agu_exam_country_prices")
       .select("id,education_level,examination_board,examination_type,class_level,country_code,country_name,currency_code,amount,is_enabled")
-      .eq("is_enabled",true);
-
+      .eq("education_level",examRegistrationEducationLevel)
+      .eq("examination_board",examRegistrationBoard)
+      .eq("examination_type",examRegistrationType)
+      .eq("class_level",examRegistrationClassLevel)
+      .eq("country_code",examRegistrationCountryCode)
+      .eq("is_enabled",true)
+      .order("country_name",{ascending:true});
     if(r.error)throw r.error;
+    examTypeCountryPrices=Array.isArray(r.data)?r.data:[];
 
-    const allPrices=Array.isArray(r.data)?r.data:[];
-
-    const matchingPrices=allPrices.filter(row=>
-      examPriceValuesMatch(row.education_level,examRegistrationEducationLevel) &&
-      examPriceValuesMatch(row.examination_board,examRegistrationBoard) &&
-      examPriceValuesMatch(row.examination_type,examRegistrationType) &&
-      examPriceValuesMatch(row.class_level,examRegistrationClassLevel)
-    );
-
-    /*
-      Match country by profile country code first, then by country name.
-      This supports both profile formats such as NG/Nigeria and avoids
-      failing simply because the administrator stored the other form.
-    */
-    let selected=matchingPrices.find(row=>
-      profileCode &&
-      (
-        examPriceValuesMatch(row.country_code,profileCode) ||
-        examPriceValuesMatch(row.country_name,profileCode)
-      )
-    );
-
-    if(!selected && profileName){
-      selected=matchingPrices.find(row=>
-        examPriceValuesMatch(row.country_name,profileName) ||
-        examPriceValuesMatch(row.country_code,profileName)
-      );
-    }
-
-    examTypeCountryPrices=selected?[selected]:[];
-
+    const selected=examTypeCountryPrices.find(x=>String(x.country_code).toUpperCase()===String(examRegistrationCountryCode).toUpperCase());
     if(selected){
-      examRegistrationCountryCode=String(selected.country_code||profileCode||"").trim();
-      examRegistrationCountryName=String(selected.country_name||profileName||profileCode||"").trim();
-      examRegistrationCurrency=String(selected.currency_code||"").trim();
-
-      if(country){
-        country.innerHTML=`<option value="${escapeForAttr(examRegistrationCountryCode)}">${esc(examRegistrationCountryName||examRegistrationCountryCode)}</option>`;
-        country.value=examRegistrationCountryCode;
-        country.disabled=true;
-      }
-
-      updateExamRegistrationCountryDisplay();
+      examRegistrationCountryCode=selected.country_code||examRegistrationCountryCode;
+      examRegistrationCountryName=selected.country_name||examRegistrationCountryName;
+      examRegistrationCurrency=selected.currency_code||"";
     }else{
-      /*
-        Keep the student's profile country visible even when the
-        administrator has not configured a matching price.
-      */
-      examRegistrationCountryCode=profileCode;
-      examRegistrationCountryName=profileName||profileCode;
       examRegistrationCurrency="";
-
-      if(country){
-        country.innerHTML=`<option value="${escapeForAttr(examRegistrationCountryCode)}">${esc(examRegistrationCountryName||examRegistrationCountryCode)}</option>`;
-        country.value=examRegistrationCountryCode;
-        country.disabled=true;
-      }
-
-      const display=document.getElementById("examRegistrationCountryDisplay");
-      if(display){
-        display.textContent=examRegistrationCountryName||examRegistrationCountryCode;
-        display.title="No enabled examination price matched the selected examination and your registered country.";
-      }
     }
-
     updateExamRegistrationSummary();
   }catch(e){
     console.warn("Examination type country prices:",e);
     examTypeCountryPrices=[];
-    examRegistrationCountryCode=profileCode;
-    examRegistrationCountryName=profileName||profileCode;
     examRegistrationCurrency="";
-
-    if(country){
-      country.innerHTML=profileCode||profileName
-        ? `<option value="${escapeForAttr(profileCode)}">${esc(profileName||profileCode)}</option>`
-        : '<option value=""></option>';
-      country.value=profileCode;
-      country.disabled=true;
-    }
-
-    updateExamRegistrationCountryDisplay();
     updateExamRegistrationSummary();
   }
 }
@@ -1664,13 +1553,9 @@ function updateExamRegistrationSummary(){
   const feeEl=document.getElementById("examRegistrationFee");
   const help=document.getElementById("examSubjectCount");
   if(countEl)countEl.textContent=`Selected Subjects: ${count}`;
-  if(feeEl)feeEl.textContent=fee===null?(
-    examRegistrationCountryCode
-      ?"Fee not configured"
-      :(studentProfileCountryName||studentProfileCountryCode
-        ?"No enabled price for your profile country"
-        :"Country not found in your student profile")
-  ):examMoney(fee,examRegistrationCurrency||"NGN");
+  if(feeEl)feeEl.textContent=fee===null
+    ?(examRegistrationCountryCode?"Fee not configured":"Registered country unavailable")
+    :examMoney(fee,examRegistrationCurrency||"NGN");
   if(help)help.textContent=count?`${count} of 9 subjects selected.`:"Select 1 to 9 subjects.";
 }
 function renderExamSubjectPicker(){
@@ -1727,7 +1612,7 @@ function showExamRegistrationPage(){
   const overlay=document.createElement("div");overlay.id="examRegistrationOverlay";overlay.className="exam-registration-overlay";
   overlay.innerHTML=`<div class="exam-registration-modal" role="dialog" aria-modal="true" aria-labelledby="examRegTitle">
     <h2 id="examRegTitle">EXAMINATION REGISTRATION</h2>
-    <p><strong>Education Level:</strong> ${esc(examRegistrationEducationLevel||"Not selected")}<br><strong>Examination Board / Organization:</strong> ${esc(examRegistrationBoard||"Not selected")}<br><strong>Exam Type:</strong> ${esc(examRegistrationType||"Not selected")}<br><strong>Class / Level:</strong> ${esc(examRegistrationClassLevel||"Not selected")}<br><strong>Country:</strong> ${esc(examRegistrationCountryName||examRegistrationCountryCode||"Not selected")}</p>
+    <p><strong>Education Level:</strong> ${esc(examRegistrationEducationLevel||"Not selected")}<br><strong>Examination Board / Organization:</strong> ${esc(examRegistrationBoard||"Not selected")}<br><strong>Exam Type:</strong> ${esc(examRegistrationType||"Not selected")}<br><strong>Class / Level:</strong> ${esc(examRegistrationClassLevel||"Not selected")}<br><strong>Registered Country:</strong> ${esc(examRegistrationCountryName||examRegistrationCountryCode||"Not available")}</p>
     <p><strong>Selected Subjects: ${examSelectedSubjects.length}</strong></p>
     <p>Registration Fee — <strong>per exam type</strong></p><div class="fee-value">${fee===null?"Fee not configured":examMoney(fee,examRegistrationCurrency||"NGN")}</div>
     <label class="exam-upload-label btn outline" for="examPhotoInput">📷 UPLOAD PHOTO</label>
@@ -1858,13 +1743,8 @@ function setupExamRegistrationFlow(){
       alert("Please select your Education Level, Examination Board / Organization, Exam Type and Class / Level before registration.");
       return;
     }
-    if(!examRegistrationCountryCode){
-      alert(studentProfileCountryName||studentProfileCountryCode
-        ?"No enabled examination price is configured for the country in your student profile."
-        :"Your student profile does not contain a country. Please complete your profile first.");
-      return;
-    }
-    if(examRegistrationFee()===null){alert("No enabled examination price is configured for this exam type, class and country.");return}
+    if(!examRegistrationCountryCode){alert("Your registered country could not be found. Please complete your student profile before registering for an examination.");return}
+    if(examRegistrationFee()===null){alert("No enabled examination price is configured for your registered country, exam type and class.");return}
     if(!examSelectedSubjects.length){alert("Select 1 to 9 subjects before registration.");return}
     showExamRegistrationGuideline();
   });
@@ -1884,7 +1764,7 @@ function renderExamList(dailyAccess){
   const filtered=availableExams.filter(e=>`${e.title||""} ${e.subject||""} ${e.education_level||""} ${e.class_level||""} ${e.term||""}`.toLowerCase().includes(q));  
   if(!filtered.length){list.innerHTML='<div class="empty">No published examinations match your search.</div>';return}  
   list.innerHTML=filtered.map((e,i)=>{  
-    const reg=registrationFor(e),registered=!!reg&&["registered","approved"].includes(String(reg.status??reg.registration_status??""));  
+    const reg=registrationFor(e),registered=!!reg&&["registered","approved"].includes(String(reg.status||""));  
     const required=!!e.registration_required;
     const registrationClosed=required&&!examSettings.registration_enabled&&!registered;
     const blocked=!!dailyAccess;  
@@ -1947,10 +1827,6 @@ async function registerForExam(exam){
   
 async function startExam(exam){  
   if(!currentUser){location.href="auth.html";return}  
-  if(exam && exam.is_published===false){  
-    alert("This examination has not been published by the administrator yet.");  
-    return;  
-  }  
   try{  
     const r=await client.rpc("agu_start_exam",{p_examination_id:exam.id});  
     if(r.error)throw r.error;  
@@ -2126,8 +2002,15 @@ async function signOut(){try{localStorage.setItem("AGU_REQUIRE_FULL_LOGIN","1");
 
 function setupAI(){
 const tp=document.getElementById("aiTeacherPanel"),tl=document.getElementById("aiTeacherLauncher");
+populateAITeacherProfile();
 const toggle=show=>{tp.classList.toggle("show",show);tp.setAttribute("aria-hidden",show?"false":"true");tl.setAttribute("aria-expanded",show?"true":"false");document.documentElement.style.overflow=show?"hidden":"";document.body.style.overflow=show?"hidden":""};
-tl.onclick=()=>toggle(!tp.classList.contains("show"));document.getElementById("closeTeacher").onclick=()=>toggle(false);
+tl.onclick=()=>{
+const opening=document.querySelector("#teacherChat .msg");
+if(opening&&currentUser)opening.textContent=`Welcome, ${getStudentDisplayName()}! 👋 I am your A G U LIBRARY AI Learning Teacher. Before I answer your first question, I need your education level, class/level and term.`;
+populateAITeacherProfile();
+document.getElementById("aiLearningProfile")?.classList.toggle("show",!(aiLearningProfile.educationLevel&&aiLearningProfile.classLevel&&aiLearningProfile.term));
+toggle(!tp.classList.contains("show"));
+};document.getElementById("closeTeacher").onclick=()=>toggle(false);
 document.getElementById("teacherSend").onclick=sendTeacher;
 document.getElementById("teacherInput").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();sendTeacher()}});
 const supportToggle=document.getElementById("supportToggle");
@@ -2162,6 +2045,7 @@ x=x.replace(/\*\*([^\n]+?)\*\*/g,"<strong>$1</strong>");
 x=x.replace(/__([^\n]+?)__/g,"<strong>$1</strong>");
 x=x.replace(/\*([^\n]+?)\*/g,"<em>$1</em>");
 x=x.replace(/_([^\n]+?)_/g,"<em>$1</em>");
+x=x.replace(/!\[([^\]\n]*)\]\((https?:\/\/[^\s)]+)\)/g,(_,alt,url)=>hold(`<img class="ai-resource-image" src="${url}" alt="${alt||"Educational image"}" loading="lazy">`));
 x=x.replace(/\[([^\]\n]+)\]\((https?:\/\/[^\s)]+)\)/g,'<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
 x=x.replace(/  $/g,"<br>");
 x=x.replace(/\u0000M(\d+)\u0000/g,(_,n)=>stash[Number(n)]);
@@ -2288,20 +2172,110 @@ box.appendChild(d);
 if(window.MathJax?.typesetPromise)window.MathJax.typesetPromise([d]).catch(()=>{});
 box.scrollTop=box.scrollHeight;
 }
-async function callAI(endpoint,message,conversation){
-const r=await fetch(endpoint,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({message,conversation,student_id:currentUser?.id||null})});
-if(!r.ok)throw new Error("AI service error");
-const d=await r.json();return d.answer||d.message||d.response||"The AI returned no answer.";
-}
-async function sendTeacher(){
-const input=document.getElementById("teacherInput"),btn=document.getElementById("teacherSend"),m=input.value.trim();if(!m)return;
-addChat("teacherChat",m,true);input.value="";btn.disabled=true;teacherConversation.push({role:"user",content:m});
+async function callAI(endpoint,message,conversation,extra={}){
+const headers={"Content-Type":"application/json"};
 try{
-const answer=await callAI((window.AGU_CONFIG?.supabaseUrl||"").replace(/\/$/,"")+"/functions/v1/ai-learning-agent",m,teacherConversation);
-addChat("teacherChat",answer,false);teacherConversation.push({role:"assistant",content:answer});
-}catch(e){addChat("teacherChat","The AI Learning Teacher interface is ready, but its secure AI backend endpoint still needs to be connected.",false)}
-btn.disabled=false;input.focus();
+const sessionResult=client?.auth ? await client.auth.getSession() : null;
+const accessToken=sessionResult?.data?.session?.access_token||"";
+if(accessToken)headers.Authorization="Bearer "+accessToken;
+}catch(e){}
+const payload={
+message,conversation,
+student_id:currentUser?.id||null,
+student_name:getStudentDisplayName(),
+learning_profile:aiLearningProfile,
+resource_context:getAITeacherResourceContext(message),
+...extra
+};
+const r=await fetch(endpoint,{method:"POST",headers,body:JSON.stringify(payload)});
+const raw=await r.text();
+let d={};try{d=raw?JSON.parse(raw):{}}catch(e){d={message:raw}};
+if(!r.ok)throw new Error(d.error||d.message||("AI service error ("+r.status+")"));
+return d.answer||d.message||d.response||"The AI returned no answer.";
 }
+
+function getStudentDisplayName(){
+const meta=currentUser?.user_metadata||{};
+const name=meta.full_name||meta.name||[meta.first_name,meta.last_name].filter(Boolean).join(" ");
+return String(name||currentUser?.email?.split("@")[0]||"Student").trim();
+}
+
+function populateAITeacherProfile(){
+const level=document.getElementById("aiEducationLevel"),cls=document.getElementById("aiClassLevel"),term=document.getElementById("aiTerm");
+if(!level||!cls||!term)return;
+const classOptions={
+"Primary School":["Primary 1","Primary 2","Primary 3","Primary 4","Primary 5","Primary 6"],
+"Junior Secondary School":["JSS 1","JSS 2","JSS 3"],
+"Senior Secondary School":["SSS 1","SSS 2","SSS 3"],
+"Tertiary / University":["100 Level","200 Level","300 Level","400 Level","500 Level","Postgraduate"],
+"Professional / Career":["Professional","Career Development","Other"]
+};
+const refreshClasses=()=>{
+const items=classOptions[level.value]||[];
+cls.innerHTML='<option value="">Class / Level</option>'+items.map(x=>`<option value="${escAttr(x)}">${esc(x)}</option>`).join("");
+cls.disabled=!items.length;
+aiLearningProfile.educationLevel=level.value;
+aiLearningProfile.classLevel="";
+updateAIProfileStatus();
+};
+level.onchange=refreshClasses;
+cls.onchange=()=>{aiLearningProfile.classLevel=cls.value;updateAIProfileStatus()};
+term.onchange=()=>{aiLearningProfile.term=term.value;updateAIProfileStatus()};
+updateAIProfileStatus();
+}
+
+function updateAIProfileStatus(){
+const status=document.getElementById("aiLearningProfileStatus");
+if(!status)return;
+const ready=aiLearningProfile.educationLevel&&aiLearningProfile.classLevel&&aiLearningProfile.term;
+status.classList.toggle("ready",!!ready);
+status.textContent=ready
+?`✓ Ready. I will teach at ${aiLearningProfile.classLevel} level for ${aiLearningProfile.term}.`
+:`Welcome${currentUser?`, ${getStudentDisplayName()}`:""}! Select your education level, class/level and term before I answer questions.`;
+}
+
+function ensureAIProfile(){
+const ready=aiLearningProfile.educationLevel&&aiLearningProfile.classLevel&&aiLearningProfile.term;
+const box=document.getElementById("aiLearningProfile");
+if(box)box.classList.toggle("show",!ready);
+if(!ready)updateAIProfileStatus();
+return !!ready;
+}
+
+function getAITeacherResourceContext(question){
+const q=String(question||"").toLowerCase();
+const resources=(allResources||[]).filter(r=>{
+const text=[r.title,r.description,r.subject,r.main_subject,r.education_level,r.level,r.class_level,r.term,r.type].filter(Boolean).join(" ").toLowerCase();
+if(!q)return true;
+return q.split(/\s+/).filter(x=>x.length>2).some(word=>text.includes(word));
+}).slice(0,12);
+return resources.map(r=>({
+id:r.id,title:r.title||"Untitled Resource",type:r.type||"resource",
+description:r.description||"",subject:r.subject||r.main_subject||"",
+education_level:r.education_level||r.level||"",class_level:r.class_level||r.classLevel||"",
+term:r.term||"",file_url:r.file_url||r.url||""
+}));
+}
+
+async function sendTeacher(){
+const input=document.getElementById("teacherInput"),btn=document.getElementById("teacherSend"),m=input.value.trim();
+if(!m)return;
+if(!ensureAIProfile()){
+addChat("teacherChat","Before I answer that, I need your education level, class/level and term. Please select them above so I can teach at the correct level.",false);
+return;
+}
+addChat("teacherChat",m,true);input.value="";btn.disabled=true;
+teacherConversation.push({role:"user",content:m});
+try{
+const endpoint=(window.AGU_CONFIG?.supabaseUrl||"").replace(/\/$/,"")+"/functions/v1/ai-learning-agent";
+const answer=await callAI(endpoint,m,teacherConversation,{learning_profile:aiLearningProfile});
+addChat("teacherChat",answer,false);teacherConversation.push({role:"assistant",content:answer});
+}catch(e){
+console.error("AI Learning Teacher:",e);
+addChat("teacherChat",`I couldn't connect to the AI Learning Teacher right now.\n\nTechnical detail: ${e.message||"Unknown AI service error"}\n\nPlease try again.`,false);
+}finally{btn.disabled=false;input.focus();}
+}
+
 async function sendSupport(){
 const input=document.getElementById("supportInput"),btn=document.getElementById("supportSend"),m=input.value.trim();if(!m)return;
 addChat("supportChat",m,true);input.value="";btn.disabled=true;supportConversation.push({role:"user",content:m});
@@ -2440,36 +2414,7 @@ shade.addEventListener("click",closeMenu);
 close.addEventListener("click",closeMenu);
 
 document.querySelectorAll(".menu-item").forEach(item=>{
-item.addEventListener("click",()=>{
-  const panel=item.dataset.panel;
-  if(panel) openAccountPanel(panel);
-});
-});
-
-/* Student Account examination shortcuts */
-document.getElementById("accountExamRoom")?.addEventListener("click",()=>{
-  if(!currentUser){
-    window.location.href="auth.html";
-    return;
-  }
-  closeMenu();
-  openService("examination");
-});
-
-document.getElementById("accountExamRegistration")?.addEventListener("click",async()=>{
-  if(!currentUser){
-    window.location.href="auth.html";
-    return;
-  }
-  closeMenu();
-  openService("examination");
-  const panel=document.getElementById("examinationPanel");
-  if(panel) panel.querySelector(".panel-body")?.scrollTo({top:0,behavior:"smooth"});
-  await new Promise(resolve=>setTimeout(resolve,120));
-  const registerButton=document.getElementById("examRegisterMain");
-  if(registerButton){
-    registerButton.scrollIntoView({behavior:"smooth",block:"center"});
-  }
+item.addEventListener("click",()=>openAccountPanel(item.dataset.panel));
 });
 
 document.querySelectorAll("[data-close-panel]").forEach(btn=>{

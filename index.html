@@ -761,18 +761,22 @@ async function loadSession(){
   if(currentUser){  
    let name=currentUser.user_metadata?.full_name||currentUser.user_metadata?.name||currentUser.email?.split("@")[0]||"Student";  
    try{
-    let p=await client.from("student_profiles").select("first_name,last_name,country_code,country_name").eq("user_id",currentUser.id).maybeSingle();
+    let p=await client.from("student_profiles").select("first_name,last_name,country_code,country_name,education_level,class_level").eq("user_id",currentUser.id).maybeSingle();
     if(p.error||!p.data){
-      try{p=await client.from("student_profiles").select("first_name,last_name,country_code,country_name").eq("id",currentUser.id).maybeSingle()}catch(e){}
+      try{p=await client.from("student_profiles").select("first_name,last_name,country_code,country_name,education_level,class_level").eq("id",currentUser.id).maybeSingle()}catch(e){}
     }
     if(!p.error&&p.data){
       const n=[p.data.first_name,p.data.last_name].filter(Boolean).join(" ").trim();
       if(n)name=n;
       studentProfileCountryCode=String(p.data.country_code||"").trim();
       studentProfileCountryName=String(p.data.country_name||"").trim();
+      studentProfileEducationLevel=String(p.data.education_level||"").trim();
+      studentProfileClassLevel=String(p.data.class_level||"").trim();
     }
     if(!studentProfileCountryCode)studentProfileCountryCode=String(currentUser.user_metadata?.country_code||"").trim();
     if(!studentProfileCountryName)studentProfileCountryName=String(currentUser.user_metadata?.country_name||"").trim();
+    if(!studentProfileEducationLevel)studentProfileEducationLevel=String(currentUser.user_metadata?.education_level||"").trim();
+    if(!studentProfileClassLevel)studentProfileClassLevel=String(currentUser.user_metadata?.class_level||"").trim();
   }catch(e){}  
    setText("accountName",name);setText("accountEmail",currentUser.email||"");  
     setText("heroStudentName",name);  
@@ -1063,6 +1067,8 @@ renderExamList(accessRes.data||null);
 
 let studentProfileCountryCode="";
 let studentProfileCountryName="";
+let studentProfileEducationLevel="";
+let studentProfileClassLevel="";
 
 let examPrices=[];
 let examSelectedSubjects=[];
@@ -1308,6 +1314,11 @@ function updateExamRegistrationHierarchy(){
     ])
   ];
 
+  const profileClass=profileExamClassForEducation(examRegistrationEducationLevel);
+  if(!examRegistrationClassLevel && profileClass && classes.includes(profileClass)){
+    examRegistrationClassLevel=profileClass;
+  }
+
   examRegistrationSetOptions(
     "examRegistrationClassLevel",
     classes,
@@ -1327,7 +1338,7 @@ function updateExamRegistrationHierarchy(){
   if(status){
     if(!examRegistrationEducationLevel){
       status.className="exam-hierarchy-status";
-      status.textContent="Select your education level.";
+      status.textContent="Select your examination board / organization and exam type.";
     }else if(!examRegistrationBoard){
       status.className="exam-hierarchy-status";
       status.textContent="Select your examination board / organization.";
@@ -1346,6 +1357,36 @@ function updateExamRegistrationHierarchy(){
   examSelectedSubjects=examSelectedSubjects.filter(s=>allowed.has(String(s).trim()));
   renderExamSubjectPicker();
 }
+function normalizeStudentExamEducation(value){
+  const raw=String(value||"").trim().toLowerCase().replace(/[_-]+/g," ").replace(/\s+/g," ");
+  const aliases={
+    "early years":"Early Years",
+    "early years school":"Early Years",
+    "primary":"Primary School",
+    "primary school":"Primary School",
+    "junior secondary":"Junior Secondary School",
+    "junior secondary school":"Junior Secondary School",
+    "jss":"Junior Secondary School",
+    "secondary":"Senior Secondary School",
+    "secondary school":"Senior Secondary School",
+    "senior secondary":"Senior Secondary School",
+    "senior secondary school":"Senior Secondary School",
+    "senior secondary / high school":"Senior Secondary School",
+    "senior secondary/high school":"Senior Secondary School",
+    "high school":"Senior Secondary School",
+    "sss":"Senior Secondary School",
+    "tertiary":"Tertiary / University",
+    "university":"Tertiary / University",
+    "university courses":"Tertiary / University"
+  };
+  return aliases[raw] || Object.keys(STUDENT_EXAM_HIERARCHY).find(k=>k.toLowerCase()===raw) || "";
+}
+function profileExamClassForEducation(education){
+  const profileEducation=normalizeStudentExamEducation(studentProfileEducationLevel);
+  if(profileEducation!==education)return "";
+  return String(studentProfileClassLevel||"").trim();
+}
+
 function setupExamRegistrationHierarchy(){
   const level=document.getElementById("examRegistrationEducationLevel");
   const board=document.getElementById("examRegistrationBoard");
@@ -1356,6 +1397,13 @@ function setupExamRegistrationHierarchy(){
   // Always show the complete AGULIBRARY education-level hierarchy.
   // Do not derive this list from currently published examinations.
   const initialLevels=Object.keys(STUDENT_EXAM_HIERARCHY);
+
+  // Education level is already stored in the student's profile.
+  // Use it automatically instead of forcing the student to select it again.
+  const profileEducation=normalizeStudentExamEducation(studentProfileEducationLevel);
+  if(!examRegistrationEducationLevel && initialLevels.includes(profileEducation)){
+    examRegistrationEducationLevel=profileEducation;
+  }
   examRegistrationSetOptions(
     "examRegistrationEducationLevel",
     initialLevels,
@@ -1368,7 +1416,7 @@ function setupExamRegistrationHierarchy(){
     examRegistrationEducationLevel=level.value;
     examRegistrationBoard="";
     examRegistrationType="";
-    examRegistrationClassLevel="";
+    examRegistrationClassLevel=profileExamClassForEducation(level.value);
     examRegistrationCountryCode="";
     examRegistrationCountryName="";
     examRegistrationCurrency="";
@@ -1380,7 +1428,7 @@ function setupExamRegistrationHierarchy(){
   board?.addEventListener("change",()=>{
     examRegistrationBoard=board.value;
     examRegistrationType="";
-    examRegistrationClassLevel="";
+    examRegistrationClassLevel=profileExamClassForEducation(examRegistrationEducationLevel);
     examRegistrationCountryCode="";
     examRegistrationCountryName="";
     examRegistrationCurrency="";
@@ -1391,7 +1439,7 @@ function setupExamRegistrationHierarchy(){
   });
   type?.addEventListener("change",()=>{
     examRegistrationType=type.value;
-    examRegistrationClassLevel="";
+    examRegistrationClassLevel=profileExamClassForEducation(examRegistrationEducationLevel);
     examRegistrationCountryCode="";
     examRegistrationCountryName="";
     examRegistrationCurrency="";

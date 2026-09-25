@@ -2,6 +2,7 @@
 
 <html lang="en">  
 <head>
+<meta name="agu-exam-registration-schema-fix" content="20260925-live-examination-id-registration-status-v2">
 <meta name="agu-exam-pricing-version" content="20260924-per-exam-type-country-price-v1">
 <meta name="agu-exam-registration-fix" content="20260925-profile-country-auto-v2">  
 <meta charset="utf-8">  
@@ -1027,7 +1028,7 @@ async function loadExaminations(){
     const [examRes,regRes,accessRes]=await Promise.all([  
   client.from("agu_examinations").select("*").eq("is_published",true),  
   client.from("agu_exam_registrations")  
-    .select("id,exam_id,student_id,status,registered_at,approved_at")  
+    .select("*,status:registration_status")  
     .eq("student_id",currentUser.id),  
   client.from("agu_exam_daily_access")  
     .select("exam_id,accessed_at")  
@@ -1871,7 +1872,7 @@ function setupExamRegistrationFlow(){
   loadMyExamRegistrationId(false).catch(e=>console.warn("Exam registration ID:",e));
 }
 
-function registrationFor(exam){return examRegistrations.find(x=>String(x.exam_id)===String(exam.id))||null}  
+function registrationFor(exam){return examRegistrations.find(x=>String(x.examination_id)===String(exam.id))||null}  
 function renderExamList(dailyAccess){  
   const list=document.getElementById("examList"),status=document.getElementById("examStatus"),q=document.getElementById("examSearch")?.value?.toLowerCase().trim()||"";  
   if(!list||!status)return;  
@@ -1883,7 +1884,7 @@ function renderExamList(dailyAccess){
   const filtered=availableExams.filter(e=>`${e.title||""} ${e.subject||""} ${e.education_level||""} ${e.class_level||""} ${e.term||""}`.toLowerCase().includes(q));  
   if(!filtered.length){list.innerHTML='<div class="empty">No published examinations match your search.</div>';return}  
   list.innerHTML=filtered.map((e,i)=>{  
-    const reg=registrationFor(e),registered=!!reg&&["registered","approved"].includes(String(reg.status||""));  
+    const reg=registrationFor(e),registered=!!reg&&["registered","approved"].includes(String(reg.status??reg.registration_status??""));  
     const required=!!e.registration_required;
     const registrationClosed=required&&!examSettings.registration_enabled&&!registered;
     const blocked=!!dailyAccess;  

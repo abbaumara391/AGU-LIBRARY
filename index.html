@@ -1492,8 +1492,8 @@ async function loadExamTypeCountryPrices(){
 
   examRegistrationCountryCode=registeredCountry.code;
   examRegistrationCountryName=registeredCountry.name;
-  const ready=examRegistrationEducationLevel && examRegistrationBoard && examRegistrationType && examRegistrationClassLevel;
-  if(!ready){
+  const hierarchyReady=examRegistrationEducationLevel && examRegistrationBoard && examRegistrationType && examRegistrationClassLevel;
+  if(!hierarchyReady){
     country.innerHTML='<option value="">Select education level, board, exam type and class first</option>';
     country.disabled=true;
     examRegistrationCountryCode="";
@@ -2235,11 +2235,11 @@ status.textContent=ready
 }
 
 function ensureAIProfile(){
-const ready=aiLearningProfile.educationLevel&&aiLearningProfile.classLevel&&aiLearningProfile.term;
+const profileReady=aiLearningProfile.educationLevel&&aiLearningProfile.classLevel&&aiLearningProfile.term;
 const box=document.getElementById("aiLearningProfile");
-if(box)box.classList.toggle("show",!ready);
-if(!ready)updateAIProfileStatus();
-return !!ready;
+if(box)box.classList.toggle("show",!profileReady);
+if(!profileReady)updateAIProfileStatus();
+return !!profileReady;
 }
 
 function getAITeacherResourceContext(question){

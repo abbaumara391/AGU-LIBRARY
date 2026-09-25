@@ -1938,7 +1938,7 @@ async function registerForExam(exam){
     return;
   }  
   try{  
-    const r=await client.rpc("agu_register_for_exam",{p_exam_id:exam.id});  
+    const r=await client.rpc("agu_register_for_exam",{p_examination_id:exam.id});  
     if(r.error)throw r.error;  
     alert("You are registered for this examination. You may start it now if today's examination access is still available.");  
     await loadExaminations();  
@@ -1952,7 +1952,7 @@ async function startExam(exam){
     return;  
   }  
   try{  
-    const r=await client.rpc("agu_start_exam",{p_exam_id:exam.id});  
+    const r=await client.rpc("agu_start_exam",{p_examination_id:exam.id});  
     if(r.error)throw r.error;  
     const data=r.data||{};  
     const q=await client.from("agu_exam_questions_public").select("id,exam_id,position,question_text,options,marks").eq("exam_id",exam.id).order("position",{ascending:true});  

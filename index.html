@@ -610,8 +610,6 @@ overflow:hidden;
         <button id="examRegisterMain" class="btn primary exam-register-main" type="button">REGISTER / ENTER YOUR ID</button>
         <div id="examIdBox" class="exam-id-box">
           <label for="examRegistrationId">EXAMINATION REGISTRATION ID</label>
-          <div id="examGeneratedId" style="display:none;margin:10px 0;padding:14px;border-radius:12px;background:rgba(20,120,90,.10);font-size:1.25rem;font-weight:800;letter-spacing:1px;text-align:center"></div>
-          <button id="copyExamRegistrationId" class="btn outline" type="button" style="display:none;width:100%;margin:0 0 10px">COPY EXAMINATION ID</button>
           <div class="exam-id-row">
             <input id="examRegistrationId" type="text" inputmode="text" autocomplete="off" placeholder="Enter your ID">
             <button id="examVerifyId" class="btn primary" type="button">VERIFY</button>
@@ -1690,77 +1688,20 @@ async function resolveAndAssignExamRegistrationId(rpcData){
   if(assigned.error)throw assigned.error;
   return assigned.data?.registration_id?assigned.data:null;
 }
-const EXAM_ID_AWAY_LIMIT_MS=10*60*1000;
-function examIdStateKey(suffix=""){
-  return `AGU_EXAM_ID_STATE_${currentUser?.id||"guest"}${suffix}`;
-}
-function examIdHasExpired(){
-  if(!currentUser)return false;
-  try{
-    const expired=localStorage.getItem(examIdStateKey("_EXPIRED"));
-    if(expired==="1")return true;
-    const leftAt=Number(localStorage.getItem(examIdStateKey("_LEFT_AT"))||0);
-    if(leftAt&&Date.now()-leftAt>=EXAM_ID_AWAY_LIMIT_MS){
-      localStorage.setItem(examIdStateKey("_EXPIRED"),"1");
-      localStorage.removeItem(examIdStateKey("_LEFT_AT"));
-      return true;
-    }
-  }catch(e){}
-  return false;
-}
-function hideExamRegistrationId(){
-  const box=document.getElementById("examIdBox"),display=document.getElementById("examGeneratedId"),copy=document.getElementById("copyExamRegistrationId"),input=document.getElementById("examRegistrationId");
-  if(box)box.classList.remove("show");
-  if(display){display.textContent="";display.style.display="none"}
-  if(copy){copy.style.display="none";copy.textContent="COPY EXAMINATION ID"}
-  if(input)input.value="";
-}
-function checkExamIdAwayExpiry(){
-  if(examIdHasExpired())hideExamRegistrationId();
-}
 async function loadMyExamRegistrationId(showBox=false){
   if(!currentUser||!client)return null;
-  checkExamIdAwayExpiry();
-  if(examIdHasExpired()){
-    if(showBox)showExamIdBox();
-    return null;
-  }
   const r=await client.rpc("agu_get_my_exam_registration_id");
   if(r.error)throw r.error;
-  if(r.data?.registration_id){showExamRegistrationId(r.data.registration_id);return r.data}
   if(showBox)showExamIdBox();
-  return null;
+  return r.data?.registration_id?r.data:null;
 }
 function showExamRegistrationId(id){
-  if(!id||examIdHasExpired())return;
-  const box=document.getElementById("examIdBox"),display=document.getElementById("examGeneratedId"),copy=document.getElementById("copyExamRegistrationId"),input=document.getElementById("examRegistrationId");
-  if(box)box.classList.add("show");
-  if(display){display.textContent=id;display.style.display="block"}
-  if(copy){
-    copy.style.display="block";
-    copy.onclick=async()=>{
-      try{
-        await navigator.clipboard.writeText(String(id));
-        copy.textContent="COPIED ✓";
-        setTimeout(()=>{if(copy)copy.textContent="COPY EXAMINATION ID"},1400);
-      }catch(e){
-        if(input){input.focus();input.select();}
-      }
-    };
-  }
-  if(input&&id)input.value=id;
-  if(input) setTimeout(()=>input.focus(),80);
+  /* Registration IDs are no longer displayed or auto-filled.
+     Registered students must enter their ID manually for verification. */
+  showExamIdBox();
+  const input=document.getElementById("examRegistrationId");
+  if(input){input.value="";setTimeout(()=>input.focus(),80);}
 }
-function markExamPageLeft(){
-  if(!currentUser)return;
-  try{
-    if(!localStorage.getItem(examIdStateKey("_EXPIRED"))){
-      localStorage.setItem(examIdStateKey("_LEFT_AT"),String(Date.now()));
-    }
-  }catch(e){}
-}
-window.addEventListener("pagehide",markExamPageLeft);
-window.addEventListener("pageshow",()=>setTimeout(checkExamIdAwayExpiry,0));
 
 async function verifyExamRegistrationId(){
   const input=document.getElementById("examRegistrationId"),status=document.getElementById("examIdStatus");

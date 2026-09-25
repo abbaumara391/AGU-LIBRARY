@@ -1495,24 +1495,46 @@ function updateExamRegistrationCountryDisplay(){
     display.title="Complete your student profile before examination registration.";
   }
 }
+function normalizeExamPriceValue(value){
+  return String(value??"")
+    .trim()
+    .toLowerCase()
+    .replace(/[_-]+/g," ")
+    .replace(/\s+/g," ");
+}
+function examPriceValuesMatch(a,b){
+  return normalizeExamPriceValue(a)===normalizeExamPriceValue(b);
+}
 async function loadExamTypeCountryPrices(){
   examTypeCountryPrices=[];
   const country=document.getElementById("examRegistrationCountry");
   updateExamRegistrationCountryDisplay();
-  if(!country)return;
-  const ready=examRegistrationEducationLevel && examRegistrationBoard && examRegistrationType && examRegistrationClassLevel;
+
+  const ready=examRegistrationEducationLevel &&
+    examRegistrationBoard &&
+    examRegistrationType &&
+    examRegistrationClassLevel;
+
   if(!ready){
-    country.innerHTML='<option value=""></option>';
-    country.disabled=true;
+    if(country){
+      country.innerHTML='<option value=""></option>';
+      country.disabled=true;
+    }
     examRegistrationCountryCode="";
     examRegistrationCountryName="";
     examRegistrationCurrency="";
     updateExamRegistrationSummary();
     return;
   }
-  if(!studentProfileCountryCode && !studentProfileCountryName){
-    country.innerHTML='<option value=""></option>';
-    country.disabled=true;
+
+  const profileCode=String(studentProfileCountryCode||"").trim();
+  const profileName=String(studentProfileCountryName||"").trim();
+
+  if(!profileCode && !profileName){
+    if(country){
+      country.innerHTML='<option value=""></option>';
+      country.disabled=true;
+    }
     examRegistrationCountryCode="";
     examRegistrationCountryName="";
     examRegistrationCurrency="";
@@ -1520,60 +1542,106 @@ async function loadExamTypeCountryPrices(){
     updateExamRegistrationSummary();
     return;
   }
+
   try{
+    /*
+      Do not use exact database equality for the five hierarchy fields.
+      Administrator-created records may contain harmless differences in
+      capitalization or spacing. Load enabled prices and match the
+      student's actual selections using normalized values.
+    */
     const r=await client.from("agu_exam_country_prices")
       .select("id,education_level,examination_board,examination_type,class_level,country_code,country_name,currency_code,amount,is_enabled")
-      .eq("education_level",examRegistrationEducationLevel)
-      .eq("examination_board",examRegistrationBoard)
-      .eq("examination_type",examRegistrationType)
-      .eq("class_level",examRegistrationClassLevel)
-      .eq("is_enabled",true)
-      .order("country_name",{ascending:true});
-    if(r.error)throw r.error;
-    examTypeCountryPrices=Array.isArray(r.data)?r.data:[];
+      .eq("is_enabled",true);
 
-    /* Country comes automatically from the student's profile. */
-    let selected=examTypeCountryPrices.find(x=>
-      studentProfileCountryCode &&
-      String(x.country_code||"").trim().toLowerCase()===studentProfileCountryCode.toLowerCase()
+    if(r.error)throw r.error;
+
+    const allPrices=Array.isArray(r.data)?r.data:[];
+
+    const matchingPrices=allPrices.filter(row=>
+      examPriceValuesMatch(row.education_level,examRegistrationEducationLevel) &&
+      examPriceValuesMatch(row.examination_board,examRegistrationBoard) &&
+      examPriceValuesMatch(row.examination_type,examRegistrationType) &&
+      examPriceValuesMatch(row.class_level,examRegistrationClassLevel)
     );
-    if(!selected && studentProfileCountryName){
-      selected=examTypeCountryPrices.find(x=>
-        String(x.country_name||"").trim().toLowerCase()===studentProfileCountryName.toLowerCase()
+
+    /*
+      Match country by profile country code first, then by country name.
+      This supports both profile formats such as NG/Nigeria and avoids
+      failing simply because the administrator stored the other form.
+    */
+    let selected=matchingPrices.find(row=>
+      profileCode &&
+      (
+        examPriceValuesMatch(row.country_code,profileCode) ||
+        examPriceValuesMatch(row.country_name,profileCode)
+      )
+    );
+
+    if(!selected && profileName){
+      selected=matchingPrices.find(row=>
+        examPriceValuesMatch(row.country_name,profileName) ||
+        examPriceValuesMatch(row.country_code,profileName)
       );
     }
 
-    country.innerHTML=selected
-      ? `<option value="${escapeForAttr(selected.country_code)}">${esc(selected.country_name||selected.country_code)}</option>`
-      : '<option value=""></option>';
-    country.value=selected?.country_code||"";
-    country.disabled=true;
+    examTypeCountryPrices=selected?[selected]:[];
 
-    examRegistrationCountryCode=selected?.country_code||"";
-    examRegistrationCountryName=selected?.country_name||studentProfileCountryName||"";
-    examRegistrationCurrency=selected?.currency_code||"";
-    updateExamRegistrationCountryDisplay();
+    if(selected){
+      examRegistrationCountryCode=String(selected.country_code||profileCode||"").trim();
+      examRegistrationCountryName=String(selected.country_name||profileName||profileCode||"").trim();
+      examRegistrationCurrency=String(selected.currency_code||"").trim();
 
-    if(!selected){
+      if(country){
+        country.innerHTML=`<option value="${escapeForAttr(examRegistrationCountryCode)}">${esc(examRegistrationCountryName||examRegistrationCountryCode)}</option>`;
+        country.value=examRegistrationCountryCode;
+        country.disabled=true;
+      }
+
+      updateExamRegistrationCountryDisplay();
+    }else{
+      /*
+        Keep the student's profile country visible even when the
+        administrator has not configured a matching price.
+      */
+      examRegistrationCountryCode=profileCode;
+      examRegistrationCountryName=profileName||profileCode;
+      examRegistrationCurrency="";
+
+      if(country){
+        country.innerHTML=`<option value="${escapeForAttr(examRegistrationCountryCode)}">${esc(examRegistrationCountryName||examRegistrationCountryCode)}</option>`;
+        country.value=examRegistrationCountryCode;
+        country.disabled=true;
+      }
+
       const display=document.getElementById("examRegistrationCountryDisplay");
       if(display){
-        display.textContent=studentProfileCountryName||studentProfileCountryCode;
-        display.title="Your profile country has no enabled examination price for these selections.";
+        display.textContent=examRegistrationCountryName||examRegistrationCountryCode;
+        display.title="No enabled examination price matched the selected examination and your registered country.";
       }
     }
+
     updateExamRegistrationSummary();
   }catch(e){
     console.warn("Examination type country prices:",e);
     examTypeCountryPrices=[];
-    country.innerHTML='<option value=""></option>';
-    country.disabled=true;
-    examRegistrationCountryCode="";
-    examRegistrationCountryName=studentProfileCountryName||"";
+    examRegistrationCountryCode=profileCode;
+    examRegistrationCountryName=profileName||profileCode;
     examRegistrationCurrency="";
+
+    if(country){
+      country.innerHTML=profileCode||profileName
+        ? `<option value="${escapeForAttr(profileCode)}">${esc(profileName||profileCode)}</option>`
+        : '<option value=""></option>';
+      country.value=profileCode;
+      country.disabled=true;
+    }
+
     updateExamRegistrationCountryDisplay();
     updateExamRegistrationSummary();
   }
 }
+
 function examSelectedTypeCountryPrice(){
   if(!examRegistrationCountryCode)return null;
   return examTypeCountryPrices.find(row=>String(row.country_code)===String(examRegistrationCountryCode))||null;

@@ -3,7 +3,7 @@
 <html lang="en">  
 <head>
 <meta name="agu-exam-pricing-version" content="20260924-per-exam-type-country-price-v1">
-<meta name="agu-exam-registration-fix" content="20260925-student-account-entry-v1">  
+<meta name="agu-exam-registration-fix" content="20260925-profile-country-auto-v2">  
 <meta charset="utf-8">  
 <meta name="viewport" content="width=device-width,initial-scale=1">  
 <meta name="agu-ai-render-version" content="20260922-education-level-exam-type-fix">  
@@ -310,6 +310,20 @@ overflow:hidden;
 .exam-guideline-real-image{width:100%;margin:15px 0;border:1px solid #d7e4de;border-radius:16px;background:#fff;overflow:hidden}.exam-guideline-real-image img{display:block;width:100%;height:auto;max-height:62vh;object-fit:contain}@media(max-width:700px){.exam-guideline-real-image{border-radius:14px}.exam-guideline-real-image img{max-height:58vh}}
 </style>
 
+<style id="agu-exam-profile-country-style">
+.exam-registration-profile-country{
+  min-height:54px;
+  display:flex;
+  align-items:center;
+  padding:0 18px;
+  border:1px solid #d5e7df;
+  border-radius:16px;
+  background:#f5faf7;
+  color:#173b2d;
+  font-weight:700;
+  box-sizing:border-box;
+}
+</style>
 </head>  
 <body>  <header class="nav">  
   <a class="brand" href="index.html"><span class="mark">AG</span><span><b>AGULIBRARY</b><small>LEARN • READ • WATCH • GROW</small></span></a>  
@@ -571,10 +585,11 @@ overflow:hidden;
               <option value="">Select education level first</option>
             </select>
           </div>
-          <div class="exam-registration-field">
-            <label for="examRegistrationCountry">Country</label>
-            <select id="examRegistrationCountry" aria-label="Select country for examination price" disabled>
-              <option value="">Select education level, board, exam type and class first</option>
+          <div class="exam-registration-field" id="examRegistrationCountryField">
+            <label for="examRegistrationCountryDisplay">Country</label>
+            <div id="examRegistrationCountryDisplay" class="exam-registration-profile-country" role="status" aria-live="polite">Loading country from your student profile…</div>
+            <select id="examRegistrationCountry" aria-hidden="true" tabindex="-1" style="display:none">
+              <option value=""></option>
             </select>
           </div>
         </div>
@@ -745,10 +760,20 @@ async function loadSession(){
   currentUser=r.data?.session?.user||null;  
   if(currentUser){  
    let name=currentUser.user_metadata?.full_name||currentUser.user_metadata?.name||currentUser.email?.split("@")[0]||"Student";  
-   try{  
-    const p=await client.from("student_profiles").select("first_name,last_name").eq("id",currentUser.id).maybeSingle();  
-    if(!p.error&&p.data){const n=[p.data.first_name,p.data.last_name].filter(Boolean).join(" ").trim();if(n)name=n}  
-   }catch(e){}  
+   try{
+    let p=await client.from("student_profiles").select("first_name,last_name,country_code,country_name").eq("user_id",currentUser.id).maybeSingle();
+    if(p.error||!p.data){
+      try{p=await client.from("student_profiles").select("first_name,last_name,country_code,country_name").eq("id",currentUser.id).maybeSingle()}catch(e){}
+    }
+    if(!p.error&&p.data){
+      const n=[p.data.first_name,p.data.last_name].filter(Boolean).join(" ").trim();
+      if(n)name=n;
+      studentProfileCountryCode=String(p.data.country_code||"").trim();
+      studentProfileCountryName=String(p.data.country_name||"").trim();
+    }
+    if(!studentProfileCountryCode)studentProfileCountryCode=String(currentUser.user_metadata?.country_code||"").trim();
+    if(!studentProfileCountryName)studentProfileCountryName=String(currentUser.user_metadata?.country_name||"").trim();
+  }catch(e){}  
    setText("accountName",name);setText("accountEmail",currentUser.email||"");  
     setText("heroStudentName",name);  
    setText("profileName",name);setText("profileEmail",currentUser.email||"");  
@@ -1035,6 +1060,9 @@ renderExamList(accessRes.data||null);
   }  
 }  
   
+
+let studentProfileCountryCode="";
+let studentProfileCountryName="";
 
 let examPrices=[];
 let examSelectedSubjects=[];
@@ -1391,6 +1419,7 @@ function setupExamRegistrationHierarchy(){
     updateExamRegistrationSummary();
   });
   level.dataset.aguHierarchyBound="true";
+  updateExamRegistrationCountryDisplay();
   updateExamRegistrationHierarchy();
   loadExamTypeCountryPrices();
 }
@@ -1407,17 +1436,39 @@ function examMoney(value,currency="NGN"){
   if(!Number.isFinite(n))return "Fee not configured";
   try{return new Intl.NumberFormat(undefined,{style:"currency",currency,maximumFractionDigits:2}).format(n)}catch(e){return `${currency} ${n.toLocaleString()}`}
 }
+function updateExamRegistrationCountryDisplay(){
+  const display=document.getElementById("examRegistrationCountryDisplay");
+  if(!display)return;
+  if(studentProfileCountryName||studentProfileCountryCode){
+    display.textContent=studentProfileCountryName||studentProfileCountryCode;
+    display.title="Country is taken automatically from your student profile.";
+  }else{
+    display.textContent="Country is not set in your student profile";
+    display.title="Complete your student profile before examination registration.";
+  }
+}
 async function loadExamTypeCountryPrices(){
   examTypeCountryPrices=[];
   const country=document.getElementById("examRegistrationCountry");
+  updateExamRegistrationCountryDisplay();
   if(!country)return;
   const ready=examRegistrationEducationLevel && examRegistrationBoard && examRegistrationType && examRegistrationClassLevel;
   if(!ready){
-    country.innerHTML='<option value="">Select education level, board, exam type and class first</option>';
+    country.innerHTML='<option value=""></option>';
     country.disabled=true;
     examRegistrationCountryCode="";
     examRegistrationCountryName="";
     examRegistrationCurrency="";
+    updateExamRegistrationSummary();
+    return;
+  }
+  if(!studentProfileCountryCode && !studentProfileCountryName){
+    country.innerHTML='<option value=""></option>';
+    country.disabled=true;
+    examRegistrationCountryCode="";
+    examRegistrationCountryName="";
+    examRegistrationCurrency="";
+    updateExamRegistrationCountryDisplay();
     updateExamRegistrationSummary();
     return;
   }
@@ -1433,28 +1484,48 @@ async function loadExamTypeCountryPrices(){
     if(r.error)throw r.error;
     examTypeCountryPrices=Array.isArray(r.data)?r.data:[];
 
-    const existing=examRegistrations.find(x=>String(x.country_code||"").trim());
-    const preferred=examRegistrationCountryCode || existing?.country_code || (examTypeCountryPrices.length===1?examTypeCountryPrices[0].country_code:"");
-    country.innerHTML='<option value="">Select country</option>'+examTypeCountryPrices.map(row=>
-      `<option value="${escapeForAttr(row.country_code)}">${esc(row.country_name||row.country_code)} — ${esc(row.currency_code||"")}</option>`
-    ).join("");
-    country.disabled=!examTypeCountryPrices.length;
-    if(preferred && examTypeCountryPrices.some(x=>String(x.country_code)===String(preferred)))country.value=preferred;
-    else country.value="";
-    const selected=examTypeCountryPrices.find(x=>String(x.country_code)===String(country.value));
+    /* Country comes automatically from the student's profile. */
+    let selected=examTypeCountryPrices.find(x=>
+      studentProfileCountryCode &&
+      String(x.country_code||"").trim().toLowerCase()===studentProfileCountryCode.toLowerCase()
+    );
+    if(!selected && studentProfileCountryName){
+      selected=examTypeCountryPrices.find(x=>
+        String(x.country_name||"").trim().toLowerCase()===studentProfileCountryName.toLowerCase()
+      );
+    }
+
+    country.innerHTML=selected
+      ? `<option value="${escapeForAttr(selected.country_code)}">${esc(selected.country_name||selected.country_code)}</option>`
+      : '<option value=""></option>';
+    country.value=selected?.country_code||"";
+    country.disabled=true;
+
     examRegistrationCountryCode=selected?.country_code||"";
-    examRegistrationCountryName=selected?.country_name||"";
+    examRegistrationCountryName=selected?.country_name||studentProfileCountryName||"";
     examRegistrationCurrency=selected?.currency_code||"";
+    updateExamRegistrationCountryDisplay();
+
+    if(!selected){
+      const display=document.getElementById("examRegistrationCountryDisplay");
+      if(display){
+        display.textContent=studentProfileCountryName||studentProfileCountryCode;
+        display.title="Your profile country has no enabled examination price for these selections.";
+      }
+    }
     updateExamRegistrationSummary();
   }catch(e){
     console.warn("Examination type country prices:",e);
     examTypeCountryPrices=[];
-    country.innerHTML='<option value="">Fee configuration unavailable</option>';
+    country.innerHTML='<option value=""></option>';
     country.disabled=true;
+    examRegistrationCountryCode="";
+    examRegistrationCountryName=studentProfileCountryName||"";
+    examRegistrationCurrency="";
+    updateExamRegistrationCountryDisplay();
     updateExamRegistrationSummary();
   }
 }
-
 function examSelectedTypeCountryPrice(){
   if(!examRegistrationCountryCode)return null;
   return examTypeCountryPrices.find(row=>String(row.country_code)===String(examRegistrationCountryCode))||null;
@@ -1476,7 +1547,13 @@ function updateExamRegistrationSummary(){
   const feeEl=document.getElementById("examRegistrationFee");
   const help=document.getElementById("examSubjectCount");
   if(countEl)countEl.textContent=`Selected Subjects: ${count}`;
-  if(feeEl)feeEl.textContent=fee===null?(examRegistrationCountryCode?"Fee not configured":"Select country to view fee"):examMoney(fee,examRegistrationCurrency||"NGN");
+  if(feeEl)feeEl.textContent=fee===null?(
+    examRegistrationCountryCode
+      ?"Fee not configured"
+      :(studentProfileCountryName||studentProfileCountryCode
+        ?"No enabled price for your profile country"
+        :"Country not found in your student profile")
+  ):examMoney(fee,examRegistrationCurrency||"NGN");
   if(help)help.textContent=count?`${count} of 9 subjects selected.`:"Select 1 to 9 subjects.";
 }
 function renderExamSubjectPicker(){
@@ -1664,7 +1741,12 @@ function setupExamRegistrationFlow(){
       alert("Please select your Education Level, Examination Board / Organization, Exam Type and Class / Level before registration.");
       return;
     }
-    if(!examRegistrationCountryCode){alert("Please select your country so the administrator-controlled examination price can be applied.");return}
+    if(!examRegistrationCountryCode){
+      alert(studentProfileCountryName||studentProfileCountryCode
+        ?"No enabled examination price is configured for the country in your student profile."
+        :"Your student profile does not contain a country. Please complete your profile first.");
+      return;
+    }
     if(examRegistrationFee()===null){alert("No enabled examination price is configured for this exam type, class and country.");return}
     if(!examSelectedSubjects.length){alert("Select 1 to 9 subjects before registration.");return}
     showExamRegistrationGuideline();

@@ -1836,7 +1836,7 @@ async function startExam(exam){
     const r=await client.rpc("agu_start_exam",{p_examination_id:exam.id});  
     if(r.error)throw r.error;  
     const data=r.data||{};  
-    const q=await client.from("agu_exam_questions_public").select("id,exam_id,position,question_text,options,marks").eq("exam_id",exam.id).order("position",{ascending:true});  
+    const q=await client.from("agu_exam_questions_public").select("id,examination_id,position,question_text,options,marks").eq("examination_id",exam.id).order("position",{ascending:true});  
     if(q.error)throw q.error;  
     if(!q.data?.length)throw new Error("This examination has no questions yet. Please contact the administrator.");  
     activeExamSession={attemptId:data.attempt_id,exam:{...exam,...data},questions:q.data,index:0,statuses:[]};  
